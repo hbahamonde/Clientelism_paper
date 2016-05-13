@@ -1,0 +1,1268 @@
+%----------------------------------------------------------------------------------------
+% PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[onesided]{article}
+%\usepackage{lipsum} % Package to generate dummy text throughout this template
+
+% \usepackage[default]{lato} % Use the LATO font
+%\usepackage{pxfonts}
+\usepackage[T1]{fontenc}
+\linespread{1.4} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+%\usepackage{multicol} % Used for the two-column layout of the document
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+%\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\Roman{subsection}} % Roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\usepackage{fancybox, fancyvrb, calc}
+\usepackage[svgnames]{xcolor}
+\usepackage{epigraph}
+
+
+%----------------------------------------------------------------------------------------
+% DOCUMENT ID (Department, Professor, Course, etc.) 
+%----------------------------------------------------------------------------------------
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Paper 1  $\bullet$ v.2} % Custom header text
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+
+%----------------------------------------------------------------------------------------
+% MY PACKAGES 
+%----------------------------------------------------------------------------------------
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{rotating}
+\usepackage{paracol}
+\usepackage{textcomp}
+\usepackage{caption}
+\usepackage[export]{adjustbox}
+\usepackage{afterpage}
+\usepackage{filecontents}
+\usepackage{color}
+\usepackage{latexsym}
+\usepackage{lscape}       %\begin{landscape} and \end{landscape}
+%\usepackage{mathabx}
+\usepackage{wasysym}
+\usepackage{dashrule}
+%\usepackage{txfonts}
+%\usepackage{pgfkeys}
+\usepackage{framed}
+\usepackage{tree-dvips}
+\usepackage{caption}
+\usepackage{fancyvrb}
+\usepackage{pgffor}
+\usepackage{xcolor}
+%\usepackage{pxfonts}
+\usepackage{authblk}
+\usepackage{paracol}
+\usepackage{setspace}
+\usepackage{qtree}
+\usepackage{tree-dvips}
+%\usepackage{sgame}        % shouldn't have neither array nor tabularx packages
+\usepackage{array}
+%\usepackage{tikz}
+\usepackage[latin1]{inputenc}
+%\label{tab:1}    %\autoref{tab:1}  %ocupar para citar.
+% \hyperlik{table1} \hypertarget{table1} 
+% \textquoteright     %apostrofe
+\usepackage{hyperref}     %desactivar para link rojos
+\usepackage{natbib} % style
+\usepackage{graphicx}
+\usepackage{dcolumn} % for R tables
+\usepackage{csquotes} % For long quotes
+\usepackage{multirow} % For multirow in tables
+
+%----------------------------------------------------------------------------------------
+% Other ADDS-ON
+%----------------------------------------------------------------------------------------
+
+% independence symbol \independent
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+
+%\setlength{\intextsep}{-5ex} % remove extra space above and below in-line float
+
+% VERBATIM WITH BACKGROUND COLOR
+\newenvironment{colframe}{%
+  \begin{Sbox}
+    \begin{minipage}
+      {\columnwidth%-\leftmargin-\rightmargin-6pt
+      }
+    }{%
+    \end{minipage}
+  \end{Sbox}
+  \begin{center}
+    \colorbox{LightSteelBlue}{\TheSbox}
+  \end{center}
+}
+
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
+    pdftoolbar=true,        % show Acrobat’s toolbar?
+    pdfmenubar=true,        % show Acrobat’s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=ForestGreen,          % color of internal links (change box color with linkbordercolor)
+    citecolor=ForestGreen,        % color of links to bibliography
+    filecolor=ForestGreen,      % color of file links
+    urlcolor=ForestGreen           % color of external links
+}
+
+\usepackage[nodayofweek,level]{datetime} % to have date within text
+
+\newcommand{\LETT}[3][]{\lettrine[lines=4,loversize=.2,#1]{\smash{#2}}{#3}} % letrine customization
+
+
+%----------------------------------------------------------------------------------------
+% TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+
+\title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{Aiming Right At You:\\ Group vs. Individual Clientelistic Targeting in Brazil}} % Article title
+
+
+\author[1]{
+%\large
+\textsc{H\'ector Bahamonde}\\ 
+\thanks{I'm thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast, Geoffrey Wallace, Doug Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Giancarlo Visconti and the four anonymous reviewers for their very helpful comments. I thank participants of the XXXII Latin American Studies Association Conference, The Southern Political Science Association meeting, The Western Political Science Association meeting and the 2014th Graduate Conference at the Political Science Dpt., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
+\normalsize PhD Candidate $\bullet$ Political Science Dpt. $\bullet$ Rutgers University \\
+\normalsize \texttt{e:}\href{mailto:hector.bahamonde@rutgers.edu}{\texttt{hector.bahamonde@rutgers.edu}}\\
+\normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.hectorbahamonde.com}}
+\vspace{-5mm}
+}
+\date{\today}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Insert title
+
+
+
+\thispagestyle{fancy} % All pages have headers and footers
+
+%----------------------------------------------------------------------------------------
+% ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+
+Do parties target individuals or groups? This is a fundamental question to understand clientelism. This paper argues that brokers target communities where the density of the poor is high, regardless of individual income. There are two types of bribed individuals. Actual beneficiaries and potential beneficiaries. Actual beneficiaries want to keep benefits coming. Potential beneficiaries  are better off supporting the broker's candidate. Brokers aware of this situation, take advantage of the spillover effects associated to the territorial proximity of poor individuals. This argument is tested using a novel variable to measure group-poverty and a quasi-experimental design which allows us to parcel out the effects of individual-level poverty and group-level poverty. This is the first paper that argues that party machines target individuals irrespective of their individual incomes.
+
+\end{abstract}
+
+%\hspace*{6.3cm}{\bf 6,614 words}
+
+
+%----------------------------------------------------------------------------------------
+% CONTENT
+%----------------------------------------------------------------------------------------
+
+\section*{Do parties target individuals or groups?} 
+
+% Motivation and synthesis paragraph
+The literature on distributive politics and clientelism offer different answers for this very important question. On the one hand, the distributive politics literature argues that what usually gets targeted are districts\footnote{See for example \citet[]{Dixit1996}, and more recent study \citet[]{Khemani2015}.} or provinces\footnote{See for example \citet[]{Calvo2004}.}. Most typically, party machines deliver public jobs, or construction projects in exchange for votes from \emph{groups} of individuals. On the other hand, the clientelism literature has typically focused on individuals. For example, the ethnographic literature traditionally has focused on individual interactions between the party machines and targeted individuals. Overall, both qualitative and quantitative scholars (via survey data or experimental designs) have topically concentrated their efforts on individuals\footnote{\citet[]{Carlin2015}.}. 
+
+%{\color{red}Check: \citet[]{Carlin2015}. THEY SAY THAT LITERATURE HAS FOCUSED ON ``individuals’ socio- economic and, especially, electoral profiles—which parties and candidates they support, professed ideological leanings, past voting turnout, and choice. We argue party brokers also consider democratic attitudinal profiles''.}.
+
+This paper is framed within the clientelism literature and it proposes to switch efforts to consider a group-targeting party strategy instead. The main argument is that brokers target \emph{clusters} of poor people, not poor \emph{individuals}. Contrary to what others have argued, cluster membership are different from the individual membership in \emph{formal associations}. Clusters do not need to be small to be targeted also. This paper argues that when individuals live in areas where the \emph{density of poor} is high, \emph{actual} and \emph{potential} beneficiaries support the clientelistic machine. The model we present does not present an argument about the \emph{net size of the group}. However, the argument is about the economic \emph{homogeneity} of the targeted people. An important implication, and contrary to what most of the literature considers, is that \emph{individual} income has no effect on the likelihood of being bribed. Brokers take advantage of the territorial proximity among poor individuals (a ``cluster''). We claim that brokers are aware that even \emph{potential} beneficiaries are better off supporting him. Consequently, party machines systematically target \emph{groups} of poor people based on an aggregated measurement of poverty. I.e., they do not target single individuals based on their individual low income. An important prediction of this model is that if two subjects are equally poor (i.e. they have the same income), but one of them lives in a high dense-poor area while the other one lives in a low-dense poverty area, the former will most likely be bribed. This prediction works regardless of their degree of involvement with formal local-association and the size of the community. 
+
+% Connection with Poverty (0)
+Clientelism is strictly targeted to the poor because poor individuals have higher discount rates for future goods. That is, the poor give a higher relative importance to immediate transfers rather than future and uncertain policy packages that may or may not improve their situation in the short run. For that reason, income has a long-standing tradition of being one of the main predictors of clientelism. 
+
+% Connection with Poverty (1): The Problem and the solution
+Recent  evidence based on observational and experimental data suggests null findings regarding (\emph{individual}) income. In our view, these results are product of a confusion in the literature. The literature is not clear on whether party machines target poor individuals or poor groups. Some have tried to solve this confusion by arguing the importance of membership in local organizations. However, we still do not know whether brokers target these organizations because individuals who live in highly-dense poverty areas join these groups or simply because they are members of an organization. To the best of our knowledge, this paper is the first in separate these two possible confounding factors. 
+
+% Connection with Poverty (2): This is not a measurement problem
+These null findings are product of a confusion that is reflected in how we have been measuring poverty. Beyond being a measurement problem, this strategy fails to recognize a substantive issue. This argument considers clusters of highly-dense poor individuals to be poor individuals in an economic \emph{context} of deprivation. It is this context what gives brokers more room to move as this poverty structure provides very efficient spill-over effects.
+
+
+
+\section*{How does clientelism work in low-information environments?} 
+
+% How does Clientelism works?
+In most modern democracies, except for a few exceptions, the secrecy of the vote is guaranteed. Enforcement has been theorized as one of the key components of clientelism. How do brokers enforce the clientelistic deal when the vote secrecy holds? As others have argued, clientelism ``works'' even under low-information environments not because of iterated interactions between bribed individuals and brokers. It works because bribed individuals' welfare depend on the broker's capacity to deliver resources at the local level. If the broker looses the election, he looses his job too. Then, bribed individuals stop receiving benefits. Consequently, clientelism works because it is an equilibrium: it is in the voters' interest to care about their individual welfare. When they do, the community's welfare is secured as a positive externality.
+
+% Connection with Net Size: coordination dilemmas
+The model presented here considers the size of the group as a source of coordination dilemmas. Large groups tend to create incentives among its members to free-ride benefits. That is, individuals embedded in large groups might be tempted to receive the bribe but then vote for a candidate different than the broker's. As others have argued, in contexts of large targeted groups, bribed individuals might vote for their preferred candidate in the hope that others vote for the broker's candidate. Thus, as the size of the targeted population increases, it also increases the risk of electoral defection. To capture this, the standard strategy so far has been to include a variable to measure the size of the district. 
+
+% Connection with local-groups
+In order to solve these coordination dilemmas, some have argued that brokers use ready-to-use third-party networks, most commonly local grass-root organizations. These organizations provide the necessary infrastructure to reach out more votes (to buy), to monitor them easily, making use of significant economies of scale. Some scholars have even argued that associationism, a principal ingredient of a rich democratic life, is -paradoxically- reversing the quality of the democracy at some localities because of its link with clientelism. So far, the standard strategy has been to include a variable to measure group membership at the local level.
+
+% Concluding paragraph on poor-density targeting
+The findings presented here do not find support for these hypotheses. An alternative theory and empirical models are presented here. Particularly, it is argued that the \emph{density of poor} analytically explains better the probability of clientelism. This model does not require a high-information environment (i.e. brokers do not need to know vote intention), nor does require group membership nor a small-sized group. From both theoretical and empirical standpoints, it does not require individual poverty either. This paper argues that when individuals live in areas where the \emph{density of poor} is high, bribed individuals have incentives to keep their broker. Hence, they vote for his political candidate. When they do, the broker keeps delivering particularistic benefits to the targeted zone via individual transfers. These benefits are targeted to the poor given their higher discount factors and risk aversion levels. This model distinguishes between \emph{actual} and \emph{potential} beneficiaries. Actual beneficiaries receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow''. This model introduces a new component. Particularly, \emph{other not-yet targeted individuals vote for the broker's candidate too in the hope of being benefited in the short run}. Potential beneficiaries have two possible strategies. First, they can flip and vote for another candidate, which might or might not bring them benefits. Second, by observing the broker's past behavior, not-yet targeted individuals could continue voting for the known broker and wait. Given that the poor are risk-averse, the equilibrium is to wait to be targeted in the near future, and vote for the current broker's candidate. In reverse, these individuals do not have incentives to vote for another candidate, and most probably, get the current broker replaced. Finally, the density of the poor is the key explanatory factor in this model. It is what makes targeted and not-yet targeted individuals similar. Unlike theories that rely on associative explanations, this theory argues that poverty is what makes them act coordinately: they collective and individual needs are similar, and in order to improve their economic situation, they (all of them) need to vote ``right''. Hence, brokers do take advantage of this aggregate levels of high discount factors and risk aversion and target strategically particularistic benefits knowing that clientelism have a multiplicative or spill-over effects. 
+
+
+% Research design paragraph
+The argument is that the density of the poor will bring incentives for coordination within a context of poverty. Individuals levels of income should not be associated to clientelism. All and all, individual targeting is not cost-effective. Rather, clientelism ought to be correlated with an aggregated measurement of poverty. In order to test this theory empirically, and study what is the cause of clientelism, it is necessary to identify a counterfactual. In order to have a plausible counterfactual, it is required to have two individuals living at a fixed level of individual poverty but living under different group-poverty contexts. That is, one living under the \emph{high} poor-density context and the other one living under the \emph{low} poor-density context. The Brazilian case offers a perfect opportunity where a poor individual can live in a non-poor area. Taking advantage of this within-municipality variance, this paper offers novel evidence that shows that political parties target their clientelistic resources to \emph{poor areas, not to poor individuals}. Given that people are not randomly assigned to either the low or to the high poverty-dense contexts, matching methods are used.
+
+%This paper proceeds as follows. 
+
+\section*{Who do political parties target?} 
+
+% General Theory of Clientelism 0
+Political parties deliver goods to their constituencies in two ways, via programmatic linkages or non-programmatic linkages (\citet{Kitschelt2000}). Non-programmatic linkages have been largely called \emph{vote buying}, \emph{clientelism}, \emph{patronage}, among others definitions (\citet{Brusco2004}, \citet{Stokes:2013cj} \citet{Kitschelt2007}). Although there are some differences between these concepts (\citet{Stokes:2013cj}), following the advice of \citet[2]{Kitschelt2007}, this paper defines \emph{clientelism} as a ``direct [and contingent] exchange of a citizen's vote in return for direct payments or continuing access to employment, goods, and services''. 
+
+% General Theory of Clientelism 1
+There are agreements and disagreements about the general theory of clientelism. There is agreement in that clientelism entangles a \emph{direct} accountability between broker and client (\cite{Kitschelt2007}, \citet{Auyero:2000ta}). Also, in that clientelism often takes the form of a \emph{personal contract} between broker and client (\citet{Auyero:2000ta}). This binary relationship is \emph{contingent}, that is, clientelistic resources will continue flowing \emph{if} clients show their support to their broker (\citet{Scott1972}). There are disagreements too. For some, clientelism necessarily involves \emph{monitoring}. This device is property of the broker and allows him to observe or infer the electoral behavior of their constituencies and enforce the clientelistic agreement, (re)allocating scarce clientelistic resources optimally (\citet[]{Stokes:2013cj}). However, \citet[]{Zarazaga2014} interviewed more than a hundred brokers and he finds that none of them were able to directly monitor their targeted individuals. Due to this constrain, \citet[]{Nichter2008} argues that what clientelism buys is turnout, not voting. Finally, for some, clientelism works because is a repeated game. For example, \citet{Stokes2005} argues that the broker-voter relationship becomes stronger and predictable in time.  Eventually, brokers develop the skills to make ``good-enough'' inferences about the electoral behavior of their clients, consequently delivering either clientelistic goods or punishments, accordingly. Others, however, have claimed that clientelism works because voters care about the welfare of others. \citet[]{Rueda2014a} develops a formal model which suggests that repeated interactions are not necessary to sustain clientelism once the targeted individuals start caring about their welfare. 
+
+% Income and clientelism
+One of the most important consensuses is on the positive effects of relative poverty on clientelism (\citet[]{Calvo2004}). \cite{Kitschelt2000}, \citet{Brusco2004} and \citet[]{Stokes:2013cj} explain that political parties target the poor only. As \citet[]{Nazareno2008a} explain, due to diminishing marginal utility of income, the poor derive more utility than the wealthy from a good of a given nominal value compared to the wealthy. The poor also are more risk averse. They prefer to be better off now (presumably via clientelism) than wait for the future and take policy packages. However, more recent evidence presented on \citet[]{Holland2015} and \citet{GonzalezOcantos:2012vr} suggest that income (measured at the individual level) has little or no effect on clientelism. Consequently, the relative importance of income has been recently contested. In this paper's view, poverty has a clear theoretical connection to clientelism. Recent paper's failure on finding (statistical) support for what it should be one of the key explanatory variables reflects a theoretical and empirical confusion. This paper presents robust evidence that strongly suggests that it is not individual poverty what causes clientelism, but aggregated levels poverty.
+
+
+\subsection*{Do parties target poor individuals or poor groups?} 
+
+% This is an important problem: GROUPS
+One of the most important but still unaccounted-for disagreements is on whether party-machines target poor individuals or poor groups. For example, \citet[10]{Kitschelt2007} argue that political parties target ``individuals \emph{or} identifiable small groups''\footnote{Emphasis added.}. However, despite this confusion, analysts do not hesitate in predicting clientelism using individual income, with mixed levels of success\footnote{An exception in the clientelism literature is \cite{Weitz-shapiro}. She measures income at the municipal level too.}.
+
+% Why this is an important problem: GROUPS
+This paper builds upon classic and newer work on clientelism regarding the issue of group vs. individual targeting. Explanations centered at the ``group'' level are not new. For example \citet[323]{Stokes2005} and \citet[10]{Kitschelt2007} have argued before that ``smaller communities'' will have a higher likelihood of receiving clientelistic goods because they are easier to be monitored. The standard empirical strategy has been to have a binary variable to account for urban and rural contexts. Newer research has proposed that party machines target individuals ``who are opinion-leading epicenters'' (\citet{Schaffer2015}). As center-nodes, these individuals are most likely to be able to reach other voters and gather more electoral support in what he calls the ``social multiplier'' effects of clientelism. Center-nodes are situated in informal situations. Others claim that clientelism is targeted to individuals who are involved in organized groups (\citet[p. 57]{Auyero2000}\footnote{The ``unidad b\'{a}sica]'', in Argentina.}), despite their individual levels of income (\citet[]{Holland2015}). This is also suggested in \citet[]{Rueda2014a}. What is not clear in these papers, however, is the role of income and how it relates to associationism. In other words, it is unclear how the standard measurement of poverty (at the individual level) substantively maps (or not) with the idea that brokers target (or not) formal (or/and informal) groups. Income and group membership might be confounded as well. That is, the poor might have higher incentives to join groups at the local level. However, it is not clear in the literature which factor predicts clientelism: group-membership or aggregated levels of poverty. This paper continues expanding this research agenda by systematically separating the effects of poor individuals, poor groups, and poor individuals/groups at different levels of group membership and group size. 
+
+% This is also another important issue: SIZE
+Another important aspect of clientelistic targeting is whether brokers prefer targeting large or small concentrations of people. In low-information environments, where brokers do not have access to people's vote intentions, they have to play strategically and anticipate electoral defection. Classic political economy literature has longly argued how large groups face more coordination dilemmas (see for example \citet[]{Aldrich}). The main intuition is that if a voter is bribed, he may be tempted to accept the bribe and then vote for his preferred candidate instead of the clientelistic candidate, in the hope that others will vote for him so he wins the election and continues delivering benefits. Taking this idea as a starting point, several scholars have argued that smaller groups are preferred because they defect less. \citet[p. 9]{Rueda2014a} explains that ``higher levels of aggregation represent a big obstacle for vote buying''. In Nigeria, \citet[]{Bratton2008a} finds that the strongest predictor of defection for a bribed voter was the expectation of others defecting. In Brazil \citet[p. 456]{Gingerich2013} find that ``vote brokerage thrives in municipalities with very small electorates''. As the size of the targeted population increases, the utility becomes more risky too. From this discussion it is clear that size challenges the broker's abilities to effectively coordinate electoral support. However, in this discussion it is not clear what is the inter-relationship between income, what it should be the main predictor of clientelism, and group-size. Is it the net size of the group, that is, the total count of individuals living in a certain community, or is it the proportion of poor people living in a certain community? The model we present takes distance from the total count strategy, arguing that informal communities drawn by the concentration of poor individuals provide brokers with an opportunity to spend resources on actual beneficiaries but getting also votes from potential beneficiaries. Clientelism works also because it has very efficient spill-over effects.
+
+
+
+
+%\citet[]{Zarazaga2014}:``While monitoring and reciprocity may exist, they are not the main mechanisms that enforce voters' compliance with clientelistic deals. None of the brokers I interviewed thought it possible to check how an individual voted. Even brokers who admitted to cheating on election day denied this possibility. Although 22 brokers acknowledged that they stole other party ballots from the polling stations, and 12 even admitted to paying certain clients with illegal drugs, none of them reported monitoring individual votes. Furthermore, voters' and brokers' narratives show that we cannot disregard the rationality of the actors involved.'' (p. 38). ``Voters prefer to keep dealing with brokers who have fulfilled their promises, because past deliveries prove that those brokers are not smoke merchants. Once voters have seen that a broker can deliver, they will support that broker; they choose to do so because they know that they can rely on that broker to deliver more goods in the future'' (p. 38-39). ``Brokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this. I witnessed firsthand, for example, how a broker, on the eve of Election Day 2009, gave a food handout to an elderly person while reminding her, ``if we lose there might not be any more food handouts'''' (p. 39). ``Voters with good brokers have strong incentives to keep their brokers; knowing that their brokers will keep their position as long as they are successful at the voting booth, voters will protect their own interest by voting for the brokers' candidates.'' (p. 39)
+
+%\citet[]{Zarazaga2015a}: Voter-Customized Rewards Strategies: party machines DO NOT offer a uniform reward to all voters: Such a strategy would imply a waste of resources, as the party machine would be promising the same amount of resources to voters that it knows have different reservation values. (1) Networks of brokers provide party machines with an informational advantage. (2) Brokers efficiently distribute rewards according to the information they posses about voters' party preferences. (3) Brokers mainly target voters already inclined to vote for their parties in order to secure their votes in the face of uncertainty.
+
+%\citet[]{Rueda2014a} {\bf The analysis that follows does not rely on reciprocity}: (1) broker sustains bribed voters' compliance by conditioning future bribes on whether her candidate's votes reach an optimally set threshold: In the model, the broker optimally sets a threshold of votes for her candidate. If the threshold is not reached in a particular polling station, those who were bribed are excluded from future payments for a fixed number of periods. (2) model does not require brokers to observe individual voters' political preferences or even vote totals of the bribed voters. I show that when there is uncertainty about voters' preferences, compliance can be sustained as long as electoral results of small groups are available. (3) vote buying is facilitated when voters care about the welfare of other voters. NOTE THIS DIFFERENCE: {\bf However, repeated interactions by themselves cannot solve the commitment problem faced by bribed voters when future benefits are determined by aggregate election results}. A voter who receives the broker's payment could vote for her preferred candidate while hoping that other bribed voters would comply with their part of the deal. In this case, the voters' commitment problem is compounded by a collective action problem. All bribed voters who oppose the buyer's candidate have incentives to free-ride on others' compliance while voting for their preferred choices. A major difference with previous models that use repeated interactions to sustain vote buying, like the ones in Stokes (2005) and Gallego (2012), is that this paper's model allows us to explore in detail the bribed voters' collective action problem. after the first election the broker continues distributing bribes to the same voters in normal periods and she does not distribute bribes during punishment ones. {\bf As for the broker's utility, it increases with the number of votes her candidate receives, and with the money that was not spent buying votes. THIS MEANS THAT AS THE SIZE OF THE TARGETED POPULATION INCRWASES, THE UTILITY BECOMES MORE RISKY: ``Then higher levels of aggregation represent a big obstacle for vote buying as the next result shows'' (p. 9)}. Punishments are necessary since the voters would not be able to believe that once low results were realized and there were no subsequent consequences, things would be any different in the future. expectations about others' actions: people tend not to comply when they think that others are doing the same. If 80\% or more of the potential opponents among those that were bribed are expected to comply, then it is better for a particular bribed opponent to do so as well.
+
+%\citet[]{Rueda2014a}  {\color{red}a limited information environment in which brokers interact repeatedly with a group of voters whose utilities depend only on how they vote and on the bribes that they receive. In Colombia, parties buy the votes of associations of seniors and associations of single mothers, orga- nizing trips to recreational centers outside the city where all their expenses are covered. parties target groups with strong ties between their members. {\bf A bribed group member that cares about the welfare of other bribed members is more likely to comply because by doing so she reduces the likelihood of bringing the punishment to both herself and to other members. Since her utility depends on the welfare of others in the group, that person is more likely to comply relative to someone who only cares about her own payments and voting choices. {\bf  DECIR AQUI Q NO ES ASSOCIACIONAL EL COMPONENETE SI NO Q DE GRUPOS DE GENTE POBRE!}. HE SAYS ``The main explanatory variables are: the size of the population in the district where the person lives, two measures that capture uncertainty about political preferences, whether a person is an active member of a group in her community, and the number of people that live in her household.'' CRITICIZE THAT!
+
+
+%\citet[p. 864]{Inan2012a}: BROKERS LIVE IN THE TARGETED COMMUNITIES / BROKERS ARE COMMUNITY ORGANIZERS ``In Paraguay, politicians hire respected community leaders in each village to interact with voters to promote their candidacy and offer them money and other forms of aid in exchange for the promise of their vote''.
+
+%\citet[]{Gingerich2013}: how uncertainty about electoral outcomes grows with the size of a jurisdiction, and how risk adverse brokers might prefer to avoid such uncertainty. the existence of brokerage depends on the size of the electorate contained within the jurisdiction controlled by the broker, with large jurisdiction sizes tending to drive brokerage out of existence. In BRazil: vote brokerage thrives in municipalities with very small elec- torates and tends to diminish precipitously as the size of the electorate expands. in many low information environments vote brokers are the only agents with the local knowledge and power necessary to make clientelistic redistribution a viable proposition for a polity’s major political actors. brokers make explicit recommendations to voters about candidates, knowing full well that they will mon- itor compliance at the jurisdictional-level and not at the individual-level. Third, the electoral success of the recommended candidate brings with it substantial collective benefits to the jurisdiction (mediated, of course, by the broker) as well as considerable personal benefits to the broker himself. STRATEGY: ln(registered.voters) is main IV.
+
+
+%INCLUDE THIS CITATION: \citet[]{Gingerich2014b}: he basically says that brokers are still very powerful and capable of shaping electoral outcomes.
+
+
+% FOllowing \citet[]{Gingerich2013} and \citet[]{Rueda2014a} include the {\color{red}log of pop}. Perhaps interact it with my treatment.
+
+
+
+\section*{Poverty Density} 
+
+% Why I introduce "poverty density": Because individual targeting doesn't work
+Where does the current literature on clientelism leave us? First, it is ambivalent about whether party machines target groups or individuals. There does not seem to be acknowledgment that this distinction is an important one. 
+
+% Why Individual targeting is problematic is problematic (0)
+Individual targeting is problematic. However, it is what prevails in the classic works on clientelism. For example, \citet[]{Brusco2004} and \citet[]{Stokes2005} argue that brokers develop really good skills that allow them to infer whether clients voted for the party or not by \emph{looking at them in the eyes}. Similar evidence is suggested in \citet{Gay1999,Gay1998}. Under this framework, local brokers monitor, target, enforce and mobilize electoral support in a one-to-one basis. The theoretical challenge however is that the individual-targeting framework does not provide a clear explanation for how political parties are able to derive enough electoral revenues to allow them to win elections. 
+
+% Why Individual targeting is problematic (1)
+Within the individual targeting framework, one targeted individual (potentially) translates into one additional vote. However, this line of argumentation means also that these costs increase linearly with the size of the targeted population too. In other words, more single individuals to target mean more costs. However, the production-possibility frontier of clientelistic political parties is fixed. That is, parties cannot increase their targeting capacities linearly with the size of the targeted clients. At some point of the function party machines simply run out of brokers. Keeping the levels of uncertainty fixed as the size of the targeted population increases, one-to-one targeting cannot be an efficient strategy because this strategy gets more and more expensive as the size of the clients increases. 
+
+% Why Individual targeting is problematic is problematic (2)
+Individual targeting is also problematic when the size of the targeted population increases because of coordination dilemmas. As argued by many, small communities are easier to monitor\footnote{See for example \citet[]{Kitschelt2007}, \citet[]{Stokes2005} and \citet[p. 67]{Magaloni:2008bq}.}. Besides, as the size of the targeted community increases, coordination dilemmas arise too (\citet[]{Rueda2014a}). Hence, individual targeting is (1) too costly and (2) too risky when it comes to large numbers of individuals.
+
+% Why DENSITY OF THE POOR MATTERS AND WORKS
+This paper argues that brokers target clusters of poor individuals. The meaning of a cluster is very intuitive. It means agglomerations of individuals who share some common factor. In this case, the factor is poverty. We theorize that this common factor (1) reduces monitoring costs by expanding the electoral support base from \emph{actual} beneficiaries only, to \emph{actual} and \emph{potential} beneficiaries. It also (2) makes bribed individuals more accountable by making both groups dependable on much-needed individual transfers, making clientelistic investment less risky.
+
+
+% Poverty clusters: Why does it reduce monitoring costs? (0)
+When poor individuals live in a high-poor dense area (i.e., in a ``cluster'' of poor individuals), clientelism has a multiplicative effect. \emph{Actual} beneficiaries (bribed individuals) comply to keep the benefits going (\citet[]{Rueda2014a,Zarazaga2014}). This paper claims that \emph{potential} beneficiaries (not-yet bribed individuals) comply too because they \emph{might} receive benefits in the future. If a broker has proven to be effective in mobilizing individual benefits to other people in the past, it is reasonable to infer that he might benefit not-yet bribed individuals in the future too. Hence \emph{potential} beneficiaries even when not currently bribed, have strong incentives to support the broker's candidate and vote for him. Others have explained that clientelism has a (social) multiplier effect when targeted at center-nodes in social networks (\citet{Schaffer2015}). The standard empirical strategy is to capture this variance including a variable for involvement in groups at the local level. The model here presented is more flexible in that it allows the existence of a latent (and informal) group: poor people living close to each other, a ``cluster''. As discussed in the empirical section as well, the model does not require formal membership in groups.
+
+% Poverty clusters: Why does it reduce monitoring costs? (1)
+Poverty clusters reduce monitoring costs. Given that clientelism is strictly targeted to the poor, individuals who have not been bribed \emph{yet} (\emph{potential} beneficiaries), face an intermediate situation in a two-stage decision making process. On the one hand, policy packages look too distant and risky, so they choose clientelism (\citet[]{Kitschelt2007}). In the second stage, they have to decide whether to electorally support the broker's candidate or not, \emph{even when not yet bribed}. As \citet[p. 14]{Zarazaga2014} explains, ``[b]rokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this''. Following this complementary strategy between brokers and voters, this paper claims that on the second stage, yet-to-be-bribed individuals are better off keeping the current broker. Hence defection is not an feasible option either. Brokers are aware of this situation too, and they systematically exploit it. Targeting clusters of poor individuals then is cheaper because (1) it reduces monitoring costs by expanding the electoral support from \emph{actual} beneficiaries only, to \emph{actual} and \emph{potential} beneficiaries. Also, (2) it does not require a one-to-one enforcing strategy. The main advantage of this strategy is that it imposes to both to \emph{actual} and \emph{potential} beneficiaries, self-enforced compliance with the broker: the former already know that the broker complies, the latter {\bf are on the waiting list}. 
+
+This line of argumentation connects with other scholarly works as well. For example, \citet[p. 65]{Auyero:2000ta} explains the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the \emph{broker's inner circle} and she got a job as a cleaning lady in a public school. As the broker explained to her before she got the job, \emph{Alfonsina} had to be \emph{patient} because, as a member of the inner circle, she was in the pool of potential beneficiaries. It was only a ``matter of time'' so she could get the job. The idea of \emph{patience} exemplifies the idea of \emph{potential} beneficiaries. In a slightly different research project, \citet[p. 20]{Magaloni:2008bq} explains that under non-democratic contexts, voters have incentives to keep voting for the incumbent government, even when they oppose it. The Mexican PRI lasted so long, and with such high levels of electoral support, not because of electoral fraud, but because voters supported what it represented the ``known devil'' for them. As she explains, hegemonic parties survive when they are able to sustain long-term economic growth and a constant supply of clientelistic transfers. Sustained good economic conditions (in \citet[]{Magaloni:2008bq}'s theory) parallels well with this paper's argument, particularly, on what refers to the ability of already-known brokers to keep benefits coming. Voters do not have better incentives but to support the current broker rather than defect. If the election is lost, a new broker will be sent. She might or might not have the resources/skills to improve prior transfer levels. Given the poor' higher discount rates, they prefer the sure thing today, and vote for the broker's candidate if they received a benefit. Even if they have not received a benefit \emph{yet}, they are better off waiting than taking their chances and defecting. 
+
+
+
+
+% What others have considered is incomplete: organization buying doesn't really apply (0)
+The ``network'' effects of clientelism have been considered before. For example, \citet[p. 250-251]{Stokes:2013cj} present the concept of ``organization buying'', where ``voters do not sell their vote but their involvement in their broker's networks''. If party machines need to buy turnout (\citet[]{Nichter2008}), they will most probably target associations too, as ``citizens immersed in clientelistic networks [...] have a higher probability of voting than the rest'' (\citet[p. 7]{Carreras2013}). \citet[p. 16]{Holland2015} explains that when ``parties lack their own brokerage networks [they seek] to capitalize on organizational networks instead''. For example, ``In Colombia, parties buy the votes of associations of seniors and associations of single mothers, organizing trips to recreational centers outside the city where all their expenses are covered'' (\citet[p. 13]{Rueda2014a}). If this were the case, associationism, i.e. formal ties to local networks, would be paradoxically reversing the quality of the democracy in clientelistic societies.
+
+% What others have considered is incomplete: organization buying doesn't really apply (1)
+Network effects seem really intuitive and appealing. However, what has not been explored yet is whether clientelism is explained by the ``cluster'' or the ``network'' components attached to association membership. Membership into local grass-root associations typically also involve a situation of high-dense poverty. Keeping coordination costs constant, groups typically are formed to address collectively problems that otherwise would be much costly to solve by individuals on their own. Hence, formal group membership might be spuriously related to clientelism.  In other words, is clientelism associated to group membership itself, or is it associated to the density of the poor that is also present in associations? The models here presented suggest that once the effects of associationism are separated by different poverty density levels, it becomes very clear that what explains clientelism is the density of the poor, not membership association.
+
+\section*{Case Selection and Design}
+
+% The Ideal experiment
+If we seek to study the causal effect of living in a high-poor dense area as opposed to live in a low-poor dense area on the likelihood of receiving clientelism, it is necessary to break any systematic component between the treatment variable and the rest of the covariates. In theory, an ideal experiment would follow the next structure. First, we would need an individual with a fixed level of income living under the low-poor dense area (control condition). Theoretically, we would need the same individual with the same level of income, but living under the high-poor dense area (treatment condition). This design has two important advantages. First, any systematic relationship between the treatment variable (\emph{the density of the poor}) and other covariates (such as \emph{income}, in this example) is broken. Second, and as a consequence, given that everything is exactly the same in ``both'' individuals but the treatment received, any change in clientelism should be safely attributed to the presence of the treatment. Additionally, since we are also interested in studying the possible causal effect of living in a highly (scarcely) populated zone or being (or not) involved in local association on the likelihood of receiving clientelism, it is necessary also to break any systematic relationship between these two factors and the treatment variable proposed here. Similarly, the same counterfactual logic described above should be applied. Given that this theoretical design is impossible, this paper takes advantage of matching methods to study the causal effects of these variables on clientelism. 
+
+
+% Why Brazil?
+Since individual income and the aggregated levels of poverty at the local level are not heavily confounded, the Brazilian case offers a good opportunity to test this theory. To make sure, in Brazil it is easier to find a poor individual living in a non-poor context. One particularity of matching methods is that they typically delete observations that cannot be paired. Since aggregate and individual levels of poverty are not strongly correlated, the deleting process for one variable will not affect the deleting process for the other, as neither correctly predicts the other. That is why this paper choose Brazil as a case to test this theory.
+
+
+ 
+\section*{Empirical Analyses}
+
+\subsection*{Data}
+
+% Data
+I use survey data from the Latin American Public Opinion Project for Brazil 2010 (pre-matching N = 1,585) \citet{LAPOP2010}\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available''.}. The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas. All variables used in this work along some descriptives are described in \autoref{sumtab:1} for the matched set and  \autoref{sumtab:2} for the raw sample. 
+
+
+\subsection*{Outcome Variable}
+
+<<clien2r, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Dependent Variable y', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+cat("\014")
+rm(list=ls())
+
+# Load the data
+library(foreign) # install.packages("foreign") 
+dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
+
+# Recoding vars
+dat <- na.omit(dat)
+dat$ed <- as.numeric(dat$ed)
+dat$vb3 <- as.numeric(dat$vb3)
+dat$exc7 <- as.numeric(dat$exc7)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv1 <- as.numeric(dat$polinv1)
+dat$polinv2 <- as.numeric(dat$polinv2)
+dat$polinv3 <- as.numeric(dat$polinv3)
+dat$polinv4 <- as.numeric(dat$polinv4)
+dat$polinv5 <- as.numeric(dat$polinv5)
+
+# Constructing Matched Set
+library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
+m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
+                 discard = "hull.both", 
+                 method = "cem",
+                 data = dat,
+                 verbose = F
+                 )
+
+# Match Data
+m.data <- match.data(m.out)
+sum.match = summary(m.out)
+
+# Recode client1dummy after matching
+library(car) # install.packages("car") 
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+## Distribution Outcome Variable Binary Outcome
+m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
+library(ggplot2)
+
+ggplot(data=m.data, aes(x=clien1dummy)) + 
+        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+        xlab("Clientelism") + 
+        ylab("Frequency") + 
+        theme_bw()
+
+@
+
+% Introducing Outcome Variable
+This paper explains the frequency of clientelism, hence it considers the next variable from the LAPOP data: \emph{[i]n recent years and thinking about election campaigns, has a candidate or someone from a political party offered you something, like a favor, food, or any other benefit or thing in return for your vote or support? Has this happened \emph{often}, \emph{sometimes} or \emph{never}?} This question might cause biased estimates due to social desirability bias ( \citet[]{GonzalezOcantos:2012vr}). However, as \citet[614]{Carreras2013a} and \citet[]{Holland2015} (who use the same dataset and outcome variable) explain, the question does not ask whether respondents took the offer, in consequence, it should not be an important source of bias\footnote{The other question asked among those who did receive goods whether they were more prone or not to voting for the candidate or party that offered them those goods. As this question was not directly related to the frequency of clientelism, it was not used.}.
+
+% Outcome variable needs to be dichotomized
+The \emph{degree} in which clientelism happens is not substantively important to test the argument. Consequently, alternatives \emph{often} and \emph{sometimes} were collapsed into one category, leaving \emph{never} unchanged. \autoref{fig:clien2r} plots the binary distribution of the dependent variable\footnote{\autoref{fig:match3} plots the original distribution of the dependent variable.}.
+
+
+\subsection*{Treatment Variable}
+
+% Explain the logic of this variable
+This paper hypothesizes that clientelism will be higher when the density of the poor is high. To test this argument, it was constructed a variable that comes from the triangulation between the LAPOP dataset and the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}. The treatment variable is the \emph{percentage of people who lives with less than half of the minimum wage in a given municipality}\footnote{{\color{red}Should we need a table with descriptives by municipality?}}. In substantive terms this variable tells us how dense a municipality is in terms of poverty. We call the key independent variable ``treatment'' variable as after matching procedures it works \emph{as-if} random (\citet[]{Ho2006}).
+
+% This variable had to be dichotomized
+The treatment variable was originally continuous and \autoref{fig:tgraph} plots its distribution\footnote{\autoref{fig:tgraph} corresponds to the matched set.}. For reasons we explain below, it was necessary to dichotomize this variable at the median\footnote{\Sexpr{median(m.data$wagehalf)}, vertical-dashed line.}. We call this variable \emph{Density of the Poor} and after  dichotomizing it, it takes two values, \emph{High Density} and \emph{Low Density}.
+
+<<tgraph, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Treatment Variable', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+## Distribution treatment var
+# Labels
+ggplot.labels1 <- data.frame(
+        time = c(15, 60), 
+        value = c(75, 75), 
+        label = c("Low (C)", "High (T)"), 
+        type = c("NA*", "MVH")
+)
+
+## Plot
+library(ggplot2)
+ggplot(m.data, aes(x=wagehalf)) + 
+        geom_histogram(binwidth=2.5, alpha=.7) + 
+        #geom_density(alpha=.1) +
+        theme_bw() +
+        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
+        xlab("Density of the Poor") + ylab("Frequency") +
+        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+@
+
+% Explaining the threshold
+The threshold denotes treatment and control observations. Below the vertical-dashed line are the control observations, while above the line are the treatment observations. Substantively, individuals in the \emph{low} poverty-dense context live mixed with poor, middle-income and rich people. On the contrary, individuals in the \emph{high} poor-dense context, live surrounded only by poor people. This is where the size of the poor is ``high''. 
+
+% Introducing, Justifying and Explaining matching
+One of the main goals of social sciences is to produce parsimonious causal explanations about the world. Therefore extra caution about the data generating process of the treatment variable is required. Individuals are clearly not randomly assigned to either the \emph{high} or the \emph{low} poverty-dense contexts. There are systematic pretreatment factors that lead individuals to live in either low-dense poverty areas or high-dense poverty areas. Not accounting for this non-random assignment might bias the results (\citet{Ho2006}). In order to make the treatment variable \emph{as-if} random, we follow \citet{King2015b}'s advice and preprocess the data using a class of exact matching called ``coarsen exact matching'' (\texttt{CEM})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. The substantive idea behind matching is to force treatment and control distributions to be balanced across covariates (\citet[3]{King2011}). Matching also reduces model dependence by deleting observations that fall outside the common support area (\citet{Ho2006}). The deletion procedure prevents the analyst of making extreme counterfactuals as it discards treatment and control observations that fall outside the convex hull, which is defined as the polygon that bounds the vector of covariates (\citet{King2005a}). \texttt{CEM} has many advantages over other algorithms,  particularly, in what respects to ``its ability to reduce imbalance, model dependence, estimation error, bias, variance, mean square error, and other criteria'' (\citet[p. 2]{Iacus2011}). As a cautionary note, matching designs \emph{do not} produce covariate balance in the way fully randomized experiments do. Matching \emph{approximates} what randomization does by selecting on observables, not on a truly random process. Yet it is a good way to \emph{approximate} covariate balance before the parametric stage. 
+
+% Explaining why I had to dichotomize the treatment var.
+It was necessary to dichotomize the treatment variable. Although there has been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. Therefore, the density of the poor was dichotomized at the median (see \autoref{fig:tgraph}). As robustness checks, different cutoffs were considered (not shown). However, they show the same substantive results. We show also the main estimations but weighted by a generalized propensity score. This strategy does not require the dichotomization of the treatment variable. \autoref{fig:gps:fig} shows the same substantive results.
+
+% Being explicit about the matching procedure
+In order to match treatment with control observations, the equation below was fitted. The covariates that were included do not have to be ex-post factors so to not incur in post-treatment bias. \autoref{eq:1} considers \emph{schooling} and \emph{income}\footnote{The \emph{Income} question has the following wording: ``\emph{Into which of the following income ranges does the total monthly income of this household fit, including remittances from abroad and the income of all the working adults and children?}''. According to the codebook, the 10-choice question is \emph{based on the currency and distribution of the country}.} as pre-treatment factors. By including \texttt{log}\emph{(population)} and \emph{political involvement} we will be able to break any systematic relationship between the \emph{density of the poor} and these covariates.
+
+\begin{equation}\label{eq:1}
+Pr(\text{Clientelism}=1) = \texttt{logit}^{-1}(\beta_{0} + \beta_{1}\text{\texttt{log}(Population)} + \beta_{2}\text{Political Involvement} + \beta_{3}\text{Income} + \beta_{4}\text{Schooling}) 
+\end{equation}
+
+After dropping \Sexpr{sum.match$nn[8]} observations in the treated group and \Sexpr{sum.match$nn[4]} in the control group, the procedure matches \Sexpr{sum.match$nn[6]} treated observations with \Sexpr{sum.match$nn[2]} control observations. A very good balance was obtained. \autoref{fig:balance} shows the quantiles of treated and control groups, pre and post matching procedures. Once the matched set was built and the unmatched observations were discarded, several logistic regressions were estimated, for several combinations of control variables (see \autoref{tab:1}).
+
+
+\subsection*{Control Variables}
+
+% Why I included the control variables I included
+Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). \citet[]{Weitz-shapiro} argues that ``the interaction between political competition and poverty will explain variation in clientelism''. Following this strategy, official electoral data for the 2008 municipal elections was collected and the variable called \emph{municipal opposition} was constructed\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}. The variable measures the percentage of seats that are not controlled by the party of the mayor in a given municipal council. Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \cite{Stokes2005}, \cite{Dixit:1996wp} and \cite{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
+
+
+
+\subsection*{Estimation Method}
+
+It is important to stress that this identification strategy is not about municipalities. That would mean to incur in ecological fallacy. What the treatment variable captures is a characteristic that every individual shares with his/her environment. Hence, the variable reflects features of the average individual at a micro-level. 
+
+As clientelism can only take two values, 1 when clientelism occurs and 0 otherwise, it needs to be estimated using a logistic regression. However, as \autoref{fig:clien2r} shows, clientelism is a rare event. For this reason this variable is estimated via a rare event logistic regression which corrects problems due to rare events (\citet{King2001a}, \citet{King:2001wo})\footnote{We report different estimation methods as well in the \hyperref[robcheck]{Robustness Checks}.}. 
+
+\subsection*{Results} 
+
+<<tab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
+# Recode client1dummy after matching
+m.data <- match.data(m.out)
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+
+
+
+# Models
+
+# library(devtools) # install.packages("devtools")
+#install_github('IQSS/Zelig')
+library(Zelig) 
+
+relogit.1 <- zelig(clien1dummy ~ large,
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+relogit.2 <- zelig(clien1dummy ~ large + exc7 + polinv + urban + log(pop) + ed,
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+relogit.3 <- zelig(clien1dummy ~ income + exc7 + polinv + urban + log(pop) + ed,
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+m.data$logpop = log(m.data$pop)
+relogit.4 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+relogit.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + log(pop):polinv,
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+relogit.6 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income, 
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+# Table
+library(texreg, quietly = T) # install.packages("texreg")
+@
+
+
+\autoref{tab:1} shows the estimations\footnote{The main model in this paper, is Model 4 in \autoref{tab:1}. All robustness checks, scatter plots and extra statistical evidence replicate this model. When the standard errors are clustered by municipality or when fixed-effects are included, the results reveal the same substantive effects for most of the models.}. \emph{High density} is positive, statistically significant and robust across all specifications. As expected, \emph{income} is negative, but very weak and non-significant. In substantive terms, these findings strongly suggest that what drives machines to target clientelism is the socioeconomic level of groups, irrespective of individual levels of income. In other words, a poor individual that lives where the density of the poor is low has less chances of receiving clientelistic goods compared to an \emph{equally} poor individual who lives where the density of the poor is high. The \emph{political involvement index} is positive but non-significant. Population size and the interaction term proposed in \citet[]{Weitz-shapiro}\footnote{Implementing what \citet[]{Armstrong:2010jk} suggests, \autoref{fig:weitz:1} corroborates the results in \autoref{tab:1}.} do not seem to have an impact both effects are almost indistinguishable from zero and also non-significant.
+
+\subsection*{The Density of the Poor}
+
+
+<<fig:4, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Probability of Clientelism Given the Treatment (Density Function Plot)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+# Simulation
+large.0 <- setx(relogit.4, large =0)
+large.1 <- setx(relogit.4, large =1)
+set.seed(602)
+Model.large.s <- sim(relogit.4, x = large.0, x1 = large.1, num=250000)
+
+large.0.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x")); colnames(large.0.s)[1] <- "X1"
+large.1.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x1")); colnames(large.1.s)[1] <- "X2"
+Model.large.e = cbind(large.0.s,large.1.s)
+
+
+X1 <- Model.large.e$X1
+X2 <- Model.large.e$X2
+
+# Plot
+ggplot.labels2 <- data.frame(
+        time = c(mean(Model.large.e$X1), mean(Model.large.e$X2), mean(Model.large.e$X1), mean(Model.large.e$X2)), 
+        value = c(14, 17, 11, 15), 
+        label = c("Low", "High", round(mean(Model.large.e$X1), 3),round(mean(Model.large.e$X2), 3)), 
+        type = c("NA*", "MVH")
+)
+
+library(ggplot2) # install.packages("ggplot2")
+
+ggplot() + 
+        geom_density(aes(x=X1), data= Model.large.e,  fill="grey", alpha = .9, linetype="dotted") + 
+        geom_density(aes(x=X2), data=Model.large.e, fill="dark grey", alpha = .8) +
+        xlab("") + ylab("") +
+        theme_bw() +
+        geom_segment(data= Model.large.e, aes(x = mean(X1), y = 0, xend = mean(X1), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
+        geom_segment(data= Model.large.e, aes(x = mean(X2), y = 0, xend = mean(X2), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
+        theme(legend.title=element_blank()) +
+        geom_text(data = ggplot.labels2, aes(x = time, y = value, label = label),colour = "black", size=4)
+@
+
+% The treatment variable works and it is very strong.
+\autoref{tab:1} strongly suggests that controlling for everything else, including group membership, individual income and population size, individuals who live in poverty clusters have a higher probability of being bribed. \autoref{fig:fig:4} shows a probability density plot. Following \citet[]{King2000}, after the main model was estimated, the parameters were simulated 2,500 times in order to build more stable estimates. The plot strongly suggests that someone living in a highly-poor dense area has twice the chances of being bribed than someone living in an area where the density of the poor is low (\Sexpr{100*(round(mean(X1), digits = 2))}\% vs \Sexpr{100*(round(mean(X2), digits = 2))}\%), keeping individual income levels balanced in both groups.
+
+\subsection*{Is Associationism Associated to Clientelism?}
+
+<<int:1, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Interaction term: Population Size and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+# Recode client1dummy after matching
+m.data <- match.data(m.out)
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+# Transformation
+m.data$logpop = log(m.data$pop)
+polinv.range <- min(m.data$polinv):max(m.data$polinv)
+logpop.range <- min(m.data$logpop):max(m.data$logpop)
+
+# Interacted Model
+relogit.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv,
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+# Simulations
+x0.1.A <- setx(relogit.5, polinv = quantile(m.data$polinv, .25), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
+x0.1.B <- setx(relogit.5, polinv = quantile(m.data$polinv, .75), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
+set.seed(602)
+relogit.5.s1.A <- sim(relogit.5, x=x0.1.A, num=600)
+relogit.5.s1.B <- sim(relogit.5, x=x0.1.B, num=600)
+
+relogit.5.e1.A = data.frame(relogit.5.s1.A$getqi(qi="ev", xvalue="range")); colnames(relogit.5.e1.A)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # low
+relogit.5.e1.B = data.frame(relogit.5.s1.B$getqi(qi="ev", xvalue="range")); colnames(relogit.5.e1.B)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # high
+
+# Plot
+library(ggplot2)
+ggplot() + 
+        geom_point(aes(x=polinv.range[1], y=relogit.5.e1.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[1], y=relogit.5.e1.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[2], y=relogit.5.e1.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[2], y=relogit.5.e1.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[3], y=relogit.5.e1.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[3], y=relogit.5.e1.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[4], y=relogit.5.e1.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[4], y=relogit.5.e1.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[5], y=relogit.5.e1.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[5], y=relogit.5.e1.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[6], y=relogit.5.e1.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
+        geom_point(aes(x=polinv.range[6], y=relogit.5.e1.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
+        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
+        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
+@
+
+% On the issue of log(Pop)*Associastionism
+New research argues that associations at the local level are strongly associated with clientelism. For example, \citet[]{Rueda2014a} interacts population size with group membership. The argument is that small groups would represent a less risky investment for the broker, while associations would provide a much more effective and cheaper aggregated monitoring. However, given the nature of clientelism, most empirical models deal with binary response variables. Consequently, interaction terms within the limited dependent variables are complicated. ``The magnitude of the interaction effect in nonlinear models does not equal the marginal effect of the interaction term, can be of opposite sign, and its statistical significance is not [usually] calculated by standard softwares'' (\citet[]{Ai2003}). Due to cross-partial derivatives are not an alternative either, simulation methods are required to estimate the combined effects of the interaction term (\citet[]{WilliamJ.Wales2013}). 
+
+% The plot shows a non existent relationship.
+Repeating the process described above on simulations,  \autoref{fig:int:1} takes the estimates of model 5 in \autoref{fig:int:1} and plots 600 simulated expected probabilities for each level of political involvement on the probability of clientelism. The figure shows an interaction between the log of population and the political involvement index (see \citet[]{Holland2015,Rueda2014a}), particularly, going from the minimum (red) to the maximum (blue) population (in log scale). On the one hand, the estimates of model 5 in \autoref{tab:1} are consistent with the theory. The estimate is (weakly) negative and non significant. More importantly, \autoref{fig:int:1} suggests that once this interaction term is decomposed by changes in population size for different values of political involvement, there is no strong evidence to suggest that small-sized population (in red) have higher probabilities of clientelism compared to big-sized population municipalities (in blue). In other words, both groups do not seem to be classified by their membership in different population sizes.
+
+
+% Associationism and Size of the Poor as confounded factors
+Results regarding population size and associationism are not consistent with past research. Aside from that, another aspect that needs attention is the relationship between the size of the poor and associationism. As argued before, new research on clientelism finds that there is an association between group membership and clientelism. However, in theory, it would be reasonable to expect that poor individuals join associations at the local level to solve their problems. Keeping coordination costs constant, groups typically are formed to address collectively problems that otherwise would be much costly to solve by individuals on their own\footnote{{\color{red}DO WE NEED TO SUPPORT THIS VERY INTUITIVE OBSERVATION?}}. If that were the case, high-poor density ought to be confounded with group membership. However, we still do not know whether brokers target individuals \emph{because they are related to an association} (standard finding in the literature so far) or \emph{because brokers target their resources to highly populated poor groups} (this paper's argument). 
+
+<<int:2, echo = FALSE, tidy=TRUE, fig.pos='H', warning=FALSE, message=FALSE, fig.cap='High Density and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+# 
+library(foreign) # install.packages("foreign") 
+dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
+dat <- na.omit(dat)
+dat$ed <- as.numeric(dat$ed)
+dat$vb3 <- as.numeric(dat$vb3)
+dat$exc7 <- as.numeric(dat$exc7)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv1 <- as.numeric(dat$polinv1)
+dat$polinv2 <- as.numeric(dat$polinv2)
+dat$polinv3 <- as.numeric(dat$polinv3)
+dat$polinv4 <- as.numeric(dat$polinv4)
+dat$polinv5 <- as.numeric(dat$polinv5)
+
+library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
+m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
+                 discard = "hull.both", 
+                 method = "cem",
+                 data = dat,
+                 verbose = F
+)
+
+
+m.data <- match.data(m.out)
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+# Main Model
+m.data$logpop = log(m.data$pop)
+relogit.4 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
+                   model = "relogit", 
+                   #robust = TRUE,
+                   cite = FALSE,
+                   data = m.data)
+
+# Simulation A x0.2
+polinv.range <- min(m.data$polinv):max(m.data$polinv)
+logpop.range <- min(m.data$logpop):max(m.data$logpop)
+
+x0.2.A <- setx(relogit.4, large = 0, polinv = polinv.range)
+set.seed(602)
+relogit.4.s2.A <- sim(relogit.4, x=x0.2.A, num=1000)
+relogit.4.e2.A = data.frame(relogit.4.s2.A$getqi(qi="ev", xvalue="range")); colnames(relogit.4.e2.A)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # low
+
+X.scale.2 <- c(mean(relogit.4.e2.A[,1]), 
+               mean(relogit.4.e2.A[,2]), 
+               mean(relogit.4.e2.A[,3]), 
+               mean(relogit.4.e2.A[,4]), 
+               mean(relogit.4.e2.A[,5]), 
+               mean(relogit.4.e2.A[,6])
+               )
+
+# Simulation B x1.2
+x1.2.B <- setx(relogit.4, large = 1, polinv = polinv.range)
+set.seed(602)
+relogit.4.s2.B <- sim(relogit.4, x=x1.2.B, num=1000)
+relogit.4.e2.B = data.frame(relogit.4.s2.B$getqi(qi="ev", xvalue="range")); colnames(relogit.4.e2.B)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # high
+
+# Plot
+library(ggplot2)
+ggplot() + 
+        geom_point(aes(x=polinv.range[1], y=relogit.4.e2.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[1], y=relogit.4.e2.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[2], y=relogit.4.e2.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[2], y=relogit.4.e2.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[3], y=relogit.4.e2.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[3], y=relogit.4.e2.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[4], y=relogit.4.e2.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[4], y=relogit.4.e2.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[5], y=relogit.4.e2.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[5], y=relogit.4.e2.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[6], y=relogit.4.e2.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
+        geom_point(aes(x=polinv.range[6], y=relogit.4.e2.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
+        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
+        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
+@
+
+% Comments on the plot
+Using the estimates from the main model,  \autoref{fig:int:2} plots simulated expected probabilities of clientelism by different values of political involvement. Conveniently, it decomposes this relationship by high-poverty density (blue) and low poverty density (red). The plot \emph{strongly} suggests that, controlling for everything else, as \emph{political involvement} increases, \emph{in general}, clientelism has a higher probability. \emph{However}, once we decompose this probability by high and low poverty densities, it is very clear that what really drives the general upward trend is the highly-dense poverty context, \emph{not political involvement itself}. These findings might explain why other papers have found (statistical) evidence in favor of group membership and associationism. It seems safe to suggest that what mainly explains clientelism is not membership into associations \emph{per se}, but \emph{the aggregated economic composition of the group}. 
+
+\subsection*{Robustness Checks\label{robcheck}}
+
+
+%Finally, \autoref{tab:2} shows the main model assuming different functional forms. Both \texttt{logit} and \texttt{probit} specifications show the same substantive effects\footnote{In theory, all these specifications should be similar. However, we show them for purposes of transparency.}. 
+
+Additionally, due that clientelism generate mostly zeros, a zero-inflated Poisson regression was considered (see \citet{Long:1997wv}). This specification assumes that the process that inflates the zeros (not shown) is driven by \emph{income} and \emph{high density}\footnote{\emph{Income} was excluded from the non-zero specification because of multicollinearity.}. The treatment variable behaves very well regardless of the assumed functional form. \autoref{gps:tab} shows the same models run in \autoref{tab:1} but using a generalized propensity score  as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this specification is that the GPS does not require to dichotomize the treatment variable. The substantive results are the same. After implementing what \citet[]{Fong2015} suggest, \autoref{fig:gps:fig} consistently shows that as the density of the poor increases, the probability of clientelism increases considerably. 
+
+Lastly, \autoref{tab:sens} shows evidence about bias reduction (or increase) using the $\mathcal{L}$ statistic test for imbalance (\citet[]{Iacus2011}). When $\mathcal{L}=1$ there is perfect imbalance, while when $\mathcal{L}=0$ there is perfect balance. In substantive terms, perfect balance means that covariates are identical under the treatment and control conditions. Moreover, when the data is perfectly balanced, the treatment assignment mechanism is ignorable. The table also shows the difference in means given a switch from control to treatment conditions. The matched set seems to have a very good balance\footnote{Matching breaks the systematic bias between the treatment variable (the density of the poor) and the rest of the covariates. It does \emph{not} break the systematic relationship respect to the outcome variable, i.e. clientelism. Hence statistical significance is still possible between income and clientelism as this relationship is not zeroed by matching methods.}. 
+
+
+\subsection*{Discussion: Potential and Actual Beneficiaries}
+
+All and all, group membership itself does not seem to be associated to clientelism. Individual income does not seem to be a strong predictor of clientelism either. A similar conclusion applies for other arguments related to population size and other interactions. This paper proposed that there is a much more flexible way brokers can effectively target their resources. Brokers take advantage of the aggregated economic structure of the communities they target. This structure impose very clear incentives to the bribed: \emph{actual} beneficiaries want to keep benefits coming, while \emph{potential} beneficiaries are better off waiting their turn. Brokers take advantage of the spillover effects associated to the territorial proximity of poor individuals. This argument does not need brokers to know bribed's vote intention, nor it does require bribed to be involved in formal associations, nor it depends on the size of population. What really binds individuals is the aggregated poverty structure. This model argued that aggregated poverty is what makes individuals living in high-poor dense areas to act coordinately. In order to improve their economic situation, all of them have enough incentives to vote for the broker's candidate. To conclude, \emph{Is this an ``AND'' or an ``OR'' story?} It might be the case that clientelism based on individual income might be a complementary strategy with the group-poverty strategy. The empirical results presented here seem to strongly support the latter, exclusively. However, all empirical models and quantitative analyses are well suited to study the average case. The data analyzed here suggest that a poor individual that lives where the density of the poor is low has less chances of receiving clientelistic goods compared to an equally poor individual who lives where the density of the poor is high. 
+
+
+
+
+\newpage
+
+\section*{Appendix}
+
+% Original Distribution of Outcome Variable
+<<match3, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Original Distribution of Outcome Variable (matched set)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+## Distribution Outcome Variable 3 outcomes
+
+# Match Data
+m.data <- match.data(m.out)
+
+# Plot
+library(ggplot2)
+ggplot(data=m.data, aes(x=clientelism)) + 
+        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+        xlab("Clientelism") + 
+        ylab("Frequency") + 
+        theme_bw()
+
+@
+
+
+% Computing L statistic
+<<lstat, echo = FALSE, tidy=TRUE, message = F, cache = TRUE>>=
+large <- as.numeric(m.data$large)
+income <- as.numeric(m.data$income)
+exc7 <- as.numeric(m.data$exc7)
+polinv <- as.numeric(m.data$polinv)
+urban <- as.numeric(m.data$urban)
+logpop = log(m.data$pop)
+logpop <- as.numeric(logpop)
+ed <- as.numeric(m.data$ed)
+munopp <- as.numeric(m.data$munopp)
+vb3 <- as.numeric(m.data$vb3)
+
+
+m.data.imb <- data.frame(large, income, exc7, polinv, urban, logpop, ed, munopp, vb3)
+vars <- c("income", "exc7", "polinv", "urban", "logpop", "ed", "munopp", "vb3")
+library(cem)
+imb <- imbalance(group = m.data$large, data = m.data.imb[vars])
+#imb
+
+# l
+l = imb$tab[3] # Extract L Statistic
+st = imb$tab[1] # Extract Diff in Means
+
+# Calling values
+l.income = round(l$L1[1], 3)
+l.exc7 = round(l$L1[2], 3)
+l.polinv = round(l$L1[3], 3)
+l.urban = round(l$L1[4], 3)
+l.logpop = round(l$L1[5], 3)
+l.ed = round(l$L1[6], 3)
+l.munopp = round(l$L1[7], 3)
+l.vb3 = round(l$L1[8], 3)
+
+# Calling values
+st.income = round(st$statistic[1], 3)
+st.exc7 = round(st$statistic[2], 3)
+st.polinv = round(st$statistic[3], 3)
+st.urban = round(st$statistic[4], 3)
+st.logpop = round(st$statistic[5], 3)
+st.ed = round(st$statistic[6], 3)
+st.munopp = round(st$statistic[7], 3)
+st.vb3 = round(st$statistic[8], 3)
+@
+
+\begin{table}[H] \centering 
+  \caption{Sensitivity Analysis: $\mathcal{L}$ Static} 
+  \label{tab:sens} 
+\scriptsize 
+\begin{tabular}{lcc}
+\hline
+\multicolumn{1}{c}{{\bf Covariate}}&\multicolumn{1}{c}{{\bf $\mathcal{L}$ Statistic}}&\multicolumn{1}{c}{{\bf Difference in Means}}\\
+\hline 
+Income 						& \Sexpr{l.income}  & \Sexpr{st.income} \\
+Perception of Corruption 	& \Sexpr{l.exc7}  & \Sexpr{st.exc7} \\
+Political Involvement Index & \Sexpr{l.polinv}  & \Sexpr{st.polinv} \\
+Urban 						& \Sexpr{l.urban}  & \Sexpr{st.urban} \\
+Population (ln)				& \Sexpr{l.logpop} 	& \Sexpr{st.logpop} \\
+Years of Schooling 			& \Sexpr{l.ed} 	& \Sexpr{st.ed} 	\\
+Municipal Opposition 		& \Sexpr{l.munopp} 	& \Sexpr{st.munopp} 	\\
+Political Id 				& \Sexpr{l.vb3} 	& \Sexpr{st.vb3} 	\\
+\hline
+\end{tabular} 
+\end{table} 
+
+
+
+% Summary Stats Matched Set
+<<sumtab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
+# Subset Data for Descriptive Stats Table
+
+# matched sample
+m.dat.clien1dummy <- m.data$clien1dummy 
+m.dat.clien1dummy <- dat$clien1dummy 
+m.dat.large <- dat$large 
+m.dat.polinv <- dat$polinv 
+m.dat.exc7 <- dat$exc7 
+m.dat.vb3 <- dat$vb3 
+m.dat.ed <- dat$ed 
+m.dat.income <- dat$income 
+m.dat.munopp <- dat$munopp
+m.dat.pop = dat$pop
+m.dat.logpop = log(m.dat.pop)
+m.dat.urban <- dat$urban
+m.dat.urban <- as.numeric(m.dat.urban)
+m.dat.urban <- recode(m.dat.urban, "1 = 0 ; 2 = 1")
+m.dat.polinv <-  dat$polinv
+m.dat.ed <- dat$ed
+m.dat.ed <- as.numeric(m.dat.ed)
+m.dat.ed <- recode(m.dat.ed, "
+                   1 = 0 ; 
+                   2 = 1 ; 
+                   3 = 2 ; 
+                   4 = 3 ;
+                   5 = 4 ;
+                   6 = 5 ;
+                   7 = 6 ;
+                   8 = 7 ;
+                   9 = 8 ;
+                   10 = 9 ;
+                   11 = 10 ;
+                   12 = 11 ;
+                   13 = 12 ;
+                   14 = 13 ;
+                   15 = 14 ;
+                   16 = 15 ;
+                   17 = 16")
+
+m.data.s <- data.frame(m.dat.clien1dummy, m.dat.large, m.dat.income, m.dat.exc7, m.dat.polinv, m.dat.urban, m.dat.logpop, m.dat.ed, m.dat.munopp, m.dat.vb3)
+
+# Descriptive Stats Matched Set
+library(stargazer, quietly = T)
+stargazer(m.data.s, 
+          summary=T, 
+          title = "Summary Statistics: Matched Sample",
+          label = "sumtab:1",
+          type = "text",
+          font.size = "scriptsize",
+          style= "apsr",
+          covariate.labels=c(
+                  "Clientelism",
+                  "High Density",
+                  "Income",
+                  "Perception of Corruption",
+                  "Political Involvement Index",
+                  "Urban",
+                  "Population (ln)",
+                  "Years of Schooling",
+                  "Municipal Opposition",
+                  "Political Id"),
+          table.placement = "h",
+          notes.align = "c"
+)
+@
+
+% Summary Stats Raw Set
+<<sumtab:2, echo=FALSE, comment=NA, results='asis', cache = T>>=
+# Descriptive Stats Raw Set
+
+# Subset Data for Descriptive Stats Table
+
+# whole sample
+dat.clien1dummy <- dat$clien1dummy 
+dat.large <- dat$large 
+dat.polinv <- dat$polinv 
+dat.exc7 <- dat$exc7 
+dat.vb3 <- dat$vb3 
+dat.ed <- dat$ed 
+dat.income <- dat$income 
+dat.munopp <- dat$munopp
+dat.pop = dat$pop
+dat.logpop = log(dat.pop)
+dat.urban <- dat$urban
+dat.urban <- as.numeric(dat.urban)
+dat.urban <- recode(dat.urban, "1 = 0 ; 2 = 1")
+dat.polinv <-  dat$polinv
+dat.ed <- dat$ed
+dat.ed <- as.numeric(dat.ed)
+dat.ed <- recode(dat.ed, "
+                 1 = 0 ; 
+                 2 = 1 ; 
+                 3 = 2 ; 
+                 4 = 3 ;
+                 5 = 4 ;
+                 6 = 5 ;
+                 7 = 6 ;
+                 8 = 7 ;
+                 9 = 8 ;
+                 10 = 9 ;
+                 11 = 10 ;
+                 12 = 11 ;
+                 13 = 12 ;
+                 14 = 13 ;
+                 15 = 14 ;
+                 16 = 15 ;
+                 17 = 16")
+
+dat.s <- data.frame(dat.clien1dummy, dat.large, dat.income, dat.exc7, dat.polinv, dat.urban, dat.logpop, dat.ed, dat.munopp, dat.vb3)
+
+
+library(stargazer, quietly = T)
+stargazer(dat, 
+          summary=T, 
+          title = "Summary Statistics: Raw Sample",
+          label = "sumtab:2",
+          type = "text",
+          font.size = "scriptsize",
+          style= "apsr",
+          covariate.labels=c(
+                  "Clientelism",
+                  "High Density",
+                  "Income",
+                  "Perception of Corruption",
+                  "Political Involvement Index",
+                  "Urban",
+                  "Population (ln)",
+                  "Years of Schooling",
+                  "Municipal Opposition",
+                  "Political Id"),
+          table.placement = "h",
+          notes.align = "c"
+)
+@
+
+% QQ Plots
+<<balance, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Testing Pre and Post Matching Covariate Balance', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+set.seed(602)
+plot(m.out, col = "forestgreen")
+@
+
+
+% GPS
+<<gps:tab,echo=FALSE, comment=NA, results='asis', cache = T>>=
+library(foreign)
+dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
+
+# Recoding vars
+dat <- na.omit(dat)
+dat$ed <- as.numeric(dat$ed)
+dat$vb3 <- as.numeric(dat$vb3)
+dat$exc7 <- as.numeric(dat$exc7)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv1 <- as.numeric(dat$polinv1)
+dat$polinv2 <- as.numeric(dat$polinv2)
+dat$polinv3 <- as.numeric(dat$polinv3)
+dat$polinv4 <- as.numeric(dat$polinv4)
+dat$polinv5 <- as.numeric(dat$polinv5)
+
+
+# Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+
+
+fit <- CBPS(wagehalf ~ income + ed + log(pop) + polinv, data = dat, iterations = 2500)
+# Attaching weights to DF
+dat$weights = fit$weights
+
+
+# Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+
+
+# Models
+library(Zelig)
+gps.relogit.1 <- zelig(clien1dummy ~ wagehalf,
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+
+gps.relogit.2 <- zelig(clien1dummy ~ wagehalf + exc7 + polinv + urban + log(pop) + ed,
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+
+gps.relogit.3 <- zelig(clien1dummy ~ wagehalf + exc7 + polinv + urban + log(pop) + ed,
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+
+dat$logpop = log(dat$pop)
+gps.relogit.4 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+
+gps.relogit.5 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + log(pop):polinv,
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+
+gps.relogit.6 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income, 
+                       model = "ls",
+                       weights = "weights", 
+                       #robust = TRUE,
+                       cite = FALSE,
+                       data = dat)
+@
+
+<<gps:fig, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Expected Value Given Continuous Treatment (GPS Weighting, 800 simulations per each value on the X-axis)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=1000,cache = TRUE>>=
+##########################
+#   GPS  Weighting PLOT [gps:fig]
+##########################
+
+# Transformation
+wagehalf.range <- min(dat$wagehalf):max(dat$wagehalf)
+
+# Simulation x0.gps
+low.polinv <- setx(gps.relogit.4, polinv = quantile(dat$polinv, .25), wagehalf= wagehalf.range)
+high.polinv <- setx(gps.relogit.4, polinv = quantile(dat$polinv, .75), wagehalf= wagehalf.range)
+
+set.seed(602)
+relogit.4.s1.gps <- sim(gps.relogit.4, x=low.polinv, x1=high.polinv, num=100)
+
+relogit.4.low.gps = data.frame(relogit.4.s1.gps$getqi(qi="ev", xvalue="range")); colnames(relogit.4.low.gps)<-seq(1:76) # low
+relogit.4.high.gps = data.frame(relogit.4.s1.gps$getqi(qi="ev", xvalue="range1")); colnames(relogit.4.high.gps)<-seq(1:76) # high
+
+library(ggplot2)
+set.seed(602)
+ggplot() + 
+        geom_point(aes(x=wagehalf.range[1], y=relogit.4.low.gps[1]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[2], y=relogit.4.low.gps[2]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[3], y=relogit.4.low.gps[3]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[4], y=relogit.4.low.gps[4]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[5], y=relogit.4.low.gps[5]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[6], y=relogit.4.low.gps[6]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[7], y=relogit.4.low.gps[7]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[8], y=relogit.4.low.gps[8]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[9], y=relogit.4.low.gps[9]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[10], y=relogit.4.low.gps[10]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[11], y=relogit.4.low.gps[11]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[12], y=relogit.4.low.gps[12]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[13], y=relogit.4.low.gps[13]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[14], y=relogit.4.low.gps[14]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[15], y=relogit.4.low.gps[15]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[16], y=relogit.4.low.gps[16]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[17], y=relogit.4.low.gps[17]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[18], y=relogit.4.low.gps[18]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[19], y=relogit.4.low.gps[19]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[20], y=relogit.4.low.gps[20]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[21], y=relogit.4.low.gps[21]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[22], y=relogit.4.low.gps[22]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[23], y=relogit.4.low.gps[23]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[24], y=relogit.4.low.gps[24]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[25], y=relogit.4.low.gps[25]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[26], y=relogit.4.low.gps[26]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[27], y=relogit.4.low.gps[27]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[28], y=relogit.4.low.gps[28]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[29], y=relogit.4.low.gps[29]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[30], y=relogit.4.low.gps[30]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[31], y=relogit.4.low.gps[31]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[32], y=relogit.4.low.gps[32]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[33], y=relogit.4.low.gps[33]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[34], y=relogit.4.low.gps[34]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[35], y=relogit.4.low.gps[35]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[36], y=relogit.4.low.gps[36]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[37], y=relogit.4.low.gps[37]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[38], y=relogit.4.low.gps[38]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[39], y=relogit.4.low.gps[39]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[40], y=relogit.4.low.gps[40]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[41], y=relogit.4.low.gps[41]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[42], y=relogit.4.low.gps[42]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[43], y=relogit.4.low.gps[43]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[44], y=relogit.4.low.gps[44]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[45], y=relogit.4.low.gps[45]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[46], y=relogit.4.low.gps[46]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[47], y=relogit.4.low.gps[47]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[48], y=relogit.4.low.gps[48]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[49], y=relogit.4.low.gps[49]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[50], y=relogit.4.low.gps[50]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[51], y=relogit.4.low.gps[51]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[52], y=relogit.4.low.gps[52]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[53], y=relogit.4.low.gps[53]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[54], y=relogit.4.low.gps[54]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[55], y=relogit.4.low.gps[55]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[56], y=relogit.4.low.gps[56]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[57], y=relogit.4.low.gps[57]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[58], y=relogit.4.low.gps[58]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[59], y=relogit.4.low.gps[59]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[60], y=relogit.4.low.gps[60]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[61], y=relogit.4.low.gps[61]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[62], y=relogit.4.low.gps[62]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[63], y=relogit.4.low.gps[63]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[64], y=relogit.4.low.gps[64]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[65], y=relogit.4.low.gps[65]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[66], y=relogit.4.low.gps[66]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[67], y=relogit.4.low.gps[67]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[68], y=relogit.4.low.gps[68]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[69], y=relogit.4.low.gps[69]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[70], y=relogit.4.low.gps[70]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[71], y=relogit.4.low.gps[71]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[72], y=relogit.4.low.gps[72]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[73], y=relogit.4.low.gps[73]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[74], y=relogit.4.low.gps[74]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[75], y=relogit.4.low.gps[75]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[76], y=relogit.4.low.gps[76]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/530) + 
+        geom_point(aes(x=wagehalf.range[1], y=relogit.4.high.gps[1]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[2], y=relogit.4.high.gps[2]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[3], y=relogit.4.high.gps[3]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[4], y=relogit.4.high.gps[4]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[5], y=relogit.4.high.gps[5]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[6], y=relogit.4.high.gps[6]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[7], y=relogit.4.high.gps[7]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[8], y=relogit.4.high.gps[8]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[9], y=relogit.4.high.gps[9]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[10], y=relogit.4.high.gps[10]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[11], y=relogit.4.high.gps[11]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[12], y=relogit.4.high.gps[12]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[13], y=relogit.4.high.gps[13]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[14], y=relogit.4.high.gps[14]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[15], y=relogit.4.high.gps[15]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[16], y=relogit.4.high.gps[16]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[17], y=relogit.4.high.gps[17]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[18], y=relogit.4.high.gps[18]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[19], y=relogit.4.high.gps[19]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[20], y=relogit.4.high.gps[20]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[21], y=relogit.4.high.gps[21]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[22], y=relogit.4.high.gps[22]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[23], y=relogit.4.high.gps[23]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[24], y=relogit.4.high.gps[24]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[25], y=relogit.4.high.gps[25]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[26], y=relogit.4.high.gps[26]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[27], y=relogit.4.high.gps[27]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[28], y=relogit.4.high.gps[28]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[29], y=relogit.4.high.gps[29]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[30], y=relogit.4.high.gps[30]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[31], y=relogit.4.high.gps[31]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[32], y=relogit.4.high.gps[32]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[33], y=relogit.4.high.gps[33]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[34], y=relogit.4.high.gps[34]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[35], y=relogit.4.high.gps[35]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[36], y=relogit.4.high.gps[36]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[37], y=relogit.4.high.gps[37]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[38], y=relogit.4.high.gps[38]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[39], y=relogit.4.high.gps[39]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[40], y=relogit.4.high.gps[40]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[41], y=relogit.4.high.gps[41]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[42], y=relogit.4.high.gps[42]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[43], y=relogit.4.high.gps[43]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[44], y=relogit.4.high.gps[44]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[45], y=relogit.4.high.gps[45]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[46], y=relogit.4.high.gps[46]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[47], y=relogit.4.high.gps[47]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[48], y=relogit.4.high.gps[48]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[49], y=relogit.4.high.gps[49]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[50], y=relogit.4.high.gps[50]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[51], y=relogit.4.high.gps[51]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[52], y=relogit.4.high.gps[52]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[53], y=relogit.4.high.gps[53]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[54], y=relogit.4.high.gps[54]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[55], y=relogit.4.high.gps[55]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[56], y=relogit.4.high.gps[56]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[57], y=relogit.4.high.gps[57]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[58], y=relogit.4.high.gps[58]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[59], y=relogit.4.high.gps[59]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[60], y=relogit.4.high.gps[60]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[61], y=relogit.4.high.gps[61]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[62], y=relogit.4.high.gps[62]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[63], y=relogit.4.high.gps[63]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[64], y=relogit.4.high.gps[64]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[65], y=relogit.4.high.gps[65]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[66], y=relogit.4.high.gps[66]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[67], y=relogit.4.high.gps[67]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[68], y=relogit.4.high.gps[68]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[69], y=relogit.4.high.gps[69]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[70], y=relogit.4.high.gps[70]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[71], y=relogit.4.high.gps[71]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[72], y=relogit.4.high.gps[72]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[73], y=relogit.4.high.gps[73]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[74], y=relogit.4.high.gps[74]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[75], y=relogit.4.high.gps[75]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
+        geom_point(aes(x=wagehalf.range[76], y=relogit.4.high.gps[76]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/530) + 
+        xlab("Percentage People Living With Less than Half of the Minimum Wage") + ylab("Expected Value of Clientelism") + theme_bw()
+@
+
+<<weitz:1, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Interaction Effects Plot: Municipal Opposition and Income', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
+library(DAMisc) # install.packages("DAMisc")
+logit.int <- glm(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income,  
+                 family=binomial(link="logit"), 
+                 data = m.data)
+
+out <- intEff(obj=logit.int, vars=c("munopp", "income"), data=m.data)
+
+set.seed(604)
+logit.int.p <- plot(jitter(out$phat, amount=0.009), 
+                    jitter(out$int_eff, amount=0.009), 
+                    xlab="Predicted Probability of Clientelism", 
+                    ylab = "Municipal Opposition * Income",
+                    ylim=c(-0.015, 0.02)
+)
+abline(h=0, col = "red", lty=2, lwd=2.5)
+ag <- aggregate(out$linear, list(out$phat), mean)
+lines(ag[,1], ag[,2], lty=1, col="red", lwd=3)
+legend("bottomright", 
+       c("Correct Marginal Effect", "Linear Marginal Effect"), 
+       pch=c(1, NA), 
+       lty=c(NA, 1), 
+       col=c("black", "red"), 
+       lwd=c(NA, 2), 
+       inset=.01
+)
+@
+
+%\begin{figure}[H]\caption{Standardized Values for Clientelism and Poor Density \label{fig:8}}
+%\includegraphics[scale=0.8, center]{munides1.pdf}
+%\end{figure}
+
+%\begin{figure}[H]\caption{Standardized Values for Income and Poor Density\label{fig:9}}
+%\includegraphics[scale=0.8, center]{munides2.pdf}
+%\end{figure}
+
+
+
+
+
+
+
+
+
+
+EDITORS COMMENTS:
+
+- The locational dimension seems to be the manuscript’s core theoretical dimension, so it should be the key to framing the theoretical contribution.
+- the mechanisms for locational targeting are underdone.
+- what targeting is and how it is done: USE Szwarcberg and Weitz-Shapiro.
+-  Reader #4 (effectiveness of clientelism): Your study can add something to the emerging literature our colleague cites that points to some of the limitations of clientelist politics.
+
+
+
+
+
+
+
+
+
+\bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
+\bibliographystyle{plainnat}
+\end{document}
+
