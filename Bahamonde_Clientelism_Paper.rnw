@@ -185,9 +185,8 @@ Do parties target individuals or groups? This is a fundamental question to under
 
 %\hspace*{6.3cm}{\bf 6,614 words}
 
-TEST
 %----------------------------------------------------------------------------------------
-% CONTENT
+% CONTENT 
 %----------------------------------------------------------------------------------------
 
 \section*{Do parties target individuals or groups?} 
