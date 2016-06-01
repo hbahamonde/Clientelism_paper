@@ -321,10 +321,7 @@ drop if clien1dummy==. |  exc7==. | np2==. | cp13==. | urban==. | ed==. | polinv
 *save "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism_Brazil_2010_St_Mun_Corrected_READY.dta", replace
 
 
-********************************************************************************************************************************************************************************
-*						M	E	R	G	E	 	o	f	 	M	u	n	i	c	i	p	a	l	 	O	p	p	o	s	i	t	i	o	n
-********************************************************************************************************************************************************************************
-
+* merge with municipal opposition dataset
 *use "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism_Brazil_2010_St_Mun_Corrected_READY.dta", replace
 merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/MunicipalOpposition.dta"
 drop _merge
@@ -343,40 +340,4 @@ rename r12 wealth8
 rename r14 wealth9
 rename r15 wealth10
 
-
 saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace 
-
-
-
-********************************************************************************************************************************************************************************
-*						M	E	R	G	I	N	G	 	M	U	N	I	C	I	P	A	L	 	P	O	P	U	L	A	T	I	O	N	
-********************************************************************************************************************************************************************************
-
-clear all
-set more off
-cd "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets"
-
-use "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.dta"
-
-*capture search renvars
-*capture search cleanchars
-
-cleanchars , in("ó") out("o") vval
-cleanchars , in("ó") out("o") vval
-
-
-
-
-
-merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.dta"
-drop _merge
-
-
-
-
-
-
-
-
-
-

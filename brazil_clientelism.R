@@ -69,34 +69,30 @@ dat.ru$wealth =
 dat = rbind(dat.ur, dat.ru)
 
 
-# Merging Municipal Population Data
-mun.pop = read.csv("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.csv")
+# municipal population from census
+pop.municipalities = data.frame(
+        municipality=c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                        "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                        "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                        "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                        "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                        "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                        "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"),  # 7
+        pop=c(51160, 2051, 455657, 2375151, 4551, 309011, 10583, 2570160, # 1
+              17077, 5405, 551098, 37748, 855048, 62769, 2452185, 318640, # 2
+              15193, 4568, 92883, 44859, 644620, 25647, 143123, 116610, # 3
+              17002, 197965, 8397, 216745, 31154, 387779, 259815, 4288, # 4
+              39979, 106290, 328275, 311611, 14189, 11031, 428527, 44701, 6163, # 5
+              26415, 55551, 336038, 6320446, 20179, 629921, 84469, # 6
+              41657, 11253503, 53825, 24294, 23983, 76202) # 7 CORREGIR VERA CRUZ Y VER QUE ESTADO SON LAS OBS QUE TENGO, HAY COMO 4 VERA CRUCES
+        )
+
+# merge datasets
+dat = merge(dat, pop.municipalities, by=c("municipality"), all.x =T)
 
 
-dat$municipality = as.character(dat$municipality)
-
-
-library(plyr)
-dat = revalue(dat$municipality, # local dataset, corrected neame
-              c("Acopiara"="Acopiara",
-                "Aloândia" = "Aloândia",
-                "Aparecida de Goiânia"="Aparecida de Goiânia",
-                "Belo Horizonte" = "Belo Horizonte",
-                "Bel\x8em" = "Belém"
-                ))
-
-
-
-
-
-dat.muni = levels(dat$municipality)
-
-
-
-dat = merge(dat, mun.pop, by="municipality")
-
-
-
+# save unmatched dataset
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 
 # Constructing Matched Set
@@ -120,6 +116,10 @@ m.data <- match.data(m.out)
 library(car) # install.packages("car") 
 m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
 m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+# save matched dataset
+save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
@@ -336,7 +336,51 @@ dev.off()
 ######################################################
 #            C o r r e l o g r a m s                 #
 ######################################################
+cat("\014")
+rm(list=ls())
 
+# load dataset
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+# Correlation of INCOME and WAGEHALF (NON-MATCHED dataset).
+cor(dat$wagehalf, dat$income)
+
+# generating/centering data set
+income = dat$income
+wagehalf = dat$wagehalf
+plot.std = data.frame(income, wagehalf)
+plot.std = apply(plot.std, MARGIN = 2, FUN = function(X) (X - min(X))/diff(range(X)))
+municipality = as.character(dat$municipality)
+plot.std = data.frame(plot.std, municipality)
+
+
+plot.std = reshape(plot.std, 
+        varying = c("income", "wagehalf"), 
+        v.names = "score",
+        timevar = "subj", 
+        times = c("income", "wagehalf"), 
+        direction = "long")
+
+
+
+## plot
+library(ggplot2)
+ggplot(plot.std, aes(x = score, 
+                     y = id, 
+                     colour = subj)) + 
+        geom_jitter(width = 0.3, 
+                    size=0.8, 
+                    alpha=I(.3)) + 
+        coord_flip() + 
+        labs(colour = "") + 
+        ylab("Observations (unmatched set)") + 
+        xlab("Standarized Score") + 
+        scale_color_manual(labels = c("Income", "Density of the Poor"), values = c("blue", "red")) +
+        theme_bw() + 
+        scale_shape(solid = FALSE)
+
+
+#
 munopp <- m.data$munopp
 large  <- m.data$large
 wagehalf <- m.data$wagehalf
@@ -359,10 +403,17 @@ corr(m.dataCorr2) # -0.2601744
 #              P  a r a m e t r i c                  #
 ######################################################
 
+cat("\014")
+rm(list=ls())
+
+
+# load dataset
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
 # Recode client1dummy after matching
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+#m.data <- match.data(m.out)
+#m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+#m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
 # transform this: simulation methods still don't support log(var).
 m.data$logpop = log(m.data$pop)
