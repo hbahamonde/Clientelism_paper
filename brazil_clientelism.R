@@ -33,39 +33,44 @@ dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
 dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
 dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
 
-# splitting df in two
+## splitting df in two
 dat.ur <- subset(dat, dat$urban == "Ur")
 dat.ru <- subset(dat, dat$urban == "Ru")
 
 
-# computing wealth index in UR settings
+
+## PCA for RURAL and URBAN
+wealth.dat.ur = data.frame(dat.ur$wealth1,dat.ur$wealth2,dat.ur$wealth3, dat.ur$wealth4, dat.ur$wealth5, dat.ur$wealth6, dat.ur$wealth7, dat.ur$wealth8, dat.ur$wealth9, dat.ur$wealth10)
+wealth.dat.ru = data.frame(dat.ru$wealth1,dat.ru$wealth2,dat.ru$wealth3, dat.ru$wealth4, dat.ru$wealth5, dat.ru$wealth6, dat.ru$wealth7, dat.ru$wealth8, dat.ru$wealth9, dat.ru$wealth10)
+
+
 dat.ur$wealth = 
-        (princomp(dat.ur$wealth1)[[1]]*(dat.ur$wealth1-mean(dat.ur$wealth1)))/sd(dat.ur$wealth1) +
-        (princomp(dat.ur$wealth2)[[1]]*(dat.ur$wealth2-mean(dat.ur$wealth2)))/sd(dat.ur$wealth2) +
-        (princomp(dat.ur$wealth3)[[1]]*(dat.ur$wealth3-mean(dat.ur$wealth3)))/sd(dat.ur$wealth3) +
-        (princomp(dat.ur$wealth4)[[1]]*(dat.ur$wealth4-mean(dat.ur$wealth4)))/sd(dat.ur$wealth4) +
-        (princomp(dat.ur$wealth5)[[1]]*(dat.ur$wealth5-mean(dat.ur$wealth5)))/sd(dat.ur$wealth5) +
-        (princomp(dat.ur$wealth6)[[1]]*(dat.ur$wealth6-mean(dat.ur$wealth6)))/sd(dat.ur$wealth6) +
-        (princomp(dat.ur$wealth7)[[1]]*(dat.ur$wealth7-mean(dat.ur$wealth7)))/sd(dat.ur$wealth7) +
-        (princomp(dat.ur$wealth8)[[1]]*(dat.ur$wealth8-mean(dat.ur$wealth8)))/sd(dat.ur$wealth8) +
-        (princomp(dat.ur$wealth9)[[1]]*(dat.ur$wealth9-mean(dat.ur$wealth9)))/sd(dat.ur$wealth9) +
-        (princomp(dat.ur$wealth10)[[1]]*(dat.ur$wealth10-mean(dat.ur$wealth10)))/sd(dat.ur$wealth10)
+        (princomp(wealth.dat.ur, scores = T)$scores[,1] * (dat.ur$wealth1-mean(dat.ur$wealth1) / sd(dat.ur$wealth1))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,2] * (dat.ur$wealth1-mean(dat.ur$wealth2) / sd(dat.ur$wealth2))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,3] * (dat.ur$wealth1-mean(dat.ur$wealth3) / sd(dat.ur$wealth3))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,4] * (dat.ur$wealth1-mean(dat.ur$wealth4) / sd(dat.ur$wealth4))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,5] * (dat.ur$wealth1-mean(dat.ur$wealth5) / sd(dat.ur$wealth5))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,6] * (dat.ur$wealth1-mean(dat.ur$wealth6) / sd(dat.ur$wealth6))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,7] * (dat.ur$wealth1-mean(dat.ur$wealth7) / sd(dat.ur$wealth7))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,8] * (dat.ur$wealth1-mean(dat.ur$wealth8) / sd(dat.ur$wealth8))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,9] * (dat.ur$wealth1-mean(dat.ur$wealth9) / sd(dat.ur$wealth9))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,10] * (dat.ur$wealth1-mean(dat.ur$wealth10) / sd(dat.ur$wealth10)))        
 
 
-# computing wealth index in RU settings
+
 dat.ru$wealth = 
-        (princomp(dat.ru$wealth1)[[1]]*(dat.ru$wealth1-mean(dat.ru$wealth1)))/sd(dat.ru$wealth1) +
-        (princomp(dat.ru$wealth2)[[1]]*(dat.ru$wealth2-mean(dat.ru$wealth2)))/sd(dat.ru$wealth2) +
-        (princomp(dat.ru$wealth3)[[1]]*(dat.ru$wealth3-mean(dat.ru$wealth3)))/sd(dat.ru$wealth3) +
-        (princomp(dat.ru$wealth4)[[1]]*(dat.ru$wealth4-mean(dat.ru$wealth4)))/sd(dat.ru$wealth4) +
-        (princomp(dat.ru$wealth5)[[1]]*(dat.ru$wealth5-mean(dat.ru$wealth5)))/sd(dat.ru$wealth5) +
-        (princomp(dat.ru$wealth6)[[1]]*(dat.ru$wealth6-mean(dat.ru$wealth6)))/sd(dat.ru$wealth6) +
-        (princomp(dat.ru$wealth7)[[1]]*(dat.ru$wealth7-mean(dat.ru$wealth7)))/sd(dat.ru$wealth7) +
-        (princomp(dat.ru$wealth8)[[1]]*(dat.ru$wealth8-mean(dat.ru$wealth8)))/sd(dat.ru$wealth8) +
-        (princomp(dat.ru$wealth9)[[1]]*(dat.ru$wealth9-mean(dat.ru$wealth9)))/sd(dat.ru$wealth9) +
-        (princomp(dat.ru$wealth10)[[1]]*(dat.ru$wealth10-mean(dat.ru$wealth10)))/sd(dat.ru$wealth10)
+        (princomp(wealth.dat.ru, scores = T)$scores[,1] * (dat.ru$wealth1-mean(dat.ru$wealth1) / sd(dat.ru$wealth1))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,2] * (dat.ru$wealth1-mean(dat.ru$wealth2) / sd(dat.ru$wealth2))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,3] * (dat.ru$wealth1-mean(dat.ru$wealth3) / sd(dat.ru$wealth3))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,4] * (dat.ru$wealth1-mean(dat.ru$wealth4) / sd(dat.ru$wealth4))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,5] * (dat.ru$wealth1-mean(dat.ru$wealth5) / sd(dat.ru$wealth5))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,6] * (dat.ru$wealth1-mean(dat.ru$wealth6) / sd(dat.ru$wealth6))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,7] * (dat.ru$wealth1-mean(dat.ru$wealth7) / sd(dat.ru$wealth7))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,8] * (dat.ru$wealth1-mean(dat.ru$wealth8) / sd(dat.ru$wealth8))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,9] * (dat.ru$wealth1-mean(dat.ru$wealth9) / sd(dat.ru$wealth9))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,10] * (dat.ru$wealth1-mean(dat.ru$wealth10) / sd(dat.ru$wealth10)))  
 
-# combining the two DF's
+## combining the two DF's
 dat = rbind(dat.ur, dat.ru)
 
 
@@ -87,9 +92,30 @@ pop.municipalities = data.frame(
               41657, 11253503, 53825, 24294, 23983, 76202) # 7 CORREGIR VERA CRUZ Y VER QUE ESTADO SON LAS OBS QUE TENGO, HAY COMO 4 VERA CRUCES
         )
 
-# merge datasets
+## merge datasets
 dat = merge(dat, pop.municipalities, by=c("municipality"), all.x =T)
 
+
+# create variable large
+library(foreign)
+wagehalf.d <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/proportionofpoorcensus.dta")
+
+wagehalf.d = data.frame(cbind(municipality = c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                                   "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                                   "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                                   "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                                   "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                                   "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                                   "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"), 
+                 large = as.numeric(wagehalf.d$wagehalf >= median(wagehalf.d$wagehalf))
+                 )
+           )
+dat = merge(dat, wagehalf.d, by=c("municipality"), all.x =T)
+
+## recode large
+library(car) # install.packages("car") 
+dat$large <- as.numeric(dat$large)
+dat$large <- recode(dat$large, "1 = 0 ; 2 = 1")
 
 # save unmatched dataset
 save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
@@ -98,12 +124,14 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 # Constructing Matched Set
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
 #m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
-m.out <- matchit(large ~ income + ed, 
-                 discard = "hull.both", 
-                 method = "cem",
+m.out <- matchit(large ~ wealth + ed + polinv, 
+                 #discard = "hull.both", 
+                 #pop.size = 1000,
+                 method = "exact",
                  data = dat,
                  verbose = F
                  )
+
 
 #print. <- print(m.out)
 sum.match = summary(m.out)
@@ -129,21 +157,21 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 
 # matched sample
 m.dat.clien1dummy <- m.data$clien1dummy 
-m.dat.clien1dummy <- dat$clien1dummy 
-m.dat.large <- dat$large 
-m.dat.polinv <- dat$polinv 
-m.dat.exc7 <- dat$exc7 
-m.dat.vb3 <- dat$vb3 
-m.dat.ed <- dat$ed 
-m.dat.income <- dat$income 
-m.dat.munopp <- dat$munopp
-m.dat.pop = dat$pop
+m.dat.clien1dummy <- m.data$clien1dummy 
+m.dat.large <- m.data$large 
+m.dat.polinv <- m.data$polinv 
+m.dat.exc7 <- m.data$exc7 
+m.dat.vb3 <- m.data$vb3 
+m.dat.ed <- m.data$ed 
+m.dat.income <- m.data$income 
+m.dat.munopp <- m.data$munopp
+m.dat.pop = m.data$pop
 m.dat.logpop = log(m.dat.pop)
-m.dat.urban <- dat$urban
+m.dat.urban <- m.data$urban
 m.dat.urban <- as.numeric(m.dat.urban)
 m.dat.urban <- recode(m.dat.urban, "1 = 0 ; 2 = 1")
-m.dat.polinv <-  dat$polinv
-m.dat.ed <- dat$ed
+m.dat.polinv <-  m.data$polinv
+m.dat.ed <- m.data$ed
 m.dat.ed <- as.numeric(m.dat.ed)
 m.dat.ed <- recode(m.dat.ed, "
                    1 = 0 ; 
@@ -262,7 +290,6 @@ stargazer(dat,
 ## Distribution Outcome Variable Binary Outcome
 
 # Plot
-
 m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
 library(ggplot2)
@@ -272,9 +299,9 @@ ggplot(data=m.data, aes(x=clien1dummy)) +
         ylab("Frequency") + 
         theme_bw()
 
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+#m.data <- match.data(m.out)
+#m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+#m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
 ## Distribution Outcome Variable 3 outcomes
 
@@ -471,6 +498,7 @@ m.data$logpop = log(m.data$pop)
 #                  data = m.data)
 
 
+
 # Models
 
 ## sort data first
@@ -480,39 +508,39 @@ m.data$municipality = sort(m.data$municipality)
 library(geepack) # install.packages("geepack")
 
 logit.gee.1 <- geeglm(clien1dummy ~ large,
-                      family = binomial, 
+                      family = binomial(link = "probit"), 
                       id = municipality, 
-                      corstr = "exchangeable",
+                      corstr = "independence",
                       data = m.data)
 
 logit.gee.2 <- geeglm(clien1dummy ~ large + exc7 + polinv + urban + logpop + ed,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
+                      family = binomial(link = "probit"), 
+                      id = municipality, 
+                     corstr = "independence",
                      data = m.data)
 
-logit.gee.3 <- geeglm(clien1dummy ~ income + exc7 + polinv + urban + logpop + ed ,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
+logit.gee.3 <- geeglm(clien1dummy ~ wealth + exc7 + polinv + urban + logpop + ed ,
+                      family = binomial(link = "probit"), 
+                      id = municipality, 
+                     corstr = "independence",
                      data = m.data)
 
-logit.gee.4 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 , 
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
+logit.gee.4 <- geeglm(clien1dummy ~ large + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3 , 
+                      family = binomial(link = "probit"), 
+                      id = municipality, 
+                     corstr = "independence",
                      data = m.data)
 
-logit.gee.5 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv ,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
+logit.gee.5 <- geeglm(clien1dummy ~ large + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv ,
+                      family = binomial(link = "probit"), 
+                      id = municipality, 
+                     corstr = "independence",
                      data = m.data)
 
-logit.gee.6 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income , 
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
+logit.gee.6 <- geeglm(clien1dummy ~ large + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income , 
+                      family = binomial(link = "probit"), 
+                      id = municipality, 
+                     corstr = "independence",
                      data = m.data)
 
 ## ---- texreg-extractor-geeglm ----
@@ -542,7 +570,7 @@ extract.geepack <- function(model) {
 }
 
 
-
+library(texreg)
 logit.gee.1.d = extract.geepack(logit.gee.1)
 logit.gee.2.d = extract.geepack(logit.gee.2)
 logit.gee.3.d = extract.geepack(logit.gee.3)
@@ -556,20 +584,20 @@ logit.gee.6.d = extract.geepack(logit.gee.6)
 library(texreg)
 screenreg(
         list(logit.gee.1.d, logit.gee.2.d, logit.gee.3.d, logit.gee.4.d, logit.gee.5.d, logit.gee.6.d),
-        custom.coef.names = c(# this gotta be before OMIT.COEFF
-                "(Intercept)",
-                "High Density",
-                "Perception of Corruption",
-                "Political Involvement",
-                "Urban",
-                "Population (ln)",
-                "Education",
-                "Individual Income",
-                "Municipal Opposition",
-                "Political Id",
-                "Political Involvement TIMES Population (ln)",
-                "Individual Income TIMES Municipal Opposition"),
-        caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
+        #custom.coef.names = c(# this gotta be before OMIT.COEFF
+         #       "(Intercept)",
+          #      "High Density",
+           #     "Perception of Corruption",
+            #    "Political Involvement",
+             #   "Urban",
+              #  "Population (ln)",
+               # "Education",
+#                #"Individual Income",
+ #               "Municipal Opposition",
+  #              "Political Id",
+   #             "Political Involvement TIMES Population (ln)",
+    #            "Individual Income TIMES Municipal Opposition"),
+        caption = "Likelihood of Clientelism: Generalized Estimating Equations",
         label = "tab:1",
         #override.se = logit.robust.se,
         #override.pvalues = logit.pval,
@@ -577,7 +605,7 @@ screenreg(
         #override.ci.up = logit.robust.se.lower,
         stars = c(0.01, 0.05, 0.1),
         digits = 3,
-        custom.note = "%stars. \n Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
+        custom.note = "%stars. \n Clustered Std. Errors at the Municipality Level. \n Matched sample. \n 95% Standard errors in parentheses",
         fontsize = "scriptsize",
         float.pos = "h"
 )
@@ -743,33 +771,156 @@ stargazer(m.4.logit, m.4.probit,m.4.zip,
 
 
 ##########################
-#   GPS  Weighting MODELS
+#   GPS  Weighting MODELS using OLS
 ##########################
+cat("\014")
+rm(list=ls())
 
-library(foreign)
-dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
 
-# Recoding vars
-dat <- na.omit(dat)
-dat$ed <- as.numeric(dat$ed)
-dat$vb3 <- as.numeric(dat$vb3)
-dat$exc7 <- as.numeric(dat$exc7)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv1 <- as.numeric(dat$polinv1)
-dat$polinv2 <- as.numeric(dat$polinv2)
-dat$polinv3 <- as.numeric(dat$polinv3)
-dat$polinv4 <- as.numeric(dat$polinv4)
-dat$polinv5 <- as.numeric(dat$polinv5)
-
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 # Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
 
 
-fit <- CBPS(wagehalf ~ income, data = dat, iterations = 2500)
+fit <- CBPS(wagehalf ~ wealth + ed, data = dat, iterations = 25000)
 # Attaching weights to DF
-dat$weights = round(fit$weights, digits=10)
+dat$weights = round(fit$weights, digits=5)
+
+
+
+# Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+dat$logpop = log(dat$pop)
+
+# Models
+ols.gps.1 <- lm(clien1dummy ~ wagehalf,
+            weights = weights, 
+            data = dat)
+
+ols.gps.2 <- lm(clien1dummy ~ wagehalf + exc7 + polinv + urban + logpop + ed,
+            weights = weights, 
+            data = dat)
+
+ols.gps.3 <- lm(clien1dummy ~ wealth + exc7 + polinv + urban + logpop + ed,
+            weights = weights, 
+            data = dat)
+
+ols.gps.4 <- lm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
+            weights = weights, 
+            data = dat)
+
+ols.gps.5 <- lm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv,
+            weights = weights, 
+            data = dat)
+
+ols.gps.6 <- lm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income, 
+            weights = weights, 
+            data = dat)
+
+
+# function that does clustered SEs
+vcovCluster <- function(
+        model,
+        cluster
+)
+{
+        require(sandwich)
+        require(lmtest)
+        if(nrow(model.matrix(model))!=length(cluster)){
+                stop("check your data: cluster variable has different N than model")
+        }
+        M <- length(unique(cluster))
+        N <- length(cluster)           
+        K <- model$rank   
+        if(M<50){
+                warning("Fewer than 50 clusters, variances may be unreliable (could try block bootstrap instead).")
+        }
+        dfc <- (M/(M - 1)) * ((N - 1)/(N - K))
+        uj  <- apply(estfun(model), 2, function(x) tapply(x, cluster, sum));
+        rcse.cov <- dfc * sandwich(model, meat = crossprod(uj)/N)
+        return(rcse.cov)
+}
+
+
+library(lmtest)
+library(sandwich)
+library(msm) # install.packages("msm")
+
+
+
+ols.gps.1.robust = coeftest(ols.gps.1, vcov = vcovCluster(ols.gps.1, cluster = as.numeric(dat$municipality)))
+ols.gps.2.robust = coeftest(ols.gps.2, vcov = vcovCluster(ols.gps.2, cluster = as.numeric(dat$municipality)))
+ols.gps.3.robust = coeftest(ols.gps.3, vcov = vcovCluster(ols.gps.3, cluster = as.numeric(dat$municipality)))
+ols.gps.4.robust = coeftest(ols.gps.4, vcov = vcovCluster(ols.gps.4, cluster = as.numeric(dat$municipality)))
+ols.gps.5.robust = coeftest(ols.gps.5, vcov = vcovCluster(ols.gps.5, cluster = as.numeric(dat$municipality)))
+ols.gps.6.robust = coeftest(ols.gps.6, vcov = vcovCluster(ols.gps.6, cluster = as.numeric(dat$municipality)))
+
+
+ols.gps.robust.se = list(c(ols.gps.1.robust[4],ols.gps.1.robust[5], ols.gps.1.robust[6]),
+                         c(ols.gps.2.robust[9],ols.gps.2.robust[10], ols.gps.2.robust[11], ols.gps.2.robust[12], ols.gps.2.robust[13], ols.gps.2.robust[14],ols.gps.2.robust[15], ols.gps.2.robust[16]),
+                         c(ols.gps.3.robust[9], ols.gps.3.robust[10], ols.gps.3.robust[11], ols.gps.3.robust[12], ols.gps.3.robust[13], ols.gps.3.robust[14], ols.gps.3.robust[15], ols.gps.3.robust[16]),
+                         c(ols.gps.4.robust[12], ols.gps.4.robust[13], ols.gps.4.robust[14], ols.gps.4.robust[15], ols.gps.4.robust[16], ols.gps.4.robust[17], ols.gps.4.robust[18], ols.gps.4.robust[19],  ols.gps.4.robust[20],  ols.gps.4.robust[21], ols.gps.4.robust[22]),
+                         c(ols.gps.5.robust[13],ols.gps.5.robust[14],ols.gps.5.robust[15],ols.gps.5.robust[16],ols.gps.5.robust[17],ols.gps.5.robust[18],ols.gps.5.robust[19],ols.gps.5.robust[20], ols.gps.5.robust[21], ols.gps.5.robust[22], ols.gps.5.robust[23], ols.gps.5.robust[24]),
+                         c(ols.gps.6.robust[13], ols.gps.6.robust[14], ols.gps.6.robust[15], ols.gps.6.robust[16], ols.gps.6.robust[17], ols.gps.6.robust[18], ols.gps.6.robust[19], ols.gps.6.robust[20], ols.gps.6.robust[21], ols.gps.6.robust[22], ols.gps.6.robust[23], ols.gps.6.robust[24])
+)
+
+ols.gps.coeffs = list(c(ols.gps.1.robust[1],ols.gps.1.robust[2], ols.gps.1.robust[3]),
+                      c(ols.gps.2.robust[1],ols.gps.2.robust[2], ols.gps.2.robust[3], ols.gps.2.robust[4], ols.gps.2.robust[5], ols.gps.2.robust[6],ols.gps.2.robust[7], ols.gps.2.robust[8]),
+                      c(ols.gps.3.robust[1], ols.gps.3.robust[2], ols.gps.3.robust[3], ols.gps.3.robust[4], ols.gps.3.robust[5], ols.gps.3.robust[6], ols.gps.3.robust[7], ols.gps.3.robust[8]),
+                      c(ols.gps.4.robust[1], ols.gps.4.robust[2], ols.gps.4.robust[3], ols.gps.4.robust[4], ols.gps.4.robust[5], ols.gps.4.robust[6], ols.gps.4.robust[7], ols.gps.4.robust[8],  ols.gps.4.robust[9],  ols.gps.4.robust[10], ols.gps.4.robust[11]),
+                      c(ols.gps.5.robust[1],ols.gps.5.robust[2],ols.gps.5.robust[3],ols.gps.5.robust[4],ols.gps.5.robust[5],ols.gps.5.robust[6],ols.gps.5.robust[7],ols.gps.5.robust[8], ols.gps.5.robust[9], ols.gps.5.robust[10], ols.gps.5.robust[11], ols.gps.5.robust[12]),
+                      c(ols.gps.6.robust[1], ols.gps.6.robust[2], ols.gps.6.robust[3], ols.gps.6.robust[4], ols.gps.6.robust[5], ols.gps.6.robust[6], ols.gps.6.robust[7], ols.gps.6.robust[8], ols.gps.6.robust[9], ols.gps.6.robust[10], ols.gps.6.robust[11], ols.gps.6.robust[12])
+)
+
+ols.gps.robust.se.upper = list(
+        c(ols.gps.coeffs[[1]] + 1.96*ols.gps.robust.se[[1]]),
+        c(ols.gps.coeffs[[2]] + 1.96*ols.gps.robust.se[[2]]),
+        c(ols.gps.coeffs[[3]] + 1.96*ols.gps.robust.se[[3]]),
+        c(ols.gps.coeffs[[4]] + 1.96*ols.gps.robust.se[[4]]),
+        c(ols.gps.coeffs[[5]] + 1.96*ols.gps.robust.se[[5]]),
+        c(ols.gps.coeffs[[6]] + 1.96*ols.gps.robust.se[[6]])
+)
+
+
+
+ols.gps.robust.se.lower = list(
+        c(ols.gps.coeffs[[1]] - 1.96*ols.gps.robust.se[[1]]),
+        c(ols.gps.coeffs[[2]] - 1.96*ols.gps.robust.se[[2]]),
+        c(ols.gps.coeffs[[3]] - 1.96*ols.gps.robust.se[[3]]),
+        c(ols.gps.coeffs[[4]] - 1.96*ols.gps.robust.se[[4]]),
+        c(ols.gps.coeffs[[5]] - 1.96*ols.gps.robust.se[[5]]),
+        c(ols.gps.coeffs[[6]] - 1.96*ols.gps.robust.se[[6]])
+)
+
+ols.gps.pval = list(
+        c(ols.gps.1.robust[10], ols.gps.1.robust[11], ols.gps.1.robust[12]),
+        c(ols.gps.2.robust[25], ols.gps.2.robust[26],ols.gps.2.robust[27],ols.gps.2.robust[28],ols.gps.2.robust[29],ols.gps.2.robust[30],ols.gps.2.robust[31],ols.gps.2.robust[32]),
+        c(ols.gps.3.robust[25], ols.gps.3.robust[26],ols.gps.3.robust[27],ols.gps.3.robust[28],ols.gps.3.robust[29],ols.gps.3.robust[30],ols.gps.3.robust[31],ols.gps.3.robust[32]),
+        c(ols.gps.4.robust[34],ols.gps.4.robust[35],ols.gps.4.robust[36],ols.gps.4.robust[37],ols.gps.4.robust[38],ols.gps.4.robust[39],ols.gps.4.robust[40],ols.gps.4.robust[41],ols.gps.4.robust[42],ols.gps.4.robust[43],ols.gps.4.robust[44]),
+        c(ols.gps.5.robust[37],ols.gps.5.robust[38],ols.gps.5.robust[39],ols.gps.5.robust[40],ols.gps.5.robust[41],ols.gps.5.robust[42],ols.gps.5.robust[43],ols.gps.5.robust[44],ols.gps.5.robust[45],ols.gps.5.robust[46],ols.gps.5.robust[47],ols.gps.5.robust[48]),
+        c(ols.gps.6.robust[37],ols.gps.6.robust[38],ols.gps.6.robust[39],ols.gps.6.robust[40],ols.gps.6.robust[41],ols.gps.6.robust[42],ols.gps.6.robust[43],ols.gps.6.robust[44],ols.gps.6.robust[45],ols.gps.6.robust[46],ols.gps.6.robust[47],ols.gps.6.robust[48])
+)
+
+
+
+##########################
+#   GPS  Weighting MODELS
+##########################
+cat("\014")
+rm(list=ls())
+
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+# Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+
+fit <- CBPS(wagehalf ~ wealth + ed + polinv, data = dat, iterations = 25000)
+# Attaching weights to DF
+dat$weights = round(fit$weights, digits=5)
 
 
 
@@ -780,124 +931,203 @@ dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
 dat$logpop = log(dat$pop)
 
 
+# HERE
+
 # Models
-gps.1 <- glm(clien1dummy ~ wagehalf + weights,
+gps.1 <- glm(clien1dummy ~ wagehalf + polinv + income + munopp:income + logpop:polinv + weights,
              family =binomial(link = "logit"),
              data = dat)
 
-gps.2 <- glm(clien1dummy ~ wagehalf + exc7 + polinv + urban + logpop + ed+ weights,
+gps.2 <- glm(clien1dummy ~ wagehalf + exc7 + polinv  + ed + weights,
              family =binomial(link = "logit"),
              data = dat)
 
-gps.3 <- glm(clien1dummy ~ income + exc7 + polinv + urban + logpop + ed + weights,
+gps.3 <- glm(clien1dummy ~ wealth + exc7 + polinv  + ed + weights,
              family =binomial(link = "logit"),
              data = dat)
 
-gps.4 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + weights, 
+gps.4 <- glm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + ed + munopp + vb3 + weights, 
              family =binomial(link = "logit"),
              data = dat)
 
-gps.5 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv + weights,
+gps.5 <- glm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + ed + munopp + vb3 + logpop:polinv + weights,
              family =binomial(link = "logit"),
              data = dat)
 
-gps.6 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income + weights, 
+gps.6 <- glm(clien1dummy ~ wagehalf + wealth + exc7 + polinv + ed + munopp + vb3 + munopp:income + weights, 
              family =binomial(link = "logit"),
              data = dat)
+
+# function that does clustered SEs
+vcovCluster <- function(
+        model,
+        cluster
+)
+{
+        require(sandwich)
+        require(lmtest)
+        if(nrow(model.matrix(model))!=length(cluster)){
+                stop("check your data: cluster variable has different N than model")
+        }
+        M <- length(unique(cluster))
+        N <- length(cluster)           
+        K <- model$rank   
+        if(M<50){
+                warning("Fewer than 50 clusters, variances may be unreliable (could try block bootstrap instead).")
+        }
+        dfc <- (M/(M - 1)) * ((N - 1)/(N - K))
+        uj  <- apply(estfun(model), 2, function(x) tapply(x, cluster, sum));
+        rcse.cov <- dfc * sandwich(model, meat = crossprod(uj)/N)
+        return(rcse.cov)
+}
+
+
+library(lmtest)
+library(sandwich)
+library(msm) # install.packages("msm")
+
+
+
+gps.1.robust = coeftest(gps.1, vcov = vcovCluster(gps.1, cluster = as.numeric(dat$municipality)))
+gps.2.robust = coeftest(gps.2, vcov = vcovCluster(gps.2, cluster = as.numeric(dat$municipality)))
+gps.3.robust = coeftest(gps.3, vcov = vcovCluster(gps.3, cluster = as.numeric(dat$municipality)))
+gps.4.robust = coeftest(gps.4, vcov = vcovCluster(gps.4, cluster = as.numeric(dat$municipality)))
+gps.5.robust = coeftest(gps.5, vcov = vcovCluster(gps.5, cluster = as.numeric(dat$municipality)))
+gps.6.robust = coeftest(gps.6, vcov = vcovCluster(gps.6, cluster = as.numeric(dat$municipality)))
+
+
+gps.robust.se = list(c(gps.1.robust[4],gps.1.robust[5], gps.1.robust[6]),
+                     c(gps.2.robust[9],gps.2.robust[10], gps.2.robust[11], gps.2.robust[12], gps.2.robust[13], gps.2.robust[14],gps.2.robust[15], gps.2.robust[16]),
+                     c(gps.3.robust[9], gps.3.robust[10], gps.3.robust[11], gps.3.robust[12], gps.3.robust[13], gps.3.robust[14], gps.3.robust[15], gps.3.robust[16]),
+                     c(gps.4.robust[12], gps.4.robust[13], gps.4.robust[14], gps.4.robust[15], gps.4.robust[16], gps.4.robust[17], gps.4.robust[18], gps.4.robust[19],  gps.4.robust[20],  gps.4.robust[21], gps.4.robust[22]),
+                     c(gps.5.robust[13],gps.5.robust[14],gps.5.robust[15],gps.5.robust[16],gps.5.robust[17],gps.5.robust[18],gps.5.robust[19],gps.5.robust[20], gps.5.robust[21], gps.5.robust[22], gps.5.robust[23], gps.5.robust[24]),
+                     c(gps.6.robust[13], gps.6.robust[14], gps.6.robust[15], gps.6.robust[16], gps.6.robust[17], gps.6.robust[18], gps.6.robust[19], gps.6.robust[20], gps.6.robust[21], gps.6.robust[22], gps.6.robust[23], gps.6.robust[24])
+)
+
+gps.coeffs = list(c(gps.1.robust[1],gps.1.robust[2], gps.1.robust[3]),
+                  c(gps.2.robust[1],gps.2.robust[2], gps.2.robust[3], gps.2.robust[4], gps.2.robust[5], gps.2.robust[6],gps.2.robust[7], gps.2.robust[8]),
+                  c(gps.3.robust[1], gps.3.robust[2], gps.3.robust[3], gps.3.robust[4], gps.3.robust[5], gps.3.robust[6], gps.3.robust[7], gps.3.robust[8]),
+                  c(gps.4.robust[1], gps.4.robust[2], gps.4.robust[3], gps.4.robust[4], gps.4.robust[5], gps.4.robust[6], gps.4.robust[7], gps.4.robust[8],  gps.4.robust[9],  gps.4.robust[10], gps.4.robust[11]),
+                  c(gps.5.robust[1],gps.5.robust[2],gps.5.robust[3],gps.5.robust[4],gps.5.robust[5],gps.5.robust[6],gps.5.robust[7],gps.5.robust[8], gps.5.robust[9], gps.5.robust[10], gps.5.robust[11], gps.5.robust[12]),
+                  c(gps.6.robust[1], gps.6.robust[2], gps.6.robust[3], gps.6.robust[4], gps.6.robust[5], gps.6.robust[6], gps.6.robust[7], gps.6.robust[8], gps.6.robust[9], gps.6.robust[10], gps.6.robust[11], gps.6.robust[12])
+)
+
+gps.robust.se.upper = list(
+        c(gps.coeffs[[1]] + 1.96*gps.robust.se[[1]]),
+        c(gps.coeffs[[2]] + 1.96*gps.robust.se[[2]]),
+        c(gps.coeffs[[3]] + 1.96*gps.robust.se[[3]]),
+        c(gps.coeffs[[4]] + 1.96*gps.robust.se[[4]]),
+        c(gps.coeffs[[5]] + 1.96*gps.robust.se[[5]]),
+        c(gps.coeffs[[6]] + 1.96*gps.robust.se[[6]])
+)
+
+
+
+gps.robust.se.lower = list(
+        c(gps.coeffs[[1]] - 1.96*gps.robust.se[[1]]),
+        c(gps.coeffs[[2]] - 1.96*gps.robust.se[[2]]),
+        c(gps.coeffs[[3]] - 1.96*gps.robust.se[[3]]),
+        c(gps.coeffs[[4]] - 1.96*gps.robust.se[[4]]),
+        c(gps.coeffs[[5]] - 1.96*gps.robust.se[[5]]),
+        c(gps.coeffs[[6]] - 1.96*gps.robust.se[[6]])
+)
+
+gps.pval = list(
+        c(gps.1.robust[10], gps.1.robust[11], gps.1.robust[12]),
+        c(gps.2.robust[25], gps.2.robust[26],gps.2.robust[27],gps.2.robust[28],gps.2.robust[29],gps.2.robust[30],gps.2.robust[31],gps.2.robust[32]),
+        c(gps.3.robust[25], gps.3.robust[26],gps.3.robust[27],gps.3.robust[28],gps.3.robust[29],gps.3.robust[30],gps.3.robust[31],gps.3.robust[32]),
+        c(gps.4.robust[34],gps.4.robust[35],gps.4.robust[36],gps.4.robust[37],gps.4.robust[38],gps.4.robust[39],gps.4.robust[40],gps.4.robust[41],gps.4.robust[42],gps.4.robust[43],gps.4.robust[44]),
+        c(gps.5.robust[37],gps.5.robust[38],gps.5.robust[39],gps.5.robust[40],gps.5.robust[41],gps.5.robust[42],gps.5.robust[43],gps.5.robust[44],gps.5.robust[45],gps.5.robust[46],gps.5.robust[47],gps.5.robust[48]),
+        c(gps.6.robust[37],gps.6.robust[38],gps.6.robust[39],gps.6.robust[40],gps.6.robust[41],gps.6.robust[42],gps.6.robust[43],gps.6.robust[44],gps.6.robust[45],gps.6.robust[46],gps.6.robust[47],gps.6.robust[48])
+)
+
+
+
+library(texreg)
+screenreg(
+        list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
+        #        custom.coef.names = c(# this gotta be before OMIT.COEFF
+        #                "(Intercept)",
+        #                "High Density",
+        #                "weights",
+        #                "Perception of Corruption",
+        #                "Political Involvement",
+        #                "Urban",
+        #                "Population (ln)",
+        #                "Education",
+        #                "Individual Income",
+        #                "Municipal Opposition",
+        #                "Political Id",
+        #                "Political Involvement TIMES Population (ln)",
+        #                "Individual Income TIMES Municipal Opposition"),
+        omit.coef = "weights", # this gotta be AFTER custo.coef.names
+        caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
+        label = "results.gps:1",
+        override.se = gps.robust.se,
+        override.pvalues = gps.pval,
+        #override.ci.low = gps.robust.se.upper,
+        #override.ci.up = gps.robust.se.lower,
+        stars = c(0.01, 0.05, 0.1),
+        digits = 3,
+        custom.note = "%stars. \n Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
+        fontsize = "scriptsize",
+        float.pos = "h"
+)
+
+
+
+
+########################################################################################
+
 
 # clusterSEs BOOSTRAPPED/clustered
-# library(clusterSEs) # install.packages("clusterSEs")
+library(clusterSEs) # install.packages("clusterSEs")
 # 
-# set.seed(602)
-# gps.1.boost.robust = cluster.bs.glm(gps.1, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.2.boost.robust = cluster.bs.glm(gps.2, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.3.boost.robust = cluster.bs.glm(gps.3, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.4.boost.robust = cluster.bs.glm(gps.4, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.5.boost.robust = cluster.bs.glm(gps.5, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.6.boost.robust = cluster.bs.glm(gps.6, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ set.seed(602)
+ gps.1.boost.robust = cluster.bs.glm(gps.1, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ gps.2.boost.robust = cluster.bs.glm(gps.2, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ gps.3.boost.robust = cluster.bs.glm(gps.3, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ gps.4.boost.robust = cluster.bs.glm(gps.4, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ gps.5.boost.robust = cluster.bs.glm(gps.5, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
+ gps.6.boost.robust = cluster.bs.glm(gps.6, dat, ~ municipality, ci.level = 0.95, boot.reps = 1000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
 
 
-# gps.robust.se.lower.boost= list(c(gps.1.boost.robust$ci[,1]), 
-#                           c(gps.2.boost.robust$ci[,1]), 
-#                         c(gps.3.boost.robust$ci[,1]),
-#                         c(gps.4.boost.robust$ci[,1]),
-#                         c(gps.5.boost.robust$ci[,1]),
-#                         c(gps.6.boost.robust$ci[,1])
-#                         )
-# gps.robust.se.upper.boost= list(c(gps.1.boost.robust$ci[,2]), 
-#                         c(gps.2.boost.robust$ci[,2]), 
-#                         c(gps.3.boost.robust$ci[,2]),
-#                         c(gps.4.boost.robust$ci[,2]),
-#                         c(gps.5.boost.robust$ci[,2]),
-#                         c(gps.6.boost.robust$ci[,2])
-#                         )
+gps.robust.se.lower.boost= list(c(gps.1.boost.robust$ci[,1]), 
+                           c(gps.2.boost.robust$ci[,1]), 
+                         c(gps.3.boost.robust$ci[,1]),
+                         c(gps.4.boost.robust$ci[,1]),
+                         c(gps.5.boost.robust$ci[,1]),
+                         c(gps.6.boost.robust$ci[,1])
+                         )
+ gps.robust.se.upper.boost= list(c(gps.1.boost.robust$ci[,2]), 
+                         c(gps.2.boost.robust$ci[,2]), 
+                         c(gps.3.boost.robust$ci[,2]),
+                         c(gps.4.boost.robust$ci[,2]),
+                         c(gps.5.boost.robust$ci[,2]),
+                         c(gps.6.boost.robust$ci[,2])
+                         )
 
 
-# screenreg(
-#       list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
-#       omit.coef = "weights", # this gotta be AFTER custo.coef.names
-#       caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
-#       label = "results.gps:1",
-#       override.se = gps.robust.se,
-#       override.ci.low = gps.robust.se.upper.boost,
-#       override.ci.up = gps.robust.se.lower.boost,
-#       digits = 3,
-#       #override.pvalues = gps.pval,
-#       custom.note = "Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
-#       fontsize = "scriptsize",
-#       float.pos = "h"
-# )
-
-
-
-
-
-# CLUSTERED STD ERRORS (but IDK what's the cluster)
-# gps.1.d = data.frame(cbind(Estimate= coef(gps.1), "Robust SE" = sqrt(diag(vcovHC(gps.1, type="HC0"))),
-#       "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.1)/sqrt(diag(vcovHC(gps.1, type="HC0")))), lower.tail=FALSE),
-# LL = coef(gps.1) - 1.96 * sqrt(diag(vcovHC(gps.1, type="HC0"))),
-#     UL = coef(gps.1) + 1.96 * sqrt(diag(vcovHC(gps.1, type="HC0"))))
-#     )
-
-# gps.2.d = data.frame(cbind(Estimate= coef(gps.2), "Robust SE" = sqrt(diag(vcovHC(gps.2, type="HC0"))),
-# "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.2)/sqrt(diag(vcovHC(gps.2, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.2) - 1.96 * sqrt(diag(vcovHC(gps.2, type="HC0"))),
-#     UL = coef(gps.2) + 1.96 * sqrt(diag(vcovHC(gps.2, type="HC0"))))
-# )
+ screenreg(
+       list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
+       #omit.coef = "weights", # this gotta be AFTER custo.coef.names
+       caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
+       label = "results.gps:1",
+       #override.se = gps.robust.se,
+       override.ci.low = gps.robust.se.lower.boost,
+       override.ci.up = gps.robust.se.upper.boost,
+       digits = 3,
+       #override.pvalues = gps.pval,
+       custom.note = "Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
+       fontsize = "scriptsize",
+       float.pos = "h"
+ )
 
 
 
-# gps.3.d = data.frame(cbind(Estimate= coef(gps.3), "Robust SE" = sqrt(diag(vcovHC(gps.3, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.3)/sqrt(diag(vcovHC(gps.3, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.3) - 1.96 * sqrt(diag(vcovHC(gps.3, type="HC0"))),
-#     UL = coef(gps.3) + 1.96 * sqrt(diag(vcovHC(gps.3, type="HC0"))))
-# )
 
 
-
-# gps.4.d = data.frame(cbind(Estimate= coef(gps.4), "Robust SE" = sqrt(diag(vcovHC(gps.4, type="HC0"))),
-#       "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.4)/sqrt(diag(vcovHC(gps.4, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.4) - 1.96 * sqrt(diag(vcovHC(gps.4, type="HC0"))),
-#     UL = coef(gps.4) + 1.96 * sqrt(diag(vcovHC(gps.4, type="HC0"))))
-# )
-
-
-
-# gps.5.d = data.frame(cbind(Estimate= coef(gps.5), "Robust SE" = sqrt(diag(vcovHC(gps.5, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.5)/sqrt(diag(vcovHC(gps.5, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.5) - 1.96 * sqrt(diag(vcovHC(gps.5, type="HC0"))),
-#     UL = coef(gps.5) + 1.96 * sqrt(diag(vcovHC(gps.5, type="HC0"))))
-# )
-
-
-
-# gps.6.d = data.frame(cbind(Estimate= coef(gps.6), "Robust SE" = sqrt(diag(vcovHC(gps.6, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.6)/sqrt(diag(vcovHC(gps.6, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.6) - 1.96 * sqrt(diag(vcovHC(gps.6, type="HC0"))),
-#     UL = coef(gps.6) + 1.96 * sqrt(diag(vcovHC(gps.6, type="HC0"))))
-# )
-
-
+########################################################################################
 
 # function that does clustered SEs
 vcovCluster <- function(
@@ -987,20 +1217,20 @@ gps.pval = list(
 library(texreg)
 screenreg(
         list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
-        custom.coef.names = c(# this gotta be before OMIT.COEFF
-                "(Intercept)",
-                "High Density",
-                "weights",
-                "Perception of Corruption",
-                "Political Involvement",
-                "Urban",
-                "Population (ln)",
-                "Education",
-                "Individual Income",
-                "Municipal Opposition",
-                "Political Id",
-                "Political Involvement TIMES Population (ln)",
-                "Individual Income TIMES Municipal Opposition"),
+#        custom.coef.names = c(# this gotta be before OMIT.COEFF
+#                "(Intercept)",
+#                "High Density",
+#                "weights",
+#                "Perception of Corruption",
+#                "Political Involvement",
+#                "Urban",
+#                "Population (ln)",
+#                "Education",
+#                "Individual Income",
+#                "Municipal Opposition",
+#                "Political Id",
+#                "Political Involvement TIMES Population (ln)",
+#                "Individual Income TIMES Municipal Opposition"),
         omit.coef = "weights", # this gotta be AFTER custo.coef.names
         caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
         label = "results.gps:1",

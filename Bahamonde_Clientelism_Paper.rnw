@@ -452,6 +452,9 @@ Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{e
 
 \subsection*{Estimation Method}
 
+
+{\color{SAY I USED GEE see Hanley2003a}}
+
 It is important to stress that this identification strategy is not about municipalities. That would mean to incur in ecological fallacy. What the treatment variable captures is a characteristic that every individual shares with his/her environment. Hence, the variable reflects features of the average individual at a micro-level. 
 
 As clientelism can only take two values, 1 when clientelism occurs and 0 otherwise, it needs to be estimated using a logistic regression. However, as \autoref{fig:clien2r} shows, clientelism is a rare event. For this reason this variable is estimated via a rare event logistic regression which corrects problems due to rare events (\citet{King2001a}, \citet{King:2001wo})\footnote{We report different estimation methods as well in the \hyperref[robcheck]{Robustness Checks}.}. 

@@ -313,6 +313,7 @@ label variable polinv "Political Involvement Index"
 
 * generating large-small size of the poor
 recode wagehalf (5.8/27.5 =0) (27.6/80.9=1), gen(large)
+drop large /* Im gonna generate this in R, using the actual dataset*/
 
 recast byte clien1dummy urban income np2
 drop if clien1dummy==. |  exc7==. | np2==. | cp13==. | urban==. | ed==. | polinv1-polinv5==.
@@ -327,7 +328,7 @@ merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_pap
 drop _merge
 
 
-keep municipality wagehalf cp13 vb3 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv large munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
+keep municipality wagehalf cp13 vb3 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
 
 rename r1 wealth1
 rename r3 wealth2
