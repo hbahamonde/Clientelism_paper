@@ -148,9 +148,9 @@ m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
 
-########################
-### PARAMETRIC
-########################
+#####################################################################
+### PARAMETRIC MATCHED SAMPLE // clustered std errors // GEE models
+#####################################################################
 
 cat("\014")
 rm(list=ls())
@@ -184,77 +184,416 @@ extract.geepack <- function(model) {
 }
 
 
+# order data for clusters
+m.data$municipality = order(m.data$municipality)
+
+
 # DONT TOUCH BELOW 1
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.1 = extract.geepack(geeglm(clien1dummy ~ large:polinv,
-                                 family = binomial(link = "probit"), 
-                                 id = municipality, 
-                                 std.err = "san.se",
-                                 corstr = "independence",
-                                 data = m.data))
+gee.1.m.t = extract.geepack(gee.1.m <- geeglm(clien1dummy ~ large,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
+
 
 # DONT TOUCH BELOW 2
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.2 = extract.geepack(geeglm(clien1dummy ~ large,
-                                 family = binomial(link = "logit"), 
-                                 id = municipality, 
-                                 std.err = "fij",
-                                 corstr = "independence",
-                                 data = m.data))
+gee.2.m.t = extract.geepack(gee.2.m <- geeglm(clien1dummy ~ large:polinv,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
 
 
 
 # DONT TOUCH BELOW 3
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.3 = extract.geepack(geeglm(clien1dummy ~ wealth,
-                                 family = binomial(link = "logit"), 
-                                 id = municipality, 
-                                 std.err = "san.se",
-                                 corstr = "independence",
-                                 data = m.data))
-
-
+gee.3.m.t = extract.geepack(gee.3.m <- geeglm(clien1dummy ~ wealth,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
 
 
 # DONT TOUCH BELOW 4
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.4 = extract.geepack(geeglm(clien1dummy ~ polinv,
-                                 family = binomial(link = "probit"), 
-                                 id = municipality, 
-                                 std.err = "san.se",
-                                 corstr = "independence",
-                                 data = m.data))
-
+gee.4.m.t = extract.geepack(gee.4.m <- geeglm(clien1dummy ~ wealth:large, 
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
 
 # DONT TOUCH BELOW 5
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.5 = extract.geepack(geeglm(clien1dummy ~ urban,
-                                 family = binomial(link = "probit"), 
-                                 id = municipality, 
-                                 std.err = "san.se",
-                                 corstr = "independence",
-                                 data = m.data))
+gee.5.m.t = extract.geepack(gee.5.m <- geeglm(clien1dummy ~ polinv,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
 
 
 # DONT TOUCH BELOW 6
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.6 = extract.geepack(geeglm(clien1dummy ~ pop,
-                                 family = binomial(link = "probit"), 
-                                 id = municipality, 
-                                 std.err = "san.se",
-                                 corstr = "independence",
-                                 data = m.data))
+gee.6.m.t = extract.geepack(gee.6.m <- geeglm(clien1dummy ~ urban,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
+
+
+# DONT TOUCH BELOW 7
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.7.m.t = extract.geepack(gee.7.m <- geeglm(clien1dummy ~ pop,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
+
+
+
+
+
+#####################################################################
+### PARAMETRIC RAW S A M P L E // GPS // clustered std errors // GEE models
+#####################################################################
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
+
+
+# Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
+            data = dat, 
+            iterations = 25000, 
+            twostep = F, # F
+            method = "exact", # EXACT
+            ATT = 0, # 2
+            standardize = F) # F
+
+# transform the weight var. // Attaching weights to DF // sorting for GEE models
+dat$weights = fit$weights
+dat$municipality = order(dat$municipality)
+
+
+
+
+# Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+dat$logpop = log(dat$pop)
+
+
+
+# Tables
+# ---- texreg-extrac.rtor-geeglm ----
+library(texreg)
+extract.geepack <- function(model) {
+  s <- summary(model)
+  names <- rownames(s$coef)
+  co <- s$coef[, 1]
+  se <- s$coef[, 2]
+  pval <- s$coef[, 4]
+  
+  n <- nrow(model.frame(model))
+  nclust <- length(s$geese$clusz)
+  
+  gof = c(n, nclust)
+  gof.names = c("Num. obs.", "Num. clust.")
+  
+  tr <- createTexreg(
+    coef.names = names,
+    coef = co,
+    se = se,
+    pvalues = pval,
+    gof.names = gof.names,
+    gof = gof,
+    gof.decimal = rep(FALSE, length(gof))
+  )
+  return(tr)
+}
+
+
+
+# Models
+# DONT TOUCH BELOW 1
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.1.r.t = extract.geepack(gee.1.r <- geeglm(clien1dummy ~ large + weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+# DONT TOUCH BELOW 2
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.2.r.t = extract.geepack(gee.2.r <- geeglm(clien1dummy ~ large:polinv+ weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+
+
+# DONT TOUCH BELOW 3
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.3.r.t = extract.geepack(gee.3.r <- geeglm(clien1dummy ~ wealth+ weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+# DONT TOUCH BELOW 4
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.4.r.t = extract.geepack(gee.4.r <- geeglm(clien1dummy ~ wealth:large+ weights, 
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+
+# DONT TOUCH BELOW 5
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.5.r.t = extract.geepack(gee.5.r <- geeglm(clien1dummy ~ polinv+ weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+# DONT TOUCH BELOW 6
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.6.r.t = extract.geepack(gee.6.r <- geeglm(clien1dummy ~ urban+ weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+# DONT TOUCH BELOW 7
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.7.r.t = extract.geepack(gee.7.r <- geeglm(clien1dummy ~ pop+ weights,
+                                               family = binomial(link = "logit"), 
+                                               id = municipality, 
+                                               std.err = "san.se",
+                                               corstr = "independence",
+                                               data = dat))
+
+
+
+########################################################################################
+### PARAMETRIC RAW S A M P L E // GPS // clustered std errors // GEE models // CONTINUOUS TREAT
+########################################################################################
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
+
+
+# Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
+            data = dat, 
+            iterations = 25000, 
+            twostep = F, # F
+            method = "exact", # EXACT
+            ATT = 0, # 2
+            standardize = F) # F
+
+# transform the weight var. // Attaching weights to DF // sorting for GEE models
+dat$weights = fit$weights
+dat$municipality = order(dat$municipality)
+
+
+
+
+# Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+dat$logpop = log(dat$pop)
+
+
+
+# Tables
+# extract function for texreg
+extract.geepack <- function(model) {
+  s <- summary(model)
+  names <- rownames(s$coef)
+  co <- s$coef[, 1]
+  se <- s$coef[, 2]
+  pval <- s$coef[, 4]
+  
+  n <- nrow(model.frame(model))
+  nclust <- length(s$geese$clusz)
+  
+  gof = c(n, nclust)
+  gof.names = c("Num. obs.", "Num. clust.")
+  
+  tr <- createTexreg(
+    coef.names = names,
+    coef = co,
+    se = se,
+    pvalues = pval,
+    gof.names = gof.names,
+    gof = gof,
+    gof.decimal = rep(FALSE, length(gof))
+  )
+  return(tr)
+}
+
+
+
+# Models
+# DONT TOUCH BELOW 1
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.1.c.r.t = extract.geepack(gee.1.c.r <- geeglm(clien1dummy ~ wagehalf + weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+# DONT TOUCH BELOW 2
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.2.c.r.t = extract.geepack(gee.2.c.r <- geeglm(clien1dummy ~ wagehalf:polinv+ weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+
+
+# DONT TOUCH BELOW 3
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.3.c.r.t = extract.geepack(gee.3.c.r <- geeglm(clien1dummy ~ wealth+ weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+# DONT TOUCH BELOW 4
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.4.c.r.t = extract.geepack(gee.4.c.r <- geeglm(clien1dummy ~ wealth:wagehalf+ weights, 
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+
+# DONT TOUCH BELOW 5
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.5.c.r.t = extract.geepack(gee.5.c.r <- geeglm(clien1dummy ~ polinv+ weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+# DONT TOUCH BELOW 6
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.6.c.r.t = extract.geepack(gee.6.c.r <- geeglm(clien1dummy ~ urban+ weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+# DONT TOUCH BELOW 7
+library(geepack) # install.packages("geepack")
+library(texreg)
+gee.7.c.r.t = extract.geepack(gee.7.c.r <- geeglm(clien1dummy ~ pop+ weights,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = dat))
+
+
+
+#####################################################################
+### T A B L E S :   R A W   A N D   M A T C H E D   S A M P L E S 
+#####################################################################
+
 
 
 # TABLE
 library(texreg)
-screenreg(list(gee.1,gee.2,gee.3,gee.4,gee.5,gee.6), # screenreg / texreg
+screenreg(list(gee.1.r.t,gee.2.r.t,gee.2.r.t,gee.3.r.t,gee.4.r.t,gee.5.r.t,gee.6.r.t,gee.7.r.t), # screenreg / texreg
+          #custom.coef.names = c(# this gotta be before OMIT.COEFF
+          #         "(Intercept)",
+          #        "Size of the Poor",
+          #        "Wealth Index",
+          #        "Size of the Poor TIMES Wealth Index",
+          #        "Size of the Poor TIMES Political Involvement",
+          #        "logpop",
+          #        "weights"),
+          caption = "Models using a Generalized Propensity Score as a Weighting Device",
+          label = "gps:1",
+          stars = c(0.01, 0.05, 0.1),
+          digits = 3,
+          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Raw sample marched on the generalized propensity score. \n Binary treatment variable.\n 95% Standard errors in parentheses",
+          fontsize = "scriptsize",
+          float.pos = "h"
+)
+
+
+
+
+
+# TABLE
+library(texreg)
+screenreg(list(gee.1.m.t,gee.2.m.t,gee.2.m.t,gee.3.m.t,gee.4.m.t,gee.5.m.t,gee.6.m.t,gee.7.m.t), # screenreg / texreg
           #custom.coef.names = c(# this gotta be before OMIT.COEFF
           #         "(Intercept)",
           #        "Size of the Poor",
@@ -268,10 +607,526 @@ screenreg(list(gee.1,gee.2,gee.3,gee.4,gee.5,gee.6), # screenreg / texreg
           stars = c(0.01, 0.05, 0.1),
           digits = 3,
           #custom.model.names = c("Logit GEE", "Rare Event Logit"),
-          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Matched sample. \n 95% Standard errors in parentheses",
+          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Matched sample. \n Binary treatment variable.\n 95% Standard errors in parentheses",
           fontsize = "scriptsize",
           float.pos = "h"
 )
+
+# TABLE
+library(texreg)
+screenreg(list(gee.1.c.r.t,gee.2.c.r.t,gee.3.c.r.t,gee.4.c.r.t,gee.5.c.r.t,gee.6.c.r.t,gee.7.c.r.t), # screenreg / texreg
+          #custom.coef.names = c(# this gotta be before OMIT.COEFF
+          #         "(Intercept)",
+          #        "Size of the Poor",
+          #        "Wealth Index",
+          #        "Size of the Poor TIMES Wealth Index",
+          #        "Size of the Poor TIMES Political Involvement",
+          #        "logpop",
+          #        "weights"),
+          caption = "Clientelism: Logit GEE Models",
+          label = "gps:1",
+          stars = c(0.01, 0.05, 0.1),
+          digits = 3,
+          #custom.model.names = c("Logit GEE", "Rare Event Logit"),
+          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Raw sample marched on the generalized propensity score. \n No cutoff was used. \n 95% Standard errors in parentheses",
+          fontsize = "scriptsize",
+          float.pos = "h"
+)
+
+
+
+######################################################
+#         C O E F F I C I E N T   P L O T S 
+#              N  O T   S I M U L A T E D
+######################################################
+
+
+# construct the dataset for raw sample
+gee.r.plot <- data.frame(
+  Sample = as.character("GPS"),
+  Treatment = as.character("Binary"),
+  variable = seq(1:7),
+  coefficients = as.numeric(c(
+    as.numeric(gee.1.r$"coefficients"["large"]),
+    as.numeric(gee.2.r$"coefficients"["large:polinv"]),
+    as.numeric(gee.3.r$"coefficients"["wealth"]),
+    as.numeric(gee.4.r$"coefficients"["wealth:large"]),
+    as.numeric(gee.5.r$"coefficients"["polinv"]),
+    as.numeric(gee.6.r$"coefficients"["urbanUr"]),
+    as.numeric(gee.7.r$"coefficients"["pop"]))),
+  se = as.numeric(c(
+    as.numeric(sqrt(diag(gee.1.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.2.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.3.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.4.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.5.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.6.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.7.r$geese$vbeta))[2]))
+    )
+  )
+
+gee.r.plot$upper <- gee.r.plot$coefficients + 1.96*gee.r.plot$se
+gee.r.plot$lower <- gee.r.plot$coefficients - 1.96*gee.r.plot$se
+
+
+gee.r.plot$variable <- factor(gee.r.plot$variable,
+                              levels = c(1,2,3,4,5,6,7), ordered=TRUE,
+                              labels =   c("Large Size of the Poor", 
+                                           paste("Large Size of the Poor * Political Involvement Index"), 
+                                           "Wealth Index",
+                                           paste("Large Size of the Poor * Wealth Index wealth"), 
+                                           "Political Involvement Index", 
+                                           "Urban",
+                                           "Municipal Population")
+                              )
+
+
+# construct the dataset for matched sample
+gee.m.plot <- data.frame(
+  Sample = as.character("CEM"),
+  Treatment = as.character("Binary"),
+  variable = seq(1:7),
+  coefficients = as.numeric(c(
+    as.numeric(gee.1.m$"coefficients"["large"]),
+    as.numeric(gee.2.m$"coefficients"["large:polinv"]),
+    as.numeric(gee.3.m$"coefficients"["wealth"]),
+    as.numeric(gee.4.m$"coefficients"["wealth:large"]),
+    as.numeric(gee.5.m$"coefficients"["polinv"]),
+    as.numeric(gee.6.m$"coefficients"["urbanUr"]),
+    as.numeric(gee.7.m$"coefficients"["pop"]))),
+  se = as.numeric(c(
+    as.numeric(sqrt(diag(gee.1.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.2.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.3.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.4.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.5.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.6.m$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.7.m$geese$vbeta))[2])
+    )
+  )
+)
+
+gee.m.plot$upper <- gee.m.plot$coefficients + 1.96*gee.m.plot$se
+gee.m.plot$lower <- gee.m.plot$coefficients - 1.96*gee.m.plot$se
+
+
+gee.m.plot$variable <- factor(gee.m.plot$variable,
+                              levels = c(1,2,3,4,5,6,7), ordered=TRUE,
+                              labels =   c("Large Size of the Poor", 
+                                           paste("Large Size of the Poor * Political Involvement Index"), 
+                                           "Wealth Index",
+                                           paste("Large Size of the Poor * Wealth Index wealth"), 
+                                           "Political Involvement Index", 
+                                           "Urban",
+                                           "Municipal Population")
+                              )
+
+
+
+# Raw sample matched on the generalized propensity score // continuous treatment
+gee.c.r.plot <- data.frame(
+  Sample = as.character("GPS"),
+  Treatment = as.character("Continuous"),
+  variable = seq(1:7),
+  coefficients = as.numeric(c(
+    as.numeric(gee.1.c.r$"coefficients"["wagehalf"]),
+    as.numeric(gee.2.c.r$"coefficients"["wagehalf:polinv"]),
+    as.numeric(gee.3.c.r$"coefficients"["wealth"]),
+    as.numeric(gee.4.c.r$"coefficients"["wealth:wagehalf"]),
+    as.numeric(gee.5.c.r$"coefficients"["polinv"]),
+    as.numeric(gee.6.c.r$"coefficients"["urbanUr"]),
+    as.numeric(gee.7.c.r$"coefficients"["pop"]))),
+  se = as.numeric(c(
+    as.numeric(sqrt(diag(gee.1.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.2.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.3.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.4.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.5.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.6.c.r$geese$vbeta))[2]),
+    as.numeric(sqrt(diag(gee.7.c.r$geese$vbeta))[2])
+  )
+  )
+)
+
+gee.c.r.plot$upper <- gee.c.r.plot$coefficients + 1.96*gee.c.r.plot$se
+gee.c.r.plot$lower <- gee.c.r.plot$coefficients - 1.96*gee.c.r.plot$se
+
+
+gee.c.r.plot$variable <- factor(gee.c.r.plot$variable,
+                                levels = c(1,2,3,4,5,6,7), ordered=TRUE,
+                                labels =   c("Large Size of the Poor", 
+                                             paste("Large Size of the Poor * Political Involvement Index"), 
+                                             "Wealth Index",
+                                             paste("Large Size of the Poor * Wealth Index wealth"), 
+                                             "Political Involvement Index", 
+                                             "Urban",
+                                             "Municipal Population")
+                                )
+
+
+
+
+# cbind these two datasets
+gee.plot = rbind(gee.m.plot, gee.r.plot,gee.c.r.plot)
+
+# plot
+
+# Plot
+library(ggplot2)
+ggplot(gee.plot, aes(
+  x = variable, 
+  y = coefficients, 
+  ymin = upper, 
+  ymax = lower,
+  colour = Sample,
+  shape = Treatment,
+  position="dodge"
+  )) +
+  geom_pointrange(position=position_dodge(width=0.45)) + 
+  geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Coefficients (logit scale)") +
+  ggtitle("Likelihood of Clientelism") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+
+
+
+######################################################
+#  S I M U L A T I O N S   A N D   P L O T S  pending
+######################################################
+
+cat("\014")
+rm(list=ls())
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+
+
+# models
+library(Zelig)
+gee.zelig.1 = zelig(clien1dummy ~ large,family = binomial(link = "logit"), id = "municipality", std.err = "san.se",model = "logit.gee",corstr = "independence",data = m.data)
+gee.zelig.2 = zelig(clien1dummy ~ large:polinv,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
+gee.zelig.3 = zelig(clien1dummy ~ wealth,  family = binomial(link = "logit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
+gee.zelig.4 = zelig(clien1dummy ~ wealth:large, family = binomial(link = "logit"), id = "municipality", std.err = "san.se",model = "logit.gee",corstr = "independence",data = m.data)
+gee.zelig.5 = zelig(clien1dummy ~ polinv,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
+gee.zelig.6 = zelig(clien1dummy ~ urban,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
+gee.zelig.7 = zelig(clien1dummy ~ pop,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
+
+
+
+# simulations
+library(Zelig) ; set.seed(602); options(scipen=999)
+gee.zelig.1.s.d = data.frame(sim(gee.zelig.1, x = setx(gee.zelig.1, large = max(m.data$large)), num=500)$getqi(qi="ev")) ; colnames(gee.zelig.1.s.d) = "fit"
+gee.zelig.2.s.d = data.frame(sim(gee.zelig.2, x = setx(gee.zelig.2, large = max(m.data$large), polinv=max(m.data$polinv)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.2.s.d) = "fit"
+gee.zelig.3.s.d = data.frame(sim(gee.zelig.3, x = setx(gee.zelig.3, wealth = max(m.data$wealth)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.3.s.d) = "fit"
+gee.zelig.4.s.d = data.frame(sim(gee.zelig.4, x = setx(gee.zelig.4, wealth = max(m.data$wealth), large = max(m.data$large)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.4.s.d) = "fit"
+gee.zelig.5.s.d = data.frame(sim(gee.zelig.5, x = setx(gee.zelig.5, polinv = max(m.data$polinv)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.5.s.d) = "fit"
+gee.zelig.6.s.d = data.frame(sim(gee.zelig.6, x = setx(gee.zelig.6, urban = "Ur"), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.6.s.d) = "fit"
+gee.zelig.7.s.d = data.frame(sim(gee.zelig.7, x = setx(gee.zelig.7, pop = max(m.data$pop)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.7.s.d) = "fit"
+
+
+# dataset for plots
+std <- function(x) sd(x)/sqrt(length(x)) # function to extract std. errors 
+
+gee.zelig.d <- data.frame(
+  variable = seq(1:7),
+  coefficients = as.numeric(c(
+    mean(gee.zelig.1.s.d$fit), 
+    mean(gee.zelig.2.s.d$fit),
+    mean(gee.zelig.3.s.d$fit), 
+    mean(gee.zelig.4.s.d$fit), 
+    mean(gee.zelig.5.s.d$fit), 
+    mean(gee.zelig.6.s.d$fit), 
+    mean(gee.zelig.7.s.d$fit))),
+  se = as.numeric(c(
+    std(gee.zelig.1.s.d$fit), 
+    std(gee.zelig.2.s.d$fit),
+    std(gee.zelig.3.s.d$fit), 
+    std(gee.zelig.4.s.d$fit), 
+    std(gee.zelig.5.s.d$fit), 
+    std(gee.zelig.6.s.d$fit), 
+    std(gee.zelig.7.s.d$fit)))
+)
+
+gee.zelig.d$upper <- gee.zelig.d$coefficients + 1.96*gee.zelig.d$se
+gee.zelig.d$lower <- gee.zelig.d$coefficients - 1.96*gee.zelig.d$se
+
+
+gee.zelig.d$variable <- factor(gee.zelig.d$variable,
+                          levels = c(1,2,3,4,5,6,7), ordered=TRUE,
+                          labels =   c("Large Size of the Poor", 
+                                       expression(paste("Large Size of the Poor", times, "Political Involvement Index")), 
+                                       "Wealth Index",
+                                       expression(paste("Large Size of the Poor", times, "Wealth Index wealth")), 
+                                       "Political Involvement Index", 
+                                       "Urban",
+                                       "Municipal Population")
+                          )
+
+
+
+# plot
+# Plot
+library(ggplot2)
+ggplot(gee.zelig.d, aes(
+  x = variable, 
+  y = coefficients, 
+  ymin = upper, 
+  ymax = lower)
+) +
+  geom_pointrange() + 
+  geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Simulated Coefficient") +
+  ggtitle("Democratic Values: Americans Systematically \n Prefer Political Candidates that go in \n Line with a Strong Democracy")+
+  guides(colour=FALSE) +
+  theme(legend.position="none") + 
+  theme_bw()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# ?????
+# explain this to reviewers: WHY IAM NOT USING CLUSTERED STD ERRORS or FIXED FXS _AND_ GPS 
+## One alternative to solve the "arbitrary-ness" of the cutoff is to not use one at all.
+## One could, for ex., leave the "treatment" variable in its original form, i.e. a cont. var.
+## The most appropiated strategy for this is to use a GPS [EXPLAIN]. The cost however is that,
+## using clustered std. errors _OR_ clustered std. errors is not possible. 
+## In these contexts, the cluster or fixed units (i.e. the municipalities) are correlated with the 
+## weighting GPS device (i.e. individuals within municipalities). 
+
+
+
+
+
+# POSSIBLE DELETE BELOW
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+
+
+library(geepack) #gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf + wealth + wagehalf:wealth + wagehalf:polinv + logpop + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
+gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf*wealth + wagehalf*polinv + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
+                         #weights = weights,
+                         family = binomial(link = "logit"), 
+                         id = municipality, 
+                         std.err = "san.se",
+                         corstr = "exchangeable",
+                         data = dat)
+
+
+
+# Table
+library(texreg) 
+gps.1.t = extract.geepack(gee.logit.gps.1)
+
+library(texreg)
+screenreg(list(gps.1.t, 
+               ), # screenreg / texreg
+  #custom.coef.names = c(# this gotta be before OMIT.COEFF
+  #         "(Intercept)",
+  #        "Size of the Poor",
+  #        "Wealth Index",
+  #        "Size of the Poor TIMES Wealth Index",
+  #        "Size of the Poor TIMES Political Involvement",
+  #        "logpop",
+  #        "weights"),
+  caption = "Models using a Generalized Propensity Score as a Weighting Device - Unmatched Sample ",
+  label = "gps:1",
+  stars = c(0.01, 0.05, 0.1),
+  digits = 3,
+  custom.model.names = c("Logit GEE", "Rare Event Logit"),
+  custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n ReLogit controls for rare-events. \n Raw (unmatched) sample. \n 95% Standard errors in parentheses",
+  fontsize = "scriptsize",
+  float.pos = "h"
+)
+
+
+
+
+
+##########################
+#   MATCHED SAMPLE // GEE LOGIT // [gps:plot:1] // LARGE * POLINV
+##########################
+
+cat("\014")
+rm(list=ls())
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+# order data for clusters
+m.data$municipality = order(m.data$municipality)
+
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+
+# model
+library(Zelig) # this is for simulation only, not for the table
+gee.2.m.zelig = zelig(clien1dummy ~ large*polinv,
+                      model = "logit.gee",
+                      family = binomial(link = "logit"), 
+                      id = "municipality", 
+                      std.err = "san.se",
+                      corstr = "independence",
+                      data = m.data)
+
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+
+# low 
+gee.2.m.zelig.low = data.frame(
+  sim(
+    x = setx(gee.2.m.zelig, 
+             large = min(m.data$large), 
+             polinv = min(m.data$polinv):max(m.data$polinv)), 
+    x1 = setx(gee.2.m.zelig, 
+              large = max(m.data$large), 
+              polinv = min(m.data$polinv):max(m.data$polinv)), 
+    num=700)$getqi(qi="ev", xvalue="range"))
+
+colnames(gee.2.m.zelig.low) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # low
+
+# high
+gee.2.m.zelig.high = data.frame(
+  sim(x = setx(gee.2.m.zelig, 
+               large = max(m.data$large), 
+               polinv = min(m.data$polinv):max(m.data$polinv)), 
+      x1 = setx(gee.2.m.zelig, 
+                large = max(m.data$large), 
+                polinv = min(m.data$polinv):max(m.data$polinv)), 
+      num=700)$getqi(qi="ev", xvalue="range1")) ; 
+colnames(gee.2.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
+
+
+
+# plot
+library(ggplot2)
+polinv.range = as.numeric(min(m.data$polinv):max(m.data$polinv))
+set.seed(602)
+grid.arrange(ggplot() + 
+               geom_point(aes(x=polinv.range[1], y=gee.2.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gee.2.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gee.2.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gee.2.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gee.2.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gee.2.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gee.2.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[1], y=gee.2.m.zelig.high[1], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gee.2.m.zelig.high[2], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gee.2.m.zelig.high[3], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gee.2.m.zelig.high[4], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gee.2.m.zelig.high[5], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gee.2.m.zelig.high[6], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gee.2.m.zelig.high[7], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
+               theme_bw() + 
+               labs(colour = "Density of the Poor") +
+               theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)), 
+             bottom = "Note: Logit GEE model. Std. clustered errors at the municipal level.")
+
+
+
+
+
+
+##########################
+#   MATCHED SAMPLE // GEE LOGIT // [gps:plot:2] // LARGE * WEALTH
+##########################
+
+
+cat("\014")
+rm(list=ls())
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+# order data for clusters
+m.data$municipality = order(m.data$municipality)
+
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+
+# model
+library(Zelig) # this is for simulation only, not for the table
+gee.4.m.zelig = zelig(clien1dummy ~ wealth:large,
+                      model = "logit.gee",
+                      family = binomial(link = "logit"), 
+                      id = "municipality", 
+                      std.err = "san.se",
+                      corstr = "independence",
+                      data = m.data)
+
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+# low 
+gee.4.m.zelig.high = data.frame(
+  sim(
+    x = setx(gee.4.m.zelig, 
+             large = min(m.data$large), 
+             wealth = min(m.data$wealth):max(m.data$wealth)), 
+    x1 = setx(gee.4.m.zelig, 
+              large = max(m.data$large), 
+              wealth = min(m.data$wealth):max(m.data$wealth)), 
+    num=700)$getqi(qi="ev", xvalue="range"))
+
+colnames(gee.4.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # low
+
+# high
+gee.4.m.zelig.high = data.frame(
+  sim(x = setx(gee.4.m.zelig, 
+               large = max(m.data$large), 
+               wealth = min(m.data$wealth):max(m.data$wealth)), 
+      x1 = setx(gee.4.m.zelig, 
+                large = max(m.data$large), 
+                wealth = min(m.data$wealth):max(m.data$wealth)), 
+      num=700)$getqi(qi="ev", xvalue="range1")) ; 
+colnames(gee.4.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
+
+
+
+
+# HERE JUN 6 2016
 
 
 
@@ -332,16 +1187,16 @@ stargazer(m.data.s,
           font.size = "scriptsize",
           style= "apsr",
           covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
+            "Clientelism",
+            "High Density",
+            "Income",
+            "Perception of Corruption",
+            "Political Involvement Index",
+            "Urban",
+            "Population (ln)",
+            "Years of Schooling",
+            "Municipal Opposition",
+            "Political Id"),
           table.placement = "h",
           notes.align = "c"
 )
@@ -398,16 +1253,16 @@ stargazer(dat,
           font.size = "scriptsize",
           style= "apsr",
           covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
+            "Clientelism",
+            "High Density",
+            "Income",
+            "Perception of Corruption",
+            "Political Involvement Index",
+            "Urban",
+            "Population (ln)",
+            "Years of Schooling",
+            "Municipal Opposition",
+            "Political Id"),
           table.placement = "h",
           notes.align = "c"
 )
@@ -422,10 +1277,10 @@ m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
 library(ggplot2)
 ggplot(data=m.data, aes(x=clien1dummy)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
+  geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+  xlab("Clientelism") + 
+  ylab("Frequency") + 
+  theme_bw()
 
 #m.data <- match.data(m.out)
 #m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
@@ -436,31 +1291,31 @@ ggplot(data=m.data, aes(x=clien1dummy)) +
 # Plot
 library(ggplot2)
 ggplot(data=m.data, aes(x=clientelism)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
+  geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+  xlab("Clientelism") + 
+  ylab("Frequency") + 
+  theme_bw()
 
 
 
 ## Distribution treatment var
 # Labels
 ggplot.labels1 <- data.frame(
-        time = c(15, 60), 
-        value = c(75, 75), 
-        label = c("Low (C)", "High (T)"), 
-        type = c("NA*", "MVH")
+  time = c(15, 60), 
+  value = c(75, 75), 
+  label = c("Low (C)", "High (T)"), 
+  type = c("NA*", "MVH")
 )
 
 ## Plot
 library(ggplot2)
 ggplot(m.data, aes(x=wagehalf)) + 
-        geom_histogram(binwidth=2.5, alpha=.7) + 
-        #geom_density(alpha=.1) +
-        theme_bw() +
-        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
-        xlab("Density of the Poor") + ylab("Frequency") +
-        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+  geom_histogram(binwidth=2.5, alpha=.7) + 
+  #geom_density(alpha=.1) +
+  theme_bw() +
+  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
+  xlab("Density of the Poor") + ylab("Frequency") +
+  geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
 
 ######################################################
 #  B   A   L   A   N   C   E       P   L   O   T   S #
@@ -510,11 +1365,11 @@ plot.std = data.frame(plot.std, municipality)
 
 
 plot.std = reshape(plot.std, 
-        varying = c("income", "wagehalf"), 
-        v.names = "score",
-        timevar = "subj", 
-        times = c("income", "wagehalf"), 
-        direction = "long")
+                   varying = c("income", "wagehalf"), 
+                   v.names = "score",
+                   timevar = "subj", 
+                   times = c("income", "wagehalf"), 
+                   direction = "long")
 
 
 
@@ -523,16 +1378,16 @@ library(ggplot2)
 ggplot(plot.std, aes(x = score, 
                      y = id, 
                      colour = subj)) + 
-        geom_jitter(width = 0.3, 
-                    size=0.8, 
-                    alpha=I(.3)) + 
-        coord_flip() + 
-        labs(colour = "") + 
-        ylab("Observations (unmatched set)") + 
-        xlab("Standarized Score") + 
-        scale_color_manual(labels = c("Income", "Density of the Poor"), values = c("blue", "red")) +
-        theme_bw() + 
-        scale_shape(solid = FALSE)
+  geom_jitter(width = 0.3, 
+              size=0.8, 
+              alpha=I(.3)) + 
+  coord_flip() + 
+  labs(colour = "") + 
+  ylab("Observations (unmatched set)") + 
+  xlab("Standarized Score") + 
+  scale_color_manual(labels = c("Income", "Density of the Poor"), values = c("blue", "red")) +
+  theme_bw() + 
+  scale_shape(solid = FALSE)
 
 
 #
@@ -553,445 +1408,6 @@ dev.off()
 # For the correlation
 m.dataCorr2 <- data.frame(large, income)
 corr(m.dataCorr2) # -0.2601744
-
-
-
-##########################
-#   GPS  Weighting MODELS
-##########################
-cat("\014")
-rm(list=ls())
-
-
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-
-## transform the wagehalf variable
-dat$wagehalf = round(dat$wagehalf, digits=0)
-
-
-# Generating the Propensity Score 
-library(CBPS, quietly = T) # install.packages("CBPS")
-fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
-            data = dat, 
-            iterations = 25000, 
-            twostep = F, # F
-            method = "exact", # EXACT
-            ATT = 0, # 2
-            standardize = F) # F
-
-# transform the weight var. // Attaching weights to DF
-dat$weights = fit$weights
-# dat$weights = round(fit$weights, digits=10)
-# dat$weights = dat$weights*100000
-
-
-
-# Recode Before modeling
-dat$clien1dummy <- as.numeric(dat$clien1dummy)
-library(car)
-dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
-dat$logpop = log(dat$pop)
-
-
-# Models
-library(geepack) #gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf + wealth + wagehalf:wealth + wagehalf:polinv + logpop + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
-gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf:wealth + wagehalf:polinv + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
-                #weights = weights,
-                family = binomial(link = "logit"), 
-                id = municipality, 
-                std.err = "san.se",
-                corstr = "exchangeable",
-                data = dat)
-
-
-library(Zelig) # this is for simulation only, not for the table
-gee.logit.gps.zelig = zelig(clien1dummy ~ wagehalf:wealth + wagehalf:polinv + weights,
-      model = "logit.gee",
-      family = binomial(link = "logit"), 
-      id = "municipality", 
-      std.err = "san.se",
-      corstr = "exchangeable",
-      data = dat)
-
-
-
-library(Zelig)
-relogit.gps.1 = zelig(clien1dummy ~ wagehalf:wealth + wagehalf:polinv + weights,
-                      model = "relogit",
-                      #robust = T,
-                      bias.correct = T, # Note that if tau = NULL, bias.correct = FALSE, the relogit procedure performs a standard logistic regression without any correction.
-                      data = dat
-                      )
-
-
-
-
-
-# ?????
-# explain this to reviewers: WHY IAM NOT USING CLUSTERED STD ERRORS or FIXED FXS _AND_ GPS 
-## One alternative to solve the "arbitrary-ness" of the cutoff is to not use one at all.
-## One could, for ex., leave the "treatment" variable in its original form, i.e. a cont. var.
-## The most appropiated strategy for this is to use a GPS [EXPLAIN]. The cost however is that,
-## using clustered std. errors _OR_ clustered std. errors is not possible. 
-## In these contexts, the cluster or fixed units (i.e. the municipalities) are correlated with the 
-## weighting GPS device (i.e. individuals within municipalities). 
-
-
-
-
-
-# Tables
-
-## ---- texreg-extractor-Relogit ZELIG ----
-library(texreg)
-extract.Zeligrelogit <- function(model, include.aic = TRUE, include.bic = TRUE, 
-                                 include.loglik = TRUE, include.deviance = TRUE, include.nobs = TRUE, ...) {
-  g <- model$zelig.out$z.out[[1]]
-  class(g) <- "glm"
-  e <- extract(g, include.aic = include.aic, include.bic = include.bic, 
-               include.loglik = include.loglik, include.deviance = include.deviance, 
-               include.nobs = include.nobs, ...)
-  return(e)
-}
-
-setMethod("extract", signature = className("Zelig-relogit", "Zelig"), 
-          definition = extract.Zeligrelogit)
-
-## ---- texreg-extractor-geeglm ----
-library(texreg)
-extract.geepack <- function(model) {
-  s <- summary(model)
-  names <- rownames(s$coef)
-  co <- s$coef[, 1]
-  se <- s$coef[, 2]
-  pval <- s$coef[, 4]
-  
-  n <- nrow(model.frame(model))
-  nclust <- length(s$geese$clusz)
-  
-  gof = c(n, nclust)
-  gof.names = c("Num. obs.", "Num. clust.")
-  
-  tr <- createTexreg(
-    coef.names = names,
-    coef = co,
-    se = se,
-    pvalues = pval,
-    gof.names = gof.names,
-    gof = gof,
-    gof.decimal = rep(FALSE, length(gof))
-  )
-  return(tr)
-}
-
-
-# Table
-library(texreg)
-gps.1.t = extract.geepack(gee.logit.gps.1)
-
-library(texreg)
-screenreg(list(gps.1.t, relogit.gps.1), # screenreg / texreg
-  #custom.coef.names = c(# this gotta be before OMIT.COEFF
-  #         "(Intercept)",
-  #        "Size of the Poor",
-  #        "Wealth Index",
-  #        "Size of the Poor TIMES Wealth Index",
-  #        "Size of the Poor TIMES Political Involvement",
-  #        "logpop",
-  #        "weights"),
-  caption = "Models using a Generalized Propensity Score as a Weighting Device - Unmatched Sample ",
-  label = "gps:1",
-  stars = c(0.01, 0.05, 0.1),
-  digits = 3,
-  custom.model.names = c("Logit GEE", "Rare Event Logit"),
-  custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n ReLogit controls for rare-events. \n Raw (unmatched) sample. \n 95% Standard errors in parentheses",
-  fontsize = "scriptsize",
-  float.pos = "h"
-)
-
-
-##########################
-#   GPS  Weighting PLOT: GEE LOGIT [gps:wagehalf_wealth1] WAGE HALF and WEALTH
-##########################
-
-# Simulation # quantile(dat$wagehalf, .25) // 
-low.wagehalf.gee <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), wealth = min(dat$wealth):max(dat$wealth))
-high.wagehalf.gee <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), wealth = min(dat$wealth):max(dat$wealth))
-
-
-
-
-set.seed(602); options(scipen=999)
-gps.logit.gee.wagehalf.s <- sim(gps.logit.gee, x = low.wagehalf.gee, x1 = high.wagehalf.gee, num=500)
-
-
-gps.logit.gee.wagehalf.s.d.low = data.frame(gps.logit.gee.wagehalf.s$getqi(qi="ev", xvalue="range")) ; colnames(gps.logit.gee.wagehalf.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$wealth):max(dat$wealth)))))  # low
-gps.logit.gee.wagehalf.s.d.high = data.frame(gps.logit.gee.wagehalf.s$getqi(qi="ev", xvalue="range1")) ; colnames(gps.logit.gee.wagehalf.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$wealth):max(dat$wealth)))))  # high
-
-
-
-library(ggplot2)
-
-wealth.rage = as.numeric(min(dat$wealth):max(dat$wealth))
-
-set.seed(602)
-ggplot() + 
-  geom_point(aes(x=wealth.rage[1], y=gps.logit.gee.wagehalf.s.d.low[1], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[2], y=gps.logit.gee.wagehalf.s.d.low[2], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[3], y=gps.logit.gee.wagehalf.s.d.low[3], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=wealth.rage[4], y=gps.logit.gee.wagehalf.s.d.low[4], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[5], y=gps.logit.gee.wagehalf.s.d.low[5], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[6], y=gps.logit.gee.wagehalf.s.d.low[6], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[7], y=gps.logit.gee.wagehalf.s.d.low[7], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[8], y=gps.logit.gee.wagehalf.s.d.low[8], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[9], y=gps.logit.gee.wagehalf.s.d.low[9], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[10], y=gps.logit.gee.wagehalf.s.d.low[10], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[11], y=gps.logit.gee.wagehalf.s.d.low[11], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[12], y=gps.logit.gee.wagehalf.s.d.low[12], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[13], y=gps.logit.gee.wagehalf.s.d.low[13], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[14], y=gps.logit.gee.wagehalf.s.d.low[14], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[15], y=gps.logit.gee.wagehalf.s.d.low[15], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[16], y=gps.logit.gee.wagehalf.s.d.low[16], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[17], y=gps.logit.gee.wagehalf.s.d.low[17], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[18], y=gps.logit.gee.wagehalf.s.d.low[18], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[19], y=gps.logit.gee.wagehalf.s.d.low[19], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[20], y=gps.logit.gee.wagehalf.s.d.low[20], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[21], y=gps.logit.gee.wagehalf.s.d.low[21], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[22], y=gps.logit.gee.wagehalf.s.d.low[22], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[23], y=gps.logit.gee.wagehalf.s.d.low[23], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[24], y=gps.logit.gee.wagehalf.s.d.low[24], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[25], y=gps.logit.gee.wagehalf.s.d.low[25], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[26], y=gps.logit.gee.wagehalf.s.d.low[26], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[1], y=gps.logit.gee.wagehalf.s.d.high[1], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[2], y=gps.logit.gee.wagehalf.s.d.high[2], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[3], y=gps.logit.gee.wagehalf.s.d.high[3], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=wealth.rage[4], y=gps.logit.gee.wagehalf.s.d.high[4], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[5], y=gps.logit.gee.wagehalf.s.d.high[5], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[6], y=gps.logit.gee.wagehalf.s.d.high[6], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[7], y=gps.logit.gee.wagehalf.s.d.high[7], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[8], y=gps.logit.gee.wagehalf.s.d.high[8], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[9], y=gps.logit.gee.wagehalf.s.d.high[9], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[10], y=gps.logit.gee.wagehalf.s.d.high[10], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[11], y=gps.logit.gee.wagehalf.s.d.high[11], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[12], y=gps.logit.gee.wagehalf.s.d.high[12], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[13], y=gps.logit.gee.wagehalf.s.d.high[13], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[14], y=gps.logit.gee.wagehalf.s.d.high[14], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[15], y=gps.logit.gee.wagehalf.s.d.high[15], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[16], y=gps.logit.gee.wagehalf.s.d.high[16], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[17], y=gps.logit.gee.wagehalf.s.d.high[17], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[18], y=gps.logit.gee.wagehalf.s.d.high[18], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[19], y=gps.logit.gee.wagehalf.s.d.high[19], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[20], y=gps.logit.gee.wagehalf.s.d.high[20], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[21], y=gps.logit.gee.wagehalf.s.d.high[21], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[22], y=gps.logit.gee.wagehalf.s.d.high[22], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[23], y=gps.logit.gee.wagehalf.s.d.high[23], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[24], y=gps.logit.gee.wagehalf.s.d.high[24], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[25], y=gps.logit.gee.wagehalf.s.d.high[25], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[26], y=gps.logit.gee.wagehalf.s.d.high[26], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
-  theme_bw() + 
-  labs(colour = "Density of the Poor") +
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
-
-
-
-
-##########################
-#   GPS  Weighting PLOT: RE LOGIT [gps:wagehalf_wealth2] WAGE HALF and WEALTH
-##########################
-
-# Simulation # quantile(dat$wagehalf, .25) // 
-low.wagehalf.relogit <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), wealth = min(dat$wealth):max(dat$wealth))
-high.wagehalf.relogit <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), wealth = min(dat$wealth):max(dat$wealth))
-
-
-
-
-set.seed(602); options(scipen=999)
-relogit.gps.wagehalf.s <- sim(relogit.gps, x = low.wagehalf.relogit, x1 = high.wagehalf.relogit, num=300)
-
-
-relogit.gps.wagehalf.s.d.low = data.frame(relogit.gps.wagehalf.s$getqi(qi="ev", xvalue="range")) ; colnames(relogit.gps.wagehalf.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$wealth):max(dat$wealth)))))  # low
-relogit.gps.wagehalf.s.d.high = data.frame(relogit.gps.wagehalf.s$getqi(qi="ev", xvalue="range1")) ; colnames(relogit.gps.wagehalf.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$wealth):max(dat$wealth)))))  # high
-
-
-
-
-
-library(ggplot2)
-
-wealth.rage = as.numeric(min(dat$wealth):max(dat$wealth))
-
-set.seed(602)
-ggplot() + 
-  geom_point(aes(x=wealth.rage[1], y=relogit.gps.wagehalf.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[2], y=relogit.gps.wagehalf.s.d.low[2], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[3], y=relogit.gps.wagehalf.s.d.low[3], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=wealth.rage[4], y=relogit.gps.wagehalf.s.d.low[4], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[5], y=relogit.gps.wagehalf.s.d.low[5], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[6], y=relogit.gps.wagehalf.s.d.low[6], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[7], y=relogit.gps.wagehalf.s.d.low[7], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[8], y=relogit.gps.wagehalf.s.d.low[8], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[9], y=relogit.gps.wagehalf.s.d.low[9], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[10], y=relogit.gps.wagehalf.s.d.low[10], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[11], y=relogit.gps.wagehalf.s.d.low[11], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[12], y=relogit.gps.wagehalf.s.d.low[12], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[13], y=relogit.gps.wagehalf.s.d.low[13], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[14], y=relogit.gps.wagehalf.s.d.low[14], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[15], y=relogit.gps.wagehalf.s.d.low[15], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[16], y=relogit.gps.wagehalf.s.d.low[16], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[17], y=relogit.gps.wagehalf.s.d.low[17], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[18], y=relogit.gps.wagehalf.s.d.low[18], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[19], y=relogit.gps.wagehalf.s.d.low[19], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[20], y=relogit.gps.wagehalf.s.d.low[20], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[21], y=relogit.gps.wagehalf.s.d.low[21], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[22], y=relogit.gps.wagehalf.s.d.low[22], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[23], y=relogit.gps.wagehalf.s.d.low[23], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[24], y=relogit.gps.wagehalf.s.d.low[24], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[25], y=relogit.gps.wagehalf.s.d.low[25], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[26], y=relogit.gps.wagehalf.s.d.low[26], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[1], y=relogit.gps.wagehalf.s.d.high[1], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[2], y=relogit.gps.wagehalf.s.d.high[2], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[3], y=relogit.gps.wagehalf.s.d.high[3], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=wealth.rage[4], y=relogit.gps.wagehalf.s.d.high[4], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[5], y=relogit.gps.wagehalf.s.d.high[5], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[6], y=relogit.gps.wagehalf.s.d.high[6], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[7], y=relogit.gps.wagehalf.s.d.high[7], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[8], y=relogit.gps.wagehalf.s.d.high[8], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[9], y=relogit.gps.wagehalf.s.d.high[9], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[10], y=relogit.gps.wagehalf.s.d.high[10], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[11], y=relogit.gps.wagehalf.s.d.high[11], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[12], y=relogit.gps.wagehalf.s.d.high[12], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[13], y=relogit.gps.wagehalf.s.d.high[13], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[14], y=relogit.gps.wagehalf.s.d.high[14], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[15], y=relogit.gps.wagehalf.s.d.high[15], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[16], y=relogit.gps.wagehalf.s.d.high[16], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[17], y=relogit.gps.wagehalf.s.d.high[17], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[18], y=relogit.gps.wagehalf.s.d.high[18], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[19], y=relogit.gps.wagehalf.s.d.high[19], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[20], y=relogit.gps.wagehalf.s.d.high[20], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[21], y=relogit.gps.wagehalf.s.d.high[21], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[22], y=relogit.gps.wagehalf.s.d.high[22], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[23], y=relogit.gps.wagehalf.s.d.high[23], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[24], y=relogit.gps.wagehalf.s.d.high[24], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[25], y=relogit.gps.wagehalf.s.d.high[25], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=wealth.rage[26], y=relogit.gps.wagehalf.s.d.high[26], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
-  theme_bw() + 
-  labs(colour = "Density of the Poor")  +
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
-
-
-
-##########################
-#   GPS  Weighting PLOT: GEE LOGIT [gps:wagehalf_polinv1] WAGE HALF and POLINV
-##########################
-
-
-# Simulation
-low.wagehalf.gee.polinv <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
-high.wagehalf.gee.polinv <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
-
-
-
-
-set.seed(602); options(scipen=999)
-gps.logit.gee.wagehalf.polinv.s <- sim(gps.logit.gee, x = low.wagehalf.gee.polinv, x1 = high.wagehalf.gee.polinv, num=500)
-
-
-gps.logit.gee.wagehalf.polinv.s.d.low = data.frame(gps.logit.gee.wagehalf.polinv.s$getqi(qi="ev", xvalue="range")) ; colnames(gps.logit.gee.wagehalf.polinv.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # low
-gps.logit.gee.wagehalf.polinv.s.d.high = data.frame(gps.logit.gee.wagehalf.polinv.s$getqi(qi="ev", xvalue="range1")) ; colnames(gps.logit.gee.wagehalf.polinv.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # high
-
-
-
-polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
-
-library(ggplot2)
-set.seed(602)
-ggplot() + 
-  geom_point(aes(x=polinv.range[1], y=gps.logit.gee.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[2], y=gps.logit.gee.wagehalf.polinv.s.d.low[2], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[3], y=gps.logit.gee.wagehalf.polinv.s.d.low[3], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=polinv.range[4], y=gps.logit.gee.wagehalf.polinv.s.d.low[4], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[5], y=gps.logit.gee.wagehalf.polinv.s.d.low[5], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[6], y=gps.logit.gee.wagehalf.polinv.s.d.low[6], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[7], y=gps.logit.gee.wagehalf.polinv.s.d.low[7], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[8], y=gps.logit.gee.wagehalf.polinv.s.d.low[8], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[9], y=gps.logit.gee.wagehalf.polinv.s.d.low[9], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[10], y=gps.logit.gee.wagehalf.polinv.s.d.low[10], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[1], y=gps.logit.gee.wagehalf.polinv.s.d.high[1], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[2], y=gps.logit.gee.wagehalf.polinv.s.d.high[2], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[3], y=gps.logit.gee.wagehalf.polinv.s.d.high[3], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-  geom_point(aes(x=polinv.range[4], y=gps.logit.gee.wagehalf.polinv.s.d.high[4], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[5], y=gps.logit.gee.wagehalf.polinv.s.d.high[5], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[6], y=gps.logit.gee.wagehalf.polinv.s.d.high[6], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[7], y=gps.logit.gee.wagehalf.polinv.s.d.high[7], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[8], y=gps.logit.gee.wagehalf.polinv.s.d.high[8], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[9], y=gps.logit.gee.wagehalf.polinv.s.d.high[9], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[10], y=gps.logit.gee.wagehalf.polinv.s.d.high[10], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-  xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
-  theme_bw() + 
-  labs(colour = "Density of the Poor")  +
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
-  
-  
-##########################
-#   GPS  Weighting PLOT: RE-LOGIT [gps:wagehalf_polinv2] WAGE HALF and POLINV
-##########################
-
-
-# Simulation
-low.wagehalf.relogit.polinv <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
-high.wagehalf.relogit.polinv <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
-
-
-
-
-set.seed(602); options(scipen=999)
-gps.relogit.wagehalf.polinv.s <- sim(gps.logit.gee, x = low.wagehalf.relogit.polinv, x1 = high.wagehalf.relogit.polinv, num=500)
-
-
-gps.relogit.wagehalf.polinv.s.d.low = data.frame(gps.relogit.wagehalf.polinv.s$getqi(qi="ev", xvalue="range")) ; colnames(gps.relogit.wagehalf.polinv.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # low
-gps.relogit.wagehalf.polinv.s.d.high = data.frame(gps.relogit.wagehalf.polinv.s$getqi(qi="ev", xvalue="range1")) ; colnames(gps.relogit.wagehalf.polinv.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # high
-
-
-
-polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
-
-
-
-library(ggplot2)
-set.seed(602)
-ggplot() + 
-  geom_point(aes(x=polinv.range[1], y=gps.relogit.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[2], y=gps.relogit.wagehalf.polinv.s.d.low[2], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[3], y=gps.relogit.wagehalf.polinv.s.d.low[3], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) + 
-  geom_point(aes(x=polinv.range[4], y=gps.relogit.wagehalf.polinv.s.d.low[4], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[5], y=gps.relogit.wagehalf.polinv.s.d.low[5], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[6], y=gps.relogit.wagehalf.polinv.s.d.low[6], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[7], y=gps.relogit.wagehalf.polinv.s.d.low[7], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[8], y=gps.relogit.wagehalf.polinv.s.d.low[8], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[9], y=gps.relogit.wagehalf.polinv.s.d.low[9], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[10], y=gps.relogit.wagehalf.polinv.s.d.low[10], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[1], y=gps.relogit.wagehalf.polinv.s.d.high[1], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[2], y=gps.relogit.wagehalf.polinv.s.d.high[2], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[3], y=gps.relogit.wagehalf.polinv.s.d.high[3], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) + 
-  geom_point(aes(x=polinv.range[4], y=gps.relogit.wagehalf.polinv.s.d.high[4], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[5], y=gps.relogit.wagehalf.polinv.s.d.high[5], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[6], y=gps.relogit.wagehalf.polinv.s.d.high[6], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[7], y=gps.relogit.wagehalf.polinv.s.d.high[7], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[8], y=gps.relogit.wagehalf.polinv.s.d.high[8], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[9], y=gps.relogit.wagehalf.polinv.s.d.high[9], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  geom_point(aes(x=polinv.range[10], y=gps.relogit.wagehalf.polinv.s.d.high[10], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
-  xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
-  theme_bw() + 
-  labs(colour = "Density of the Poor")  +
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
-
 
 
 
@@ -1289,7 +1705,7 @@ m.data$logpop = log(m.data$pop)
 
 # METHOD 2
 # library(devtools) # install.packages("devtools")
-#install_github('IQSS/Zelig')
+# install_github('IQSS/Zelig')
 #library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
 
 #relogit.1 <- zelig(clien1dummy ~ large,
@@ -1750,4 +2166,144 @@ screenreg(
   float.pos = "h"
 )
 
+
+###
+
+## ---- texreg-extractor-Relogit ZELIG ----
+library(texreg)
+extract.Zeligrelogit <- function(model, include.aic = TRUE, include.bic = TRUE, 
+                                 include.loglik = TRUE, include.deviance = TRUE, include.nobs = TRUE, ...) {
+  g <- model$zelig.out$z.out[[1]]
+  class(g) <- "glm"
+  e <- extract(g, include.aic = include.aic, include.bic = include.bic, 
+               include.loglik = include.loglik, include.deviance = include.deviance, 
+               include.nobs = include.nobs, ...)
+  return(e)
+}
+
+setMethod("extract", signature = className("Zelig-relogit", "Zelig"), 
+          definition = extract.Zeligrelogit)
+
+
+## **OLD DONT USE***
+##########################
+#   GPS  Weighting PLOT: GEE LOGIT [gps:wagehalf_polinv1] WAGE HALF and POLINV
+##########################
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+# Simulation
+library(Zelig)
+low.wagehalf.gee.polinv <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
+high.wagehalf.gee.polinv <- setx(gee.logit.gps.zelig, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
+
+
+
+
+set.seed(602); options(scipen=999)
+gps.logit.gee.wagehalf.polinv.s <- sim(gps.logit.gee, x = low.wagehalf.gee.polinv, x1 = high.wagehalf.gee.polinv, num=500)
+
+
+gps.logit.gee.wagehalf.polinv.s.d.low = data.frame(gps.logit.gee.wagehalf.polinv.s$getqi(qi="ev", xvalue="range")) ; colnames(gps.logit.gee.wagehalf.polinv.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # low
+gps.logit.gee.wagehalf.polinv.s.d.high = data.frame(gps.logit.gee.wagehalf.polinv.s$getqi(qi="ev", xvalue="range1")) ; colnames(gps.logit.gee.wagehalf.polinv.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # high
+
+
+
+polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
+
+library(ggplot2)
+set.seed(602)
+grid.arrange(ggplot() + 
+               geom_point(aes(x=polinv.range[1], y=gps.logit.gee.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gps.logit.gee.wagehalf.polinv.s.d.low[2], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gps.logit.gee.wagehalf.polinv.s.d.low[3], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gps.logit.gee.wagehalf.polinv.s.d.low[4], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gps.logit.gee.wagehalf.polinv.s.d.low[5], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gps.logit.gee.wagehalf.polinv.s.d.low[6], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gps.logit.gee.wagehalf.polinv.s.d.low[7], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[8], y=gps.logit.gee.wagehalf.polinv.s.d.low[8], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[9], y=gps.logit.gee.wagehalf.polinv.s.d.low[9], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[10], y=gps.logit.gee.wagehalf.polinv.s.d.low[10], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[1], y=gps.logit.gee.wagehalf.polinv.s.d.high[1], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gps.logit.gee.wagehalf.polinv.s.d.high[2], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gps.logit.gee.wagehalf.polinv.s.d.high[3], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gps.logit.gee.wagehalf.polinv.s.d.high[4], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gps.logit.gee.wagehalf.polinv.s.d.high[5], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gps.logit.gee.wagehalf.polinv.s.d.high[6], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gps.logit.gee.wagehalf.polinv.s.d.high[7], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[8], y=gps.logit.gee.wagehalf.polinv.s.d.high[8], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[9], y=gps.logit.gee.wagehalf.polinv.s.d.high[9], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[10], y=gps.logit.gee.wagehalf.polinv.s.d.high[10], color = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
+               theme_bw() + 
+               labs(colour = "Density of the Poor")  +
+               theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)),
+             bottom = "Notes: Logit GEE model: Std. clustered errors at the municipal level. \n No cutoff was used. Sample matched on the generalized propensity score. \n Low and High represent one SD below/above the mean.")
+
+
+
+
+## **OLD DONT USE***
+##########################
+#   GPS  Weighting PLOT: RE-LOGIT [gps:wagehalf_polinv2] WAGE HALF and POLINV
+##########################
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+
+# Simulation
+library(Zelig)
+low.wagehalf.relogit.polinv <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)-sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
+high.wagehalf.relogit.polinv <- setx(relogit.gps.1, wagehalf = mean(dat$wagehalf)+sd(dat$wagehalf), polinv = min(dat$polinv):max(dat$polinv))
+
+
+
+
+set.seed(602); options(scipen=999)
+gps.relogit.wagehalf.polinv.s <- sim(relogit.gps.1, x = low.wagehalf.relogit.polinv, x1 = high.wagehalf.relogit.polinv, num=500)
+
+
+gps.relogit.wagehalf.polinv.s.d.low = data.frame(gps.relogit.wagehalf.polinv.s$getqi(qi="ev", xvalue="range")) ; colnames(gps.relogit.wagehalf.polinv.s.d.low) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # low
+gps.relogit.wagehalf.polinv.s.d.high = data.frame(gps.relogit.wagehalf.polinv.s$getqi(qi="ev", xvalue="range1")) ; colnames(gps.relogit.wagehalf.polinv.s.d.high) <- seq(1:ncol(as.data.frame(t(min(dat$polinv):max(dat$polinv)))))  # high
+
+
+
+polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
+
+
+
+library(ggplot2)
+set.seed(602)
+grid.arrange(ggplot() + 
+               geom_point(aes(x=polinv.range[1], y=gps.relogit.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gps.relogit.wagehalf.polinv.s.d.low[2], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gps.relogit.wagehalf.polinv.s.d.low[3], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gps.relogit.wagehalf.polinv.s.d.low[4], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gps.relogit.wagehalf.polinv.s.d.low[5], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gps.relogit.wagehalf.polinv.s.d.low[6], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gps.relogit.wagehalf.polinv.s.d.low[7], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[8], y=gps.relogit.wagehalf.polinv.s.d.low[8], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[9], y=gps.relogit.wagehalf.polinv.s.d.low[9], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[10], y=gps.relogit.wagehalf.polinv.s.d.low[10], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[1], y=gps.relogit.wagehalf.polinv.s.d.high[1], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[2], y=gps.relogit.wagehalf.polinv.s.d.high[2], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[3], y=gps.relogit.wagehalf.polinv.s.d.high[3], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) + 
+               geom_point(aes(x=polinv.range[4], y=gps.relogit.wagehalf.polinv.s.d.high[4], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[5], y=gps.relogit.wagehalf.polinv.s.d.high[5], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[6], y=gps.relogit.wagehalf.polinv.s.d.high[6], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[7], y=gps.relogit.wagehalf.polinv.s.d.high[7], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[8], y=gps.relogit.wagehalf.polinv.s.d.high[8], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[9], y=gps.relogit.wagehalf.polinv.s.d.high[9], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               geom_point(aes(x=polinv.range[10], y=gps.relogit.wagehalf.polinv.s.d.high[10], color = "High"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
+               xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
+               theme_bw() + 
+               labs(colour = "Density of the Poor")  +
+               theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)),
+             bottom = "Notes: Rare Event Logistic model. \n No cutoff was used. Sample matched on the generalized propensity score. \n Low and High represent one SD below/above the mean.")
 
