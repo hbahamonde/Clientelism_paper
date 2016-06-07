@@ -674,7 +674,7 @@ gee.r.plot$variable <- factor(gee.r.plot$variable,
                               labels =   c("Large Size of the Poor", 
                                            paste("Large Size of the Poor * Political Involvement Index"), 
                                            "Wealth Index",
-                                           paste("Large Size of the Poor * Wealth Index wealth"), 
+                                           paste("Large Size of the Poor * Wealth Index"), 
                                            "Political Involvement Index", 
                                            "Urban",
                                            "Municipal Population")
@@ -715,7 +715,7 @@ gee.m.plot$variable <- factor(gee.m.plot$variable,
                               labels =   c("Large Size of the Poor", 
                                            paste("Large Size of the Poor * Political Involvement Index"), 
                                            "Wealth Index",
-                                           paste("Large Size of the Poor * Wealth Index wealth"), 
+                                           paste("Large Size of the Poor * Wealth Index"), 
                                            "Political Involvement Index", 
                                            "Urban",
                                            "Municipal Population")
@@ -757,7 +757,7 @@ gee.c.r.plot$variable <- factor(gee.c.r.plot$variable,
                                 labels =   c("Large Size of the Poor", 
                                              paste("Large Size of the Poor * Political Involvement Index"), 
                                              "Wealth Index",
-                                             paste("Large Size of the Poor * Wealth Index wealth"), 
+                                             paste("Large Size of the Poor * Wealth Index"), 
                                              "Political Involvement Index", 
                                              "Urban",
                                              "Municipal Population")
@@ -796,185 +796,67 @@ ggplot(gee.plot, aes(
 
 
 
-
-
-######################################################
-#  S I M U L A T I O N S   A N D   P L O T S  pending
-######################################################
+##########################
+#   MATCHED SAMPLE // GEE LOGIT // [gps:plot:0] // LARGE [distribution plots]
+##########################
 
 cat("\014")
 rm(list=ls())
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
+# order data for clusters
+m.data$municipality = order(m.data$municipality)
+
+
 # METHOD 2
 # library(devtools) # install.packages("devtools")
 # install_github('IQSS/Zelig')
 #library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
 
 
-
-# models
-library(Zelig)
-gee.zelig.1 = zelig(clien1dummy ~ large,family = binomial(link = "logit"), id = "municipality", std.err = "san.se",model = "logit.gee",corstr = "independence",data = m.data)
-gee.zelig.2 = zelig(clien1dummy ~ large:polinv,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
-gee.zelig.3 = zelig(clien1dummy ~ wealth,  family = binomial(link = "logit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
-gee.zelig.4 = zelig(clien1dummy ~ wealth:large, family = binomial(link = "logit"), id = "municipality", std.err = "san.se",model = "logit.gee",corstr = "independence",data = m.data)
-gee.zelig.5 = zelig(clien1dummy ~ polinv,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
-gee.zelig.6 = zelig(clien1dummy ~ urban,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
-gee.zelig.7 = zelig(clien1dummy ~ pop,  family = binomial(link = "probit"),   id = "municipality",   std.err = "san.se",  model = "logit.gee",  corstr = "independence",  data = m.data)
-
-
-
-# simulations
-library(Zelig) ; set.seed(602); options(scipen=999)
-gee.zelig.1.s.d = data.frame(sim(gee.zelig.1, x = setx(gee.zelig.1, large = max(m.data$large)), num=500)$getqi(qi="ev")) ; colnames(gee.zelig.1.s.d) = "fit"
-gee.zelig.2.s.d = data.frame(sim(gee.zelig.2, x = setx(gee.zelig.2, large = max(m.data$large), polinv=max(m.data$polinv)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.2.s.d) = "fit"
-gee.zelig.3.s.d = data.frame(sim(gee.zelig.3, x = setx(gee.zelig.3, wealth = max(m.data$wealth)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.3.s.d) = "fit"
-gee.zelig.4.s.d = data.frame(sim(gee.zelig.4, x = setx(gee.zelig.4, wealth = max(m.data$wealth), large = max(m.data$large)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.4.s.d) = "fit"
-gee.zelig.5.s.d = data.frame(sim(gee.zelig.5, x = setx(gee.zelig.5, polinv = max(m.data$polinv)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.5.s.d) = "fit"
-gee.zelig.6.s.d = data.frame(sim(gee.zelig.6, x = setx(gee.zelig.6, urban = "Ur"), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.6.s.d) = "fit"
-gee.zelig.7.s.d = data.frame(sim(gee.zelig.7, x = setx(gee.zelig.7, pop = max(m.data$pop)), num = 500)$getqi(qi="ev")) ; colnames(gee.zelig.7.s.d) = "fit"
+# model
+set.seed(602); options(scipen=999)
+library(Zelig) # this is for simulation only, not for the table
+gee.1.m.zelig = zelig(clien1dummy ~ large,
+                      model = "logit.gee",
+                      family = binomial(link = "logit"), 
+                      id = "municipality", 
+                      std.err = "san.se",
+                      corstr = "independence",
+                      data = m.data)
 
 
-# dataset for plots
-std <- function(x) sd(x)/sqrt(length(x)) # function to extract std. errors 
+# simulation
+## low 
+gee.1.m.zelig.low = data.frame(
+  sim(x = setx(gee.1.m.zelig, 
+               large = min(m.data$large)), num=700)$getqi(qi="ev"))
+colnames(gee.1.m.zelig.low) <- c("Low")  # low
 
-gee.zelig.d <- data.frame(
-  variable = seq(1:7),
-  coefficients = as.numeric(c(
-    mean(gee.zelig.1.s.d$fit), 
-    mean(gee.zelig.2.s.d$fit),
-    mean(gee.zelig.3.s.d$fit), 
-    mean(gee.zelig.4.s.d$fit), 
-    mean(gee.zelig.5.s.d$fit), 
-    mean(gee.zelig.6.s.d$fit), 
-    mean(gee.zelig.7.s.d$fit))),
-  se = as.numeric(c(
-    std(gee.zelig.1.s.d$fit), 
-    std(gee.zelig.2.s.d$fit),
-    std(gee.zelig.3.s.d$fit), 
-    std(gee.zelig.4.s.d$fit), 
-    std(gee.zelig.5.s.d$fit), 
-    std(gee.zelig.6.s.d$fit), 
-    std(gee.zelig.7.s.d$fit)))
-)
-
-gee.zelig.d$upper <- gee.zelig.d$coefficients + 1.96*gee.zelig.d$se
-gee.zelig.d$lower <- gee.zelig.d$coefficients - 1.96*gee.zelig.d$se
-
-
-gee.zelig.d$variable <- factor(gee.zelig.d$variable,
-                          levels = c(1,2,3,4,5,6,7), ordered=TRUE,
-                          labels =   c("Large Size of the Poor", 
-                                       expression(paste("Large Size of the Poor", times, "Political Involvement Index")), 
-                                       "Wealth Index",
-                                       expression(paste("Large Size of the Poor", times, "Wealth Index wealth")), 
-                                       "Political Involvement Index", 
-                                       "Urban",
-                                       "Municipal Population")
-                          )
+## high
+gee.1.m.zelig.high = data.frame(
+  sim(x = setx(gee.1.m.zelig, 
+               large = max(m.data$large)), num=700)$getqi(qi="ev"))
+colnames(gee.1.m.zelig.high) <- c("High")  # low
 
 
 
 # plot
-# Plot
-library(ggplot2)
-ggplot(gee.zelig.d, aes(
-  x = variable, 
-  y = coefficients, 
-  ymin = upper, 
-  ymax = lower)
-) +
-  geom_pointrange() + 
-  geom_hline(yintercept = 0, colour = gray(1/2), lty = 2) +
-  coord_flip() + 
-  xlab("") + 
-  ylab("Simulated Coefficient") +
-  ggtitle("Democratic Values: Americans Systematically \n Prefer Political Candidates that go in \n Line with a Strong Democracy")+
-  guides(colour=FALSE) +
-  theme(legend.position="none") + 
-  theme_bw()
+library(ggplot2) ; library(gridExtra)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ?????
-# explain this to reviewers: WHY IAM NOT USING CLUSTERED STD ERRORS or FIXED FXS _AND_ GPS 
-## One alternative to solve the "arbitrary-ness" of the cutoff is to not use one at all.
-## One could, for ex., leave the "treatment" variable in its original form, i.e. a cont. var.
-## The most appropiated strategy for this is to use a GPS [EXPLAIN]. The cost however is that,
-## using clustered std. errors _OR_ clustered std. errors is not possible. 
-## In these contexts, the cluster or fixed units (i.e. the municipalities) are correlated with the 
-## weighting GPS device (i.e. individuals within municipalities). 
-
-
-
-
-
-# POSSIBLE DELETE BELOW
-
-# METHOD 2
-# library(devtools) # install.packages("devtools")
-# install_github('IQSS/Zelig')
-#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
-
-
-
-library(geepack) #gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf + wealth + wagehalf:wealth + wagehalf:polinv + logpop + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
-gee.logit.gps.1 = geeglm(clien1dummy ~ wagehalf*wealth + wagehalf*polinv + weights, #+ wealth + wagehalf:wealth + wagehalf:polinv + weights,
-                         #weights = weights,
-                         family = binomial(link = "logit"), 
-                         id = municipality, 
-                         std.err = "san.se",
-                         corstr = "exchangeable",
-                         data = dat)
-
-
-
-# Table
-library(texreg) 
-gps.1.t = extract.geepack(gee.logit.gps.1)
-
-library(texreg)
-screenreg(list(gps.1.t, 
-               ), # screenreg / texreg
-  #custom.coef.names = c(# this gotta be before OMIT.COEFF
-  #         "(Intercept)",
-  #        "Size of the Poor",
-  #        "Wealth Index",
-  #        "Size of the Poor TIMES Wealth Index",
-  #        "Size of the Poor TIMES Political Involvement",
-  #        "logpop",
-  #        "weights"),
-  caption = "Models using a Generalized Propensity Score as a Weighting Device - Unmatched Sample ",
-  label = "gps:1",
-  stars = c(0.01, 0.05, 0.1),
-  digits = 3,
-  custom.model.names = c("Logit GEE", "Rare Event Logit"),
-  custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n ReLogit controls for rare-events. \n Raw (unmatched) sample. \n 95% Standard errors in parentheses",
-  fontsize = "scriptsize",
-  float.pos = "h"
-)
-
-
-
+grid.arrange(ggplot() + 
+               geom_density(aes(x=Low, fill="Low"), data= gee.1.m.zelig.low, alpha = .2) + 
+               geom_density(aes(x=High, fill="High"), data= gee.1.m.zelig.high, alpha = .2) + 
+               xlab("Expected Value") + ylab("Density") + 
+               theme_bw() + 
+               theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) + 
+               scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")),
+             bottom = "Note: Logit GEE model. Std. clustered errors at the municipal level. Matched Dataset.")
 
 
 ##########################
-#   MATCHED SAMPLE // GEE LOGIT // [gps:plot:1] // LARGE * POLINV
+#   MATCHED SAMPLE // GEE LOGIT // [plot:1] // LARGE * POLINV
 ##########################
 
 cat("\014")
@@ -1014,28 +896,23 @@ gee.2.m.zelig.low = data.frame(
     x = setx(gee.2.m.zelig, 
              large = min(m.data$large), 
              polinv = min(m.data$polinv):max(m.data$polinv)), 
-    x1 = setx(gee.2.m.zelig, 
-              large = max(m.data$large), 
-              polinv = min(m.data$polinv):max(m.data$polinv)), 
     num=700)$getqi(qi="ev", xvalue="range"))
 
 colnames(gee.2.m.zelig.low) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # low
 
 # high
 gee.2.m.zelig.high = data.frame(
-  sim(x = setx(gee.2.m.zelig, 
+  sim(
+    x = setx(gee.2.m.zelig, 
                large = max(m.data$large), 
                polinv = min(m.data$polinv):max(m.data$polinv)), 
-      x1 = setx(gee.2.m.zelig, 
-                large = max(m.data$large), 
-                polinv = min(m.data$polinv):max(m.data$polinv)), 
-      num=700)$getqi(qi="ev", xvalue="range1")) ; 
+      num=700)$getqi(qi="ev", xvalue="range")) ; 
 colnames(gee.2.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
 
 
 
 # plot
-library(ggplot2)
+library(ggplot2) ; library(gridExtra)
 polinv.range = as.numeric(min(m.data$polinv):max(m.data$polinv))
 set.seed(602)
 grid.arrange(ggplot() + 
@@ -1057,17 +934,12 @@ grid.arrange(ggplot() +
                theme_bw() + 
                labs(colour = "Density of the Poor") +
                theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)), 
-             bottom = "Note: Logit GEE model. Std. clustered errors at the municipal level.")
-
-
-
-
+             bottom = "Note: Logit GEE model. Std. clustered errors at the municipal level. Matched Dataset.")
 
 
 ##########################
-#   MATCHED SAMPLE // GEE LOGIT // [gps:plot:2] // LARGE * WEALTH
+#   MATCHED SAMPLE // GEE LOGIT // [plot:2] // LARGE * WEALTH
 ##########################
-
 
 cat("\014")
 rm(list=ls())
@@ -1086,7 +958,7 @@ m.data$municipality = order(m.data$municipality)
 
 # model
 library(Zelig) # this is for simulation only, not for the table
-gee.4.m.zelig = zelig(clien1dummy ~ wealth:large,
+gee.4.m.zelig = zelig(clien1dummy ~ wealth*large,
                       model = "logit.gee",
                       family = binomial(link = "logit"), 
                       id = "municipality", 
@@ -1100,41 +972,100 @@ set.seed(602); options(scipen=999)
 
 
 # low 
-gee.4.m.zelig.high = data.frame(
+gee.4.m.zelig.low = data.frame(
   sim(
     x = setx(gee.4.m.zelig, 
              large = min(m.data$large), 
              wealth = min(m.data$wealth):max(m.data$wealth)), 
-    x1 = setx(gee.4.m.zelig, 
-              large = max(m.data$large), 
-              wealth = min(m.data$wealth):max(m.data$wealth)), 
-    num=700)$getqi(qi="ev", xvalue="range"))
+    num=300)$getqi(qi="ev", xvalue="range"))
 
-colnames(gee.4.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # low
+colnames(gee.4.m.zelig.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # low
 
 # high
 gee.4.m.zelig.high = data.frame(
   sim(x = setx(gee.4.m.zelig, 
                large = max(m.data$large), 
                wealth = min(m.data$wealth):max(m.data$wealth)), 
-      x1 = setx(gee.4.m.zelig, 
-                large = max(m.data$large), 
-                wealth = min(m.data$wealth):max(m.data$wealth)), 
-      num=700)$getqi(qi="ev", xvalue="range1")) ; 
+      num=300)$getqi(qi="ev", xvalue="range")) ; 
 colnames(gee.4.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
 
 
 
 
-# HERE JUN 6 2016
-
-
-
+# plot
+library(ggplot2) ; library(gridExtra)
+wealth.range = as.numeric(min(m.data$wealth):max(m.data$wealth))
+set.seed(602)
+grid.arrange(ggplot() + 
+               geom_point(aes(x=wealth.range[1], y=gee.4.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) + 
+               geom_point(aes(x=wealth.range[2], y=gee.4.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[3], y=gee.4.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[4], y=gee.4.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[5], y=gee.4.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[6], y=gee.4.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[7], y=gee.4.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[8], y=gee.4.m.zelig.low[8], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[9], y=gee.4.m.zelig.low[9], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[10], y=gee.4.m.zelig.low[10], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[11], y=gee.4.m.zelig.low[11], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[12], y=gee.4.m.zelig.low[12], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[13], y=gee.4.m.zelig.low[13], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[14], y=gee.4.m.zelig.low[14], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[15], y=gee.4.m.zelig.low[15], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[16], y=gee.4.m.zelig.low[16], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[17], y=gee.4.m.zelig.low[17], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[18], y=gee.4.m.zelig.low[18], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[19], y=gee.4.m.zelig.low[19], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[20], y=gee.4.m.zelig.low[20], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[21], y=gee.4.m.zelig.low[21], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[22], y=gee.4.m.zelig.low[22], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[23], y=gee.4.m.zelig.low[23], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[24], y=gee.4.m.zelig.low[24], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[25], y=gee.4.m.zelig.low[25], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[26], y=gee.4.m.zelig.low[26], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[1], y=gee.4.m.zelig.high[1], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) + 
+               geom_point(aes(x=wealth.range[2], y=gee.4.m.zelig.high[2], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[3], y=gee.4.m.zelig.high[3], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[4], y=gee.4.m.zelig.high[4], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[5], y=gee.4.m.zelig.high[5], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[6], y=gee.4.m.zelig.high[6], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[7], y=gee.4.m.zelig.high[7], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[8], y=gee.4.m.zelig.high[8], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[9], y=gee.4.m.zelig.high[9], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[10], y=gee.4.m.zelig.high[10], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[11], y=gee.4.m.zelig.high[11], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[12], y=gee.4.m.zelig.high[12], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[13], y=gee.4.m.zelig.high[13], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[14], y=gee.4.m.zelig.high[14], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[15], y=gee.4.m.zelig.high[15], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[16], y=gee.4.m.zelig.high[16], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[17], y=gee.4.m.zelig.high[17], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[18], y=gee.4.m.zelig.high[18], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[19], y=gee.4.m.zelig.high[19], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[20], y=gee.4.m.zelig.high[20], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[21], y=gee.4.m.zelig.high[21], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[22], y=gee.4.m.zelig.high[22], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[23], y=gee.4.m.zelig.high[23], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[24], y=gee.4.m.zelig.high[24], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[25], y=gee.4.m.zelig.high[25], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_point(aes(x=wealth.range[26], y=gee.4.m.zelig.high[26], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
+               theme_bw() + 
+               labs(colour = "Density of the Poor") +
+               theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)), 
+             bottom = "Note: Logit GEE model. Std. clustered errors at the municipal level. \n Matched Dataset.")
 
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
 ######################################################
+
+cat("\014")
+rm(list=ls())
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+
 
 # Subset Data for Descriptive Stats Table
 
@@ -1203,7 +1134,10 @@ stargazer(m.data.s,
 
 # Descriptive Stats Raw Set
 
+
+
 # Subset Data for Descriptive Stats Table
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 # whole sample
 dat.clien1dummy <- dat$clien1dummy 
@@ -1245,7 +1179,7 @@ dat.s <- data.frame(dat.clien1dummy, dat.large, dat.income, dat.exc7, dat.polinv
 
 
 library(stargazer, quietly = T)
-stargazer(dat, 
+stargazer(dat.s, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
           label = "sumtab:2",
@@ -1271,8 +1205,6 @@ stargazer(dat,
 
 
 ## Distribution Outcome Variable Binary Outcome
-
-# Plot
 m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
 library(ggplot2)
@@ -1282,13 +1214,8 @@ ggplot(data=m.data, aes(x=clien1dummy)) +
   ylab("Frequency") + 
   theme_bw()
 
-#m.data <- match.data(m.out)
-#m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-#m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
 ## Distribution Outcome Variable 3 outcomes
-
-# Plot
 library(ggplot2)
 ggplot(data=m.data, aes(x=clientelism)) + 
   geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
@@ -1307,7 +1234,7 @@ ggplot.labels1 <- data.frame(
   type = c("NA*", "MVH")
 )
 
-## Plot
+## Plot BARS
 library(ggplot2)
 ggplot(m.data, aes(x=wagehalf)) + 
   geom_histogram(binwidth=2.5, alpha=.7) + 
@@ -1316,6 +1243,27 @@ ggplot(m.data, aes(x=wagehalf)) +
   geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
   xlab("Density of the Poor") + ylab("Frequency") +
   geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+
+
+## Plot Density
+
+library(ggplot2) ; library(gridExtra)
+grid.arrange(ggplot() + 
+               geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
+               geom_segment(data= 
+                              m.data, aes(
+                                x = (wagehalf=median(m.data$wagehalf)), 
+                                y = 0, 
+                                xend = (wagehalf=median(m.data$wagehalf)), 
+                                yend = .0305), 
+                            linetype="dashed", 
+                            size=1.5, 
+                            colour = "forestgreen") + 
+               xlab("Percentage of People Living with Less than Half of the Minimum Wage") + 
+               ylab("Density") + 
+               theme_bw(),
+             bottom = "Note: Matched Sample.")
+
 
 ######################################################
 #  B   A   L   A   N   C   E       P   L   O   T   S #
@@ -2214,7 +2162,7 @@ gps.logit.gee.wagehalf.polinv.s.d.high = data.frame(gps.logit.gee.wagehalf.polin
 
 polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
 
-library(ggplot2)
+library(ggplot2) ; library(gridExtra)
 set.seed(602)
 grid.arrange(ggplot() + 
                geom_point(aes(x=polinv.range[1], y=gps.logit.gee.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
@@ -2278,7 +2226,7 @@ polinv.range = as.numeric(min(dat$polinv):max(dat$polinv))
 
 
 
-library(ggplot2)
+library(ggplot2) ; library(gridExtra)
 set.seed(602)
 grid.arrange(ggplot() + 
                geom_point(aes(x=polinv.range[1], y=gps.relogit.wagehalf.polinv.s.d.low[1], color = "Low"), position = position_jitter(width = 3), size = I(4), alpha = 1/100) +
