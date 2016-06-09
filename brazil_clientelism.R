@@ -184,8 +184,6 @@ extract.geepack <- function(model) {
 }
 
 
-# order data for clusters
-m.data$municipality = order(m.data$municipality)
 
 
 # DONT TOUCH BELOW 1
@@ -202,7 +200,7 @@ gee.1.m.t = extract.geepack(gee.1.m <- geeglm(clien1dummy ~ large,
 # DONT TOUCH BELOW 2
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.2.m.t = extract.geepack(gee.2.m <- geeglm(clien1dummy ~ large:polinv,
+gee.2.m.t = extract.geepack(gee.2.m <- geeglm(clien1dummy ~ large*polinv,
                                               family = binomial(link = "logit"), 
                                               id = municipality, 
                                               std.err = "san.se",
@@ -225,7 +223,7 @@ gee.3.m.t = extract.geepack(gee.3.m <- geeglm(clien1dummy ~ wealth,
 # DONT TOUCH BELOW 4
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.4.m.t = extract.geepack(gee.4.m <- geeglm(clien1dummy ~ wealth:large, 
+gee.4.m.t = extract.geepack(gee.4.m <- geeglm(clien1dummy ~ wealth*large, 
                                               family = binomial(link = "logit"), 
                                               id = municipality, 
                                               std.err = "san.se",
@@ -280,17 +278,17 @@ dat$wagehalf = round(dat$wagehalf, digits=0)
 
 # Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
-fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
+#fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
+fit <- CBPS(wagehalf ~ wealth + munopp + polinv + urban,  # wealth + munopp + polinv
             data = dat, 
             iterations = 25000, 
             twostep = F, # F
             method = "exact", # EXACT
-            ATT = 0, # 2
+            ATT = 2, # 2
             standardize = F) # F
 
 # transform the weight var. // Attaching weights to DF // sorting for GEE models
 dat$weights = fit$weights
-dat$municipality = order(dat$municipality)
 
 
 
@@ -348,7 +346,7 @@ gee.1.r.t = extract.geepack(gee.1.r <- geeglm(clien1dummy ~ large + weights,
 # DONT TOUCH BELOW 2
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.2.r.t = extract.geepack(gee.2.r <- geeglm(clien1dummy ~ large:polinv+ weights,
+gee.2.r.t = extract.geepack(gee.2.r <- geeglm(clien1dummy ~ large*polinv+ weights,
                                                family = binomial(link = "logit"), 
                                                id = municipality, 
                                                std.err = "san.se",
@@ -372,7 +370,7 @@ gee.3.r.t = extract.geepack(gee.3.r <- geeglm(clien1dummy ~ wealth+ weights,
 # DONT TOUCH BELOW 4
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.4.r.t = extract.geepack(gee.4.r <- geeglm(clien1dummy ~ wealth:large+ weights, 
+gee.4.r.t = extract.geepack(gee.4.r <- geeglm(clien1dummy ~ wealth*large+ weights, 
                                                family = binomial(link = "logit"), 
                                                id = municipality, 
                                                std.err = "san.se",
@@ -437,7 +435,6 @@ fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
 
 # transform the weight var. // Attaching weights to DF // sorting for GEE models
 dat$weights = fit$weights
-dat$municipality = order(dat$municipality)
 
 
 
@@ -479,6 +476,7 @@ extract.geepack <- function(model) {
 
 
 
+
 # Models
 # DONT TOUCH BELOW 1
 library(geepack) # install.packages("geepack")
@@ -494,7 +492,7 @@ gee.1.c.r.t = extract.geepack(gee.1.c.r <- geeglm(clien1dummy ~ wagehalf + weigh
 # DONT TOUCH BELOW 2
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.2.c.r.t = extract.geepack(gee.2.c.r <- geeglm(clien1dummy ~ wagehalf:polinv+ weights,
+gee.2.c.r.t = extract.geepack(gee.2.c.r <- geeglm(clien1dummy ~ wagehalf*polinv+ weights,
                                               family = binomial(link = "logit"), 
                                               id = municipality, 
                                               std.err = "san.se",
@@ -518,7 +516,7 @@ gee.3.c.r.t = extract.geepack(gee.3.c.r <- geeglm(clien1dummy ~ wealth+ weights,
 # DONT TOUCH BELOW 4
 library(geepack) # install.packages("geepack")
 library(texreg)
-gee.4.c.r.t = extract.geepack(gee.4.c.r <- geeglm(clien1dummy ~ wealth:wagehalf+ weights, 
+gee.4.c.r.t = extract.geepack(gee.4.c.r <- geeglm(clien1dummy ~ wealth*wagehalf+ weights, 
                                               family = binomial(link = "logit"), 
                                               id = municipality, 
                                               std.err = "san.se",
@@ -566,23 +564,29 @@ gee.7.c.r.t = extract.geepack(gee.7.c.r <- geeglm(clien1dummy ~ pop+ weights,
 #####################################################################
 
 
-
 # TABLE
 library(texreg)
 screenreg(list(gee.1.r.t,gee.2.r.t,gee.2.r.t,gee.3.r.t,gee.4.r.t,gee.5.r.t,gee.6.r.t,gee.7.r.t), # screenreg / texreg
           #custom.coef.names = c(# this gotta be before OMIT.COEFF
-          #         "(Intercept)",
-          #        "Size of the Poor",
-          #        "Wealth Index",
-          #        "Size of the Poor TIMES Wealth Index",
-          #        "Size of the Poor TIMES Political Involvement",
-          #        "logpop",
-          #        "weights"),
-          caption = "Models using a Generalized Propensity Score as a Weighting Device",
-          label = "gps:1",
+          #                   "(Intercept)",
+          #       "High Poor Density",
+          #       "weights",
+          #       "High Poor Density * Political Involvement",
+          #       "Wealth Index",
+          #       "High Poor Density * Wealth Index",
+          #       "Political Involvement",
+          #       "Urban",
+          #       "Municipal Population"),
+          caption = "Likelihood of Clientelism: Logit GEE Models using a Generalized Propensity Score",
+          omit.coef = "weights",
+         # ci.force = T,
+          #override.pvalues = 0,
+          #override.ci.low = as.list(gee.gps.dich.1$upper),
+          #override.ci.up = as.list(gee.gps.dich.1$upper),
+          label = "gee:gps:dich:1",
           stars = c(0.01, 0.05, 0.1),
           digits = 3,
-          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Raw sample marched on the generalized propensity score. \n Binary treatment variable.\n 95% Standard errors in parentheses",
+          custom.note = "%stars. \n Logit GEE uses clustered std. errors at the municipality Level. \n Raw sample marched on the generalized propensity score. GPS vector omited. \n Binary treatment variable.\n 95% Standard errors in parentheses",
           fontsize = "scriptsize",
           float.pos = "h"
 )
@@ -603,7 +607,7 @@ screenreg(list(gee.1.m.t,gee.2.m.t,gee.2.m.t,gee.3.m.t,gee.4.m.t,gee.5.m.t,gee.6
           #        "logpop",
           #        "weights"),
           caption = "Clientelism: Logit GEE Models",
-          label = "gps:1",
+          label = "gee:cem:dich:1",
           stars = c(0.01, 0.05, 0.1),
           digits = 3,
           #custom.model.names = c("Logit GEE", "Rare Event Logit"),
@@ -624,7 +628,7 @@ screenreg(list(gee.1.c.r.t,gee.2.c.r.t,gee.3.c.r.t,gee.4.c.r.t,gee.5.c.r.t,gee.6
           #        "logpop",
           #        "weights"),
           caption = "Clientelism: Logit GEE Models",
-          label = "gps:1",
+          label = "gee:gps:cont:1",
           stars = c(0.01, 0.05, 0.1),
           digits = 3,
           #custom.model.names = c("Logit GEE", "Rare Event Logit"),
@@ -671,10 +675,10 @@ gee.r.plot$lower <- gee.r.plot$coefficients - 1.96*gee.r.plot$se
 
 gee.r.plot$variable <- factor(gee.r.plot$variable,
                               levels = c(1,2,3,4,5,6,7), ordered=TRUE,
-                              labels =   c("Large Size of the Poor", 
-                                           paste("Large Size of the Poor * Political Involvement Index"), 
+                              labels =   c("High Poor Density", 
+                                           "High Poor Density * Political Involvement Index", 
                                            "Wealth Index",
-                                           paste("Large Size of the Poor * Wealth Index"), 
+                                           "High Poor Density * Wealth Index", 
                                            "Political Involvement Index", 
                                            "Urban",
                                            "Municipal Population")
@@ -712,10 +716,10 @@ gee.m.plot$lower <- gee.m.plot$coefficients - 1.96*gee.m.plot$se
 
 gee.m.plot$variable <- factor(gee.m.plot$variable,
                               levels = c(1,2,3,4,5,6,7), ordered=TRUE,
-                              labels =   c("Large Size of the Poor", 
-                                           paste("Large Size of the Poor * Political Involvement Index"), 
+                              labels =   c("High Poor Density", 
+                                           "High Poor Density * Political Involvement Index", 
                                            "Wealth Index",
-                                           paste("Large Size of the Poor * Wealth Index"), 
+                                           "High Poor Density * Wealth Index", 
                                            "Political Involvement Index", 
                                            "Urban",
                                            "Municipal Population")
@@ -754,10 +758,10 @@ gee.c.r.plot$lower <- gee.c.r.plot$coefficients - 1.96*gee.c.r.plot$se
 
 gee.c.r.plot$variable <- factor(gee.c.r.plot$variable,
                                 levels = c(1,2,3,4,5,6,7), ordered=TRUE,
-                                labels =   c("Large Size of the Poor", 
-                                             paste("Large Size of the Poor * Political Involvement Index"), 
+                                labels =   c("Size of the Poor", 
+                                             "Size of the Poor * Political Involvement Index", 
                                              "Wealth Index",
-                                             paste("Large Size of the Poor * Wealth Index"), 
+                                             "Size of the Poor * Wealth Index", 
                                              "Political Involvement Index", 
                                              "Urban",
                                              "Municipal Population")
@@ -805,8 +809,6 @@ rm(list=ls())
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
-# order data for clusters
-m.data$municipality = order(m.data$municipality)
 
 
 # METHOD 2
@@ -818,7 +820,8 @@ m.data$municipality = order(m.data$municipality)
 # model
 set.seed(602); options(scipen=999)
 library(Zelig) # this is for simulation only, not for the table
-gee.1.m.zelig = zelig(clien1dummy ~ large,
+#gee.1.m.zelig = zelig(clien1dummy ~ large,
+gee.1.m.zelig = zelig(clien1dummy ~ large + wealth + polinv + large*wealth + large*polinv,
                       model = "logit.gee",
                       family = binomial(link = "logit"), 
                       id = "municipality", 
@@ -864,8 +867,6 @@ rm(list=ls())
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
-# order data for clusters
-m.data$municipality = order(m.data$municipality)
 
 
 # METHOD 2
@@ -876,7 +877,8 @@ m.data$municipality = order(m.data$municipality)
 
 # model
 library(Zelig) # this is for simulation only, not for the table
-gee.2.m.zelig = zelig(clien1dummy ~ large*polinv,
+#gee.2.m.zelig = zelig(clien1dummy ~ large*polinv,
+gee.2.m.zelig = zelig(clien1dummy ~ large + wealth + polinv + large*wealth + large*polinv,
                       model = "logit.gee",
                       family = binomial(link = "logit"), 
                       id = "municipality", 
@@ -911,25 +913,25 @@ colnames(gee.2.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):ma
 
 
 
-# plot
+# plot ## geom_point also works
 library(ggplot2) ; library(gridExtra)
 polinv.range = as.numeric(min(m.data$polinv):max(m.data$polinv))
 set.seed(602)
 grid.arrange(ggplot() + 
-               geom_point(aes(x=polinv.range[1], y=gee.2.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[2], y=gee.2.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[3], y=gee.2.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-               geom_point(aes(x=polinv.range[4], y=gee.2.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[5], y=gee.2.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[6], y=gee.2.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[7], y=gee.2.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[1], y=gee.2.m.zelig.high[1], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[2], y=gee.2.m.zelig.high[2], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[3], y=gee.2.m.zelig.high[3], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) + 
-               geom_point(aes(x=polinv.range[4], y=gee.2.m.zelig.high[4], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[5], y=gee.2.m.zelig.high[5], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[6], y=gee.2.m.zelig.high[6], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
-               geom_point(aes(x=polinv.range[7], y=gee.2.m.zelig.high[7], colour = "High"), position = position_jitter(width = 3), size = I(5), alpha = 1/100) +
+               geom_line(aes(x=polinv.range[1], y=gee.2.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[2], y=gee.2.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[3], y=gee.2.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) + 
+               geom_line(aes(x=polinv.range[4], y=gee.2.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[5], y=gee.2.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[6], y=gee.2.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[7], y=gee.2.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[1], y=gee.2.m.zelig.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[2], y=gee.2.m.zelig.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[3], y=gee.2.m.zelig.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) + 
+               geom_line(aes(x=polinv.range[4], y=gee.2.m.zelig.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[5], y=gee.2.m.zelig.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[6], y=gee.2.m.zelig.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
+               geom_line(aes(x=polinv.range[7], y=gee.2.m.zelig.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/20) +
                xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
                theme_bw() + 
                labs(colour = "Density of the Poor") +
@@ -946,8 +948,6 @@ rm(list=ls())
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
-# order data for clusters
-m.data$municipality = order(m.data$municipality)
 
 
 # METHOD 2
@@ -959,6 +959,7 @@ m.data$municipality = order(m.data$municipality)
 # model
 library(Zelig) # this is for simulation only, not for the table
 gee.4.m.zelig = zelig(clien1dummy ~ wealth*large,
+#gee.4.m.zelig = zelig(clien1dummy ~ large + wealth + polinv + large*wealth + large*polinv,
                       model = "logit.gee",
                       family = binomial(link = "logit"), 
                       id = "municipality", 
@@ -992,63 +993,65 @@ colnames(gee.4.m.zelig.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):ma
 
 
 
-# plot
+
+# plot ##  geom_point also works
+# plot ##  geom_line also works
 library(ggplot2) ; library(gridExtra)
 wealth.range = as.numeric(min(m.data$wealth):max(m.data$wealth))
 set.seed(602)
 grid.arrange(ggplot() + 
-               geom_point(aes(x=wealth.range[1], y=gee.4.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) + 
-               geom_point(aes(x=wealth.range[2], y=gee.4.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[3], y=gee.4.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[4], y=gee.4.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[5], y=gee.4.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[6], y=gee.4.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[7], y=gee.4.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[8], y=gee.4.m.zelig.low[8], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[9], y=gee.4.m.zelig.low[9], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[10], y=gee.4.m.zelig.low[10], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[11], y=gee.4.m.zelig.low[11], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[12], y=gee.4.m.zelig.low[12], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[13], y=gee.4.m.zelig.low[13], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[14], y=gee.4.m.zelig.low[14], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[15], y=gee.4.m.zelig.low[15], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[16], y=gee.4.m.zelig.low[16], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[17], y=gee.4.m.zelig.low[17], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[18], y=gee.4.m.zelig.low[18], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[19], y=gee.4.m.zelig.low[19], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[20], y=gee.4.m.zelig.low[20], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[21], y=gee.4.m.zelig.low[21], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[22], y=gee.4.m.zelig.low[22], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[23], y=gee.4.m.zelig.low[23], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[24], y=gee.4.m.zelig.low[24], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[25], y=gee.4.m.zelig.low[25], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[26], y=gee.4.m.zelig.low[26], colour = "Low"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[1], y=gee.4.m.zelig.high[1], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) + 
-               geom_point(aes(x=wealth.range[2], y=gee.4.m.zelig.high[2], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[3], y=gee.4.m.zelig.high[3], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[4], y=gee.4.m.zelig.high[4], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[5], y=gee.4.m.zelig.high[5], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[6], y=gee.4.m.zelig.high[6], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[7], y=gee.4.m.zelig.high[7], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[8], y=gee.4.m.zelig.high[8], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[9], y=gee.4.m.zelig.high[9], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[10], y=gee.4.m.zelig.high[10], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[11], y=gee.4.m.zelig.high[11], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[12], y=gee.4.m.zelig.high[12], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[13], y=gee.4.m.zelig.high[13], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[14], y=gee.4.m.zelig.high[14], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[15], y=gee.4.m.zelig.high[15], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[16], y=gee.4.m.zelig.high[16], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[17], y=gee.4.m.zelig.high[17], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[18], y=gee.4.m.zelig.high[18], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[19], y=gee.4.m.zelig.high[19], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[20], y=gee.4.m.zelig.high[20], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[21], y=gee.4.m.zelig.high[21], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[22], y=gee.4.m.zelig.high[22], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[23], y=gee.4.m.zelig.high[23], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[24], y=gee.4.m.zelig.high[24], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[25], y=gee.4.m.zelig.high[25], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
-               geom_point(aes(x=wealth.range[26], y=gee.4.m.zelig.high[26], colour = "High"), position = position_jitter(width = 5), alpha = 1/15) +
+               geom_line(aes(x=wealth.range[1], y=gee.4.m.zelig.low[1], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) + 
+               geom_line(aes(x=wealth.range[2], y=gee.4.m.zelig.low[2], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[3], y=gee.4.m.zelig.low[3], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[4], y=gee.4.m.zelig.low[4], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[5], y=gee.4.m.zelig.low[5], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[6], y=gee.4.m.zelig.low[6], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[7], y=gee.4.m.zelig.low[7], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[8], y=gee.4.m.zelig.low[8], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[9], y=gee.4.m.zelig.low[9], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[10], y=gee.4.m.zelig.low[10], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[11], y=gee.4.m.zelig.low[11], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[12], y=gee.4.m.zelig.low[12], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[13], y=gee.4.m.zelig.low[13], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[14], y=gee.4.m.zelig.low[14], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[15], y=gee.4.m.zelig.low[15], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[16], y=gee.4.m.zelig.low[16], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[17], y=gee.4.m.zelig.low[17], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[18], y=gee.4.m.zelig.low[18], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[19], y=gee.4.m.zelig.low[19], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[20], y=gee.4.m.zelig.low[20], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[21], y=gee.4.m.zelig.low[21], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[22], y=gee.4.m.zelig.low[22], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[23], y=gee.4.m.zelig.low[23], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[24], y=gee.4.m.zelig.low[24], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[25], y=gee.4.m.zelig.low[25], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[26], y=gee.4.m.zelig.low[26], colour = "Low"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[1], y=gee.4.m.zelig.high[1], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) + 
+               geom_line(aes(x=wealth.range[2], y=gee.4.m.zelig.high[2], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[3], y=gee.4.m.zelig.high[3], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[4], y=gee.4.m.zelig.high[4], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[5], y=gee.4.m.zelig.high[5], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[6], y=gee.4.m.zelig.high[6], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[7], y=gee.4.m.zelig.high[7], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[8], y=gee.4.m.zelig.high[8], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[9], y=gee.4.m.zelig.high[9], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[10], y=gee.4.m.zelig.high[10], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[11], y=gee.4.m.zelig.high[11], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[12], y=gee.4.m.zelig.high[12], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[13], y=gee.4.m.zelig.high[13], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[14], y=gee.4.m.zelig.high[14], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[15], y=gee.4.m.zelig.high[15], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[16], y=gee.4.m.zelig.high[16], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[17], y=gee.4.m.zelig.high[17], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[18], y=gee.4.m.zelig.high[18], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[19], y=gee.4.m.zelig.high[19], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[20], y=gee.4.m.zelig.high[20], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[21], y=gee.4.m.zelig.high[21], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[22], y=gee.4.m.zelig.high[22], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[23], y=gee.4.m.zelig.high[23], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[24], y=gee.4.m.zelig.high[24], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[25], y=gee.4.m.zelig.high[25], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
+               geom_line(aes(x=wealth.range[26], y=gee.4.m.zelig.high[26], colour = "High"), position = position_jitter(width = 5), alpha = 1/20) +
                xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
                theme_bw() + 
                labs(colour = "Density of the Poor") +
@@ -1260,7 +1263,7 @@ grid.arrange(ggplot() +
                             size=1.5, 
                             colour = "forestgreen") + 
                xlab("Percentage of People Living with Less than Half of the Minimum Wage") + 
-               ylab("Density") + 
+               ylab("Density Estimate") + 
                theme_bw(),
              bottom = "Note: Matched Sample.")
 
