@@ -19,6 +19,8 @@ dat$polinv2 <- as.numeric(dat$polinv2)
 dat$polinv3 <- as.numeric(dat$polinv3)
 dat$polinv4 <- as.numeric(dat$polinv4)
 dat$polinv5 <- as.numeric(dat$polinv5)
+dat$ing4 <- as.numeric(dat$ing4)
+
 
 # constructing relative wealth index (Cordova 2009)
 library(car) # install.packages("car") 
@@ -124,7 +126,8 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 # Constructing Matched Set
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-m.out <- matchit(large ~ wealth + urban + munopp + polinv, 
+# wealth + urban + munopp + polinv,  
+m.out <- matchit(large ~ wealth + urban + munopp + polinv,
                  discard = "hull.both", 
                  method = "cem",
                  data = dat,
@@ -149,8 +152,302 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 
 
 #####################################################################
-### PARAMETRIC MATCHED SAMPLE // clustered std errors // GEE models
+### PARAMETRIC models
 #####################################################################
+
+
+
+# 1
+################################################
+# gee.dich.m.X: DICH // MATCHED // GEE
+################################################
+
+cat("\014")
+rm(list=ls())
+
+
+set.seed(602); options(scipen=999)
+
+
+# TABLES
+
+# extract function for texreg
+library(texreg)
+extract.geepack <- function(model) {
+  s <- summary(model)
+  names <- rownames(s$coef)
+  co <- s$coef[, 1]
+  se <- s$coef[, 2]
+  pval <- s$coef[, 4]
+  
+  n <- nrow(model.frame(model))
+  nclust <- length(s$geese$clusz)
+  
+  gof = c(n, nclust)
+  gof.names = c("Num. obs.", "Num. clust.")
+  
+  tr <- createTexreg(
+    coef.names = names,
+    coef = co,
+    se = se,
+    pvalues = pval,
+    gof.names = gof.names,
+    gof = gof,
+    gof.decimal = rep(FALSE, length(gof))
+  )
+  return(tr)
+}
+
+
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+
+# models
+library(geepack) # install.packages("geepack")
+gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(clien1dummy ~ large + wealth + large:wealth,
+                                              family = binomial(link = "logit"), 
+                                              id = municipality, 
+                                              std.err = "san.se",
+                                              corstr = "independence",
+                                              data = m.data))
+
+
+gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(clien1dummy ~ large + wealth + urban + munopp, 
+                                                        family = binomial(link = "logit"), 
+                                                        id = municipality, 
+                                                        std.err = "san.se",
+                                                        corstr = "independence",
+                                                        data = m.data))
+
+gee.dich.m.3.t = extract.geepack(gee.dich.m.3 <- geeglm(clien1dummy ~ large + wealth + polinv + munopp + ing4, 
+                                                        family = binomial(link = "logit"), 
+                                                        id = municipality, 
+                                                        std.err = "san.se",
+                                                        corstr = "independence",
+                                                        data = m.data))
+# 2
+################################################
+# gee.cont.rgps.X: CONT // RAW GPS // GEE
+################################################
+
+set.seed(602); options(scipen=999)
+
+
+# extract function for texreg
+library(texreg)
+extract.geepack <- function(model) {
+  s <- summary(model)
+  names <- rownames(s$coef)
+  co <- s$coef[, 1]
+  se <- s$coef[, 2]
+  pval <- s$coef[, 4]
+  
+  n <- nrow(model.frame(model))
+  nclust <- length(s$geese$clusz)
+  
+  gof = c(n, nclust)
+  gof.names = c("Num. obs.", "Num. clust.")
+  
+  tr <- createTexreg(
+    coef.names = names,
+    coef = co,
+    se = se,
+    pvalues = pval,
+    gof.names = gof.names,
+    gof = gof,
+    gof.decimal = rep(FALSE, length(gof))
+  )
+  return(tr)
+}
+
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
+
+
+## Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+#fit <- CBPS(wagehalf ~ wealth + munopp + polinv,  # wealth + munopp + polinv
+# fit <- CBPS(wagehalf ~ wealth + munopp + polinv + urban,  # wealth + munopp + polinv
+fit <- CBPS(wagehalf ~ wealth + munopp + polinv + ing4,  # wealth + munopp + polinv
+            data = dat, 
+            iterations = 25000, 
+            twostep = T, # F
+            method = "exact", # EXACT
+            ATT = 2, # 2
+            standardize = F) # F
+
+## transform the weight var. // Attaching weights to DF // sorting for GEE models
+dat$weights = fit$weights
+
+
+
+
+## Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+dat$logpop = log(dat$pop)
+
+
+# models
+set.seed(602); options(scipen=999)
+
+
+gee.cont.rgps.1.t = extract.geepack(gee.cont.rgps.1 <- geeglm(clien1dummy ~ wagehalf + wealth + wagehalf:wealth + weights,
+                                                        family = binomial(link = "probit"), 
+                                                        id = municipality, 
+                                                        #weights = weights,
+                                                        std.err = "san.se",
+                                                        corstr = "independence",
+                                                        data = dat))
+
+
+gee.cont.rgps.2.t = extract.geepack(gee.cont.rgps.2 <- geeglm(clien1dummy ~ wagehalf + wealth + urban + munopp + weights, 
+                                                        family = binomial(link = "probit"), 
+                                                        id = municipality, 
+                                                        #weights = weights,
+                                                        std.err = "san.se",
+                                                        corstr = "independence",
+                                                        data = dat))
+
+
+gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(clien1dummy ~ wagehalf + wealth + polinv + munopp + ing4 + weights, 
+                                                        family = binomial(link = "probit"), 
+                                                        id = municipality, 
+                                                        #weights = weights,
+                                                        std.err = "san.se",
+                                                        corstr = "independence",
+                                                        data = dat))
+
+
+
+
+# back up
+# gee.cont.m.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(clien1dummy ~ wagehalf + wealth + polinv + munopp + ing4, 
+#                                                            family = binomial(link = "logit"), 
+#                                                            id = municipality, 
+#                                                            weights = weights,
+#                                                            std.err = "san.se",
+#                                                            corstr = "exchangeable",
+#                                                            data = dat))
+
+
+###### COEFFICIENT PLOT
+
+cem.plot = data.frame(
+  Coefficients = as.numeric(c(gee.dich.m.1$"coefficients", gee.dich.m.2$"coefficients", gee.dich.m.3$"coefficients")),
+  Covariate = as.character(c(
+    "Intercept", "Poverty Density", "Wealth Index", "Poverty Density*Wealth Index", 
+    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", 
+    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Domocratic Support")),
+  Model = as.character(c(rep("Economic", 4), rep("Contextual", 5), rep("Political", 6))),
+  se = c(as.numeric(c(sqrt(diag(gee.dich.m.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.dich.m.2$geese$vbeta))), as.numeric(sqrt(diag(gee.dich.m.3$geese$vbeta)))),
+  upper = c(as.numeric(gee.dich.m.1$"coefficients")  + 1.28*sqrt(diag(gee.dich.m.1$geese$vbeta)),
+            as.numeric(gee.dich.m.2$"coefficients") + 1.28*sqrt(diag(gee.dich.m.2$geese$vbeta)),
+            as.numeric(gee.dich.m.3$"coefficients") + 1.28*sqrt(diag(gee.dich.m.3$geese$vbeta))),
+  lower = c(as.numeric(gee.dich.m.1$"coefficients")  - 1.28*sqrt(diag(gee.dich.m.1$geese$vbeta)),
+            as.numeric(gee.dich.m.2$"coefficients") - 1.28*sqrt(diag(gee.dich.m.2$geese$vbeta)),
+            as.numeric(gee.dich.m.3$"coefficients") - 1.28*sqrt(diag(gee.dich.m.3$geese$vbeta))),
+  Matching = rep(as.character("CEM"), 15)
+)
+
+
+gps.plot = data.frame(
+  Coefficients = as.numeric(c(gee.cont.rgps.1$"coefficients", gee.cont.rgps.2$"coefficients", gee.cont.rgps.3$"coefficients")),
+  Covariate = as.character(c(
+    "Intercept", "Poverty Density", "Wealth Index", "Poverty Density*Wealth Index", "Weights", 
+    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", "Weights", 
+    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Domocratic Support", "Weights")),
+  Model = as.character(c(rep("Economic", 5), rep("Contextual", 6), rep("Political", 7))),
+  se = c(as.numeric(c(sqrt(diag(gee.cont.rgps.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.cont.rgps.2$geese$vbeta))), as.numeric(sqrt(diag(gee.cont.rgps.3$geese$vbeta)))),
+  upper = c(as.numeric(gee.cont.rgps.1$"coefficients")  + 1.28*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
+            as.numeric(gee.cont.rgps.2$"coefficients") + 1.28*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
+            as.numeric(gee.cont.rgps.3$"coefficients") + 1.28*sqrt(diag(gee.cont.rgps.3$geese$vbeta))),
+  lower = c(as.numeric(gee.cont.rgps.1$"coefficients")  - 1.28*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
+            as.numeric(gee.cont.rgps.2$"coefficients") - 1.28*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
+            as.numeric(gee.cont.rgps.3$"coefficients") - 1.28*sqrt(diag(gee.cont.rgps.3$geese$vbeta))),
+  Matching = rep(as.character("GPS"), 18)
+)
+
+# cbind these two datasets
+gee.plot = rbind(cem.plot, gps.plot)
+
+# delete "non" important estimations
+gee.plot<-gee.plot[!(gee.plot$Covariate=="Intercept" | gee.plot$Covariate=="Weights"),]
+
+
+
+# plot
+
+# Plot
+library(ggplot2)
+ggplot(gee.plot, aes(
+  x = Covariate, 
+  y = Coefficients, 
+  ymin = upper, 
+  ymax = lower,
+  colour = Model,
+  shape = Matching,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.65), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Coefficients (logit scale)") +
+  ggtitle("Likelihood of Clientelism") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+
+
+
+
+# SIMULATIONS // gee.dich.m.X.s
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+library(Zelig)
+gee.dich.m.1.s = zelig(clien1dummy ~ large + wealth + large:wealth, 
+              model = "logit.gee",
+              id = "municipality", 
+              std.err = "san.se",
+              corstr = "independence",
+              data = m.data)
+
+gee.dich.m.2.s = zelig(clien1dummy ~ large + wealth + urban + munopp, 
+              model = "logit.gee",
+              id = "municipality", 
+              std.err = "san.se",
+              corstr = "independence",
+              data = m.data)
+
+gee.dich.m.3.s = zelig(clien1dummy ~ large + wealth + polinv + munopp + exc7 + ing4, 
+              model = "logit.gee",
+              id = "municipality", 
+              std.err = "san.se",
+              corstr = "independence",
+              data = m.data)
+
+
+
+
+
+
+
+
+### TEST AREA ### TEST AREA
+### TEST AREA ### TEST AREA
+### TEST AREA ### TEST AREA
+### TEST AREA ### TEST AREA
+### TEST AREA ### TEST AREA
 
 cat("\014")
 rm(list=ls())

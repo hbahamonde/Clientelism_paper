@@ -90,6 +90,8 @@ drop exc7
 rename exc7new exc7
 
 
+
+
 label variable exc7 "Percept. of Corruption"
 label variable np2 "Bureaucracy Contacted him/her"
 *label variable cp13 "Political Party Contacted him/her"
@@ -328,7 +330,7 @@ merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_pap
 drop _merge
 
 
-keep municipality wagehalf cp13 vb3 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
+keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
 
 rename r1 wealth1
 rename r3 wealth2
@@ -341,4 +343,4 @@ rename r12 wealth8
 rename r14 wealth9
 rename r15 wealth10
 
-saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace 
+saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
