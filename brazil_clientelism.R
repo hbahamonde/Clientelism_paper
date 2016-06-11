@@ -214,9 +214,6 @@ m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wageha
 m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + munopp + weights)
 # m3: political
 m3.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + polinv + munopp + ing4 + exc7 + weights)
-
-
-
 ####### formulas
 
 # models
@@ -506,7 +503,7 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
           stars = numeric(0),
           custom.model.names = c("Economic", "Contextual", "Political"),
           digits = 2,
-          custom.note = "Logit GEE models with clustered std. errors at the municipality Level. \n Matched sample using the CEM algorithm. \n Dichotomous treatment variable (cutoffs at the median).\n 95% Confidence intervals in parentheses.",
+          custom.note = "Logit GEE models with clustered std. errors at the municipality level. \n Matched sample using the CEM algorithm. \n Dichotomous treatment variable (cutoff at the median).\n 95% Confidence intervals in parentheses.",
           fontsize = "scriptsize",
           float.pos = "h"
           )
@@ -579,7 +576,7 @@ screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenr
               )),
           label = "gee:gps:dich:1",
           digits = 2,
-          custom.note = "Logit GEE models with clustered std. errors at the municipality Level. \n Raw sample weighted by the generalized propensity score. GPS vector omited. \n Continuous treatment variable (no cutoffs were used).\n 95% Confidence intervals in parentheses.",
+          custom.note = "Logit GEE models with clustered std. errors at the municipality level. \n Raw sample weighted by the generalized propensity score. GPS vector omited. \n Continuous treatment variable (no cutoffs were used).\n 95% Confidence intervals in parentheses.",
           fontsize = "scriptsize",
           stars = as.numeric(0),
           custom.model.names = c("Economic", "Contextual", "Political"),
@@ -610,7 +607,8 @@ gee.dich.m.1.s = zelig(m1.m,
                        weights = "wt",
                        std.err = "san.se",
                        corstr = "independence",
-                       data = m.data)
+                       data = m.data,
+                       cite = F))
 
 gee.dich.m.2.s = zelig(m2.m, 
                        model = "logit.gee",
@@ -618,7 +616,8 @@ gee.dich.m.2.s = zelig(m2.m,
                        weights = "wt",
                        std.err = "san.se",
                        corstr = "independence",
-                       data = m.data)
+                       data = m.data,
+                       cite = F))
 
 gee.dich.m.3.s = zelig(m3.m, 
               model = "logit.gee",
@@ -626,7 +625,8 @@ gee.dich.m.3.s = zelig(m3.m,
               weights = "wt",
               std.err = "san.se",
               corstr = "independence",
-              data = m.data)
+              data = m.data,
+              cite = F))
 
 
 
@@ -1104,7 +1104,7 @@ Discarded = m.out$discarded
 Treated = dat$clien1dummy
 
 library(ggplot2)
-ggplot() + geom_density(aes(x=distance, colour=Discarded, linetype=Treated), alpha=.1) +
+ggplot() + geom_density(aes(x=Distance, colour=Discarded, linetype=Treated), alpha=.1) +
   ylab("Estimated Density") + 
   xlab("Distance") + 
   theme_bw()
