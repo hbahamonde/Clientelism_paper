@@ -1103,8 +1103,14 @@ m2
 m3
 
 # HERE
-data.frame(
+
+balance.plot = data.frame(
   Variable = c(
+    as.character("Wealth Index"),
+    as.character("Urban"),
+    as.character("Municipal Opposition"),
+    as.character("Political Involvement"),
+    as.character("Support for Democracy"),
     as.character("Wealth Index"),
     as.character("Urban"),
     as.character("Municipal Opposition"),
@@ -1114,19 +1120,99 @@ data.frame(
     rep(as.character("High Density of the Poor"), 5),
     rep(as.character("Low Density of the Poor"), 5)),
   mean = c(
-    as.numeric(m.data$wealth[m.data$large==1]),
-    as.numeric(m.data$polinv[m.data$large==1]),
-    
-    )
-  mean.0 = 
-  
-  
-)
+    as.numeric(mean(m.data$wealth[m.data$large==1])),
+    mean(as.numeric(m.data$urban[m.data$large==1])),
+    as.numeric(mean(m.data$munopp[m.data$large==1])),
+    as.numeric(mean(m.data$polinv[m.data$large==1])),
+    as.numeric(mean(m.data$ing4[m.data$large==1])),
+    as.numeric(mean(m.data$wealth[m.data$large==0])),
+    mean(as.numeric(m.data$urban[m.data$large==1])),
+    as.numeric(mean(m.data$munopp[m.data$large==0])),
+    as.numeric(mean(m.data$polinv[m.data$large==0])),
+    as.numeric(mean(m.data$ing4[m.data$large==0])))
+  )
 
 
-qqplot(m.data$polinv[m.data$large==1],m.data$polinv[m.data$large==0])
+## Matched
+library(ggplot2)
+balance.1.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Wealth Index") + 
+  theme_bw()
 
 
+balance.2.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$urban[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$urban[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Urban") + 
+  theme_bw()
+
+balance.3.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw()
+
+balance.4.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw()
+
+balance.5.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$ing4[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$ing4[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Support for Democracy") + 
+  theme_bw()
+
+## RAW
+balance.1.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$wealth[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$wealth[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Wealth Index") + 
+  theme_bw()
+
+
+balance.2.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$urban[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$urban[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Urban") + 
+  theme_bw()
+
+balance.3.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$munopp[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$munopp[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw()
+
+balance.4.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$polinv[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$polinv[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw()
+
+balance.5.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$ing4[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$ing4[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Support for Democracy") + 
+  theme_bw()
+
+
+library(cowplot) # install.packages("cowplot")
+balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m,balance.5.m, nrow = 5, align = "v", scale = 1)
+balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r,balance.5.r, nrow = 5, align = "v", scale = 1)
+plot_grid(balance.matched,balance.raw)
 
 ######################################################
 #            C o r r e l o g r a m s                 #
