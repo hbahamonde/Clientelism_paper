@@ -200,17 +200,28 @@ extract.geepack <- function(model) {
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
 
-# formulas
+####### formulas
+#### MATCHED SAMPLE
 # m1: economic
-m1 = formula(clien1dummy ~ large + wealth + large:wealth)
+m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
 # m2: contextual
-m2 = formula(clien1dummy ~ large + wealth + urban + munopp)
+m2.m = formula(clien1dummy ~ large + wealth + urban + munopp)
 # m3: political
-m3 = formula(clien1dummy ~ large + wealth + polinv + munopp + ing4)
+m3.m = formula(clien1dummy ~ large + wealth + polinv + munopp + ing4 + exc7)
+#### 
+m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
+# m2: contextual
+m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + munopp + weights)
+# m3: political
+m3.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + polinv + munopp + ing4 + exc7 + weights)
+
+
+
+####### formulas
 
 # models
 library(geepack) # install.packages("geepack")
-gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(m1,
+gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(m1.m,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -219,7 +230,7 @@ gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(m1,
                                                         data = m.data))
 
 
-gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(m2, 
+gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(m2.m, 
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -228,7 +239,7 @@ gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(m2,
                                                         data = m.data))
 
 
-gee.dich.m.3.t = extract.geepack(gee.dich.m.3 <- geeglm(m3, 
+gee.dich.m.3.t = extract.geepack(gee.dich.m.3 <- geeglm(m3.m,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -318,7 +329,7 @@ dat$logpop = log(dat$pop)
 set.seed(602); options(scipen=999)
 
 
-gee.cont.rgps.1.t = extract.geepack(gee.cont.rgps.1 <- geeglm(clien1dummy ~ as.numeric(wagehalf.4) + wealth +  as.numeric(wagehalf.4):wealth + weights,# + weights,
+gee.cont.rgps.1.t = extract.geepack(gee.cont.rgps.1 <- geeglm(m1.r,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -327,7 +338,7 @@ gee.cont.rgps.1.t = extract.geepack(gee.cont.rgps.1 <- geeglm(clien1dummy ~ as.n
                                                         data = dat))
 
 
-gee.cont.rgps.2.t = extract.geepack(gee.cont.rgps.2 <- geeglm(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + munopp + weights,# + weights, 
+gee.cont.rgps.2.t = extract.geepack(gee.cont.rgps.2 <- geeglm(m2.r,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -336,7 +347,7 @@ gee.cont.rgps.2.t = extract.geepack(gee.cont.rgps.2 <- geeglm(clien1dummy ~ as.n
                                                         data = dat))
 
 
-gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(clien1dummy ~ as.numeric(wagehalf.4) + wealth + polinv + munopp + ing4 + weights,# + weights, 
+gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
                                                         weights = wt,
@@ -356,13 +367,14 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(clien1dummy ~ as.n
 # 95% CIs: 1.96
 
 
+
 cem.plot = data.frame(
   Coefficients = as.numeric(c(gee.dich.m.1$"coefficients", gee.dich.m.2$"coefficients", gee.dich.m.3$"coefficients")),
   Covariate = as.character(c(
-    "Intercept", "Poverty Density", "Wealth Index", "Poverty Density*Wealth Index", 
+    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Poverty Density*Wealth Index", 
     "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", 
-    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy")),
-  Model = as.character(c(rep("Economic", 4), rep("Contextual", 5), rep("Political", 6))),
+    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy", "Perception of Corruption")),
+  Model = as.character(c(rep("Economic", 5), rep("Contextual", 5), rep("Political", 7))),
   se = c(as.numeric(c(sqrt(diag(gee.dich.m.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.dich.m.2$geese$vbeta))), as.numeric(sqrt(diag(gee.dich.m.3$geese$vbeta)))),
   upper = c(as.numeric(gee.dich.m.1$"coefficients")  + 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") + 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
@@ -370,18 +382,20 @@ cem.plot = data.frame(
   lower = c(as.numeric(gee.dich.m.1$"coefficients")  - 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") - 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
             as.numeric(gee.dich.m.3$"coefficients") - 1.96*sqrt(diag(gee.dich.m.3$geese$vbeta))),
-  Balancing = rep(as.character("CEM Matching"), 15)
+  Balancing = rep(as.character("CEM Matching"), as.numeric(5+5+7))
 )
+
+
 
 
 gps.plot = data.frame(
   Coefficients = as.numeric(c(gee.cont.rgps.1$"coefficients", gee.cont.rgps.2$"coefficients", gee.cont.rgps.3$"coefficients")),
   Covariate = as.character(c(
-    "Intercept", "Poverty Density", "Wealth Index", "Poverty Density*Wealth Index", "Weights", 
+    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Weights", "Poverty Density*Wealth Index", 
     "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", "Weights", 
-    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy", "Weights"
+    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Weights"
     )),
-  Model = as.character(c(rep("Economic", 5), rep("Contextual", 6), rep("Political", 7))),
+  Model = as.character(c(rep("Economic", 6), rep("Contextual", 6), rep("Political", 8))),
   se = c(as.numeric(c(sqrt(diag(gee.cont.rgps.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.cont.rgps.2$geese$vbeta))), as.numeric(sqrt(diag(gee.cont.rgps.3$geese$vbeta)))),
   upper = c(as.numeric(gee.cont.rgps.1$"coefficients")  + 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") + 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
@@ -389,7 +403,7 @@ gps.plot = data.frame(
   lower = c(as.numeric(gee.cont.rgps.1$"coefficients")  - 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
             as.numeric(gee.cont.rgps.3$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.3$geese$vbeta))),
-  Balancing = rep(as.character("GPS Weighting"), 18)
+  Balancing = rep(as.character("GPS Weighting"), as.numeric(6+6+8))
 )
 
 # cbind these two datasets
@@ -437,51 +451,58 @@ ggplot(gee.plot, aes(
 library(texreg)
 screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texreg
           custom.coef.names = c(# this gotta be before OMIT.COEFF
-            "(Intercept)",
-            "Size of the Poor",
-            "Wealth Index",
-            "Size of the Poor * Wealth Index",
-            "Urban",
-            "Municipal Opposition",
-            "Political Involvement",
-            "Support for Democracy"),
+                      "(Intercept)",
+           "Size of the Poor",
+           "Wealth Index",
+           "Education Years",
+           "Size of the Poor * Wealth Index",
+           "Urban",
+           "Municipal Opposition",
+           "Political Involvement",
+           "Support for Democracy",
+           "Perception of Corruption"),
           caption = "Likelihood of Clientelism: Logit GEE Models with Coarsened Exact Match Sample",
           label = "gee:cem:dich:1",
           ci.force = T,
-          override.pvalues = list(c(1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1)),
-          override.se = list(c(1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1)),
+          override.pvalues = list(c(1,1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1,1)),
+          override.se = list(c(1,1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1,1)),
           override.ci.low = list(
             c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][1],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][2],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][3],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][4]),
-            c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][5],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][6],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][4], 
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][5]),
+            c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][6],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][7],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][8],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][9]),
-            c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][10],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][11],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][9],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][10]),
+            c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][11],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][12],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][13],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][14],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][15])),
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][15],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][16],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][17])),
           override.ci.up =  list(
             c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][1],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][2],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][3],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][4]),
-            c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][5],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][6],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][4],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][5]),
+            c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][6],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][7],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][8],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][9]),
-            c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][10],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][11],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][9],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][10]),
+            c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][11],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][12],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][13],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][14],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][15])),
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][15],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][16],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][17]
+              )),
           stars = numeric(0),
           custom.model.names = c("Economic", "Contextual", "Political"),
           digits = 2,
@@ -497,17 +518,19 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
 library(texreg)
 screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenreg / texreg
           custom.coef.names = c(# this gotta be before OMIT.COEFF
-                  "(Intercept)",
-                "Size of the Poor",
-                "Wealth Index",
-          "Weights",
-                "Size of the Poor * Wealth Index",
-                "Urban",
-                "Municipal Opposition",
-                "Political Involvement",
-                "Support for Democracy"),
+            "(Intercept)",
+            "Size of the Poor",
+            "Wealth Index",
+            "Education Years",
+            "Weights",
+            "Size of the Poor * Wealth Index",
+            "Urban",
+            "Municipal Opposition",
+            "Political Involvement",
+            "Support for Democracy",
+            "Perception of Corruption"),
           caption = "Likelihood of Clientelism: Generalized Propensity Score Weighted Logit GEE Models",
-          #omit.coef = "weights",
+          omit.coef = "weights",
           ci.force = T,
           #override.pvalues = list(c(1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1)),
           #override.se = list(c(1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1)),
@@ -516,44 +539,49 @@ screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenr
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][2],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][3],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][4],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][5]),
-            c(gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][6],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][7],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][5],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][6]),
+            c(gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][7],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][8],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][9],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][10],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][11]),
-            c(gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][12],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][13],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][11],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][12]),
+            c(gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][13],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][14],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][15],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][16],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][17],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][18])),
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][18],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][19],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][20])),
           override.ci.up =  list(
             c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][1],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][2],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][3],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][4],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][5]),
-            c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][6],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][7],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][5],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][6]),
+            c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][7],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][8],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][9],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][10],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][11]),
-            c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][12],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][13],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][11],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][12]),
+            c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][13],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][14],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][15],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][16],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][17],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][18])),
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][19],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][19],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][20]
+              )),
           label = "gee:gps:dich:1",
           digits = 2,
           custom.note = "Logit GEE models with clustered std. errors at the municipality Level. \n Raw sample weighted by the generalized propensity score. GPS vector omited. \n Continuous treatment variable (no cutoffs were used).\n 95% Confidence intervals in parentheses.",
           fontsize = "scriptsize",
-          stars = numeric(0),
+          stars = as.numeric(0),
           custom.model.names = c("Economic", "Contextual", "Political"),
           float.pos = "h"
 )
@@ -576,7 +604,7 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData"
 #library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
 
 library(Zelig)
-gee.dich.m.1.s = zelig(m1, 
+gee.dich.m.1.s = zelig(m1.m, 
                        model = "logit.gee",
                        id = "municipality", 
                        weights = "wt",
@@ -584,7 +612,7 @@ gee.dich.m.1.s = zelig(m1,
                        corstr = "independence",
                        data = m.data)
 
-gee.dich.m.2.s = zelig(m2, 
+gee.dich.m.2.s = zelig(m2.m, 
                        model = "logit.gee",
                        id = "municipality", 
                        weights = "wt",
@@ -592,7 +620,7 @@ gee.dich.m.2.s = zelig(m2,
                        corstr = "independence",
                        data = m.data)
 
-gee.dich.m.3.s = zelig(m3, 
+gee.dich.m.3.s = zelig(m3.m, 
               model = "logit.gee",
               id = "municipality", 
               weights = "wt",
@@ -611,6 +639,7 @@ gee.dich.m.3.s = zelig(m3,
 #####################################################################
 
 set.seed(602); options(scipen=999)
+
 
 # simulation DISTRIBUTION PLOTS
 ## m1 
@@ -1048,7 +1077,6 @@ ggplot(m.data, aes(x=wagehalf)) +
 
 
 ## Plot Density
-
 library(ggplot2)
 ggplot() + 
   geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
@@ -1070,149 +1098,180 @@ ggplot() +
 #  B   A   L   A   N   C   E       P   L   O   T   S #
 ######################################################
 
-# 5 x 5 size.
+# Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
+Distance = m.out$distance
+Discarded = m.out$discarded
+Treated = dat$clien1dummy
 
-# Jitter
-plot(m.out, type = "jitter")
-dev.off()
-
-# Histogram de PSs
-plot(m.out, type = "hist")
-dev.off()
-
-
-boxplot(distance~clien1dummy,data=m.data, 
-        xlab="Clientelism", 
-        ylab="Propensity Score")
+library(ggplot2)
+ggplot() + geom_density(aes(x=distance, colour=Discarded, linetype=Treated), alpha=.1) +
+  ylab("Estimated Density") + 
+  xlab("Distance") + 
+  theme_bw()
+  
 
 
-boxplot(polinv~clien1dummy,data=m.data, 
-        xlab="Clientelism", 
-        ylab="Propensity Score")
-
-
-# QQ of de PSs by covariate
-set.seed(602)
-plot(m.out, col = "forestgreen")
-dev.off()
-
-
-## WITH GGPLOT
-m1
-m2
-m3
-
-# HERE
-
-balance.plot = data.frame(
-  Variable = c(
-    as.character("Wealth Index"),
-    as.character("Urban"),
-    as.character("Municipal Opposition"),
-    as.character("Political Involvement"),
-    as.character("Support for Democracy"),
-    as.character("Wealth Index"),
-    as.character("Urban"),
-    as.character("Municipal Opposition"),
-    as.character("Political Involvement"),
-    as.character("Support for Democracy")),
-  Condition = c(
-    rep(as.character("High Density of the Poor"), 5),
-    rep(as.character("Low Density of the Poor"), 5)),
-  mean = c(
-    as.numeric(mean(m.data$wealth[m.data$large==1])),
-    mean(as.numeric(m.data$urban[m.data$large==1])),
-    as.numeric(mean(m.data$munopp[m.data$large==1])),
-    as.numeric(mean(m.data$polinv[m.data$large==1])),
-    as.numeric(mean(m.data$ing4[m.data$large==1])),
-    as.numeric(mean(m.data$wealth[m.data$large==0])),
-    mean(as.numeric(m.data$urban[m.data$large==1])),
-    as.numeric(mean(m.data$munopp[m.data$large==0])),
-    as.numeric(mean(m.data$polinv[m.data$large==0])),
-    as.numeric(mean(m.data$ing4[m.data$large==0])))
-  )
-
-
+# DISTRIBUTION PLOTS PRE AND POST MATCHING
 ## Matched
 library(ggplot2)
 balance.1.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==0])), fill = "red", alpha = .1) + 
-  ylab("") + 
+  ylab("Matched Set") + 
   xlab("Wealth Index") + 
-  theme_bw()
-
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  ylim(limits = c(0, 0.085)) +
+  theme(axis.title=element_text(size=10))
 
 balance.2.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$urban[m.data$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(m.data$urban[m.data$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Urban") + 
-  theme_bw()
+  theme_bw() + 
+  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
+  ylim(limits = c(0, 15)) +
+  theme(axis.title=element_text(size=10))
+
 
 balance.3.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Municipal Opposition") + 
-  theme_bw()
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  ylim(limits = c(0, .12)) +
+  theme(axis.title=element_text(size=10))
+
 
 balance.4.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Political Involvement") + 
-  theme_bw()
+  theme_bw() + 
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  ylim(limits = c(0, .5)) +
+  theme(axis.title=element_text(size=10))
 
-balance.5.m=ggplot() + 
-  geom_density(aes(x=as.numeric(m.data$ing4[m.data$large==1])), fill = "blue", alpha = .1) + 
-  geom_density(aes(x=as.numeric(m.data$ing4[m.data$large==0])), fill = "red", alpha = .1) + 
-  ylab("") + 
-  xlab("Support for Democracy") + 
-  theme_bw()
+
 
 ## RAW
 balance.1.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$wealth[dat$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(dat$wealth[dat$large==0])), fill = "red", alpha = .1) + 
-  ylab("") + 
+  ylab("Raw Set") + 
   xlab("Wealth Index") + 
-  theme_bw()
-
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  ylim(limits = c(0, 0.085)) +
+  theme(axis.title=element_text(size=10))
 
 balance.2.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$urban[dat$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(dat$urban[dat$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Urban") + 
-  theme_bw()
+  theme_bw() + 
+  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
+  ylim(limits = c(0, 15)) +
+  theme(axis.title=element_text(size=10))
+
 
 balance.3.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$munopp[dat$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(dat$munopp[dat$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Municipal Opposition") + 
-  theme_bw()
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  ylim(limits = c(0, .12)) +
+  theme(axis.title=element_text(size=10))
+
 
 balance.4.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$polinv[dat$large==1])), fill = "blue", alpha = .1) + 
   geom_density(aes(x=as.numeric(dat$polinv[dat$large==0])), fill = "red", alpha = .1) + 
   ylab("") + 
   xlab("Political Involvement") + 
-  theme_bw()
-
-balance.5.r=ggplot() + 
-  geom_density(aes(x=as.numeric(dat$ing4[dat$large==1])), fill = "blue", alpha = .1) + 
-  geom_density(aes(x=as.numeric(dat$ing4[dat$large==0])), fill = "red", alpha = .1) + 
-  ylab("") + 
-  xlab("Support for Democracy") + 
-  theme_bw()
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  ylim(limits = c(0, .5)) +
+  theme(axis.title=element_text(size=10))
 
 
 library(cowplot) # install.packages("cowplot")
-balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m,balance.5.m, nrow = 1, align = "v", scale = 1)
-balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r,balance.5.r, nrow = 1, align = "v", scale = 1)
+balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m, nrow = 1, align = "v", scale = 1)
+balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r, nrow = 1, align = "v", scale = 1)
 plot_grid(balance.matched,balance.raw,  nrow = 2)
+
+
+
+
+##########################
+#   Sensivity Analysis
+##########################
+
+
+library(cem)
+
+dat$urban = as.numeric(dat$urban)
+imb.m <- imbalance(group = m.data$large, data = m.data[c("wealth", "exc7", "polinv", "urban", "ed", "munopp", "ing4")], weights = m.data$wt)
+imb.r <- imbalance(group = dat$large, data = dat[c("wealth", "exc7", "polinv", "urban", "ed", "munopp", "ing4")], weights = dat$wt)
+
+imb.m.d=data.frame(
+  L = round(as.numeric(imb.m$tab[,3]),3),
+  Diff = round(as.numeric(imb.m$tab[,1]),3),
+  Sample = rep("Matched",7),
+  Variable = c(c("Wealth Index", 
+                 "Perception Of Corrupution", 
+                 "Political Involvement", 
+                 "Urban", 
+                 "Education Years", 
+                 "Municipal Opposition", 
+                 "Democratic Support"))
+)
+  
+
+imb.r.d=data.frame(
+  L = round(as.numeric(imb.r$tab[,3]),3),
+  Diff = round(as.numeric(imb.r$tab[,1]),3),
+  Sample = rep("Raw",7),
+  Variable = c(c("Wealth Index", 
+                 "Perception Of Corrupution", 
+                 "Political Involvement", 
+                 "Urban", 
+                 "Education Years", 
+                 "Municipal Opposition", 
+                 "Democratic Support"))
+  
+)
+
+imb.d = rbind(imb.m.d, imb.r.d)
+
+
+
+
+
+
+
+
+
+
+
+#######################################
+# O L D   D O N T   U S E   B E L O W 
+#######################################
+
+
+
+
+
+
+
+
 
 ######################################################
 #            C o r r e l o g r a m s                 #
@@ -1279,70 +1338,6 @@ dev.off()
 # For the correlation
 m.dataCorr2 <- data.frame(large, income)
 corr(m.dataCorr2) # -0.2601744
-
-
-
-##########################
-#   Sensivity Analysis
-##########################
-
-large <- as.numeric(m.data$large)
-income <- as.numeric(m.data$income)
-exc7 <- as.numeric(m.data$exc7)
-polinv <- as.numeric(m.data$polinv)
-urban <- as.numeric(m.data$urban)
-logpop = log(m.data$pop)
-logpop <- as.numeric(logpop)
-ed <- as.numeric(m.data$ed)
-munopp <- as.numeric(m.data$munopp)
-vb3 <- as.numeric(m.data$vb3)
-
-
-m.data.imb <- data.frame(large, income, exc7, polinv, urban, logpop, ed, munopp, vb3)
-vars <- c("income", "exc7", "polinv", "urban", "logpop", "ed", "munopp", "vb3")
-library(cem)
-imb <- imbalance(group = m.data$large, data = m.data.imb[vars])
-imb
-
-# l
-l = imb$tab[3] # Extract L Statistic
-st = imb$tab[1] # Extract Diff in Means
-
-# Calling values
-l.income = round(l$L1[1], 3)
-l.exc7 = round(l$L1[2], 3)
-l.polinv = round(l$L1[3], 3)
-l.urban = round(l$L1[4], 3)
-l.logpop = round(l$L1[5], 3)
-l.ed = round(l$L1[6], 3)
-l.munopp = round(l$L1[7], 3)
-l.vb3 = round(l$L1[8], 3)
-
-# Calling values
-st.income = round(st$statistic[1], 3)
-st.exc7 = round(st$statistic[2], 3)
-st.polinv = round(st$statistic[3], 3)
-st.urban = round(st$statistic[4], 3)
-st.logpop = round(st$statistic[5], 3)
-st.ed = round(st$statistic[6], 3)
-st.munopp = round(st$statistic[7], 3)
-st.vb3 = round(st$statistic[8], 3)
-
-
-
-
-
-
-
-
-
-
-#######################################
-# O L D   D O N T   U S E   B E L O W 
-#######################################
-
-
-
 
 
 ##########################
