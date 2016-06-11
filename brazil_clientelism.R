@@ -1210,9 +1210,9 @@ balance.5.r=ggplot() +
 
 
 library(cowplot) # install.packages("cowplot")
-balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m,balance.5.m, nrow = 5, align = "v", scale = 1)
-balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r,balance.5.r, nrow = 5, align = "v", scale = 1)
-plot_grid(balance.matched,balance.raw)
+balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m,balance.5.m, nrow = 1, align = "v", scale = 1)
+balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r,balance.5.r, nrow = 1, align = "v", scale = 1)
+plot_grid(balance.matched,balance.raw,  nrow = 2)
 
 ######################################################
 #            C o r r e l o g r a m s                 #
