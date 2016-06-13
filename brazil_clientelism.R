@@ -226,7 +226,7 @@ gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(m1.m,
                                                         corstr = "independence",
                                                         data = m.data))
 
-
+library(geepack) # install.packages("geepack")
 gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(m2.m, 
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
@@ -235,7 +235,7 @@ gee.dich.m.2.t = extract.geepack(gee.dich.m.2 <- geeglm(m2.m,
                                                         corstr = "independence",
                                                         data = m.data))
 
-
+library(geepack) # install.packages("geepack")
 gee.dich.m.3.t = extract.geepack(gee.dich.m.3 <- geeglm(m3.m,
                                                         family = binomial(link = "logit"), 
                                                         id = municipality, 
@@ -515,17 +515,17 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
 library(texreg)
 screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenreg / texreg
           custom.coef.names = c(# this gotta be before OMIT.COEFF
-            "(Intercept)",
-            "Size of the Poor",
-            "Wealth Index",
-            "Education Years",
-            "Weights",
-            "Size of the Poor * Wealth Index",
-            "Urban",
-            "Municipal Opposition",
-            "Political Involvement",
-            "Support for Democracy",
-            "Perception of Corruption"),
+                                "(Intercept)",
+          "Size of the Poor",
+          "Wealth Index",
+          "Education Years",
+          "weights",
+          "Size of the Poor * Wealth Index",
+          "Urban",
+          "Municipal Opposition",
+          "Political Involvement",
+          "Support for Democracy",
+          "Perception of Corruption"),
           caption = "Likelihood of Clientelism: Generalized Propensity Score Weighted Logit GEE Models",
           omit.coef = "weights",
           ci.force = T,
@@ -574,7 +574,7 @@ screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenr
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][19],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][20]
               )),
-          label = "gee:gps:dich:1",
+          label = "gee:gps:cont:1",
           digits = 2,
           custom.note = "Logit GEE models with clustered std. errors at the municipality level. \n Raw sample weighted by the generalized propensity score. GPS vector omited. \n Continuous treatment variable (no cutoffs were used).\n 95% Confidence intervals in parentheses.",
           fontsize = "scriptsize",
@@ -608,7 +608,7 @@ gee.dich.m.1.s = zelig(m1.m,
                        std.err = "san.se",
                        corstr = "independence",
                        data = m.data,
-                       cite = F))
+                       cite = F)
 
 gee.dich.m.2.s = zelig(m2.m, 
                        model = "logit.gee",
@@ -617,7 +617,7 @@ gee.dich.m.2.s = zelig(m2.m,
                        std.err = "san.se",
                        corstr = "independence",
                        data = m.data,
-                       cite = F))
+                       cite = F)
 
 gee.dich.m.3.s = zelig(m3.m, 
               model = "logit.gee",
@@ -626,7 +626,7 @@ gee.dich.m.3.s = zelig(m3.m,
               std.err = "san.se",
               corstr = "independence",
               data = m.data,
-              cite = F))
+              cite = F)
 
 
 
@@ -723,7 +723,6 @@ plot_grid(large.m1,large.m2,large.m3, nrow = 1, align = "v", scale = 1)
 # library(devtools) # install.packages("devtools")
 # install_github('IQSS/Zelig')
 #library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
-
 
 # simulation
 library(Zelig)
@@ -831,6 +830,14 @@ ggplot() +
 # simulation
 library(Zelig)
 set.seed(602); options(scipen=999)
+
+
+# HERE : fix the interaction term plot
+
+sim(x = setx(gee.dich.m.3.s, large = min(m.data$large), large:polinv),  num=700)
+
+sim(x = setx(gee.dich.m.3.s, large:polinv))
+
 
 
 
