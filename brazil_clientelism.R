@@ -207,14 +207,16 @@ m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
 # m2: contextual
 m2.m = formula(clien1dummy ~ large + wealth + urban + munopp)
 # m3: political
-m3.m = formula(clien1dummy ~ large + wealth + polinv + munopp + ing4 + exc7)
+m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + munopp + ing4 + exc7 + vb3)
 #### 
 m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
 # m2: contextual
 m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + munopp + weights)
 # m3: political
-m3.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + polinv + munopp + ing4 + exc7 + weights)
+m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + munopp + ing4 + exc7 + vb3 + weights)
 ####### formulas
+
+
 
 # models
 library(geepack) # install.packages("geepack")
@@ -368,10 +370,10 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
 cem.plot = data.frame(
   Coefficients = as.numeric(c(gee.dich.m.1$"coefficients", gee.dich.m.2$"coefficients", gee.dich.m.3$"coefficients")),
   Covariate = as.character(c(
-    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Poverty Density*Wealth Index", 
+    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Poverty Density* \n Wealth Index", 
     "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", 
-    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy", "Perception of Corruption")),
-  Model = as.character(c(rep("Economic", 5), rep("Contextual", 5), rep("Political", 7))),
+    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Party Id.", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
+  Model = as.character(c(rep("Economic", 5), rep("Contextual", 5), rep("Political", 10))),
   se = c(as.numeric(c(sqrt(diag(gee.dich.m.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.dich.m.2$geese$vbeta))), as.numeric(sqrt(diag(gee.dich.m.3$geese$vbeta)))),
   upper = c(as.numeric(gee.dich.m.1$"coefficients")  + 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") + 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
@@ -379,7 +381,7 @@ cem.plot = data.frame(
   lower = c(as.numeric(gee.dich.m.1$"coefficients")  - 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") - 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
             as.numeric(gee.dich.m.3$"coefficients") - 1.96*sqrt(diag(gee.dich.m.3$geese$vbeta))),
-  Balancing = rep(as.character("CEM Matching"), as.numeric(5+5+7))
+  Balancing = rep(as.character("CEM Matching"), as.numeric(5+5+10))
 )
 
 
@@ -388,11 +390,10 @@ cem.plot = data.frame(
 gps.plot = data.frame(
   Coefficients = as.numeric(c(gee.cont.rgps.1$"coefficients", gee.cont.rgps.2$"coefficients", gee.cont.rgps.3$"coefficients")),
   Covariate = as.character(c(
-    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Weights", "Poverty Density*Wealth Index", 
+    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Weights", "Poverty Density * \n Wealth Index", 
     "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", "Weights", 
-    "Intercept", "Poverty Density", "Wealth Index", "Political Involvement Index", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Weights"
-    )),
-  Model = as.character(c(rep("Economic", 6), rep("Contextual", 6), rep("Political", 8))),
+    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Party Id.", "Weights", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
+  Model = as.character(c(rep("Economic", 6), rep("Contextual", 6), rep("Political", 11))),
   se = c(as.numeric(c(sqrt(diag(gee.cont.rgps.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.cont.rgps.2$geese$vbeta))), as.numeric(sqrt(diag(gee.cont.rgps.3$geese$vbeta)))),
   upper = c(as.numeric(gee.cont.rgps.1$"coefficients")  + 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") + 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
@@ -400,7 +401,7 @@ gps.plot = data.frame(
   lower = c(as.numeric(gee.cont.rgps.1$"coefficients")  - 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
             as.numeric(gee.cont.rgps.3$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.3$geese$vbeta))),
-  Balancing = rep(as.character("GPS Weighting"), as.numeric(6+6+8))
+  Balancing = rep(as.character("GPS Weighting"), as.numeric(6+6+11))
 )
 
 # cbind these two datasets
@@ -423,7 +424,7 @@ ggplot(gee.plot, aes(
   shape = Balancing,
   position="dodge"
 )) +
-  geom_pointrange(position=position_dodge(width=0.65), fill = NA) + 
+  geom_pointrange(position=position_dodge(width=0.8), fill = NA) + 
   geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
   coord_flip() + 
   xlab("") + 
@@ -448,21 +449,22 @@ ggplot(gee.plot, aes(
 library(texreg)
 screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texreg
           custom.coef.names = c(# this gotta be before OMIT.COEFF
-                      "(Intercept)",
-           "Size of the Poor",
-           "Wealth Index",
-           "Education Years",
-           "Size of the Poor * Wealth Index",
-           "Urban",
-           "Municipal Opposition",
-           "Political Involvement",
-           "Support for Democracy",
-           "Perception of Corruption"),
+          "(Intercept)",
+          "Size of the Poor",
+          "Wealth Index",
+          "Education Years",
+          "Size of the Poor * Wealth Index",
+          "Urban",
+          "Municipal Opposition",
+          "Political Involvement",
+          "Support for Democracy",
+          "Perception of Corruption",
+          "Party Id.",
+          "Political Involvement * Wealth Index",
+          "Political Involvement * Size of the Poor"),
           caption = "Likelihood of Clientelism: Logit GEE Models with Coarsened Exact Match Sample",
           label = "gee:cem:dich:1",
           ci.force = T,
-          override.pvalues = list(c(1,1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1,1)),
-          override.se = list(c(1,1,1,1,1), c(1,1,1,1,1), c(1,1,1,1,1,1,1)),
           override.ci.low = list(
             c(cem.plot$lower[cem.plot$Balancing=="CEM Matching"][1],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][2],
@@ -480,7 +482,10 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][14],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][15],
               cem.plot$lower[cem.plot$Balancing=="CEM Matching"][16],
-              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][17])),
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][17],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][18],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][19],
+              cem.plot$lower[cem.plot$Balancing=="CEM Matching"][20])),
           override.ci.up =  list(
             c(cem.plot$upper[cem.plot$Balancing=="CEM Matching"][1],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][2],
@@ -498,8 +503,10 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][14],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][15],
               cem.plot$upper[cem.plot$Balancing=="CEM Matching"][16],
-              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][17]
-              )),
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][17],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][18],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][19],
+              cem.plot$upper[cem.plot$Balancing=="CEM Matching"][20])),
           stars = numeric(0),
           custom.model.names = c("Economic", "Contextual", "Political"),
           digits = 2,
@@ -515,17 +522,20 @@ screenreg(list(gee.dich.m.1.t,gee.dich.m.2.t,gee.dich.m.3.t), # screenreg / texr
 library(texreg)
 screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenreg / texreg
           custom.coef.names = c(# this gotta be before OMIT.COEFF
-                                "(Intercept)",
+          "(Intercept)",
           "Size of the Poor",
           "Wealth Index",
           "Education Years",
-          "weights",
-          "Size of the Poor * Wealth Index",
-          "Urban",
-          "Municipal Opposition",
-          "Political Involvement",
-          "Support for Democracy",
-          "Perception of Corruption"),
+           "weights",
+             "Size of the Poor * Wealth Index",
+             "Urban",
+             "Municipal Opposition",
+             "Political Involvement",
+             "Support for Democracy",
+             "Perception of Corruption",
+          "Party Id.",
+          "Political Involvement * Wealth Index",
+          "Political Involvement * Size of the Poor"),
           caption = "Likelihood of Clientelism: Generalized Propensity Score Weighted Logit GEE Models",
           omit.coef = "weights",
           ci.force = T,
@@ -551,7 +561,10 @@ screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenr
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][17],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][18],
               gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][19],
-              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][20])),
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][20],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][21],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][22],
+              gps.plot$lower[gps.plot$Balancing=="GPS Weighting"][23])),
           override.ci.up =  list(
             c(gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][1],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][2],
@@ -572,8 +585,10 @@ screenreg(list(gee.cont.rgps.1.t,gee.cont.rgps.2.t,gee.cont.rgps.3.t), # screenr
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][17],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][19],
               gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][19],
-              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][20]
-              )),
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][20],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][21],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][22],
+              gps.plot$upper[gps.plot$Balancing=="GPS Weighting"][23])),
           label = "gee:gps:cont:1",
           digits = 2,
           custom.note = "Logit GEE models with clustered std. errors at the municipality level. \n Raw sample weighted by the generalized propensity score. GPS vector omited. \n Continuous treatment variable (no cutoffs were used).\n 95% Confidence intervals in parentheses.",
@@ -670,7 +685,7 @@ large.m1=ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.1.m.zelig.low
     panel.margin = unit(0, "lines"), 
     axis.title.x = element_text(colour = "white")) + 
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
-  xlim(.1, .4) +  coord_fixed(ratio = 0.4/45) +
+  xlim(0, .4) +  ylim(0,20) + coord_fixed(ratio = 0.4/45) +
   guides(fill=FALSE)
 
 large.m2=ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.2.m.zelig.low, alpha = .2) + 
@@ -683,18 +698,18 @@ large.m2=ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.2.m.zelig.low
     panel.margin = unit(0, "lines"),
     axis.title.x = element_text(colour = "black")) + 
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) + 
-  xlim(.1, .4) +  coord_fixed(ratio = 0.4/45) +
+  xlim(0, .4) +  ylim(0,20) + coord_fixed(ratio = 0.4/45) +
   guides(fill=FALSE)
 
-large.m3=ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.3.m.zelig.low, alpha = .2) + 
+large.m3= ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.3.m.zelig.low, alpha = .2) + 
   geom_density(aes(x=High, fill="High"), data= gee.3.m.zelig.high, alpha = .2) + 
-  xlab("NULL") + ylab("") + xlab("Expected Value \n of Clientelism") +
+  ylab("") + xlab("Expected Value \n of Clientelism") +
   theme_bw() + 
   ggtitle("Political") +
-  xlim(.1, .4) +  coord_fixed(ratio = 0.4/45) +
+  xlim(0, .4) +  ylim(0,20) + coord_fixed(ratio = 0.4/45) +
   theme(
     legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
-    legend.position=c(-.9, -.35),
+    legend.position=c(-.9, -.85),
     legend.key.height=unit(0.5,"line"),
     legend.key.width=unit(0.5,"line"),
     panel.margin = unit(0, "lines"),
@@ -729,9 +744,10 @@ library(Zelig)
 set.seed(602); options(scipen=999)
 
 
+
 # low 
 gee.dich.m.1.s.low = data.frame(
-  sim(x = setx(gee.dich.m.1.s, 
+  sim(x = setx(gee.dich.m.1.s, cond = TRUE,
              large = min(m.data$large), 
              wealth = min(m.data$wealth):max(m.data$wealth)), 
     num=300)$getqi(qi="ev", xvalue="range"))
@@ -740,7 +756,7 @@ colnames(gee.dich.m.1.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):ma
 
 # high
 gee.dich.m.1.s.high = data.frame(
-  sim(x = setx(gee.dich.m.1.s, 
+  sim(x = setx(gee.dich.m.1.s, cond = TRUE,
                large = max(m.data$large), 
                wealth = min(m.data$wealth):max(m.data$wealth)),num=300)$getqi(qi="ev", xvalue="range"))
 colnames(gee.dich.m.1.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
@@ -755,56 +771,56 @@ library(ggplot2)
 wealth.range = as.numeric(min(m.data$wealth):max(m.data$wealth))
 set.seed(602)
 ggplot() + 
-  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.low[1], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) + 
-  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.low[2], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.low[3], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.low[4], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.low[5], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.low[6], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.low[7], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.low[8], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.low[9], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.low[10], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.low[11], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.low[12], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.low[13], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.low[14], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.low[15], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.low[16], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.low[17], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.low[18], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.low[19], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.low[20], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.low[21], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.low[22], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.low[23], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.low[24], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.low[25], colour = "Low"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.high[1], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) + 
-  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.high[2], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.high[3], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.high[4], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.high[5], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.high[6], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.high[7], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.high[8], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.high[9], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.high[10], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.high[11], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.high[12], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.high[13], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.high[14], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.high[15], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.high[16], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.high[17], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.high[18], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.high[19], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.high[20], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.high[21], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.high[22], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.high[23], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.high[24], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.high[25], colour = "High"), position = position_jitter(width = 5), alpha = 1/10) + 
+  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
+  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.low[8], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.low[9], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.low[10], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.low[11], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.low[12], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.low[13], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.low[14], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.low[15], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.low[16], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.low[17], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.low[18], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.low[19], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.low[20], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.low[21], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.low[22], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.low[23], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.low[24], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.low[25], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
+  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.high[8], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.high[9], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.high[10], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.high[11], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.high[12], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.high[13], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.high[14], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.high[15], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.high[16], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.high[17], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.high[18], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.high[19], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.high[20], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.high[21], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.high[22], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.high[23], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.high[24], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.high[25], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
   xlab("Wealth Index") + ylab("Expected Value of Clientelism") +  theme_bw() + labs(colour = "Density of the Poor") + theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) +
   theme(
     legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
@@ -822,6 +838,7 @@ ggplot() +
 
 
 
+
 ##########################
 #  LARGE * POLINV: gee.dich.m.3.s
 ##########################
@@ -832,19 +849,10 @@ library(Zelig)
 set.seed(602); options(scipen=999)
 
 
-# HERE : fix the interaction term plot
-
-sim(x = setx(gee.dich.m.3.s, large = min(m.data$large), large:polinv),  num=700)
-
-sim(x = setx(gee.dich.m.3.s, large:polinv))
-
-
-
-
 # low 
 gee.dich.m.3.s.low = data.frame(
   sim(
-    x = setx(gee.dich.m.3.s, 
+    x = setx(gee.dich.m.3.s, cond = TRUE,
              large = min(m.data$large), 
              polinv = min(m.data$polinv):max(m.data$polinv)), 
     num=700)$getqi(qi="ev", xvalue="range"))
@@ -854,7 +862,7 @@ colnames(gee.dich.m.3.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):ma
 # high
 gee.dich.m.3.s.high = data.frame(
   sim(
-    x = setx(gee.dich.m.3.s, 
+    x = setx(gee.dich.m.3.s, cond = TRUE,
                large = max(m.data$large), 
                polinv = min(m.data$polinv):max(m.data$polinv)), 
       num=700)$getqi(qi="ev", xvalue="range")) ; 
@@ -1038,6 +1046,36 @@ stargazer(dat.s,
           table.placement = "h",
           notes.align = "c"
 )
+
+
+
+
+# Distribution of Individuals by Municipality
+
+## df of matched set
+municipality.m = data.frame(
+  Municipality = as.factor(m.data$municipality),
+  Sample = c(rep("Matched", length(m.data$municipality))
+             )
+)
+
+## df of raw set
+municipality.r = data.frame(
+  Municipality = as.factor(dat$municipality),
+  Sample = c(rep("Raw", length(dat$municipality))
+  )
+)
+
+## rbinding the two of them
+municipality.d = data.frame(rbind(municipality.m, municipality.r))
+
+
+## plot
+library(ggplot2)
+ggplot(municipality.d, aes(factor(Municipality), fill = Sample)) + geom_bar() + coord_flip() +
+  xlab("Municipality") + 
+  ylab("Frequency") + 
+  theme_bw()
 
 
 
@@ -1233,7 +1271,7 @@ imb.m.d=data.frame(
   Diff = round(as.numeric(imb.m$tab[,1]),3),
   Sample = rep("Matched",7),
   Variable = c(c("Wealth Index", 
-                 "Perception Of Corrupution", 
+                 "Perception Of Corruption", 
                  "Political Involvement", 
                  "Urban", 
                  "Education Years", 
@@ -1247,7 +1285,7 @@ imb.r.d=data.frame(
   Diff = round(as.numeric(imb.r$tab[,1]),3),
   Sample = rep("Raw",7),
   Variable = c(c("Wealth Index", 
-                 "Perception Of Corrupution", 
+                 "Perception Of Corruption", 
                  "Political Involvement", 
                  "Urban", 
                  "Education Years", 
