@@ -1271,7 +1271,13 @@ EDITORS COMMENTS:
 # dont say the poor live sorrounded by more poor // say that in high density --> spillovers are more effective since (1) there more poor, (2) less middle income / rich folks (in line with Shapiro). // Related to this: Is this simply a matter of maximizing finite resources, and parties willingly accept certain inefficiencies at the micro level when targeting clusters of poor people, given the difficulties of targeting at the individual level? (from reviewer 4).
 
 
+# Why I excluded constitutive terms of the interaction terms:
+## Brambor2005: 72. ``he coefficient on the constitutive term X must not be interpreted as the average effect of a change in X on Y as it can in a linear-additive regression model. As the above discussion should have made clear, the coefficient on X only captures the effect of X on Y when Z is zero. [SEE HERE] Similarly, it should be obvious that the coefficient on Z only captures the effect of Z on Y when X is zero.9 It is, therefore, incorrect to say that a positive and significant coefficient on X (or Z) indicates that an increase in X (or Z) is expected to lead to an increase in Y'' This indicates why either SIZE OF THE POOR as a constitutive term AND ANU OTHER CONSTITUTIVE TERM cannot be interpreted alone.
 
+## Brambor2005: 76 ``often impossible to evaluate conditional hypotheses using only the information provided in traditional results tables''
+
+## Brambor2005:74 The analyst cannot even infer whether X has a meaningful conditional effect on Y from
+the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
 
 
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
