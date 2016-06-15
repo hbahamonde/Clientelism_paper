@@ -910,96 +910,95 @@ ggplot() +
 ######################################################
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/m.data.RData")
+library(car)
 
 
 
-# Subset Data for Descriptive Stats Table
+########################################################
+# Descriptive Stats Matched Set
 
 # matched sample
-m.dat.clien1dummy <- m.data$clien1dummy 
-m.dat.clien1dummy <- m.data$clien1dummy 
-m.dat.large <- m.data$large 
-m.dat.polinv <- m.data$polinv 
-m.dat.exc7 <- m.data$exc7 
-m.dat.vb3 <- m.data$vb3 
-m.dat.ed <- m.data$ed 
-m.dat.income <- m.data$income 
-m.dat.munopp <- m.data$munopp
-m.dat.pop = m.data$pop
-m.dat.logpop = log(m.dat.pop)
-m.dat.urban <- m.data$urban
-m.dat.urban <- as.numeric(m.dat.urban)
-m.dat.urban <- recode(m.dat.urban, "1 = 0 ; 2 = 1")
-m.dat.polinv <-  m.data$polinv
-m.dat.ed <- m.data$ed
-m.dat.ed <- as.numeric(m.dat.ed)
-m.dat.ed <- recode(m.dat.ed, "
-                   1 = 0 ; 
-                   2 = 1 ; 
-                   3 = 2 ; 
-                   4 = 3 ;
-                   5 = 4 ;
-                   6 = 5 ;
-                   7 = 6 ;
-                   8 = 7 ;
-                   9 = 8 ;
-                   10 = 9 ;
-                   11 = 10 ;
-                   12 = 11 ;
-                   13 = 12 ;
-                   14 = 13 ;
-                   15 = 14 ;
-                   16 = 15 ;
-                   17 = 16")
+m.data.clien1dummy <- m.data$clien1dummy 
+m.data.clien1dummy <- as.numeric(m.data.clien1dummy)
+m.data.clien1dummy <- recode(m.data.clien1dummy, "1 = 0 ; 2 = 1")
 
-m.data.s <- data.frame(m.dat.clien1dummy, m.dat.large, m.dat.income, m.dat.exc7, m.dat.polinv, m.dat.urban, m.dat.logpop, m.dat.ed, m.dat.munopp, m.dat.vb3)
 
-# Descriptive Stats Matched Set
+
+m.data.large <- m.data$large 
+m.data.wealth <- m.data$wealth 
+m.data.munopp <- m.data$munopp
+m.data.polinv <- m.data$polinv 
+
+m.data.exc7 <- m.data$exc7 
+m.data.ing4 <- m.data$ing4
+m.data.vb3 <- m.data$vb3 
+
+m.data.urban <- m.data$urban
+m.data.urban <- as.numeric(m.data.urban)
+m.data.urban <- recode(m.data.urban, "1 = 0 ; 2 = 1")
+
+m.data.ed <- m.data$ed
+m.data.ed <- as.numeric(m.data.ed)
+m.data.ed <- recode(m.data.ed, "
+                    1 = 0 ; 
+                    2 = 1 ; 
+                    3 = 2 ; 
+                    4 = 3 ;
+                    5 = 4 ;
+                    6 = 5 ;
+                    7 = 6 ;
+                    8 = 7 ;
+                    9 = 8 ;
+                    10 = 9 ;
+                    11 = 10 ;
+                    12 = 11 ;
+                    13 = 12 ;
+                    14 = 13 ;
+                    15 = 14 ;
+                    16 = 15 ;
+                    17 = 16")
+
+dat.m <- data.frame(m.data.clien1dummy, m.data.large, m.data.wealth, m.data.munopp, m.data.polinv, m.data.exc7, m.data.ing4, m.data.vb3, m.data.urban, m.data.ed)
+
+
 library(stargazer, quietly = T)
-stargazer(m.data.s, 
+stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
           label = "sumtab:1",
           type = "text",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c(
-            "Clientelism",
-            "High Density",
-            "Income",
-            "Perception of Corruption",
-            "Political Involvement Index",
-            "Urban",
-            "Population (ln)",
-            "Years of Schooling",
-            "Municipal Opposition",
-            "Political Id"),
+          covariate.labels=c("Clientelism", "High Density", "Wealth Index", "Municipal Opposition", "Political Involvement", "Perception of Corruption", "Support for Democracy", "Party Id.", "Urban", "Years of Education"),
           table.placement = "h",
           notes.align = "c"
 )
 
+
+########################################################
 # Descriptive Stats Raw Set
-
-
-
-# Subset Data for Descriptive Stats Table
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 # whole sample
 dat.clien1dummy <- dat$clien1dummy 
+dat.clien1dummy <- as.numeric(dat.clien1dummy)
+dat.clien1dummy <- recode(dat.clien1dummy, "1 = 0 ; 2 = 1")
+
+
+
 dat.large <- dat$large 
-dat.polinv <- dat$polinv 
-dat.exc7 <- dat$exc7 
-dat.vb3 <- dat$vb3 
-dat.ed <- dat$ed 
-dat.income <- dat$income 
+dat.wealth <- dat$wealth 
 dat.munopp <- dat$munopp
-dat.pop = dat$pop
-dat.logpop = log(dat.pop)
+dat.polinv <- dat$polinv 
+
+dat.exc7 <- dat$exc7 
+dat.ing4 <- dat$ing4
+dat.vb3 <- dat$vb3 
+
 dat.urban <- dat$urban
 dat.urban <- as.numeric(dat.urban)
 dat.urban <- recode(dat.urban, "1 = 0 ; 2 = 1")
-dat.polinv <-  dat$polinv
+
 dat.ed <- dat$ed
 dat.ed <- as.numeric(dat.ed)
 dat.ed <- recode(dat.ed, "
@@ -1021,35 +1020,24 @@ dat.ed <- recode(dat.ed, "
                  16 = 15 ;
                  17 = 16")
 
-dat.s <- data.frame(dat.clien1dummy, dat.large, dat.income, dat.exc7, dat.polinv, dat.urban, dat.logpop, dat.ed, dat.munopp, dat.vb3)
+dat.r <- data.frame(dat.clien1dummy, dat.large, dat.wealth, dat.munopp, dat.polinv, dat.exc7, dat.ing4, dat.vb3, dat.urban, dat.ed)
 
 
 library(stargazer, quietly = T)
-stargazer(dat.s, 
+stargazer(dat.r, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
           label = "sumtab:2",
           type = "text",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c(
-            "Clientelism",
-            "High Density",
-            "Income",
-            "Perception of Corruption",
-            "Political Involvement Index",
-            "Urban",
-            "Population (ln)",
-            "Years of Schooling",
-            "Municipal Opposition",
-            "Political Id"),
+          covariate.labels=c("Clientelism", "High Density", "Wealth Index", "Municipal Opposition", "Political Involvement", "Perception of Corruption", "Support for Democracy", "Party Id.", "Urban", "Years of Education"),
           table.placement = "h",
           notes.align = "c"
 )
 
 
-
-
+############################################################
 # Distribution of Individuals by Municipality
 
 ## df of matched set
@@ -1077,10 +1065,87 @@ ggplot(municipality.d, aes(factor(Municipality), fill = Sample)) + geom_bar() + 
   ylab("Frequency") + 
   theme_bw()
 
+############################################################
+# Distribution of Individuals by High/Low COnditions and municipality
+
+## HIGH df
+high.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 1]),
+  Density = c(rep("High", length(m.data$municipality[as.numeric(m.data$large == 1)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 1]
+)
+
+## LOW df
+low.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 0]),
+  Density = c(rep("Low", length(m.data$municipality[as.numeric(m.data$large == 0)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 0]
+)
+
+## rbinding the two of them
+density.d = data.frame(rbind(high.d, low.d))
 
 
+## plot
+library(ggplot2)
+ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+  geom_bar() + 
+  geom_point(data=density.d, 
+             position = position_jitter(width = 0.5), 
+             size = I(1.5),
+             aes(
+    x=as.factor(Municipality), 
+    y= abs(min(m.data$wealth))+Wealth, 
+    alpha=Wealth)) + 
+  coord_flip() +
+  xlab("Municipality") + 
+  ylab("Frequency") + 
+  theme_bw() +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 
-## Distribution Outcome Variable Binary Outcome
+
+############################################################
+# Distribution of Individuals by High/Low COnditions and Wealth
+
+## plot
+library(ggplot2)
+
+### Matched Set
+density.wealth.m= ggplot() + geom_point(
+  aes(
+    y=as.factor(m.data$large), 
+    x=m.data$wealth, 
+    colour=m.data$large), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Matched Set") + 
+  ylab("Density of the Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(legend.position="none") +
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+### Raw Set
+density.wealth.r= ggplot() + geom_point(
+  aes(
+    y=as.factor(dat$large), 
+    x=dat$wealth, 
+    colour=dat$large), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Raw Set") + 
+  ylab("Density of the Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(legend.position="none") +
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
+
+
+  
+
+############################################################
+# Distribution Outcome Variable Binary Outcome
 m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
 library(ggplot2)
@@ -1100,7 +1165,7 @@ ggplot(data=m.data, aes(x=clientelism)) +
   theme_bw()
 
 
-
+############################################################
 ## Distribution treatment var
 # Labels
 ggplot.labels1 <- data.frame(

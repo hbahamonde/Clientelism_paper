@@ -1261,9 +1261,14 @@ EDITORS COMMENTS:
 - what targeting is and how it is done: USE Szwarcberg and Weitz-Shapiro.
 -  Reader #4 (effectiveness of clientelism): Your study can add something to the emerging literature our colleague cites that points to some of the limitations of clientelist politics.
 
+# this is a paper about vote buying
+
+# contexts that are clientelism-inducing
 
 
+# effectiveness gap”  between clientelistic effort and payoff in Latin American regimes (Kitschelt and Altamirano 2015), subnational data indicating that clientelistic parties often shy away from such under-the-table tactics in certain constituencies (Weitz-Shapiro 2014), and micro level findings suggesting that some citizens are fundamentally against, or at least unaffected by, clientelistic strategies (Carlin and Moseley 2015; Imai, Park, and Green 2014; Ocantos et al. 2013; Vicente 2014). Yet the author(s) continues to make strong claims for the effectiveness of clientelism throughout. First, this probably isn’t appropriate given that the analysis presented here says nothing about the effectiveness of vote buying, per se.  wonder how this paper fits into a larger narrative about the failure of clientelism in 21st century Latin America?
 
+# dont say the poor live sorrounded by more poor // say that in high density --> spillovers are more effective since (1) there more poor, (2) less middle income / rich folks (in line with Shapiro). // Related to this: Is this simply a matter of maximizing finite resources, and parties willingly accept certain inefficiencies at the micro level when targeting clusters of poor people, given the difficulties of targeting at the individual level? (from reviewer 4).
 
 
 
