@@ -217,7 +217,6 @@ m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + ing
 ####### formulas
 
 
-
 # models
 library(geepack) # install.packages("geepack")
 gee.dich.m.1.t = extract.geepack(gee.dich.m.1 <- geeglm(m1.m,
@@ -361,6 +360,8 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
 #####################################################################
 ### C O E F F I C I E N T   P L O T 
 #####################################################################
+
+
 
 # 90% CIs: 1.645
 # 95% CIs: 1.96
@@ -519,9 +520,7 @@ political.plot = ggplot(political.d, aes(
 
 
 library(cowplot) # install.packages("cowplot")
-plot_grid(political.plot, economic.plot, contextual.plot,  nrow = 1)
-
-
+plot_grid(political.plot, economic.plot, contextual.plot,  nrow = 3)
 
 #####################################################################
 ### T A B L E S :   G P S   A N D   M A T C H E D   S A M P L E S 
@@ -849,10 +848,6 @@ gee.dich.m.1.s.high = data.frame(
 colnames(gee.dich.m.1.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
 
 
-
-
-
-# plot ##  geom_point also works
 # plot ##  geom_line also works
 library(ggplot2)
 wealth.range = as.numeric(min(m.data$wealth):max(m.data$wealth))
@@ -920,11 +915,234 @@ ggplot() +
                                            title.position = "left",
                                            direction = "horizontal"))
 
+##################################################
+## normal plot
+### low
+df.low = data.frame(
+  mean = c(
+    mean(gee.dich.m.1.s.low$`1`),
+    mean(gee.dich.m.1.s.low$`2`),
+    mean(gee.dich.m.1.s.low$`3`),
+    mean(gee.dich.m.1.s.low$`4`),
+    mean(gee.dich.m.1.s.low$`5`),
+    mean(gee.dich.m.1.s.low$`6`),
+    mean(gee.dich.m.1.s.low$`7`),
+    mean(gee.dich.m.1.s.low$`8`),
+    mean(gee.dich.m.1.s.low$`9`),
+    mean(gee.dich.m.1.s.low$`10`),
+    mean(gee.dich.m.1.s.low$`11`),
+    mean(gee.dich.m.1.s.low$`12`),
+    mean(gee.dich.m.1.s.low$`13`),
+    mean(gee.dich.m.1.s.low$`14`),
+    mean(gee.dich.m.1.s.low$`15`),
+    mean(gee.dich.m.1.s.low$`16`),
+    mean(gee.dich.m.1.s.low$`17`),
+    mean(gee.dich.m.1.s.low$`18`),
+    mean(gee.dich.m.1.s.low$`19`),
+    mean(gee.dich.m.1.s.low$`20`),
+    mean(gee.dich.m.1.s.low$`21`),
+    mean(gee.dich.m.1.s.low$`22`),
+    mean(gee.dich.m.1.s.low$`23`),
+    mean(gee.dich.m.1.s.low$`24`),
+    mean(gee.dich.m.1.s.low$`25`)
+  ),
+  Wealth = min(m.data$wealth):max(m.data$wealth),
+  Density = rep("Low", ncol(gee.dich.m.1.s.low))
+  )
+
+## CI
+
+CI(gee.dich.m.1.s.low$`22`)
+CI(gee.dich.m.1.s.low$`23`)
+
+
+### high
+df.high = data.frame(
+  mean = c(
+    mean(gee.dich.m.1.s.high$`1`),
+    mean(gee.dich.m.1.s.high$`2`),
+    mean(gee.dich.m.1.s.high$`3`),
+    mean(gee.dich.m.1.s.high$`4`),
+    mean(gee.dich.m.1.s.high$`5`),
+    mean(gee.dich.m.1.s.high$`6`),
+    mean(gee.dich.m.1.s.high$`7`),
+    mean(gee.dich.m.1.s.high$`8`),
+    mean(gee.dich.m.1.s.high$`9`),
+    mean(gee.dich.m.1.s.high$`10`),
+    mean(gee.dich.m.1.s.high$`11`),
+    mean(gee.dich.m.1.s.high$`12`),
+    mean(gee.dich.m.1.s.high$`13`),
+    mean(gee.dich.m.1.s.high$`14`),
+    mean(gee.dich.m.1.s.high$`15`),
+    mean(gee.dich.m.1.s.high$`16`),
+    mean(gee.dich.m.1.s.high$`17`),
+    mean(gee.dich.m.1.s.high$`18`),
+    mean(gee.dich.m.1.s.high$`19`),
+    mean(gee.dich.m.1.s.high$`20`),
+    mean(gee.dich.m.1.s.high$`21`),
+    mean(gee.dich.m.1.s.high$`22`),
+    mean(gee.dich.m.1.s.high$`23`),
+    mean(gee.dich.m.1.s.high$`24`),
+    mean(gee.dich.m.1.s.high$`25`)
+  ),
+  Wealth = min(m.data$wealth):max(m.data$wealth),
+  Density = rep("High", ncol(gee.dich.m.1.s.high))
+)
+
+### combined two df's
+wealth.d= rbind(df.high, df.low)
+
+### get upper lower bounds
+std <- function(x) sd(x)/sqrt(length(x))
+wealth.d$upper = wealth.d$mean + qnorm(.95) * std(wealth.d$mean)
+wealth.d$lower = wealth.d$mean + qnorm(.05) * std(wealth.d$mean)
+
+
+### plot
+ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Density)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) +
+  xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  labs(colour = "Density of the Poor") + 
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) + 
+  scale_fill_continuous(guide = guide_legend(title.position = "left",
+                                           direction = "horizontal"))
+
+##########################
+#  LARGE * MUNOPP: gee.dich.m.2.s
+##########################
+
+
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+# low 
+gee.dich.m.2.s.low = data.frame(
+  sim(
+    x = setx(gee.dich.m.2.s, cond = TRUE,
+             large = min(m.data$large), 
+             large:munopp,
+             munopp = min(m.data$munopp):max(m.data$munopp)), 
+    num=200)$getqi(qi="ev", xvalue="range"))
+
+colnames(gee.dich.m.2.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # low
 
 
 
+# high 
+gee.dich.m.2.s.high = data.frame(
+  sim(
+    x = setx(gee.dich.m.2.s, cond = TRUE,
+             large = max(m.data$large), 
+             large:munopp,
+             munopp = min(m.data$munopp):max(m.data$munopp)), 
+    num=200)$getqi(qi="ev", xvalue="range"))
 
+colnames(gee.dich.m.2.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # low
 
+## plot
+library(ggplot2)
+munopp.range = as.numeric(min(m.data$munopp):max(m.data$munopp))
+set.seed(602)
+ggplot() + 
+  geom_line(aes(x=munopp.range[1], y=gee.dich.m.2.s.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[2], y=gee.dich.m.2.s.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[3], y=gee.dich.m.2.s.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[4], y=gee.dich.m.2.s.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[5], y=gee.dich.m.2.s.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[6], y=gee.dich.m.2.s.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[7], y=gee.dich.m.2.s.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[8], y=gee.dich.m.2.s.low[8], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[9], y=gee.dich.m.2.s.low[9], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[10], y=gee.dich.m.2.s.low[10], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[11], y=gee.dich.m.2.s.low[11], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[12], y=gee.dich.m.2.s.low[12], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[13], y=gee.dich.m.2.s.low[13], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[14], y=gee.dich.m.2.s.low[14], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[15], y=gee.dich.m.2.s.low[15], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[16], y=gee.dich.m.2.s.low[16], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[17], y=gee.dich.m.2.s.low[17], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[18], y=gee.dich.m.2.s.low[18], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[19], y=gee.dich.m.2.s.low[19], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[20], y=gee.dich.m.2.s.low[20], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[21], y=gee.dich.m.2.s.low[21], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[22], y=gee.dich.m.2.s.low[22], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[23], y=gee.dich.m.2.s.low[23], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[24], y=gee.dich.m.2.s.low[24], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[25], y=gee.dich.m.2.s.low[25], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[26], y=gee.dich.m.2.s.low[26], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[27], y=gee.dich.m.2.s.low[27], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[28], y=gee.dich.m.2.s.low[28], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[29], y=gee.dich.m.2.s.low[29], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[30], y=gee.dich.m.2.s.low[30], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[31], y=gee.dich.m.2.s.low[31], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[32], y=gee.dich.m.2.s.low[32], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[33], y=gee.dich.m.2.s.low[33], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[34], y=gee.dich.m.2.s.low[34], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[35], y=gee.dich.m.2.s.low[35], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[36], y=gee.dich.m.2.s.low[36], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[37], y=gee.dich.m.2.s.low[37], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[38], y=gee.dich.m.2.s.low[38], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[39], y=gee.dich.m.2.s.low[39], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[40], y=gee.dich.m.2.s.low[40], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[41], y=gee.dich.m.2.s.low[41], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[1], y=gee.dich.m.2.s.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[2], y=gee.dich.m.2.s.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[3], y=gee.dich.m.2.s.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[4], y=gee.dich.m.2.s.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[5], y=gee.dich.m.2.s.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[6], y=gee.dich.m.2.s.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[7], y=gee.dich.m.2.s.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[8], y=gee.dich.m.2.s.high[8], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[9], y=gee.dich.m.2.s.high[9], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[10], y=gee.dich.m.2.s.high[10], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[11], y=gee.dich.m.2.s.high[11], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[12], y=gee.dich.m.2.s.high[12], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[13], y=gee.dich.m.2.s.high[13], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[14], y=gee.dich.m.2.s.high[14], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[15], y=gee.dich.m.2.s.high[15], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[16], y=gee.dich.m.2.s.high[16], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[17], y=gee.dich.m.2.s.high[17], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[18], y=gee.dich.m.2.s.high[18], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[19], y=gee.dich.m.2.s.high[19], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[20], y=gee.dich.m.2.s.high[20], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[21], y=gee.dich.m.2.s.high[21], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[22], y=gee.dich.m.2.s.high[22], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[23], y=gee.dich.m.2.s.high[23], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[24], y=gee.dich.m.2.s.high[24], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[25], y=gee.dich.m.2.s.high[25], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[26], y=gee.dich.m.2.s.high[26], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[27], y=gee.dich.m.2.s.high[27], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[28], y=gee.dich.m.2.s.high[28], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[29], y=gee.dich.m.2.s.high[29], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[30], y=gee.dich.m.2.s.high[30], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[31], y=gee.dich.m.2.s.high[31], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[32], y=gee.dich.m.2.s.high[32], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[33], y=gee.dich.m.2.s.high[33], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[34], y=gee.dich.m.2.s.high[34], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[35], y=gee.dich.m.2.s.high[35], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[36], y=gee.dich.m.2.s.high[36], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[37], y=gee.dich.m.2.s.high[37], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[38], y=gee.dich.m.2.s.high[38], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[39], y=gee.dich.m.2.s.high[39], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[40], y=gee.dich.m.2.s.high[40], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  geom_line(aes(x=munopp.range[41], y=gee.dich.m.2.s.high[41], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+  xlab("Municipal Opposition") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  labs(colour = "Density of the Poor") + 
+  theme(
+    legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
+    legend.position=c(.4, 0.9),
+    legend.key.height=unit(0.5,"line"),
+    legend.key.width=unit(0.5,"line"),
+    panel.margin = unit(0, "lines"),
+    legend.justification="right") + 
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor",
+                                           title.position = "left",
+                                           direction = "horizontal"))
 
 ##########################
 #  LARGE * POLINV: gee.dich.m.3.s
