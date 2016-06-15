@@ -205,15 +205,15 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData"
 # m1: economic
 m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
 # m2: contextual
-m2.m = formula(clien1dummy ~ large + wealth + urban + munopp)
+m2.m = formula(clien1dummy ~ large + wealth + urban + pop + munopp + wealth:munopp + large:munopp)
 # m3: political
-m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + munopp + ing4 + exc7 + vb3)
+m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + ing4 + vb3 + exc7)
 #### 
 m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
 # m2: contextual
-m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + munopp + weights)
+m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + pop + munopp + wealth:munopp + as.numeric(wagehalf.4):munopp + weights)
 # m3: political
-m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + munopp + ing4 + exc7 + vb3 + weights)
+m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + ing4 + vb3 + exc7 + weights)
 ####### formulas
 
 
@@ -370,10 +370,10 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
 cem.plot = data.frame(
   Coefficients = as.numeric(c(gee.dich.m.1$"coefficients", gee.dich.m.2$"coefficients", gee.dich.m.3$"coefficients")),
   Covariate = as.character(c(
-    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Poverty Density* \n Wealth Index", 
-    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", 
-    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Party Id.", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
-  Model = as.character(c(rep("Economic", 5), rep("Contextual", 5), rep("Political", 10))),
+    "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Poverty Density * \n Wealth Index", 
+    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Population", "Municipal Opposition", "Wealth Index * \n Municipal Opposition", "Poverty Density * \n Municipal Opposition", 
+    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Support for Democracy", "Party Id.", "Perception of Corruption", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
+  Model = as.character(c(rep("Economic", 5), rep("Contextual", 8), rep("Political", 9))),
   se = c(as.numeric(c(sqrt(diag(gee.dich.m.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.dich.m.2$geese$vbeta))), as.numeric(sqrt(diag(gee.dich.m.3$geese$vbeta)))),
   upper = c(as.numeric(gee.dich.m.1$"coefficients")  + 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") + 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
@@ -381,8 +381,9 @@ cem.plot = data.frame(
   lower = c(as.numeric(gee.dich.m.1$"coefficients")  - 1.96*sqrt(diag(gee.dich.m.1$geese$vbeta)),
             as.numeric(gee.dich.m.2$"coefficients") - 1.96*sqrt(diag(gee.dich.m.2$geese$vbeta)),
             as.numeric(gee.dich.m.3$"coefficients") - 1.96*sqrt(diag(gee.dich.m.3$geese$vbeta))),
-  Balancing = rep(as.character("CEM Matching"), as.numeric(5+5+10))
+  Balancing = rep(as.character("CEM Matching"), as.numeric(5+8+9))
 )
+#cem.plot<-cem.plot[!(cem.plot$Covariate=="Wealth Index" | cem.plot$Covariate=="Poverty Density" | cem.plot$Covariate=="Political Involvement Index"),]
 
 
 
@@ -391,9 +392,9 @@ gps.plot = data.frame(
   Coefficients = as.numeric(c(gee.cont.rgps.1$"coefficients", gee.cont.rgps.2$"coefficients", gee.cont.rgps.3$"coefficients")),
   Covariate = as.character(c(
     "Intercept", "Poverty Density", "Wealth Index", "Education Years", "Weights", "Poverty Density * \n Wealth Index", 
-    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Opposition", "Weights", 
-    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Municipal Opposition", "Support for Democracy", "Perception of Corruption", "Party Id.", "Weights", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
-  Model = as.character(c(rep("Economic", 6), rep("Contextual", 6), rep("Political", 11))),
+    "Intercept", "Poverty Density", "Wealth Index", "Urban", "Municipal Population", "Municipal Opposition", "Wealth Index * \n Municipal Opposition", "Weights", "Poverty Density * \n Municipal Opposition", 
+    "Intercept", "Political Involvement Index", "Wealth Index", "Poverty Density", "Support for Democracy", "Party Id.", "Perception of Corruption", "Weights", "Political Involvement *\n Wealth Index", "Political Involvement *\n Poverty Density")),
+  Model = as.character(c(rep("Economic", 6), rep("Contextual", 9), rep("Political", 10))),
   se = c(as.numeric(c(sqrt(diag(gee.cont.rgps.1$geese$vbeta)))), as.numeric(sqrt(diag(gee.cont.rgps.2$geese$vbeta))), as.numeric(sqrt(diag(gee.cont.rgps.3$geese$vbeta)))),
   upper = c(as.numeric(gee.cont.rgps.1$"coefficients")  + 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") + 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
@@ -401,8 +402,11 @@ gps.plot = data.frame(
   lower = c(as.numeric(gee.cont.rgps.1$"coefficients")  - 1.96*sqrt(diag(gee.cont.rgps.1$geese$vbeta)),
             as.numeric(gee.cont.rgps.2$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.2$geese$vbeta)),
             as.numeric(gee.cont.rgps.3$"coefficients") - 1.96*sqrt(diag(gee.cont.rgps.3$geese$vbeta))),
-  Balancing = rep(as.character("GPS Weighting"), as.numeric(6+6+11))
+  Balancing = rep(as.character("GPS Weighting"), as.numeric(6+9+10))
 )
+
+#gps.plot<-gps.plot[!(gps.plot$Covariate=="Wealth Index" | gps.plot$Covariate=="Poverty Density" | gps.plot$Covariate=="Political Involvement Index"),]
+
 
 # cbind these two datasets
 gee.plot = rbind(cem.plot, gps.plot)
@@ -420,7 +424,7 @@ ggplot(gee.plot, aes(
   y = Coefficients, 
   ymin = upper, 
   ymax = lower,
-  colour = Model,
+  #colour = Model,
   shape = Balancing,
   position="dodge"
 )) +
@@ -433,8 +437,89 @@ ggplot(gee.plot, aes(
   #guides(colour=FALSE) +
   #theme(legend.position="none") + 
   theme_bw() +
+  facet_grid(Model ~ .) +
   #labs(colour = "Sample") +
   theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+## TEST AREA BELOW
+economic.d = subset(gee.plot, gee.plot$Model=="Economic")
+contextual.d = subset(gee.plot, gee.plot$Model=="Contextual")
+political.d = subset(gee.plot, gee.plot$Model=="Political")
+
+# Plot
+library(ggplot2)
+
+### ecomomic
+economic.plot = ggplot(economic.d, aes(
+  x = Covariate, 
+  y = Coefficients, 
+  ymin = upper, 
+  ymax = lower,
+  #colour = Model,
+  colour = Balancing,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Coefficients (logit scale)") +
+  ggtitle("Likelihood of Clientelism: Economic Model") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+### contextual
+contextual.plot = ggplot(contextual.d, aes(
+  x = Covariate, 
+  y = Coefficients, 
+  ymin = upper, 
+  ymax = lower,
+  #colour = Model,
+  colour = Balancing,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Coefficients (logit scale)") +
+  ggtitle("Likelihood of Clientelism: Contextual Model") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+### political
+political.plot = ggplot(political.d, aes(
+  x = Covariate, 
+  y = Coefficients, 
+  ymin = upper, 
+  ymax = lower,
+  #colour = Model,
+  colour = Balancing,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Coefficients (logit scale)") +
+  ggtitle("Likelihood of Clientelism: Political Model") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(political.plot, economic.plot, contextual.plot,  nrow = 1)
 
 
 
@@ -658,14 +743,14 @@ set.seed(602); options(scipen=999)
 
 # simulation DISTRIBUTION PLOTS
 ## m1 
-gee.1.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.1.s, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
-gee.1.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.1.s, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.1.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.1.s, cond = T, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.1.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.1.s, cond = T, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
 ## m2
-gee.2.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.2.s, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
-gee.2.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.2.s, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.2.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.2.s, cond = T, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.2.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.2.s, cond = T, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
 ## m3
-gee.3.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.3.s, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
-gee.3.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.3.s, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.3.m.zelig.low = data.frame(Low = sim(x = setx(gee.dich.m.3.s, cond = T, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.3.m.zelig.high = data.frame(High = sim(x = setx(gee.dich.m.3.s, cond = T, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
 
 
 
@@ -749,6 +834,7 @@ set.seed(602); options(scipen=999)
 gee.dich.m.1.s.low = data.frame(
   sim(x = setx(gee.dich.m.1.s, cond = TRUE,
              large = min(m.data$large), 
+             large:wealth,
              wealth = min(m.data$wealth):max(m.data$wealth)), 
     num=300)$getqi(qi="ev", xvalue="range"))
 colnames(gee.dich.m.1.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
@@ -758,6 +844,7 @@ colnames(gee.dich.m.1.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):ma
 gee.dich.m.1.s.high = data.frame(
   sim(x = setx(gee.dich.m.1.s, cond = TRUE,
                large = max(m.data$large), 
+               large:wealth,
                wealth = min(m.data$wealth):max(m.data$wealth)),num=300)$getqi(qi="ev", xvalue="range"))
 colnames(gee.dich.m.1.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
 
@@ -854,6 +941,7 @@ gee.dich.m.3.s.low = data.frame(
   sim(
     x = setx(gee.dich.m.3.s, cond = TRUE,
              large = min(m.data$large), 
+             polinv:large,
              polinv = min(m.data$polinv):max(m.data$polinv)), 
     num=700)$getqi(qi="ev", xvalue="range"))
 
@@ -864,6 +952,7 @@ gee.dich.m.3.s.high = data.frame(
   sim(
     x = setx(gee.dich.m.3.s, cond = TRUE,
                large = max(m.data$large), 
+             polinv:large,
                polinv = min(m.data$polinv):max(m.data$polinv)), 
       num=700)$getqi(qi="ev", xvalue="range")) ; 
 colnames(gee.dich.m.3.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
