@@ -1280,6 +1280,19 @@ EDITORS COMMENTS:
 the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
 
 
+# SHapiro
+  ## ``High competition should be compatible with clientelism when poverty is high, but should decrease the incentives for clientelism where poverty is low''.
+  ##``although clientelism is a vote-getting tactic aimed at the poor, non-poor voters are likely to punish politicians who engage in it. The salience of these costs should vary with the share of the population that is non-poor and a politician’s security in office''.
+  ## ``Statistical analysis supports the claim that neither poverty nor political competition alone explains why some politicians opt out of clientelism. Only when a large opposition presence is coupled with a sizable middle class does the use of clientelism decline''
+  ## ``Almost universally, scholars of clientelism treat and analyze the practice as an exchange between politicians and their poor clients''.
+  ## ``In both older and more recent works on clientelism, poverty, either directly or when manifest through income inequality, is cited as a powerful predictor of clientelism'' : SEE Brusco et al. (2004), Huntington (1968), Scott (1969), and Robinson and Verdier (2002).
+  ## ``The non-poor might object to clientelism either due to self-interest or because of moral concern
+about the practice''
+  ## ``To the extent clientelism serves as a signal of low-quality government performance, middle class voters are unlikely to support a politician who relies on it''.
+  ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades b´
+asicas insatisfechas”)''.
+
+
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
 \bibliographystyle{plainnat}
 \end{document}

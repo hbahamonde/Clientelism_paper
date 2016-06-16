@@ -769,63 +769,6 @@ gee.dich.m.3.s = zelig(m3.m,
 
 
 
-
-
-### TEST AREA
-
-
-z.out = zelig(clien1dummy ~ large + pop.10.m + munopp + pop.10.m:large:munopp + ing4 + vb3 + exc7 + ed, 
-                       model = "logit.gee",
-                       id = "municipality", 
-                       weights = "wt",
-                       std.err = "san.se",
-                       corstr = "independence",
-                       data = m.data,
-                       cite = F)
-
-sim.1.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large)), num=10000)$getqi(qi="ev"))
-sim.2.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=max(m.data$munopp), large=min(m.data$large)), num=10000)$getqi(qi="ev"))
-sim.3.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large)), num=10000)$getqi(qi="ev"))
-sim.4.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=min(m.data$large)), num=10000)$getqi(qi="ev"))
-
-sim.1.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
-sim.2.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=max(m.data$munopp), large=min(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
-sim.3.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
-sim.4.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=min(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
-
-
-
-p1=ggplot() + 
-  geom_density(aes(x=mean), data= sim.1.low.pop, colour = 1, alpha = .2) + 
-  xlab("1") + ylab("Estimated Density") + 
-  theme_bw() + xlim(0, .8)
-  
-
-p2=ggplot() + 
-  geom_density(aes(x=mean), data= sim.2.low.pop, colour = 2, alpha = .2) + 
-  xlab("2") + ylab("Estimated Density") + 
-  theme_bw() + xlim(0, .8)
-
-p3=ggplot() + 
-  geom_density(aes(x=mean), data= sim.3.low.pop, colour = 3, alpha = .2) + 
-  xlab("3") + ylab("Estimated Density") + 
-  theme_bw() + xlim(0, .8)
-
-  
-p4=ggplot() + 
-  geom_density(aes(x=mean), data= sim.4.low.pop, colour = 4, alpha = .2) + 
-  xlab("4") + ylab("Estimated Density") + 
-  theme_bw() + xlim(0, .8)
-
-
-  
-
-library(cowplot) # install.packages("cowplot")
-plot_grid(p1,p2,p3,p4, nrow = 2, ncol = 2, align = "v")
-
-
-
-
 #####################################################################
 ### S I M U L A T I O N S:      D  I S T R I B U T I O N   P L O T S 
 #####################################################################
