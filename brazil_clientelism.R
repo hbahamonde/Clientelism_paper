@@ -147,6 +147,46 @@ library(car) # install.packages("car")
 m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
 m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
+
+#
+# Transform the continuous "pop" variable in ten segments // mostly for simulation purposes
+pop.10.m = cut(m.data$pop, breaks = c(0,
+                                      quantile(m.data$pop, .10), 
+                                      quantile(m.data$pop, .20), 
+                                      quantile(m.data$pop, .30), 
+                                      quantile(m.data$pop, .40),
+                                      quantile(m.data$pop, .50),
+                                      quantile(m.data$pop, .60),
+                                      quantile(m.data$pop, .70),
+                                      quantile(m.data$pop, .80),
+                                      quantile(m.data$pop, .90),
+                                      quantile(m.data$pop, 1)
+), 
+include.lowest=T, labels=c(
+  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
+)
+
+
+pop.10.r = cut(dat$pop, breaks = c(0,
+                                   quantile(dat$pop, .10), 
+                                   quantile(dat$pop, .20), 
+                                   quantile(dat$pop, .30), 
+                                   quantile(dat$pop, .40),
+                                   quantile(dat$pop, .50),
+                                   quantile(dat$pop, .60),
+                                   quantile(dat$pop, .70),
+                                   quantile(dat$pop, .80),
+                                   quantile(dat$pop, .90),
+                                   quantile(dat$pop, 1)
+), 
+include.lowest=T, labels=c(
+  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
+)
+
+## attaching
+m.data$pop.10.m = as.numeric(pop.10.m)
+dat$pop.10.r = as.numeric(pop.10.r)
+
 # save matched dataset
 save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
@@ -205,13 +245,13 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData"
 # m1: economic
 m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
 # m2: contextual
-m2.m = formula(clien1dummy ~ large + wealth + urban + pop + munopp + wealth:munopp + large:munopp)
+m2.m = formula(clien1dummy ~ large + wealth + urban + pop.10.m + munopp + wealth:munopp + large:munopp)
 # m3: political
 m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + ing4 + vb3 + exc7)
 #### 
 m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
 # m2: contextual
-m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban + pop + munopp + wealth:munopp + as.numeric(wagehalf.4):munopp + weights)
+m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban +  pop.10.r + munopp + wealth:munopp + as.numeric(wagehalf.4):munopp + weights)
 # m3: political
 m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + ing4 + vb3 + exc7 + weights)
 ####### formulas
@@ -320,7 +360,6 @@ dat$weights = fit$weights
 dat$clien1dummy <- as.numeric(dat$clien1dummy)
 library(car)
 dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
-dat$logpop = log(dat$pop)
 
 
 # models
@@ -732,6 +771,60 @@ gee.dich.m.3.s = zelig(m3.m,
 
 
 
+### TEST AREA
+
+
+z.out = zelig(clien1dummy ~ large + pop.10.m + munopp + pop.10.m:large:munopp + ing4 + vb3 + exc7 + ed, 
+                       model = "logit.gee",
+                       id = "municipality", 
+                       weights = "wt",
+                       std.err = "san.se",
+                       corstr = "independence",
+                       data = m.data,
+                       cite = F)
+
+sim.1.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large)), num=10000)$getqi(qi="ev"))
+sim.2.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=max(m.data$munopp), large=min(m.data$large)), num=10000)$getqi(qi="ev"))
+sim.3.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large)), num=10000)$getqi(qi="ev"))
+sim.4.low.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=min(m.data$large)), num=10000)$getqi(qi="ev"))
+
+sim.1.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
+sim.2.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=max(m.data$munopp), large=min(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
+sim.3.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=max(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
+sim.4.high.pop = data.frame(mean= sim(x=setx(z.out, munopp=min(m.data$munopp), large=min(m.data$large), pop.10.m=max(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
+
+
+
+p1=ggplot() + 
+  geom_density(aes(x=mean), data= sim.1.low.pop, colour = 1, alpha = .2) + 
+  xlab("1") + ylab("Estimated Density") + 
+  theme_bw() + xlim(0, .8)
+  
+
+p2=ggplot() + 
+  geom_density(aes(x=mean), data= sim.2.low.pop, colour = 2, alpha = .2) + 
+  xlab("2") + ylab("Estimated Density") + 
+  theme_bw() + xlim(0, .8)
+
+p3=ggplot() + 
+  geom_density(aes(x=mean), data= sim.3.low.pop, colour = 3, alpha = .2) + 
+  xlab("3") + ylab("Estimated Density") + 
+  theme_bw() + xlim(0, .8)
+
+  
+p4=ggplot() + 
+  geom_density(aes(x=mean), data= sim.4.low.pop, colour = 4, alpha = .2) + 
+  xlab("4") + ylab("Estimated Density") + 
+  theme_bw() + xlim(0, .8)
+
+
+  
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2,p3,p4, nrow = 2, ncol = 2, align = "v")
+
+
+
 
 #####################################################################
 ### S I M U L A T I O N S:      D  I S T R I B U T I O N   P L O T S 
@@ -812,6 +905,86 @@ plot_grid(large.m1,large.m2,large.m3, nrow = 1, align = "v", scale = 1)
 #####################################################################
 
 
+##########################
+#  LARGE * POP: gee.dich.m.2.s
+##########################
+
+
+
+
+## low 
+gee.dich.m.2.s.low = data.frame(
+  sim(x = setx(gee.dich.m.2.s, cond = TRUE,
+               large = min(m.data$large), 
+               pop.10.m = min(m.data$pop.10.m):max(m.data$pop.10.m)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10.m):max(m.data$pop.10.m)))))  # low
+
+
+## high
+gee.dich.m.2.high = data.frame(
+  sim(x = setx(gee.dich.m.2.s, cond = TRUE,
+               large = max(m.data$large), 
+               pop.10.m = min(m.data$pop.10.m):max(m.data$pop.10.m)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.high) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10.m):max(m.data$pop.10.m)))))  # high
+
+
+## pop.10.m
+gee.dich.m.2.pop.10.m = data.frame(
+  sim(x = setx(gee.dich.m.2.s, cond = TRUE,
+               pop.10.m = min(m.data$pop.10.m):max(m.data$pop.10.m)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.pop.10.m) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10.m):max(m.data$pop.10.m)))))  # high
+
+
+
+library(Rmisc) # install.packages("Rmisc")
+
+### low
+df.low = data.frame(
+  mean = c(mean(gee.dich.m.2.s.low$`1`),mean(gee.dich.m.2.s.low$`2`),mean(gee.dich.m.2.s.low$`3`),mean(gee.dich.m.2.s.low$`4`),mean(gee.dich.m.2.s.low$`5`),mean(gee.dich.m.2.s.low$`6`),mean(gee.dich.m.2.s.low$`7`),mean(gee.dich.m.2.s.low$`8`), mean(gee.dich.m.2.s.low$`9`),mean(gee.dich.m.2.s.low$`10`)),
+  Population = min(m.data$pop.10.m):max(m.data$pop.10.m),
+  Poverty = rep("Low Density", ncol(gee.dich.m.2.s.low)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.s.low$`1`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`2`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`3`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`4`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`5`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`6`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`7`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`8`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`9`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.s.low$`1`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`2`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`3`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`4`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`5`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`6`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`7`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`8`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`9`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`10`)[3]))
+)
+
+
+
+### high
+df.high = data.frame(
+  mean = c(mean(gee.dich.m.2.high$`1`),mean(gee.dich.m.2.high$`2`),mean(gee.dich.m.2.high$`3`),mean(gee.dich.m.2.high$`4`),mean(gee.dich.m.2.high$`5`),mean(gee.dich.m.2.high$`6`),mean(gee.dich.m.2.high$`7`),mean(gee.dich.m.2.high$`8`), mean(gee.dich.m.2.high$`9`),mean(gee.dich.m.2.high$`10`)),
+  Population = min(m.data$pop.10.m):max(m.data$pop.10.m),
+  Poverty = rep("High Density", ncol(gee.dich.m.2.high)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.high$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.high$`10`)[3]))
+)
+
+### pop
+df.pop.alone = data.frame(
+  mean = c(mean(gee.dich.m.2.pop.10.m$`1`),mean(gee.dich.m.2.pop.10.m$`2`),mean(gee.dich.m.2.pop.10.m$`3`),mean(gee.dich.m.2.pop.10.m$`4`),mean(gee.dich.m.2.pop.10.m$`5`),mean(gee.dich.m.2.pop.10.m$`6`),mean(gee.dich.m.2.pop.10.m$`7`),mean(gee.dich.m.2.pop.10.m$`8`), mean(gee.dich.m.2.pop.10.m$`9`),mean(gee.dich.m.2.pop.10.m$`10`)),
+  Population = min(m.data$pop.10.m):max(m.data$pop.10.m),
+  Poverty = rep("Population Size", ncol(gee.dich.m.2.pop.10.m)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.pop.10.m$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.pop.10.m$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`10`)[3]))
+)
+
+
+
+### combined two df's
+pop.d= rbind(df.high, df.low,df.pop.alone)
+
+
+
+### plot
+library(ggplot2)
+ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Population,y=mean)) +
+  xlab("Municipal Population Size") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
 
 ##########################
 #  LARGE * WEALTH: gee.dich.m.1.s
@@ -829,7 +1002,7 @@ set.seed(602); options(scipen=999)
 
 
 
-# low 
+## low 
 gee.dich.m.1.s.low = data.frame(
   sim(x = setx(gee.dich.m.1.s, cond = TRUE,
              large = min(m.data$large), 
@@ -839,7 +1012,7 @@ gee.dich.m.1.s.low = data.frame(
 colnames(gee.dich.m.1.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
 
 
-# high
+## high
 gee.dich.m.1.s.high = data.frame(
   sim(x = setx(gee.dich.m.1.s, cond = TRUE,
                large = max(m.data$large), 
@@ -848,166 +1021,64 @@ gee.dich.m.1.s.high = data.frame(
 colnames(gee.dich.m.1.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
 
 
-# plot ##  geom_line also works
-library(ggplot2)
-wealth.range = as.numeric(min(m.data$wealth):max(m.data$wealth))
-set.seed(602)
-ggplot() + 
-  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.low[8], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.low[9], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.low[10], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.low[11], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.low[12], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.low[13], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.low[14], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.low[15], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.low[16], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.low[17], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.low[18], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.low[19], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.low[20], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.low[21], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.low[22], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.low[23], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.low[24], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.low[25], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[1], y=gee.dich.m.1.s.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=wealth.range[2], y=gee.dich.m.1.s.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[3], y=gee.dich.m.1.s.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[4], y=gee.dich.m.1.s.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[5], y=gee.dich.m.1.s.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[6], y=gee.dich.m.1.s.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[7], y=gee.dich.m.1.s.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[8], y=gee.dich.m.1.s.high[8], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[9], y=gee.dich.m.1.s.high[9], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[10], y=gee.dich.m.1.s.high[10], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[11], y=gee.dich.m.1.s.high[11], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[12], y=gee.dich.m.1.s.high[12], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[13], y=gee.dich.m.1.s.high[13], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[14], y=gee.dich.m.1.s.high[14], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[15], y=gee.dich.m.1.s.high[15], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[16], y=gee.dich.m.1.s.high[16], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[17], y=gee.dich.m.1.s.high[17], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[18], y=gee.dich.m.1.s.high[18], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[19], y=gee.dich.m.1.s.high[19], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[20], y=gee.dich.m.1.s.high[20], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[21], y=gee.dich.m.1.s.high[21], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[22], y=gee.dich.m.1.s.high[22], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[23], y=gee.dich.m.1.s.high[23], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[24], y=gee.dich.m.1.s.high[24], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=wealth.range[25], y=gee.dich.m.1.s.high[25], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  xlab("Wealth Index") + ylab("Expected Value of Clientelism") +  theme_bw() + labs(colour = "Density of the Poor") + theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) +
-  theme(
-    legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
-    legend.position=c(.4, 0.9),
-    legend.key.height=unit(0.5,"line"),
-    legend.key.width=unit(0.5,"line"),
-    panel.margin = unit(0, "lines"),
-    legend.justification="right") + 
-  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor",
-                                           title.position = "left",
-                                           direction = "horizontal"))
 
-##################################################
-## normal plot
+## wealth
+gee.dich.m.1.s.wealth = data.frame(
+  sim(x = setx(gee.dich.m.1.s, cond = TRUE,
+               large:wealth,
+               wealth = min(m.data$wealth):max(m.data$wealth)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.1.s.wealth) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
+
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
 ### low
 df.low = data.frame(
-  mean = c(
-    mean(gee.dich.m.1.s.low$`1`),
-    mean(gee.dich.m.1.s.low$`2`),
-    mean(gee.dich.m.1.s.low$`3`),
-    mean(gee.dich.m.1.s.low$`4`),
-    mean(gee.dich.m.1.s.low$`5`),
-    mean(gee.dich.m.1.s.low$`6`),
-    mean(gee.dich.m.1.s.low$`7`),
-    mean(gee.dich.m.1.s.low$`8`),
-    mean(gee.dich.m.1.s.low$`9`),
-    mean(gee.dich.m.1.s.low$`10`),
-    mean(gee.dich.m.1.s.low$`11`),
-    mean(gee.dich.m.1.s.low$`12`),
-    mean(gee.dich.m.1.s.low$`13`),
-    mean(gee.dich.m.1.s.low$`14`),
-    mean(gee.dich.m.1.s.low$`15`),
-    mean(gee.dich.m.1.s.low$`16`),
-    mean(gee.dich.m.1.s.low$`17`),
-    mean(gee.dich.m.1.s.low$`18`),
-    mean(gee.dich.m.1.s.low$`19`),
-    mean(gee.dich.m.1.s.low$`20`),
-    mean(gee.dich.m.1.s.low$`21`),
-    mean(gee.dich.m.1.s.low$`22`),
-    mean(gee.dich.m.1.s.low$`23`),
-    mean(gee.dich.m.1.s.low$`24`),
-    mean(gee.dich.m.1.s.low$`25`)
-  ),
-  Wealth = min(m.data$wealth):max(m.data$wealth),
-  Density = rep("Low", ncol(gee.dich.m.1.s.low))
+  mean = c(mean(gee.dich.m.1.s.low$`1`),mean(gee.dich.m.1.s.low$`2`),mean(gee.dich.m.1.s.low$`3`),mean(gee.dich.m.1.s.low$`4`),mean(gee.dich.m.1.s.low$`5`),mean(gee.dich.m.1.s.low$`6`),mean(gee.dich.m.1.s.low$`7`),mean(gee.dich.m.1.s.low$`8`), mean(gee.dich.m.1.s.low$`9`),mean(gee.dich.m.1.s.low$`10`), mean(gee.dich.m.1.s.low$`11`), mean(gee.dich.m.1.s.low$`12`),mean(gee.dich.m.1.s.low$`13`),mean(gee.dich.m.1.s.low$`14`),mean(gee.dich.m.1.s.low$`15`),mean(gee.dich.m.1.s.low$`16`),mean(gee.dich.m.1.s.low$`17`),mean(gee.dich.m.1.s.low$`18`),mean(gee.dich.m.1.s.low$`19`),mean(gee.dich.m.1.s.low$`20`),mean(gee.dich.m.1.s.low$`21`),mean(gee.dich.m.1.s.low$`22`),mean(gee.dich.m.1.s.low$`23`),mean(gee.dich.m.1.s.low$`24`),mean(gee.dich.m.1.s.low$`25`)),Wealth = min(m.data$wealth):max(m.data$wealth),
+  Poverty = rep("Low Density", ncol(gee.dich.m.1.s.low)),
+  Upper = c(as.numeric(CI(gee.dich.m.1.s.low$`1`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`2`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`3`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`4`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`5`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`6`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`7`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`8`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`9`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`10`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`11`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`12`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`13`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`14`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`15`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`16`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`17`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`18`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`19`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`20`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`21`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`22`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`23`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`24`)[1]), as.numeric(CI(gee.dich.m.1.s.low$`25`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.1.s.low$`1`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`2`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`3`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`4`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`5`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`6`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`7`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`8`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`9`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`10`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`11`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`12`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`13`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`14`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`15`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`16`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`17`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`18`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`19`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`20`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`21`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`22`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`23`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`24`)[3]), as.numeric(CI(gee.dich.m.1.s.low$`25`)[3]))
   )
 
-## CI
-
-CI(gee.dich.m.1.s.low$`22`)
-CI(gee.dich.m.1.s.low$`23`)
 
 
 ### high
 df.high = data.frame(
-  mean = c(
-    mean(gee.dich.m.1.s.high$`1`),
-    mean(gee.dich.m.1.s.high$`2`),
-    mean(gee.dich.m.1.s.high$`3`),
-    mean(gee.dich.m.1.s.high$`4`),
-    mean(gee.dich.m.1.s.high$`5`),
-    mean(gee.dich.m.1.s.high$`6`),
-    mean(gee.dich.m.1.s.high$`7`),
-    mean(gee.dich.m.1.s.high$`8`),
-    mean(gee.dich.m.1.s.high$`9`),
-    mean(gee.dich.m.1.s.high$`10`),
-    mean(gee.dich.m.1.s.high$`11`),
-    mean(gee.dich.m.1.s.high$`12`),
-    mean(gee.dich.m.1.s.high$`13`),
-    mean(gee.dich.m.1.s.high$`14`),
-    mean(gee.dich.m.1.s.high$`15`),
-    mean(gee.dich.m.1.s.high$`16`),
-    mean(gee.dich.m.1.s.high$`17`),
-    mean(gee.dich.m.1.s.high$`18`),
-    mean(gee.dich.m.1.s.high$`19`),
-    mean(gee.dich.m.1.s.high$`20`),
-    mean(gee.dich.m.1.s.high$`21`),
-    mean(gee.dich.m.1.s.high$`22`),
-    mean(gee.dich.m.1.s.high$`23`),
-    mean(gee.dich.m.1.s.high$`24`),
-    mean(gee.dich.m.1.s.high$`25`)
-  ),
+  mean = c(mean(gee.dich.m.1.s.high$`1`),mean(gee.dich.m.1.s.high$`2`),mean(gee.dich.m.1.s.high$`3`),mean(gee.dich.m.1.s.high$`4`),mean(gee.dich.m.1.s.high$`5`),mean(gee.dich.m.1.s.high$`6`),mean(gee.dich.m.1.s.high$`7`),mean(gee.dich.m.1.s.high$`8`),mean(gee.dich.m.1.s.high$`9`),mean(gee.dich.m.1.s.high$`10`),mean(gee.dich.m.1.s.high$`11`),mean(gee.dich.m.1.s.high$`12`),mean(gee.dich.m.1.s.high$`13`),mean(gee.dich.m.1.s.high$`14`),mean(gee.dich.m.1.s.high$`15`),mean(gee.dich.m.1.s.high$`16`),mean(gee.dich.m.1.s.high$`17`),mean(gee.dich.m.1.s.high$`18`),mean(gee.dich.m.1.s.high$`19`),mean(gee.dich.m.1.s.high$`20`),mean(gee.dich.m.1.s.high$`21`),mean(gee.dich.m.1.s.high$`22`),mean(gee.dich.m.1.s.high$`23`),mean(gee.dich.m.1.s.high$`24`),mean(gee.dich.m.1.s.high$`25`)),
   Wealth = min(m.data$wealth):max(m.data$wealth),
-  Density = rep("High", ncol(gee.dich.m.1.s.high))
+  Poverty = rep("High Density", ncol(gee.dich.m.1.s.high)),
+  Upper = c(as.numeric(CI(gee.dich.m.1.s.high$`1`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`2`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`3`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`4`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`5`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`6`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`7`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`8`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`9`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`10`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`11`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`12`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`13`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`14`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`15`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`16`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`17`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`18`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`19`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`20`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`21`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`22`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`23`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`24`)[1]), as.numeric(CI(gee.dich.m.1.s.high$`25`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.1.s.high$`1`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`2`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`3`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`4`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`5`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`6`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`7`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`8`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`9`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`10`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`11`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`12`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`13`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`14`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`15`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`16`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`17`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`18`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`19`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`20`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`21`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`22`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`23`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`24`)[3]), as.numeric(CI(gee.dich.m.1.s.high$`25`)[3]))
+  )
+
+### wealth
+df.wealth.alone = data.frame(
+  mean = c(mean(gee.dich.m.1.s.wealth$`1`),mean(gee.dich.m.1.s.wealth$`2`),mean(gee.dich.m.1.s.wealth$`3`),mean(gee.dich.m.1.s.wealth$`4`),mean(gee.dich.m.1.s.wealth$`5`),mean(gee.dich.m.1.s.wealth$`6`),mean(gee.dich.m.1.s.wealth$`7`),mean(gee.dich.m.1.s.wealth$`8`),mean(gee.dich.m.1.s.wealth$`9`),mean(gee.dich.m.1.s.wealth$`10`),mean(gee.dich.m.1.s.wealth$`11`),mean(gee.dich.m.1.s.wealth$`12`),mean(gee.dich.m.1.s.wealth$`13`),mean(gee.dich.m.1.s.wealth$`14`),mean(gee.dich.m.1.s.wealth$`15`),mean(gee.dich.m.1.s.wealth$`16`),mean(gee.dich.m.1.s.wealth$`17`),mean(gee.dich.m.1.s.wealth$`18`),mean(gee.dich.m.1.s.wealth$`19`),mean(gee.dich.m.1.s.wealth$`20`),mean(gee.dich.m.1.s.wealth$`21`),mean(gee.dich.m.1.s.wealth$`22`),mean(gee.dich.m.1.s.wealth$`23`),mean(gee.dich.m.1.s.wealth$`24`),mean(gee.dich.m.1.s.wealth$`25`)),
+  Wealth = min(m.data$wealth):max(m.data$wealth),
+  Poverty = rep("Wealth Index", ncol(gee.dich.m.1.s.wealth)),
+  Upper = c(as.numeric(CI(gee.dich.m.1.s.wealth$`1`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`2`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`3`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`4`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`5`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`6`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`7`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`8`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`9`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`10`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`11`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`12`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`13`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`14`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`15`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`16`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`17`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`18`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`19`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`20`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`21`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`22`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`23`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`24`)[1]), as.numeric(CI(gee.dich.m.1.s.wealth$`25`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.1.s.wealth$`1`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`2`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`3`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`4`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`5`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`6`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`7`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`8`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`9`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`10`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`11`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`12`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`13`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`14`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`15`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`16`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`17`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`18`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`19`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`20`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`21`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`22`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`23`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`24`)[3]), as.numeric(CI(gee.dich.m.1.s.wealth$`25`)[3]))
 )
 
-### combined two df's
-wealth.d= rbind(df.high, df.low)
 
-### get upper lower bounds
-std <- function(x) sd(x)/sqrt(length(x))
-wealth.d$upper = wealth.d$mean + qnorm(.95) * std(wealth.d$mean)
-wealth.d$lower = wealth.d$mean + qnorm(.05) * std(wealth.d$mean)
+
+### combined two df's
+wealth.d= rbind(df.high, df.low,df.wealth.alone)
 
 
 ### plot
-ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Density)) + 
+library(ggplot2)
+p1=ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) + 
   stat_smooth() + 
-  geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) +
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Wealth,y=mean)) +
   xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
   theme_bw() + 
-  labs(colour = "Density of the Poor") + 
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) + 
-  scale_fill_continuous(guide = guide_legend(title.position = "left",
-                                           direction = "horizontal"))
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
 
 ##########################
 #  LARGE * MUNOPP: gee.dich.m.2.s
@@ -1043,106 +1114,61 @@ gee.dich.m.2.s.high = data.frame(
 
 colnames(gee.dich.m.2.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # low
 
-## plot
+
+
+# munopp 
+gee.dich.m.2.s.munopp = data.frame(
+  sim(x = setx(gee.dich.m.2.s, cond = TRUE,
+               large:munopp,
+               munopp = min(m.data$munopp):max(m.data$munopp)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.s.munopp) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # high
+
+
+### df's
+### low
+df.low = data.frame(
+  mean = c(mean(gee.dich.m.2.s.low$`1`),mean(gee.dich.m.2.s.low$`2`),mean(gee.dich.m.2.s.low$`3`),mean(gee.dich.m.2.s.low$`4`),mean(gee.dich.m.2.s.low$`5`),mean(gee.dich.m.2.s.low$`6`),mean(gee.dich.m.2.s.low$`7`),mean(gee.dich.m.2.s.low$`8`), mean(gee.dich.m.2.s.low$`9`),mean(gee.dich.m.2.s.low$`10`), mean(gee.dich.m.2.s.low$`11`), mean(gee.dich.m.2.s.low$`12`),mean(gee.dich.m.2.s.low$`13`),mean(gee.dich.m.2.s.low$`14`),mean(gee.dich.m.2.s.low$`15`),mean(gee.dich.m.2.s.low$`16`),mean(gee.dich.m.2.s.low$`17`),mean(gee.dich.m.2.s.low$`18`),mean(gee.dich.m.2.s.low$`19`),mean(gee.dich.m.2.s.low$`20`), mean(gee.dich.m.2.s.low$`21`),mean(gee.dich.m.2.s.low$`22`),mean(gee.dich.m.2.s.low$`23`),mean(gee.dich.m.2.s.low$`24`),mean(gee.dich.m.2.s.low$`25`),mean(gee.dich.m.2.s.low$`26`),mean(gee.dich.m.2.s.low$`27`),mean(gee.dich.m.2.s.low$`28`), mean(gee.dich.m.2.s.low$`29`),mean(gee.dich.m.2.s.low$`30`), mean(gee.dich.m.2.s.low$`31`), mean(gee.dich.m.2.s.low$`32`),mean(gee.dich.m.2.s.low$`33`),mean(gee.dich.m.2.s.low$`34`),mean(gee.dich.m.2.s.low$`35`),mean(gee.dich.m.2.s.low$`36`),mean(gee.dich.m.2.s.low$`37`),mean(gee.dich.m.2.s.low$`38`),mean(gee.dich.m.2.s.low$`39`),mean(gee.dich.m.2.s.low$`40`),mean(gee.dich.m.2.s.low$`41`)),
+  Type = rep("Low Density", ncol(gee.dich.m.2.s.low)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(gee.dich.m.2.s.low$`1`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`2`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`3`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`4`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`5`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`6`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`7`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`8`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`9`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`10`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`11`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`12`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`13`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`14`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`15`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`16`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`17`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`18`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`19`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`20`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`21`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`22`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`23`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`24`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`25`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`26`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`27`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`28`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`29`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`30`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`31`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`32`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`33`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`34`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`35`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`36`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`37`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`38`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`39`)[1]), as.numeric(CI(gee.dich.m.2.s.low$`40`)[1]),as.numeric(CI(gee.dich.m.2.s.low$`41`)[1])),
+  Lower = c(
+    as.numeric(CI(gee.dich.m.2.s.low$`1`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`2`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`3`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`4`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`5`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`6`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`7`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`8`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`9`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`10`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`11`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`12`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`13`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`14`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`15`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`16`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`17`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`18`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`19`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`20`)[3]),as.numeric(CI(gee.dich.m.2.s.low$`21`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`22`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`23`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`24`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`25`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`26`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`27`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`28`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`29`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`30`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`31`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`32`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`33`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`34`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`35`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`36`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`37`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`38`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`39`)[3]), as.numeric(CI(gee.dich.m.2.s.low$`40`)[3]),as.numeric(CI(gee.dich.m.2.s.low$`41`)[3]))
+  )
+
+### high
+df.high = data.frame(
+  mean = c(mean(gee.dich.m.2.s.high$`1`),mean(gee.dich.m.2.s.high$`2`),mean(gee.dich.m.2.s.high$`3`),mean(gee.dich.m.2.s.high$`4`),mean(gee.dich.m.2.s.high$`5`),mean(gee.dich.m.2.s.high$`6`),mean(gee.dich.m.2.s.high$`7`),mean(gee.dich.m.2.s.high$`8`), mean(gee.dich.m.2.s.high$`9`),mean(gee.dich.m.2.s.high$`10`), mean(gee.dich.m.2.s.high$`11`), mean(gee.dich.m.2.s.high$`12`),mean(gee.dich.m.2.s.high$`13`),mean(gee.dich.m.2.s.high$`14`),mean(gee.dich.m.2.s.high$`15`),mean(gee.dich.m.2.s.high$`16`),mean(gee.dich.m.2.s.high$`17`),mean(gee.dich.m.2.s.high$`18`),mean(gee.dich.m.2.s.high$`19`),mean(gee.dich.m.2.s.high$`20`), mean(gee.dich.m.2.s.high$`21`),mean(gee.dich.m.2.s.high$`22`),mean(gee.dich.m.2.s.high$`23`),mean(gee.dich.m.2.s.high$`24`),mean(gee.dich.m.2.s.high$`25`),mean(gee.dich.m.2.s.high$`26`),mean(gee.dich.m.2.s.high$`27`),mean(gee.dich.m.2.s.high$`28`), mean(gee.dich.m.2.s.high$`29`),mean(gee.dich.m.2.s.high$`30`), mean(gee.dich.m.2.s.high$`31`), mean(gee.dich.m.2.s.high$`32`),mean(gee.dich.m.2.s.high$`33`),mean(gee.dich.m.2.s.high$`34`),mean(gee.dich.m.2.s.high$`35`),mean(gee.dich.m.2.s.high$`36`),mean(gee.dich.m.2.s.high$`37`),mean(gee.dich.m.2.s.high$`38`),mean(gee.dich.m.2.s.high$`39`),mean(gee.dich.m.2.s.high$`40`),mean(gee.dich.m.2.s.high$`41`)),
+  Type = rep("High Density", ncol(gee.dich.m.2.s.high)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(gee.dich.m.2.s.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`10`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`11`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`12`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`13`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`14`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`15`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`16`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`17`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`18`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`19`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`20`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`21`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`22`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`23`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`24`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`25`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`26`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`27`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`28`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`29`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`30`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`31`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`32`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`33`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`34`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`35`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`36`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`37`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`38`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`39`)[1]), as.numeric(CI(gee.dich.m.2.s.high$`40`)[1]),as.numeric(CI(gee.dich.m.2.s.high$`41`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.s.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`10`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`11`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`12`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`13`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`14`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`15`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`16`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`17`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`18`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`19`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`20`)[3]),as.numeric(CI(gee.dich.m.2.s.high$`21`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`22`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`23`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`24`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`25`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`26`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`27`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`28`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`29`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`30`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`31`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`32`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`33`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`34`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`35`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`36`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`37`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`38`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`39`)[3]), as.numeric(CI(gee.dich.m.2.s.high$`40`)[3]),as.numeric(CI(gee.dich.m.2.s.high$`41`)[3]))
+)
+
+### munopp
+df.munopp.alone = data.frame(
+  mean = c(mean(gee.dich.m.2.s.munopp$`1`),mean(gee.dich.m.2.s.munopp$`2`),mean(gee.dich.m.2.s.munopp$`3`),mean(gee.dich.m.2.s.munopp$`4`),mean(gee.dich.m.2.s.munopp$`5`),mean(gee.dich.m.2.s.munopp$`6`),mean(gee.dich.m.2.s.munopp$`7`),mean(gee.dich.m.2.s.munopp$`8`), mean(gee.dich.m.2.s.munopp$`9`),mean(gee.dich.m.2.s.munopp$`10`), mean(gee.dich.m.2.s.munopp$`11`), mean(gee.dich.m.2.s.munopp$`12`),mean(gee.dich.m.2.s.munopp$`13`),mean(gee.dich.m.2.s.munopp$`14`),mean(gee.dich.m.2.s.munopp$`15`),mean(gee.dich.m.2.s.munopp$`16`),mean(gee.dich.m.2.s.munopp$`17`),mean(gee.dich.m.2.s.munopp$`18`),mean(gee.dich.m.2.s.munopp$`19`),mean(gee.dich.m.2.s.munopp$`20`), mean(gee.dich.m.2.s.munopp$`21`),mean(gee.dich.m.2.s.munopp$`22`),mean(gee.dich.m.2.s.munopp$`23`),mean(gee.dich.m.2.s.munopp$`24`),mean(gee.dich.m.2.s.munopp$`25`),mean(gee.dich.m.2.s.munopp$`26`),mean(gee.dich.m.2.s.munopp$`27`),mean(gee.dich.m.2.s.munopp$`28`), mean(gee.dich.m.2.s.munopp$`29`),mean(gee.dich.m.2.s.munopp$`30`), mean(gee.dich.m.2.s.munopp$`31`), mean(gee.dich.m.2.s.munopp$`32`),mean(gee.dich.m.2.s.munopp$`33`),mean(gee.dich.m.2.s.munopp$`34`),mean(gee.dich.m.2.s.munopp$`35`),mean(gee.dich.m.2.s.munopp$`36`),mean(gee.dich.m.2.s.munopp$`37`),mean(gee.dich.m.2.s.munopp$`38`),mean(gee.dich.m.2.s.munopp$`39`),mean(gee.dich.m.2.s.munopp$`40`),mean(gee.dich.m.2.s.munopp$`41`)),
+  Type = rep("Municipal Opposition", ncol(gee.dich.m.2.s.munopp)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(gee.dich.m.2.s.munopp$`1`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`2`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`3`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`4`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`5`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`6`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`7`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`8`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`9`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`10`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`11`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`12`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`13`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`14`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`15`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`16`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`17`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`18`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`19`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`20`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`21`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`22`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`23`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`24`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`25`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`26`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`27`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`28`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`29`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`30`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`31`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`32`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`33`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`34`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`35`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`36`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`37`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`38`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`39`)[1]), as.numeric(CI(gee.dich.m.2.s.munopp$`40`)[1]),as.numeric(CI(gee.dich.m.2.s.munopp$`41`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.s.munopp$`1`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`2`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`3`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`4`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`5`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`6`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`7`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`8`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`9`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`10`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`11`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`12`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`13`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`14`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`15`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`16`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`17`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`18`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`19`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`20`)[3]),as.numeric(CI(gee.dich.m.2.s.munopp$`21`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`22`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`23`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`24`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`25`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`26`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`27`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`28`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`29`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`30`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`31`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`32`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`33`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`34`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`35`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`36`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`37`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`38`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`39`)[3]), as.numeric(CI(gee.dich.m.2.s.munopp$`40`)[3]),as.numeric(CI(gee.dich.m.2.s.munopp$`41`)[3]))
+)
+
+### combined two df's
+munopp.d= rbind(df.high, df.low,df.munopp.alone)
+
+
+### plot
 library(ggplot2)
-munopp.range = as.numeric(min(m.data$munopp):max(m.data$munopp))
-set.seed(602)
-ggplot() + 
-  geom_line(aes(x=munopp.range[1], y=gee.dich.m.2.s.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[2], y=gee.dich.m.2.s.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[3], y=gee.dich.m.2.s.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[4], y=gee.dich.m.2.s.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[5], y=gee.dich.m.2.s.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[6], y=gee.dich.m.2.s.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[7], y=gee.dich.m.2.s.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[8], y=gee.dich.m.2.s.low[8], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[9], y=gee.dich.m.2.s.low[9], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[10], y=gee.dich.m.2.s.low[10], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[11], y=gee.dich.m.2.s.low[11], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[12], y=gee.dich.m.2.s.low[12], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[13], y=gee.dich.m.2.s.low[13], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[14], y=gee.dich.m.2.s.low[14], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[15], y=gee.dich.m.2.s.low[15], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[16], y=gee.dich.m.2.s.low[16], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[17], y=gee.dich.m.2.s.low[17], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[18], y=gee.dich.m.2.s.low[18], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[19], y=gee.dich.m.2.s.low[19], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[20], y=gee.dich.m.2.s.low[20], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[21], y=gee.dich.m.2.s.low[21], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[22], y=gee.dich.m.2.s.low[22], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[23], y=gee.dich.m.2.s.low[23], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[24], y=gee.dich.m.2.s.low[24], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[25], y=gee.dich.m.2.s.low[25], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[26], y=gee.dich.m.2.s.low[26], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[27], y=gee.dich.m.2.s.low[27], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[28], y=gee.dich.m.2.s.low[28], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[29], y=gee.dich.m.2.s.low[29], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[30], y=gee.dich.m.2.s.low[30], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[31], y=gee.dich.m.2.s.low[31], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[32], y=gee.dich.m.2.s.low[32], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[33], y=gee.dich.m.2.s.low[33], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[34], y=gee.dich.m.2.s.low[34], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[35], y=gee.dich.m.2.s.low[35], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[36], y=gee.dich.m.2.s.low[36], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[37], y=gee.dich.m.2.s.low[37], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[38], y=gee.dich.m.2.s.low[38], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[39], y=gee.dich.m.2.s.low[39], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[40], y=gee.dich.m.2.s.low[40], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[41], y=gee.dich.m.2.s.low[41], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[1], y=gee.dich.m.2.s.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[2], y=gee.dich.m.2.s.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[3], y=gee.dich.m.2.s.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[4], y=gee.dich.m.2.s.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[5], y=gee.dich.m.2.s.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[6], y=gee.dich.m.2.s.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[7], y=gee.dich.m.2.s.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[8], y=gee.dich.m.2.s.high[8], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[9], y=gee.dich.m.2.s.high[9], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[10], y=gee.dich.m.2.s.high[10], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[11], y=gee.dich.m.2.s.high[11], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[12], y=gee.dich.m.2.s.high[12], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[13], y=gee.dich.m.2.s.high[13], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[14], y=gee.dich.m.2.s.high[14], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[15], y=gee.dich.m.2.s.high[15], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[16], y=gee.dich.m.2.s.high[16], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[17], y=gee.dich.m.2.s.high[17], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[18], y=gee.dich.m.2.s.high[18], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[19], y=gee.dich.m.2.s.high[19], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[20], y=gee.dich.m.2.s.high[20], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[21], y=gee.dich.m.2.s.high[21], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[22], y=gee.dich.m.2.s.high[22], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[23], y=gee.dich.m.2.s.high[23], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[24], y=gee.dich.m.2.s.high[24], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[25], y=gee.dich.m.2.s.high[25], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[26], y=gee.dich.m.2.s.high[26], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[27], y=gee.dich.m.2.s.high[27], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[28], y=gee.dich.m.2.s.high[28], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[29], y=gee.dich.m.2.s.high[29], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[30], y=gee.dich.m.2.s.high[30], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[31], y=gee.dich.m.2.s.high[31], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[32], y=gee.dich.m.2.s.high[32], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[33], y=gee.dich.m.2.s.high[33], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[34], y=gee.dich.m.2.s.high[34], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[35], y=gee.dich.m.2.s.high[35], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[36], y=gee.dich.m.2.s.high[36], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[37], y=gee.dich.m.2.s.high[37], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[38], y=gee.dich.m.2.s.high[38], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[39], y=gee.dich.m.2.s.high[39], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[40], y=gee.dich.m.2.s.high[40], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=munopp.range[41], y=gee.dich.m.2.s.high[41], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) +
+p2=ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Opposition,y=mean)) +
   xlab("Municipal Opposition") + ylab("Expected Value of Clientelism") + 
   theme_bw() + 
-  labs(colour = "Density of the Poor") + 
-  theme(
-    legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
-    legend.position=c(.4, 0.9),
-    legend.key.height=unit(0.5,"line"),
-    legend.key.width=unit(0.5,"line"),
-    panel.margin = unit(0, "lines"),
-    legend.justification="right") + 
-  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor",
-                                           title.position = "left",
-                                           direction = "horizontal"))
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
 
 ##########################
 #  LARGE * POLINV: gee.dich.m.3.s
@@ -1176,39 +1202,67 @@ gee.dich.m.3.s.high = data.frame(
 colnames(gee.dich.m.3.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
 
 
+# polinv 
+gee.dich.m.3.s.polinv = data.frame(
+  sim(x = setx(gee.dich.m.3.s, cond = TRUE,
+               large:munopp,
+               polinv = min(m.data$polinv):max(m.data$polinv)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.3.s.polinv) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  
 
-# plot ## geom_point also works
+
+### df's
+### low
+df.low = data.frame(
+  mean = c(mean(gee.dich.m.3.s.low$`1`),mean(gee.dich.m.3.s.low$`2`),mean(gee.dich.m.3.s.low$`3`),mean(gee.dich.m.3.s.low$`4`),mean(gee.dich.m.3.s.low$`5`),mean(gee.dich.m.3.s.low$`6`),mean(gee.dich.m.3.s.low$`7`),mean(gee.dich.m.3.s.low$`8`)),
+  Type = rep("Low Density", ncol(gee.dich.m.3.s.low)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(gee.dich.m.3.s.low$`1`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`2`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`3`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`4`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`5`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`6`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`7`)[1]), as.numeric(CI(gee.dich.m.3.s.low$`8`)[1])),
+  Lower = c(
+    as.numeric(CI(gee.dich.m.3.s.low$`1`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`2`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`3`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`4`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`5`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`6`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`7`)[3]), as.numeric(CI(gee.dich.m.3.s.low$`8`)[3]))
+)
+
+### high
+df.high = data.frame(
+  mean = c(mean(gee.dich.m.3.s.high$`1`),mean(gee.dich.m.3.s.high$`2`),mean(gee.dich.m.3.s.high$`3`),mean(gee.dich.m.3.s.high$`4`),mean(gee.dich.m.3.s.high$`5`),mean(gee.dich.m.3.s.high$`6`),mean(gee.dich.m.3.s.high$`7`),mean(gee.dich.m.3.s.high$`8`)),
+  Type = rep("High Density", ncol(gee.dich.m.3.s.high)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(gee.dich.m.3.s.high$`1`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`2`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`3`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`4`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`5`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`6`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`7`)[1]), as.numeric(CI(gee.dich.m.3.s.high$`8`)[1])),
+  Lower = c(
+    as.numeric(CI(gee.dich.m.3.s.high$`1`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`2`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`3`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`4`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`5`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`6`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`7`)[3]), as.numeric(CI(gee.dich.m.3.s.high$`8`)[3]))
+)
+
+### polinv
+df.polinv.alone = data.frame(
+  mean = c(mean(gee.dich.m.3.s.polinv$`1`),mean(gee.dich.m.3.s.polinv$`2`),mean(gee.dich.m.3.s.polinv$`3`),mean(gee.dich.m.3.s.polinv$`4`),mean(gee.dich.m.3.s.polinv$`5`),mean(gee.dich.m.3.s.polinv$`6`),mean(gee.dich.m.3.s.polinv$`7`),mean(gee.dich.m.3.s.polinv$`8`)),
+  Type = rep("Political Involvement", ncol(gee.dich.m.3.s.polinv)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(gee.dich.m.3.s.polinv$`1`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`2`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`3`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`4`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`5`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`6`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`7`)[1]), as.numeric(CI(gee.dich.m.3.s.polinv$`8`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.3.s.polinv$`1`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`2`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`3`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`4`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`5`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`6`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`7`)[3]), as.numeric(CI(gee.dich.m.3.s.polinv$`8`)[3]))
+)
+
+### combined two df's
+polinv.d= rbind(df.high, df.low,df.polinv.alone)
+
+
+### plot
 library(ggplot2)
-polinv.range = as.numeric(min(m.data$polinv):max(m.data$polinv))
-set.seed(602)
-ggplot() + 
-  geom_line(aes(x=polinv.range[1], y=gee.dich.m.3.s.low[1], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) +
-  geom_line(aes(x=polinv.range[2], y=gee.dich.m.3.s.low[2], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[3], y=gee.dich.m.3.s.low[3], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[4], y=gee.dich.m.3.s.low[4], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[5], y=gee.dich.m.3.s.low[5], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[6], y=gee.dich.m.3.s.low[6], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[7], y=gee.dich.m.3.s.low[7], colour = "Low"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[1], y=gee.dich.m.3.s.high[1], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[2], y=gee.dich.m.3.s.high[2], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[3], y=gee.dich.m.3.s.high[3], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[4], y=gee.dich.m.3.s.high[4], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[5], y=gee.dich.m.3.s.high[5], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[6], y=gee.dich.m.3.s.high[6], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  geom_line(aes(x=polinv.range[7], y=gee.dich.m.3.s.high[7], colour = "High"), position = position_jitter(width = 3), alpha = 1/10) + 
-  xlab("Political Involvement Index") + ylab("Expected Value of Clientelism") + 
+p3=ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Opposition,y=mean)) +
+  xlab("Political Involvement") + ylab("Expected Value of Clientelism") + 
   theme_bw() + 
-  labs(colour = "Density of the Poor") + 
-  theme(
-    legend.key = element_rect(colour = NA, fill = NA, size = 0.5), 
-    legend.position=c(.4, 0.9),
-    legend.key.height=unit(0.5,"line"),
-    legend.key.width=unit(0.5,"line"),
-    panel.margin = unit(0, "lines"),
-    legend.justification="right") + 
-  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor",
-                                           title.position = "left",
-                                           direction = "horizontal"))
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
+######################################################
+#  Combined Plots
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2,p3,  ncol = 1)
+
+
+
 
 
 
