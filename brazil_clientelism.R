@@ -843,6 +843,89 @@ large.m3= ggplot() + geom_density(aes(x=Low, fill="Low"), data= gee.3.m.zelig.lo
 library(cowplot) # install.packages("cowplot")
 plot_grid(large.m1,large.m2,large.m3, nrow = 1, align = "v", scale = 1)
 
+
+##########################################################################
+### S I M U L A T I O N S:      D  I S T R I B U T I O N   P L O T S  I I 
+##########################################################################
+
+
+##### BY INCOME
+
+set.seed(602); options(scipen=999)
+
+
+# simulation DISTRIBUTION PLOTS
+high.poor = data.frame(group = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+high.rich = data.frame(group = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+low.poor = data.frame(group = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+low.rich = data.frame(group = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+
+# plot
+ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor, alpha = .2) + 
+  geom_density(aes(x=x, fill="High Density"), data= high.rich, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich, alpha = .2) + 
+  ylab("Expected Density") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(.~group)
+  
+
+
+## t test on these distributions
+t.test(high.poor$x, low.poor$x,conf.level = 0.95) # significative pvalue = significantly different
+t.test(high.rich$x, low.rich$x, conf.level = 0.95) # significative pvalue = significantly different
+
+##### BY Competition and Income
+
+set.seed(602); options(scipen=999)
+
+
+# simulation DISTRIBUTION PLOTS
+high.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+high.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+low.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+low.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+# plot
+library(ggplot2)
+ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp, alpha = .2) + 
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp, alpha = .2) + 
+  ylab("Expected Density") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(competition~income)
+
+
+## t test on these distributions
+t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(low.rich.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+
+
+
+
+### MAKE A TABLE IN RNW using this sequence.
+t = t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+as.numeric(t$estimate[2])
 #####################################################################
 ### S I M U L A T I O N S:      I N T E R A C T I O N   P L O T S 
 #####################################################################
@@ -910,7 +993,6 @@ df.pop.alone = data.frame(
   Upper = c(as.numeric(CI(gee.dich.m.2.pop.10.m$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10.m$`10`)[1])),
   Lower =c(as.numeric(CI(gee.dich.m.2.pop.10.m$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10.m$`10`)[3]))
 )
-
 
 
 ### combined two df's

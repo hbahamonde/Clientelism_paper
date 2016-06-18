@@ -1293,6 +1293,11 @@ about the practice''
 asicas insatisfechas”)''.
 
 
+# Effectiveness Gap
+
+  ## ``Latin American countries exhibit a striking ``effectiveness gap'' in that politicians make great efforts to target voters with clientelistic goods, but fail to generate a commensurate number of votes with these practices'' (p. 247).
+
+
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
 \bibliographystyle{plainnat}
 \end{document}
