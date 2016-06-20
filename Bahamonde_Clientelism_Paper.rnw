@@ -1271,6 +1271,8 @@ EDITORS COMMENTS:
 # dont say the poor live sorrounded by more poor // say that in high density --> spillovers are more effective since (1) there more poor, (2) less middle income / rich folks (in line with Shapiro). // Related to this: Is this simply a matter of maximizing finite resources, and parties willingly accept certain inefficiencies at the micro level when targeting clusters of poor people, given the difficulties of targeting at the individual level? (from reviewer 4).
 
 
+# Why not so much emphasis on Brazilian politics. : ``The theoretical mechanism highlighted here is not directly tied to the idiosyncrasies of the Colombian democratic experience''
+
 # Why I excluded constitutive terms of the interaction terms:
 ## Brambor2005: 72. ``he coefficient on the constitutive term X must not be interpreted as the average effect of a change in X on Y as it can in a linear-additive regression model. As the above discussion should have made clear, the coefficient on X only captures the effect of X on Y when Z is zero. [SEE HERE] Similarly, it should be obvious that the coefficient on Z only captures the effect of Z on Y when X is zero.9 It is, therefore, incorrect to say that a positive and significant coefficient on X (or Z) indicates that an increase in X (or Z) is expected to lead to an increase in Y'' This indicates why either SIZE OF THE POOR as a constitutive term AND ANU OTHER CONSTITUTIVE TERM cannot be interpreted alone.
 
@@ -1278,6 +1280,22 @@ EDITORS COMMENTS:
 
 ## Brambor2005:74 The analyst cannot even infer whether X has a meaningful conditional effect on Y from
 the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
+
+# My argument
+	## Against Rueda:  
+		### ``Only when results of small groups are available do voters feel that their vote can be important in reaching any number of votes that the broker considers acceptable to deliver future rewards.'' // 
+		### ``It is also important to highlight that the proposed mechanism predicts a negative effect of higher aggregation of electoral results on vote buying irrespective of the overall size of the electorate or the size of the population. Even in large electorates, it is still possible to sustain vote buying transactions if a group of brokers within that large electorate has access to electoral results of small groups of voters''
+		### ``collective monitoring''. // In line with (Stokes 2005; Stokes et al. 2013): 
+		### ``The article offers the first systematic empirical assessment of the use of collective monitoring and highlights a theory that clarifies why small groups’ results facilitate these transactions even when the voting behavior of those bribed is not observed.'' I SAY `COLLECTIVE MONITORING` IS MORE EFFECTIVE WHEN THE DENSITY OF THE POOR IS LARGE, WHY? BC OF SPILLOVER EFFECTS. BROKERS DON'T NEED TO OBSERVE, THEY JUST NEED TO TAKE ADVANTAGE OF SPILLOVER EFFECTS.
+		### ``Since their choices are not likely to determine whether the termination of future bribes will occur, the bribed voters would have a greater incentive to vote according to their true preferences.'' THIS IS TRUE. HOWEVER, THEIR CHOICES WILL ENDANGER THE CREDIBILITY THE COMMUNITY HAS. THAT ESSENTIALLY COMPROMISES THE POSSIBILITY OF RECEIVING INDUCEMENTS.
+
+
+		### WHy do I say this is not right? Essentially, 
+	## Against Rueda: ``There should be more vote buying incidents where fewer voters vote at each polling station''.
+	## Income has not explained the results well in the clientelism literature. That is why this paper proposes a mechanism where this economic factor is complexed. 
+		(1) non-poor individuals do receive clientelistic offerings, i.e. when the size of the poor is small and when competition is low. In these cases, there exists a situation where parties are not systematically challenged, and supported elections after elections, reinforcing their hegemonic power. Low poverty density contexts imply an environment where the middle class and higher-income individuals are the majority. This increases the marginal costs of clientelism, but given the lack of checks and balances, and the larger discretionality non-challenged parties have, they can easily afford more expensive clients. Lets remember that political competition is measured by the proportion of seats that are different than the major's party. 
+		#### Behavior of latent and actual beneficiaries is the same when the size of the poor is large.
+	## SIze argument: Gingerich and Medina 2013; Rueda 2015; Stokes et al. 2013)
 
 
 # SHapiro
@@ -1289,13 +1307,27 @@ the magnitude and significance of the coefficient on the interaction term either
   ## ``The non-poor might object to clientelism either due to self-interest or because of moral concern
 about the practice''
   ## ``To the extent clientelism serves as a signal of low-quality government performance, middle class voters are unlikely to support a politician who relies on it''.
-  ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades b´
-asicas insatisfechas”)''.
+  ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades basicas insatisfechas”)''.
 
+# Vote-Buying Paper
+	## Rueda2016 ``vote buying separates it from other forms of clientelism in which rewards are given to groups whose voting behavior is known'' 
 
 # Effectiveness Gap
 
   ## ``Latin American countries exhibit a striking ``effectiveness gap'' in that politicians make great efforts to target voters with clientelistic goods, but fail to generate a commensurate number of votes with these practices'' (p. 247).
+  ## ``The dominant argument about the incidence of clientelism in partisan politics has to do with economic development. Poor people laboring at the bare subsistence threshold are expected to discount the future and prefer an immediate, tangible personal direct gain of clientelistic inducement compared to a distance, less tangible collective indirect policy gain. Conversely, as citizen's income rises, the material inducements of clientelism become of questionable value'' (p. 254).
+  	### This is an explanation about ``clientelistic effort''. What if ``the density of the poor'' decreases the amount of effort needed to be clientelism an effective strategy? This should also be mediated by the degree of competition.
+  ## ``High competitiveness forces politicians to deploy their resources in the best possible manner [...] high competitiveness will always make politicians engage in clientelistic targeting if they are fairly certain that is effective'' (p. 261). ``\emph{Hence, greater competitiveness should unconditionally reduce the gap between clientelistic effort and clientelistic effectiveness, whether the equilibrium is a hight or a low level of clientelistic effort}.'' (p. 261)
+  ## ``parties' capacity to mobilize and monitor voters (e.g., via social/civic/party networks) will increase clientelistic effectiveness''
+  ## ``Similar to other developing democracies, Colombia’s electoral environment is such that brokers have a hard time identifying the preferred candidates or voting proclivities of individuals.'' (Rueda2016:5	)
+
+
+# Section on Brazilian politics.
+ ## ``Brazil has served as a poster-child for the impact of electoral rules on clientelism. The interaction of multimember districts with voting on open lists and the absence of vote-pooling of candidate preference votes under the auspices of the same list, as well as the \emph{candidato nato} rule that removed parties' control over the nominations process and let an electoral legislator to decide to run on any party ticket, clearly made Brazil one of the most personalistic systems of democratic governance''. (Latin American Voter, p. ?).
+
+ # My argument
+ 	## Work that links micro and macro explanations of clientelism. Particularly, how macro poverty levels change the incentives of politicians to engage in clientelism at the micro level.
+ 	## Actual/Latent receivers and the idea of ``networks'' (See Calvo and Murillo 2012).
 
 
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}

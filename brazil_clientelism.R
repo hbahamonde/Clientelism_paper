@@ -849,16 +849,20 @@ plot_grid(large.m1,large.m2,large.m3, nrow = 1, align = "v", scale = 1)
 ##########################################################################
 
 
+
+##########################
 ##### BY INCOME
+##########################
+
 
 set.seed(602); options(scipen=999)
 
 
 # simulation DISTRIBUTION PLOTS
 high.poor = data.frame(group = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth)), num=1000000)$getqi(qi="ev"))
-high.rich = data.frame(group = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+high.rich = data.frame(group = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
 low.poor = data.frame(group = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth)), num=1000000)$getqi(qi="ev"))
-low.rich = data.frame(group = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
+low.rich = data.frame(group = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.1.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth)), num=1000000)$getqi(qi="ev"))
 
 # plot
 ggplot() + 
@@ -877,24 +881,24 @@ ggplot() +
 t.test(high.poor$x, low.poor$x,conf.level = 0.95) # significative pvalue = significantly different
 t.test(high.rich$x, low.rich$x, conf.level = 0.95) # significative pvalue = significantly different
 
+
+##########################
 ##### BY Competition and Income
+##########################
 
 set.seed(602); options(scipen=999)
 
 
+
 # simulation DISTRIBUTION PLOTS
-high.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= min(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-
-
-high.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= max(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-
-low.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= min(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-
-low.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Rich Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= max(m.data$wealth), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 
 
 # plot
@@ -911,12 +915,15 @@ ggplot() +
   ylab("Expected Density") + xlab("Expected Value of Clientelism") +
   theme_bw() +
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
-  facet_grid(competition~income)
+  facet_grid(competition~income, scales ="free")
 
 
 ## t test on these distributions
 t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
-t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+
+t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99, paired =TRUE) # significative pvalue = significantly different
+
+
 t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 t.test(low.rich.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 
@@ -926,6 +933,80 @@ t.test(low.rich.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative
 ### MAKE A TABLE IN RNW using this sequence.
 t = t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 as.numeric(t$estimate[2])
+
+
+
+##########################
+###### By Density, Income, COmpetition and Pop Size //
+##########################
+### PUT IN APPENDIX: SAY THAT I DIDNT FIND SUPPORT //
+### ACTUALLY LARGER POPULATION< MORE CLIENTELISM // ATTENTION THIS IS **NOT** RUEDA'S argument
+
+set.seed(602); options(scipen=999)
+
+
+# simulation DISTRIBUTION PLOTS // low pop
+high.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# simulation DISTRIBUTION PLOTS // high pop
+high.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# plot 1 //
+library(ggplot2)
+p1 = ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.lowpop, alpha = .2) +
+  ylab("Expected Density: Large Pop. Size") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(competition~income)
+
+# plot 2 //
+library(ggplot2)
+p2 = ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.highpop, alpha = .2) +
+  ylab("Expected Density: Small Pop. Size") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(competition~income)
+
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
+
+
+
 #####################################################################
 ### S I M U L A T I O N S:      I N T E R A C T I O N   P L O T S 
 #####################################################################
