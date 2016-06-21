@@ -1282,6 +1282,14 @@ EDITORS COMMENTS:
 the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
 
 # My argument
+	## Framing: 
+		``Existing research looks almost exclusively at individuals’ socio- economic and, especially, electoral profile'' (Carlin2015).
+		``Yet our knowledge of who parties target remains incomplete''  (Carlin2015).
+
+
+		### The paper argues that brokers have an incentive structure that changes depending on patterns of competition and the size of the poor group. Hence, poverty structure, whether the individuals are nested in contexts of high or low ``poverty density'' and the political constrains incumbents face at every election, are not a substitute for individual characteristics or macro-structural conditions, but rather they complement them.
+		### Vicente2014 argues ``vote buying increases participation and counteracts the incumbency advantage''. I find that vote buying is higher where political is competition low BUT the density of the poor is low too. In this sense, vote buying helps to sustain incumbency advantage, not counteracts it.
+		### Szwarcberg2013 ``challenges the assumption that parties and candidates with access to material benefits will always distribute goods to low-income voters in exchange for electoral support''.
 	## Against Rueda:  
 		### ``Only when results of small groups are available do voters feel that their vote can be important in reaching any number of votes that the broker considers acceptable to deliver future rewards.'' // 
 		### ``It is also important to highlight that the proposed mechanism predicts a negative effect of higher aggregation of electoral results on vote buying irrespective of the overall size of the electorate or the size of the population. Even in large electorates, it is still possible to sustain vote buying transactions if a group of brokers within that large electorate has access to electoral results of small groups of voters''
@@ -1293,7 +1301,7 @@ the magnitude and significance of the coefficient on the interaction term either
 		### WHy do I say this is not right? Essentially, 
 	## Against Rueda: ``There should be more vote buying incidents where fewer voters vote at each polling station''.
 	## Income has not explained the results well in the clientelism literature. That is why this paper proposes a mechanism where this economic factor is complexed. 
-		(1) non-poor individuals do receive clientelistic offerings, i.e. when the size of the poor is small and when competition is low. In these cases, there exists a situation where parties are not systematically challenged, and supported elections after elections, reinforcing their hegemonic power. Low poverty density contexts imply an environment where the middle class and higher-income individuals are the majority. This increases the marginal costs of clientelism, but given the lack of checks and balances, and the larger discretionality non-challenged parties have, they can easily afford more expensive clients. Lets remember that political competition is measured by the proportion of seats that are different than the major's party. 
+		(1) non-poor individuals do receive clientelistic offerings, i.e. when the size of the poor is small and when competition is low. In these cases, there exists a situation where parties are not systematically challenged, and supported elections after elections, reinforcing their hegemonic power. Low poverty density contexts imply an environment where the middle class and higher-income individuals are the majority. This increases the marginal costs of clientelism, but given the lack of checks and balances, and the larger discretionality non-challenged parties have, they can easily afford more expensive clients. Lets remember that political competition is measured by the proportion of seats that are different than the major's party. As Szwarcberg2013:39-40 argues, ``Access to resources is, however, conditioned by the level of government - national, provincial, or municipal''.
 		#### Behavior of latent and actual beneficiaries is the same when the size of the poor is large.
 	## SIze argument: Gingerich and Medina 2013; Rueda 2015; Stokes et al. 2013)
 
@@ -1304,13 +1312,18 @@ the magnitude and significance of the coefficient on the interaction term either
   ## ``Statistical analysis supports the claim that neither poverty nor political competition alone explains why some politicians opt out of clientelism. Only when a large opposition presence is coupled with a sizable middle class does the use of clientelism decline''
   ## ``Almost universally, scholars of clientelism treat and analyze the practice as an exchange between politicians and their poor clients''.
   ## ``In both older and more recent works on clientelism, poverty, either directly or when manifest through income inequality, is cited as a powerful predictor of clientelism'' : SEE Brusco et al. (2004), Huntington (1968), Scott (1969), and Robinson and Verdier (2002).
-  ## ``The non-poor might object to clientelism either due to self-interest or because of moral concern
+  ## Psychic Costs: ``The non-poor might object to clientelism either due to self-interest or because of moral concern
 about the practice''
   ## ``To the extent clientelism serves as a signal of low-quality government performance, middle class voters are unlikely to support a politician who relies on it''.
   ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades basicas insatisfechas”)''.
+  ## Psychic Costs: ``Democratic objections to clientelism may take a variety of forms [...] Citizens who attach a high value to the integrity of the democratic process may [...] object to the fact that clientelism exploits poor voters''.
+  ## Psychic Costs/ ``moral repugnance'' (Carlin2001)`` Brokers want to avoid democrats because they are relatively costly [producing] ``audience'' costs'' p. 16.
+  ## Psychic Costs/Vicente2014: 2013: ``This large difference is likely due to the immoral/illegal connotation vote-buying practices have in STP''.
+  ## Psychic Costs/Szwarcberg2013: ``challenges the assumption that parties and candidates with access to material benefits will always distribute goods to low-income voters in exchange for electoral support''. ``Candidates who are capable of using and prefer to use clientelism are encouraged to employ these strategies by a per- verse system of incentives that promotes the careers of clientelistic candidates to the detriment of candidates who are either unable or unwilling to use such strategies'' (p. 50). HOWEVER THIS PAPER CANT EXPLAIN THE LONG-RUN EQUILIBRIA. IT MIGHT BE TRUE THAT **SOME** CANDIDATES MIGHT NOT WANT TO USE CLIENTELISM. HOWEVER, THEY ARE KICKED OUT OF THE CYCLE AND REPLACED FOR ONES THAT ARE. IT DOES NOT EXPLAIN WHY SOME CANDIDATES USE. IT JUST REPORTS THAT THE ONES WHO DON'T USE IT, DIE. 
 
 # Vote-Buying Paper
-	## Rueda2016 ``vote buying separates it from other forms of clientelism in which rewards are given to groups whose voting behavior is known'' 
+	## Rueda2016 ``vote buying separates it from other forms of clientelism in which rewards are given to groups whose voting behavior is known'' .
+	## Definition of vote-buying: ``the proffering to voters of cash or (more commonly) minor consumption goods by political parties, in office or in opposition, in exchange for the recipient’s vote''. (Brusco, Nazareno, and Stokes 2004, 67)
 
 # Effectiveness Gap
 
@@ -1320,6 +1333,9 @@ about the practice''
   ## ``High competitiveness forces politicians to deploy their resources in the best possible manner [...] high competitiveness will always make politicians engage in clientelistic targeting if they are fairly certain that is effective'' (p. 261). ``\emph{Hence, greater competitiveness should unconditionally reduce the gap between clientelistic effort and clientelistic effectiveness, whether the equilibrium is a hight or a low level of clientelistic effort}.'' (p. 261)
   ## ``parties' capacity to mobilize and monitor voters (e.g., via social/civic/party networks) will increase clientelistic effectiveness''
   ## ``Similar to other developing democracies, Colombia’s electoral environment is such that brokers have a hard time identifying the preferred candidates or voting proclivities of individuals.'' (Rueda2016:5	)
+  ## ``Their electoral profiles are composed of behaviors that are difficult to monitor with certainty and attitudes''. This quote from Carlin2015: 15.
+  ## ``Hence, brokers must draw inferences about future behavior from information about fluid attitudes and past electoral behavior. But since that information is often imperfect or incomplete, brokers' predictions are imprecise'' .
+  ## (see Nichter 2008 and Dixit/Londregan 1996: leaky buckets)
 
 
 # Section on Brazilian politics.
@@ -1328,6 +1344,7 @@ about the practice''
  # My argument
  	## Work that links micro and macro explanations of clientelism. Particularly, how macro poverty levels change the incentives of politicians to engage in clientelism at the micro level.
  	## Actual/Latent receivers and the idea of ``networks'' (See Calvo and Murillo 2012).
+ 	## ``Unquestionably, brokers are deeply nested in social networks'' (Carlin2015:15)
 
 
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}

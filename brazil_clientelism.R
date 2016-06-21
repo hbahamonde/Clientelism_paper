@@ -1007,6 +1007,79 @@ plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
 
 
 
+##########################
+###### By Density, Income, COmpetition and Dem Values //
+##########################
+
+gee.dich.m.3.s.TEST = zelig(clien1dummy ~  wealth + large + munopp + ing4 + vb3 + exc7 + large*wealth*ing4,
+                       model = "logit.gee",
+                       id = "municipality", 
+                       weights = "wt",
+                       std.err = "san.se",
+                       corstr = "independence",
+                       data = m.data,
+                       cite = F)
+
+
+set.seed(602); options(scipen=999)
+# simulation DISTRIBUTION PLOTS //
+high.poor.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+high.poor.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.3.s.TEST, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# plot 1 //
+library(ggplot2)
+p1=ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.nondem, alpha = .2) +
+  ylab("Expected Density: High Competition") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(dem~income)
+
+# plot 2 //
+library(ggplot2)
+p2=ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.nondem, alpha = .2) +
+  ylab("Expected Density: Low Competition") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(dem~income)
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
+
+
 #####################################################################
 ### S I M U L A T I O N S:      I N T E R A C T I O N   P L O T S 
 #####################################################################
