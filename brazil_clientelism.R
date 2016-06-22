@@ -196,6 +196,9 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 #####################################################################
 
 
+### GEE: In gee there is no quasipossion, because gee is in a way already quasi.
+### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
+### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
 
 # 1
 ################################################
@@ -245,13 +248,13 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData"
 # m1: economic
 m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
 # m2: contextual
-m2.m = formula(clien1dummy ~ large + wealth + urban + pop.10.m + munopp + wealth:munopp + large:munopp)
+m2.m = formula(clien1dummy ~ wealth*munopp*large + pop.10.m)
 # m3: political
 m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + ing4 + vb3 + exc7)
 #### 
 m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
 # m2: contextual
-m2.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + urban +  pop.10.r + munopp + wealth:munopp + as.numeric(wagehalf.4):munopp + weights)
+m2.r = formula(clien1dummy ~ wealth*munopp*as.numeric(wagehalf.4) + pop.10.m + weights)
 # m3: political
 m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + ing4 + vb3 + exc7 + weights)
 ####### formulas
@@ -888,8 +891,6 @@ t.test(high.rich$x, low.rich$x, conf.level = 0.95) # significative pvalue = sign
 
 set.seed(602); options(scipen=999)
 
-
-
 # simulation DISTRIBUTION PLOTS
 high.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 high.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
@@ -912,20 +913,22 @@ ggplot() +
   geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp, alpha = .2) + 
   geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp, alpha = .2) + 
   geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp, alpha = .2) + 
-  ylab("Expected Density") + xlab("Expected Value of Clientelism") +
+  ylab("Estimated Density") + xlab("Expected Value of Clientelism") +
   theme_bw() +
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
   facet_grid(competition~income, scales ="free")
 
-
 ## t test on these distributions
+### 1
 t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
-
-t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99, paired =TRUE) # significative pvalue = significantly different
-
-
+### 2
+t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+### 3
+t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+### 4
 t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
-t.test(low.rich.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+
+
 
 
 

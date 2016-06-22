@@ -178,9 +178,7 @@
 %----------------------------------------------------------------------------------------
 
 \begin{abstract}
-
-Do parties target individuals or groups? This is a fundamental question to understand clientelism. This paper argues that brokers target communities where the density of the poor is high, regardless of individual income. There are two types of bribed individuals. Actual beneficiaries and potential beneficiaries. Actual beneficiaries want to keep benefits coming. Potential beneficiaries  are better off supporting the broker's candidate. Brokers aware of this situation, take advantage of the spillover effects associated to the territorial proximity of poor individuals. This argument is tested using a novel variable to measure group-poverty and a quasi-experimental design which allows us to parcel out the effects of individual-level poverty and group-level poverty. This is the first paper that argues that party machines target individuals irrespective of their individual incomes.
-
+Do parties target individuals or groups? This is a fundamental question to understand clientelism, and yet the literature does not offer a consensus. This paper argues that brokers target high-dense poverty clusters when political competition is high, and low-dense poverty clusters when political competition is low. Since heavy contestation requires more votes, motivated brokers have the incentives to engage in group-monitoring. Given that brokers cannot increase their monitoring capacities to target large groups, they take their risks and rely on the economies of scale and spillover effects that large aggregations of poor individuals provide. On the contrary, when political contestation is low, brokers target low-dense poverty clusters. This way of targeting is closer to a much secure investment. Building on recent research that gives emphasis to macro variables (group size and electoral competition), it also considers the issue of individual income. However, the paper departs from recent research in that the theory and models presented here do find that clientelism also happens to non-poor individuals only under low-competition settings. In non-contested districts, it is easier to deviate more resources to engage in rather expensive forms of vote-buying. Using Brazil as a case, the paper exploits the variations of personal incomes within different poverty-density contexts to support the theory. 
 \end{abstract}
 
 %\hspace*{6.3cm}{\bf 6,614 words}
@@ -189,12 +187,31 @@ Do parties target individuals or groups? This is a fundamental question to under
 % CONTENT 
 %----------------------------------------------------------------------------------------
 
+
+%# Introduction
 \section*{Do parties target individuals or groups?} 
 
-% Motivation and synthesis paragraph
-The literature on distributive politics and clientelism offer different answers for this very important question. On the one hand, the distributive politics literature argues that what usually gets targeted are districts\footnote{See for example \citet[]{Dixit1996}, and more recent study \citet[]{Khemani2015}.} or provinces\footnote{See for example \citet[]{Calvo2004}.}. Most typically, party machines deliver public jobs, or construction projects in exchange for votes from \emph{groups} of individuals. On the other hand, the clientelism literature has typically focused on individuals. For example, the ethnographic literature traditionally has focused on individual interactions between the party machines and targeted individuals. Overall, both qualitative and quantitative scholars (via survey data or experimental designs) have topically concentrated their efforts on individuals\footnote{\citet[]{Carlin2015}.}. 
+% the literature doesn't agree
+There is not agreement on whether parties target individuals \emph{or} groups. On the one hand, the distributive politics and vote-buying literatures offer different answers for this very important question. The distributive politics literature mostly focuses on groups, usually districts (see for example \citet[]{Dixit1996} and most recently, \citet[]{Khemani2015}) or provinces (\citet[]{Calvo2004}). In this literature brokers deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of individuals. On the other hand, the vote-buying literature has typically focused on individuals and their characteristics such as socio-economic and electoral profiles (\citet[]{Carlin2015}). Particularly, individual poverty has been positioned as one of the main explanations of clientelism (\citet{Kitschelt2000,Calvo2004} and Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}). Very recently, some papers have stressed the impact of macro-conditions. For example \citet[]{Weitz-shapiro} studies how high-political competition (a macro-structural factor) interacted with individual income is positively associated to more clientelism. 
 
-%{\color{red}Check: \citet[]{Carlin2015}. THEY SAY THAT LITERATURE HAS FOCUSED ON ``individuals’ socio- economic and, especially, electoral profiles—which parties and candidates they support, professed ideological leanings, past voting turnout, and choice. We argue party brokers also consider democratic attitudinal profiles''.}.
+% it's both
+More importantly, there is no consensus on what 
+
+
+
+
+
+
+
+%# Hook//Question.
+
+
+
+
+
+
+
+
 
 This paper is framed within the clientelism literature and it proposes to switch efforts to consider a group-targeting party strategy instead. The main argument is that brokers target \emph{clusters} of poor people, not poor \emph{individuals}. Contrary to what others have argued, cluster membership are different from the individual membership in \emph{formal associations}. Clusters do not need to be small to be targeted also. This paper argues that when individuals live in areas where the \emph{density of poor} is high, \emph{actual} and \emph{potential} beneficiaries support the clientelistic machine. The model we present does not present an argument about the \emph{net size of the group}. However, the argument is about the economic \emph{homogeneity} of the targeted people. An important implication, and contrary to what most of the literature considers, is that \emph{individual} income has no effect on the likelihood of being bribed. Brokers take advantage of the territorial proximity among poor individuals (a ``cluster''). We claim that brokers are aware that even \emph{potential} beneficiaries are better off supporting him. Consequently, party machines systematically target \emph{groups} of poor people based on an aggregated measurement of poverty. I.e., they do not target single individuals based on their individual low income. An important prediction of this model is that if two subjects are equally poor (i.e. they have the same income), but one of them lives in a high dense-poor area while the other one lives in a low-dense poverty area, the former will most likely be bribed. This prediction works regardless of their degree of involvement with formal local-association and the size of the community. 
 
@@ -338,54 +355,6 @@ I use survey data from the Latin American Public Opinion Project for Brazil 2010
 \subsection*{Outcome Variable}
 
 <<clien2r, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Dependent Variable y', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-cat("\014")
-rm(list=ls())
-
-# Load the data
-library(foreign) # install.packages("foreign") 
-dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
-
-# Recoding vars
-dat <- na.omit(dat)
-dat$ed <- as.numeric(dat$ed)
-dat$vb3 <- as.numeric(dat$vb3)
-dat$exc7 <- as.numeric(dat$exc7)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv1 <- as.numeric(dat$polinv1)
-dat$polinv2 <- as.numeric(dat$polinv2)
-dat$polinv3 <- as.numeric(dat$polinv3)
-dat$polinv4 <- as.numeric(dat$polinv4)
-dat$polinv5 <- as.numeric(dat$polinv5)
-
-# Constructing Matched Set
-library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
-                 discard = "hull.both", 
-                 method = "cem",
-                 data = dat,
-                 verbose = F
-                 )
-
-# Match Data
-m.data <- match.data(m.out)
-sum.match = summary(m.out)
-
-# Recode client1dummy after matching
-library(car) # install.packages("car") 
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-## Distribution Outcome Variable Binary Outcome
-m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
-library(ggplot2)
-
-ggplot(data=m.data, aes(x=clien1dummy)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
-
 @
 
 % Introducing Outcome Variable
@@ -406,22 +375,6 @@ The treatment variable was originally continuous and \autoref{fig:tgraph} plots 
 <<tgraph, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Treatment Variable', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
 ## Distribution treatment var
 # Labels
-ggplot.labels1 <- data.frame(
-        time = c(15, 60), 
-        value = c(75, 75), 
-        label = c("Low (C)", "High (T)"), 
-        type = c("NA*", "MVH")
-)
-
-## Plot
-library(ggplot2)
-ggplot(m.data, aes(x=wagehalf)) + 
-        geom_histogram(binwidth=2.5, alpha=.7) + 
-        #geom_density(alpha=.1) +
-        theme_bw() +
-        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
-        xlab("Density of the Poor") + ylab("Frequency") +
-        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
 @
 
 % Explaining the threshold
@@ -462,59 +415,6 @@ As clientelism can only take two values, 1 when clientelism occurs and 0 otherwi
 \subsection*{Results} 
 
 <<tab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
-# Recode client1dummy after matching
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-
-
-
-# Models
-
-# library(devtools) # install.packages("devtools")
-#install_github('IQSS/Zelig')
-library(Zelig) 
-
-relogit.1 <- zelig(clien1dummy ~ large,
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-relogit.2 <- zelig(clien1dummy ~ large + exc7 + polinv + urban + log(pop) + ed,
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-relogit.3 <- zelig(clien1dummy ~ income + exc7 + polinv + urban + log(pop) + ed,
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-m.data$logpop = log(m.data$pop)
-relogit.4 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-relogit.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + log(pop):polinv,
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-relogit.6 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income, 
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-# Table
-library(texreg, quietly = T) # install.packages("texreg")
 @
 
 
@@ -525,38 +425,6 @@ library(texreg, quietly = T) # install.packages("texreg")
 
 <<fig:4, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Probability of Clientelism Given the Treatment (Density Function Plot)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
 # Simulation
-large.0 <- setx(relogit.4, large =0)
-large.1 <- setx(relogit.4, large =1)
-set.seed(602)
-Model.large.s <- sim(relogit.4, x = large.0, x1 = large.1, num=250000)
-
-large.0.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x")); colnames(large.0.s)[1] <- "X1"
-large.1.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x1")); colnames(large.1.s)[1] <- "X2"
-Model.large.e = cbind(large.0.s,large.1.s)
-
-
-X1 <- Model.large.e$X1
-X2 <- Model.large.e$X2
-
-# Plot
-ggplot.labels2 <- data.frame(
-        time = c(mean(Model.large.e$X1), mean(Model.large.e$X2), mean(Model.large.e$X1), mean(Model.large.e$X2)), 
-        value = c(14, 17, 11, 15), 
-        label = c("Low", "High", round(mean(Model.large.e$X1), 3),round(mean(Model.large.e$X2), 3)), 
-        type = c("NA*", "MVH")
-)
-
-library(ggplot2) # install.packages("ggplot2")
-
-ggplot() + 
-        geom_density(aes(x=X1), data= Model.large.e,  fill="grey", alpha = .9, linetype="dotted") + 
-        geom_density(aes(x=X2), data=Model.large.e, fill="dark grey", alpha = .8) +
-        xlab("") + ylab("") +
-        theme_bw() +
-        geom_segment(data= Model.large.e, aes(x = mean(X1), y = 0, xend = mean(X1), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
-        geom_segment(data= Model.large.e, aes(x = mean(X2), y = 0, xend = mean(X2), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
-        theme(legend.title=element_blank()) +
-        geom_text(data = ggplot.labels2, aes(x = time, y = value, label = label),colour = "black", size=4)
 @
 
 % The treatment variable works and it is very strong.
@@ -565,50 +433,6 @@ ggplot() +
 \subsection*{Is Associationism Associated to Clientelism?}
 
 <<int:1, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Interaction term: Population Size and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-# Recode client1dummy after matching
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-# Transformation
-m.data$logpop = log(m.data$pop)
-polinv.range <- min(m.data$polinv):max(m.data$polinv)
-logpop.range <- min(m.data$logpop):max(m.data$logpop)
-
-# Interacted Model
-relogit.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv,
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-# Simulations
-x0.1.A <- setx(relogit.5, polinv = quantile(m.data$polinv, .25), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
-x0.1.B <- setx(relogit.5, polinv = quantile(m.data$polinv, .75), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
-set.seed(602)
-relogit.5.s1.A <- sim(relogit.5, x=x0.1.A, num=600)
-relogit.5.s1.B <- sim(relogit.5, x=x0.1.B, num=600)
-
-relogit.5.e1.A = data.frame(relogit.5.s1.A$getqi(qi="ev", xvalue="range")); colnames(relogit.5.e1.A)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # low
-relogit.5.e1.B = data.frame(relogit.5.s1.B$getqi(qi="ev", xvalue="range")); colnames(relogit.5.e1.B)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # high
-
-# Plot
-library(ggplot2)
-ggplot() + 
-        geom_point(aes(x=polinv.range[1], y=relogit.5.e1.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[1], y=relogit.5.e1.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[2], y=relogit.5.e1.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[2], y=relogit.5.e1.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[3], y=relogit.5.e1.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[3], y=relogit.5.e1.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[4], y=relogit.5.e1.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[4], y=relogit.5.e1.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[5], y=relogit.5.e1.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[5], y=relogit.5.e1.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[6], y=relogit.5.e1.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[6], y=relogit.5.e1.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
-        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
 @
 
 % On the issue of log(Pop)*Associastionism
@@ -622,82 +446,6 @@ Repeating the process described above on simulations,  \autoref{fig:int:1} takes
 Results regarding population size and associationism are not consistent with past research. Aside from that, another aspect that needs attention is the relationship between the size of the poor and associationism. As argued before, new research on clientelism finds that there is an association between group membership and clientelism. However, in theory, it would be reasonable to expect that poor individuals join associations at the local level to solve their problems. Keeping coordination costs constant, groups typically are formed to address collectively problems that otherwise would be much costly to solve by individuals on their own\footnote{{\color{red}DO WE NEED TO SUPPORT THIS VERY INTUITIVE OBSERVATION?}}. If that were the case, high-poor density ought to be confounded with group membership. However, we still do not know whether brokers target individuals \emph{because they are related to an association} (standard finding in the literature so far) or \emph{because brokers target their resources to highly populated poor groups} (this paper's argument). 
 
 <<int:2, echo = FALSE, tidy=TRUE, fig.pos='H', warning=FALSE, message=FALSE, fig.cap='High Density and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-# 
-library(foreign) # install.packages("foreign") 
-dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
-dat <- na.omit(dat)
-dat$ed <- as.numeric(dat$ed)
-dat$vb3 <- as.numeric(dat$vb3)
-dat$exc7 <- as.numeric(dat$exc7)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv1 <- as.numeric(dat$polinv1)
-dat$polinv2 <- as.numeric(dat$polinv2)
-dat$polinv3 <- as.numeric(dat$polinv3)
-dat$polinv4 <- as.numeric(dat$polinv4)
-dat$polinv5 <- as.numeric(dat$polinv5)
-
-library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
-                 discard = "hull.both", 
-                 method = "cem",
-                 data = dat,
-                 verbose = F
-)
-
-
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-# Main Model
-m.data$logpop = log(m.data$pop)
-relogit.4 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                   model = "relogit", 
-                   #robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-# Simulation A x0.2
-polinv.range <- min(m.data$polinv):max(m.data$polinv)
-logpop.range <- min(m.data$logpop):max(m.data$logpop)
-
-x0.2.A <- setx(relogit.4, large = 0, polinv = polinv.range)
-set.seed(602)
-relogit.4.s2.A <- sim(relogit.4, x=x0.2.A, num=1000)
-relogit.4.e2.A = data.frame(relogit.4.s2.A$getqi(qi="ev", xvalue="range")); colnames(relogit.4.e2.A)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # low
-
-X.scale.2 <- c(mean(relogit.4.e2.A[,1]), 
-               mean(relogit.4.e2.A[,2]), 
-               mean(relogit.4.e2.A[,3]), 
-               mean(relogit.4.e2.A[,4]), 
-               mean(relogit.4.e2.A[,5]), 
-               mean(relogit.4.e2.A[,6])
-               )
-
-# Simulation B x1.2
-x1.2.B <- setx(relogit.4, large = 1, polinv = polinv.range)
-set.seed(602)
-relogit.4.s2.B <- sim(relogit.4, x=x1.2.B, num=1000)
-relogit.4.e2.B = data.frame(relogit.4.s2.B$getqi(qi="ev", xvalue="range")); colnames(relogit.4.e2.B)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # high
-
-# Plot
-library(ggplot2)
-ggplot() + 
-        geom_point(aes(x=polinv.range[1], y=relogit.4.e2.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[1], y=relogit.4.e2.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[2], y=relogit.4.e2.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[2], y=relogit.4.e2.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[3], y=relogit.4.e2.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[3], y=relogit.4.e2.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[4], y=relogit.4.e2.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[4], y=relogit.4.e2.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[5], y=relogit.4.e2.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[5], y=relogit.4.e2.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[6], y=relogit.4.e2.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[6], y=relogit.4.e2.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
-        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
 @
 
 % Comments on the plot
@@ -726,65 +474,11 @@ All and all, group membership itself does not seem to be associated to clienteli
 
 % Original Distribution of Outcome Variable
 <<match3, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Original Distribution of Outcome Variable (matched set)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-## Distribution Outcome Variable 3 outcomes
-
-# Match Data
-m.data <- match.data(m.out)
-
-# Plot
-library(ggplot2)
-ggplot(data=m.data, aes(x=clientelism)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
-
 @
 
 
 % Computing L statistic
 <<lstat, echo = FALSE, tidy=TRUE, message = F, cache = TRUE>>=
-large <- as.numeric(m.data$large)
-income <- as.numeric(m.data$income)
-exc7 <- as.numeric(m.data$exc7)
-polinv <- as.numeric(m.data$polinv)
-urban <- as.numeric(m.data$urban)
-logpop = log(m.data$pop)
-logpop <- as.numeric(logpop)
-ed <- as.numeric(m.data$ed)
-munopp <- as.numeric(m.data$munopp)
-vb3 <- as.numeric(m.data$vb3)
-
-
-m.data.imb <- data.frame(large, income, exc7, polinv, urban, logpop, ed, munopp, vb3)
-vars <- c("income", "exc7", "polinv", "urban", "logpop", "ed", "munopp", "vb3")
-library(cem)
-imb <- imbalance(group = m.data$large, data = m.data.imb[vars])
-#imb
-
-# l
-l = imb$tab[3] # Extract L Statistic
-st = imb$tab[1] # Extract Diff in Means
-
-# Calling values
-l.income = round(l$L1[1], 3)
-l.exc7 = round(l$L1[2], 3)
-l.polinv = round(l$L1[3], 3)
-l.urban = round(l$L1[4], 3)
-l.logpop = round(l$L1[5], 3)
-l.ed = round(l$L1[6], 3)
-l.munopp = round(l$L1[7], 3)
-l.vb3 = round(l$L1[8], 3)
-
-# Calling values
-st.income = round(st$statistic[1], 3)
-st.exc7 = round(st$statistic[2], 3)
-st.polinv = round(st$statistic[3], 3)
-st.urban = round(st$statistic[4], 3)
-st.logpop = round(st$statistic[5], 3)
-st.ed = round(st$statistic[6], 3)
-st.munopp = round(st$statistic[7], 3)
-st.vb3 = round(st$statistic[8], 3)
 @
 
 \begin{table}[H] \centering 
@@ -811,447 +505,33 @@ Political Id 				& \Sexpr{l.vb3} 	& \Sexpr{st.vb3} 	\\
 
 % Summary Stats Matched Set
 <<sumtab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
-# Subset Data for Descriptive Stats Table
-
-# matched sample
-m.dat.clien1dummy <- m.data$clien1dummy 
-m.dat.clien1dummy <- dat$clien1dummy 
-m.dat.large <- dat$large 
-m.dat.polinv <- dat$polinv 
-m.dat.exc7 <- dat$exc7 
-m.dat.vb3 <- dat$vb3 
-m.dat.ed <- dat$ed 
-m.dat.income <- dat$income 
-m.dat.munopp <- dat$munopp
-m.dat.pop = dat$pop
-m.dat.logpop = log(m.dat.pop)
-m.dat.urban <- dat$urban
-m.dat.urban <- as.numeric(m.dat.urban)
-m.dat.urban <- recode(m.dat.urban, "1 = 0 ; 2 = 1")
-m.dat.polinv <-  dat$polinv
-m.dat.ed <- dat$ed
-m.dat.ed <- as.numeric(m.dat.ed)
-m.dat.ed <- recode(m.dat.ed, "
-                   1 = 0 ; 
-                   2 = 1 ; 
-                   3 = 2 ; 
-                   4 = 3 ;
-                   5 = 4 ;
-                   6 = 5 ;
-                   7 = 6 ;
-                   8 = 7 ;
-                   9 = 8 ;
-                   10 = 9 ;
-                   11 = 10 ;
-                   12 = 11 ;
-                   13 = 12 ;
-                   14 = 13 ;
-                   15 = 14 ;
-                   16 = 15 ;
-                   17 = 16")
-
-m.data.s <- data.frame(m.dat.clien1dummy, m.dat.large, m.dat.income, m.dat.exc7, m.dat.polinv, m.dat.urban, m.dat.logpop, m.dat.ed, m.dat.munopp, m.dat.vb3)
-
-# Descriptive Stats Matched Set
-library(stargazer, quietly = T)
-stargazer(m.data.s, 
-          summary=T, 
-          title = "Summary Statistics: Matched Sample",
-          label = "sumtab:1",
-          type = "text",
-          font.size = "scriptsize",
-          style= "apsr",
-          covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
-          table.placement = "h",
-          notes.align = "c"
-)
 @
 
 % Summary Stats Raw Set
 <<sumtab:2, echo=FALSE, comment=NA, results='asis', cache = T>>=
-# Descriptive Stats Raw Set
-
-# Subset Data for Descriptive Stats Table
-
-# whole sample
-dat.clien1dummy <- dat$clien1dummy 
-dat.large <- dat$large 
-dat.polinv <- dat$polinv 
-dat.exc7 <- dat$exc7 
-dat.vb3 <- dat$vb3 
-dat.ed <- dat$ed 
-dat.income <- dat$income 
-dat.munopp <- dat$munopp
-dat.pop = dat$pop
-dat.logpop = log(dat.pop)
-dat.urban <- dat$urban
-dat.urban <- as.numeric(dat.urban)
-dat.urban <- recode(dat.urban, "1 = 0 ; 2 = 1")
-dat.polinv <-  dat$polinv
-dat.ed <- dat$ed
-dat.ed <- as.numeric(dat.ed)
-dat.ed <- recode(dat.ed, "
-                 1 = 0 ; 
-                 2 = 1 ; 
-                 3 = 2 ; 
-                 4 = 3 ;
-                 5 = 4 ;
-                 6 = 5 ;
-                 7 = 6 ;
-                 8 = 7 ;
-                 9 = 8 ;
-                 10 = 9 ;
-                 11 = 10 ;
-                 12 = 11 ;
-                 13 = 12 ;
-                 14 = 13 ;
-                 15 = 14 ;
-                 16 = 15 ;
-                 17 = 16")
-
-dat.s <- data.frame(dat.clien1dummy, dat.large, dat.income, dat.exc7, dat.polinv, dat.urban, dat.logpop, dat.ed, dat.munopp, dat.vb3)
-
-
-library(stargazer, quietly = T)
-stargazer(dat, 
-          summary=T, 
-          title = "Summary Statistics: Raw Sample",
-          label = "sumtab:2",
-          type = "text",
-          font.size = "scriptsize",
-          style= "apsr",
-          covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
-          table.placement = "h",
-          notes.align = "c"
-)
 @
 
 % QQ Plots
 <<balance, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Testing Pre and Post Matching Covariate Balance', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-set.seed(602)
-plot(m.out, col = "forestgreen")
 @
 
 
 % GPS
 <<gps:tab,echo=FALSE, comment=NA, results='asis', cache = T>>=
-library(foreign)
-dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
-
-# Recoding vars
-dat <- na.omit(dat)
-dat$ed <- as.numeric(dat$ed)
-dat$vb3 <- as.numeric(dat$vb3)
-dat$exc7 <- as.numeric(dat$exc7)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv1 <- as.numeric(dat$polinv1)
-dat$polinv2 <- as.numeric(dat$polinv2)
-dat$polinv3 <- as.numeric(dat$polinv3)
-dat$polinv4 <- as.numeric(dat$polinv4)
-dat$polinv5 <- as.numeric(dat$polinv5)
-
-
-# Generating the Propensity Score 
-library(CBPS, quietly = T) # install.packages("CBPS")
-
-
-fit <- CBPS(wagehalf ~ income + ed + log(pop) + polinv, data = dat, iterations = 2500)
-# Attaching weights to DF
-dat$weights = fit$weights
-
-
-# Recode Before modeling
-dat$clien1dummy <- as.numeric(dat$clien1dummy)
-library(car)
-dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
-
-
-# Models
-library(Zelig)
-gps.relogit.1 <- zelig(clien1dummy ~ wagehalf,
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
-
-gps.relogit.2 <- zelig(clien1dummy ~ wagehalf + exc7 + polinv + urban + log(pop) + ed,
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
-
-gps.relogit.3 <- zelig(clien1dummy ~ wagehalf + exc7 + polinv + urban + log(pop) + ed,
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
-
-dat$logpop = log(dat$pop)
-gps.relogit.4 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
-
-gps.relogit.5 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + log(pop):polinv,
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
-
-gps.relogit.6 <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income, 
-                       model = "ls",
-                       weights = "weights", 
-                       #robust = TRUE,
-                       cite = FALSE,
-                       data = dat)
 @
 
 <<gps:fig, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Expected Value Given Continuous Treatment (GPS Weighting, 800 simulations per each value on the X-axis)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=1000,cache = TRUE>>=
-##########################
-#   GPS  Weighting PLOT [gps:fig]
-##########################
-
-# Transformation
-wagehalf.range <- min(dat$wagehalf):max(dat$wagehalf)
-
-# Simulation x0.gps
-low.polinv <- setx(gps.relogit.4, polinv = quantile(dat$polinv, .25), wagehalf= wagehalf.range)
-high.polinv <- setx(gps.relogit.4, polinv = quantile(dat$polinv, .75), wagehalf= wagehalf.range)
-
-set.seed(602)
-relogit.4.s1.gps <- sim(gps.relogit.4, x=low.polinv, x1=high.polinv, num=100)
-
-relogit.4.low.gps = data.frame(relogit.4.s1.gps$getqi(qi="ev", xvalue="range")); colnames(relogit.4.low.gps)<-seq(1:76) # low
-relogit.4.high.gps = data.frame(relogit.4.s1.gps$getqi(qi="ev", xvalue="range1")); colnames(relogit.4.high.gps)<-seq(1:76) # high
-
-library(ggplot2)
-set.seed(602)
-ggplot() + 
-        geom_point(aes(x=wagehalf.range[1], y=relogit.4.low.gps[1]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[2], y=relogit.4.low.gps[2]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[3], y=relogit.4.low.gps[3]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[4], y=relogit.4.low.gps[4]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[5], y=relogit.4.low.gps[5]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[6], y=relogit.4.low.gps[6]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[7], y=relogit.4.low.gps[7]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[8], y=relogit.4.low.gps[8]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[9], y=relogit.4.low.gps[9]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[10], y=relogit.4.low.gps[10]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[11], y=relogit.4.low.gps[11]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[12], y=relogit.4.low.gps[12]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[13], y=relogit.4.low.gps[13]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[14], y=relogit.4.low.gps[14]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[15], y=relogit.4.low.gps[15]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[16], y=relogit.4.low.gps[16]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[17], y=relogit.4.low.gps[17]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[18], y=relogit.4.low.gps[18]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[19], y=relogit.4.low.gps[19]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[20], y=relogit.4.low.gps[20]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[21], y=relogit.4.low.gps[21]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[22], y=relogit.4.low.gps[22]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[23], y=relogit.4.low.gps[23]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[24], y=relogit.4.low.gps[24]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[25], y=relogit.4.low.gps[25]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[26], y=relogit.4.low.gps[26]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[27], y=relogit.4.low.gps[27]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[28], y=relogit.4.low.gps[28]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[29], y=relogit.4.low.gps[29]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[30], y=relogit.4.low.gps[30]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[31], y=relogit.4.low.gps[31]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[32], y=relogit.4.low.gps[32]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[33], y=relogit.4.low.gps[33]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[34], y=relogit.4.low.gps[34]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[35], y=relogit.4.low.gps[35]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[36], y=relogit.4.low.gps[36]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[37], y=relogit.4.low.gps[37]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[38], y=relogit.4.low.gps[38]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[39], y=relogit.4.low.gps[39]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[40], y=relogit.4.low.gps[40]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[41], y=relogit.4.low.gps[41]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[42], y=relogit.4.low.gps[42]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[43], y=relogit.4.low.gps[43]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[44], y=relogit.4.low.gps[44]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[45], y=relogit.4.low.gps[45]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[46], y=relogit.4.low.gps[46]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[47], y=relogit.4.low.gps[47]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[48], y=relogit.4.low.gps[48]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[49], y=relogit.4.low.gps[49]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[50], y=relogit.4.low.gps[50]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[51], y=relogit.4.low.gps[51]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[52], y=relogit.4.low.gps[52]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[53], y=relogit.4.low.gps[53]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[54], y=relogit.4.low.gps[54]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[55], y=relogit.4.low.gps[55]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[56], y=relogit.4.low.gps[56]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[57], y=relogit.4.low.gps[57]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[58], y=relogit.4.low.gps[58]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[59], y=relogit.4.low.gps[59]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[60], y=relogit.4.low.gps[60]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[61], y=relogit.4.low.gps[61]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[62], y=relogit.4.low.gps[62]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[63], y=relogit.4.low.gps[63]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[64], y=relogit.4.low.gps[64]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[65], y=relogit.4.low.gps[65]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[66], y=relogit.4.low.gps[66]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[67], y=relogit.4.low.gps[67]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[68], y=relogit.4.low.gps[68]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[69], y=relogit.4.low.gps[69]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[70], y=relogit.4.low.gps[70]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[71], y=relogit.4.low.gps[71]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[72], y=relogit.4.low.gps[72]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[73], y=relogit.4.low.gps[73]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[74], y=relogit.4.low.gps[74]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[75], y=relogit.4.low.gps[75]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[76], y=relogit.4.low.gps[76]), position = position_jitter(width = 2), size = I(5), color = "red", alpha = 1/530) + 
-        geom_point(aes(x=wagehalf.range[1], y=relogit.4.high.gps[1]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[2], y=relogit.4.high.gps[2]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[3], y=relogit.4.high.gps[3]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[4], y=relogit.4.high.gps[4]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[5], y=relogit.4.high.gps[5]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[6], y=relogit.4.high.gps[6]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[7], y=relogit.4.high.gps[7]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[8], y=relogit.4.high.gps[8]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[9], y=relogit.4.high.gps[9]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[10], y=relogit.4.high.gps[10]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[11], y=relogit.4.high.gps[11]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[12], y=relogit.4.high.gps[12]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[13], y=relogit.4.high.gps[13]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[14], y=relogit.4.high.gps[14]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[15], y=relogit.4.high.gps[15]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[16], y=relogit.4.high.gps[16]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[17], y=relogit.4.high.gps[17]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[18], y=relogit.4.high.gps[18]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[19], y=relogit.4.high.gps[19]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[20], y=relogit.4.high.gps[20]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[21], y=relogit.4.high.gps[21]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[22], y=relogit.4.high.gps[22]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[23], y=relogit.4.high.gps[23]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[24], y=relogit.4.high.gps[24]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[25], y=relogit.4.high.gps[25]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[26], y=relogit.4.high.gps[26]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[27], y=relogit.4.high.gps[27]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[28], y=relogit.4.high.gps[28]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[29], y=relogit.4.high.gps[29]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[30], y=relogit.4.high.gps[30]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[31], y=relogit.4.high.gps[31]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[32], y=relogit.4.high.gps[32]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[33], y=relogit.4.high.gps[33]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[34], y=relogit.4.high.gps[34]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[35], y=relogit.4.high.gps[35]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[36], y=relogit.4.high.gps[36]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[37], y=relogit.4.high.gps[37]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[38], y=relogit.4.high.gps[38]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[39], y=relogit.4.high.gps[39]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[40], y=relogit.4.high.gps[40]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[41], y=relogit.4.high.gps[41]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[42], y=relogit.4.high.gps[42]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[43], y=relogit.4.high.gps[43]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[44], y=relogit.4.high.gps[44]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[45], y=relogit.4.high.gps[45]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[46], y=relogit.4.high.gps[46]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[47], y=relogit.4.high.gps[47]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[48], y=relogit.4.high.gps[48]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[49], y=relogit.4.high.gps[49]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[50], y=relogit.4.high.gps[50]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[51], y=relogit.4.high.gps[51]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[52], y=relogit.4.high.gps[52]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[53], y=relogit.4.high.gps[53]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[54], y=relogit.4.high.gps[54]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[55], y=relogit.4.high.gps[55]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[56], y=relogit.4.high.gps[56]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[57], y=relogit.4.high.gps[57]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[58], y=relogit.4.high.gps[58]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[59], y=relogit.4.high.gps[59]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[60], y=relogit.4.high.gps[60]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[61], y=relogit.4.high.gps[61]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[62], y=relogit.4.high.gps[62]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[63], y=relogit.4.high.gps[63]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[64], y=relogit.4.high.gps[64]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[65], y=relogit.4.high.gps[65]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[66], y=relogit.4.high.gps[66]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[67], y=relogit.4.high.gps[67]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[68], y=relogit.4.high.gps[68]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[69], y=relogit.4.high.gps[69]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[70], y=relogit.4.high.gps[70]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[71], y=relogit.4.high.gps[71]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[72], y=relogit.4.high.gps[72]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[73], y=relogit.4.high.gps[73]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[74], y=relogit.4.high.gps[74]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[75], y=relogit.4.high.gps[75]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/300) +
-        geom_point(aes(x=wagehalf.range[76], y=relogit.4.high.gps[76]), position = position_jitter(width = 2), size = I(5), color = "blue", alpha = 1/530) + 
-        xlab("Percentage People Living With Less than Half of the Minimum Wage") + ylab("Expected Value of Clientelism") + theme_bw()
 @
 
-<<weitz:1, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Interaction Effects Plot: Municipal Opposition and Income', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-library(DAMisc) # install.packages("DAMisc")
-logit.int <- glm(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income,  
-                 family=binomial(link="logit"), 
-                 data = m.data)
 
-out <- intEff(obj=logit.int, vars=c("munopp", "income"), data=m.data)
 
-set.seed(604)
-logit.int.p <- plot(jitter(out$phat, amount=0.009), 
-                    jitter(out$int_eff, amount=0.009), 
-                    xlab="Predicted Probability of Clientelism", 
-                    ylab = "Municipal Opposition * Income",
-                    ylim=c(-0.015, 0.02)
-)
-abline(h=0, col = "red", lty=2, lwd=2.5)
-ag <- aggregate(out$linear, list(out$phat), mean)
-lines(ag[,1], ag[,2], lty=1, col="red", lwd=3)
-legend("bottomright", 
-       c("Correct Marginal Effect", "Linear Marginal Effect"), 
-       pch=c(1, NA), 
-       lty=c(NA, 1), 
-       col=c("black", "red"), 
-       lwd=c(NA, 2), 
-       inset=.01
-)
-@
-
-%\begin{figure}[H]\caption{Standardized Values for Clientelism and Poor Density \label{fig:8}}
-%\includegraphics[scale=0.8, center]{munides1.pdf}
-%\end{figure}
-
-%\begin{figure}[H]\caption{Standardized Values for Income and Poor Density\label{fig:9}}
-%\includegraphics[scale=0.8, center]{munides2.pdf}
-%\end{figure}
+\bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
+\bibliographystyle{plainnat}
+\end{document}
 
 
 
-
-
-
-
-
+### 
 
 
 EDITORS COMMENTS:
@@ -1345,9 +625,4 @@ about the practice''
  	## Work that links micro and macro explanations of clientelism. Particularly, how macro poverty levels change the incentives of politicians to engage in clientelism at the micro level.
  	## Actual/Latent receivers and the idea of ``networks'' (See Calvo and Murillo 2012).
  	## ``Unquestionably, brokers are deeply nested in social networks'' (Carlin2015:15)
-
-
-\bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
-\bibliographystyle{plainnat}
-\end{document}
 
