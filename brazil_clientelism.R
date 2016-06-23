@@ -892,6 +892,7 @@ t.test(high.rich$x, low.rich$x, conf.level = 0.95) # significative pvalue = sign
 set.seed(602); options(scipen=999)
 
 # simulation DISTRIBUTION PLOTS
+library(Zelig)
 high.poor.lowcomp = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 high.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 high.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
