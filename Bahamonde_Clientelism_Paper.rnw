@@ -42,7 +42,7 @@
 \pagestyle{fancy} % All pages have headers and footers
 \fancyhead{} % Blank out the default header
 \fancyfoot{} % Blank out the default footer
-\fancyhead[C]{Very preliminary draft, please DO NOT cite} % Custom header text
+\fancyhead[C]{Paper 1  $\bullet$ v.2} % Custom header text
 \fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 %----------------------------------------------------------------------------------------
@@ -148,13 +148,14 @@
 % TITLE SECTION
 %----------------------------------------------------------------------------------------
 
+
 \title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{Aiming Right At You:\\ Group vs. Individual Clientelistic Targeting in Brazil}} % Article title
 
 
 \author[1]{
-\large
+%\large
 \textsc{H\'ector Bahamonde}\\ 
-\thanks{I'm thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast, Geoffrey Wallace, Doug Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Giancarlo Visconti and the the anonymous reviewers for their very helpful comments. I thank participants of the XXXII Latin American Studies Association Conference, The Southern Political Science Association meeting, The Western Political Science Association meeting and the 2014th Graduate Conference at the Political Science Dpt., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
+\thanks{I'm thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast, Geoffrey Wallace, Doug Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Giancarlo Visconti and the four anonymous reviewers for their very helpful comments. I thank participants of the XXXII Latin American Studies Association Conference, The Southern Political Science Association meeting, The Western Political Science Association meeting and the 2014th Graduate Conference at the Political Science Dpt., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
 \normalsize PhD Candidate $\bullet$ Political Science Dpt. $\bullet$ Rutgers University \\
 \normalsize \texttt{e:}\href{mailto:hector.bahamonde@rutgers.edu}{\texttt{hector.bahamonde@rutgers.edu}}\\
 \normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.hectorbahamonde.com}}
@@ -168,12 +169,13 @@
 
 \maketitle % Insert title
 
+
+
 \thispagestyle{fancy} % All pages have headers and footers
 
 %----------------------------------------------------------------------------------------
 % ABSTRACT
 %----------------------------------------------------------------------------------------
-
 
 
 \begin{abstract}
@@ -191,7 +193,7 @@
 There is no agreement on when parties target individuals and when parties should target groups. The distributive politics and vote-buying literatures have traditionally followed two different practices. This decision seems to be grounded on rather research design strategies than on theoretical foundations. Consequently, it has been implied that the two strategies are  interchangeable. On the one hand, the distributive politics literature has mostly focused on groups, usually districts or provinces (\citet[]{Dixit1996}, \citet[]{Khemani2015}, \citet[]{Calvo2004}). In this literature, incumbent parties deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of individuals. On the other hand, the vote-buying literature has typically focused on individuals and their characteristics such as socio-economic or electoral profiles (\citet[]{Carlin2015}). 
 
 % OK income: hook 2
-The most consolidated agreement is on the positive effects of poverty on clientelism (\citet[]{Calvo2004,Weitz-shapiro}). \cite{Kitschelt2000}\footnote{See also Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}.}, For example, \citet{Brusco2004}, \citet[]{Stokes:2013cj} and \citet[]{Nazareno2008a} explain that since the poor derive more utility from immediate transfers than future and risky returns associated to policy packages, clientelistic political parties target the poor \emph{only}. This canonical predictor has been recently challenged, however. \citet{GonzalezOcantos:2012vr} and \citet[]{Holland2015} explain that income (measured at the individual level) has little or no effect on clientelism. Why do newer papers with more sophisticated methodological techniques report null fundings on poverty, the \emph{most} important predictor of clientelism? 
+The most consolidated agreement is on the positive effects of poverty on clientelism (\citet[]{Calvo2004,Weitz-shapiro}). \citet{Kitschelt2000}\footnote{See also Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}.}, For example, \citet{Brusco2004}, \citet[]{Stokes:2013cj} and \citet[]{Nazareno2008a} explain that since the poor derive more utility from immediate transfers than future and risky returns associated to policy packages, clientelistic political parties target the poor \emph{only}. This canonical predictor has been recently challenged, however. \citet{GonzalezOcantos:2012vr} and \citet[]{Holland2015} explain that income (measured at the individual level) has little or no effect on clientelism. Why do newer papers with more sophisticated methodological techniques report null fundings on poverty, the \emph{most} important predictor of clientelism? 
 
 % OK questions
 The lack of clarity on whether parties should target groups or/and individuals and when (if) they should switch strategies, leave us in big confusion. For example, the literature is not explicit on whether ``the poor'' constitute poor \emph{groups} or poor \emph{individuals}. There has not been an explicit effort to theorize about the different set of incentives these two targeting strategies present to both parties and individuals (either considered on their own or nested in groups). For example, \citet[10]{Kitschelt2007} argue that political parties target ``individuals \emph{or} identifiable small groups''\footnote{Emphasis added.}. However, it is not clear what makes parties to focus on one or the other, or both at the same time, why and how. This paper tries to shed light on those issues.
@@ -328,7 +330,7 @@ The findings presented here do not find support for these hypotheses. An alterna
 Political parties deliver goods to their constituencies in two ways, via programmatic linkages or non-programmatic linkages (\citet{Kitschelt2000}). Non-programmatic linkages have been largely called \emph{vote buying}, \emph{clientelism}, \emph{patronage}, among others definitions (\citet{Brusco2004}, \citet{Stokes:2013cj} \citet{Kitschelt2007}). Although there are some differences between these concepts (\citet{Stokes:2013cj}), following the advice of \citet[2]{Kitschelt2007}, this paper defines \emph{clientelism} as a ``direct [and contingent] exchange of a citizen's vote in return for direct payments or continuing access to employment, goods, and services''. 
 
 % General Theory of Clientelism 1
-There are agreements and disagreements about the general theory of clientelism. There is agreement in that clientelism entangles a \emph{direct} accountability between broker and client (\cite{Kitschelt2007}, \citet{Auyero:2000ta}). Also, in that clientelism often takes the form of a \emph{personal contract} between broker and client (\citet{Auyero:2000ta}). This binary relationship is \emph{contingent}, that is, clientelistic resources will continue flowing \emph{if} clients show their support to their broker (\citet{Scott1972}). There are disagreements too. For some, clientelism necessarily involves \emph{monitoring}. This device is property of the broker and allows him to observe or infer the electoral behavior of their constituencies and enforce the clientelistic agreement, (re)allocating scarce clientelistic resources optimally (\citet[]{Stokes:2013cj}). However, \citet[]{Zarazaga2014} interviewed more than a hundred brokers and he finds that none of them were able to directly monitor their targeted individuals. Due to this constrain, \citet[]{Nichter2008} argues that what clientelism buys is turnout, not voting. Finally, for some, clientelism works because is a repeated game. For example, \citet{Stokes2005} argues that the broker-voter relationship becomes stronger and predictable in time.  Eventually, brokers develop the skills to make ``good-enough'' inferences about the electoral behavior of their clients, consequently delivering either clientelistic goods or punishments, accordingly. Others, however, have claimed that clientelism works because voters care about the welfare of others. \citet[]{Rueda2014a} develops a formal model which suggests that repeated interactions are not necessary to sustain clientelism once the targeted individuals start caring about their welfare. 
+There are agreements and disagreements about the general theory of clientelism. There is agreement in that clientelism entangles a \emph{direct} accountability between broker and client (\citet{Kitschelt2007}, \citet{Auyero:2000ta}). Also, in that clientelism often takes the form of a \emph{personal contract} between broker and client (\citet{Auyero:2000ta}). This binary relationship is \emph{contingent}, that is, clientelistic resources will continue flowing \emph{if} clients show their support to their broker (\citet{Scott1972}). There are disagreements too. For some, clientelism necessarily involves \emph{monitoring}. This device is property of the broker and allows him to observe or infer the electoral behavior of their constituencies and enforce the clientelistic agreement, (re)allocating scarce clientelistic resources optimally (\citet[]{Stokes:2013cj}). However, \citet[]{Zarazaga2014} interviewed more than a hundred brokers and he finds that none of them were able to directly monitor their targeted individuals. Due to this constrain, \citet[]{Nichter2008} argues that what clientelism buys is turnout, not voting. Finally, for some, clientelism works because is a repeated game. For example, \citet{Stokes2005} argues that the broker-voter relationship becomes stronger and predictable in time.  Eventually, brokers develop the skills to make ``good-enough'' inferences about the electoral behavior of their clients, consequently delivering either clientelistic goods or punishments, accordingly. Others, however, have claimed that clientelism works because voters care about the welfare of others. \citet[]{Rueda2014a} develops a formal model which suggests that repeated interactions are not necessary to sustain clientelism once the targeted individuals start caring about their welfare. 
 
 
 
@@ -406,8 +408,6 @@ I use survey data from the Latin American Public Opinion Project for Brazil 2010
 
 \subsection*{Outcome Variable}
 
-%<<clien2r, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Dependent Variable y', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%@
 
 % Introducing Outcome Variable
 This paper explains the frequency of clientelism, hence it considers the next variable from the LAPOP data: \emph{[i]n recent years and thinking about election campaigns, has a candidate or someone from a political party offered you something, like a favor, food, or any other benefit or thing in return for your vote or support? Has this happened \emph{often}, \emph{sometimes} or \emph{never}?} This question might cause biased estimates due to social desirability bias ( \citet[]{GonzalezOcantos:2012vr}). However, as \citet[614]{Carreras2013a} and \citet[]{Holland2015} (who use the same dataset and outcome variable) explain, the question does not ask whether respondents took the offer, in consequence, it should not be an important source of bias\footnote{The other question asked among those who did receive goods whether they were more prone or not to voting for the candidate or party that offered them those goods. As this question was not directly related to the frequency of clientelism, it was not used.}.
@@ -422,13 +422,8 @@ The \emph{degree} in which clientelism happens is not substantively important to
 This paper hypothesizes that clientelism will be higher when the density of the poor is high. To test this argument, it was constructed a variable that comes from the triangulation between the LAPOP dataset and the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}. The treatment variable is the \emph{percentage of people who lives with less than half of the minimum wage in a given municipality}\footnote{{\color{red}Should we need a table with descriptives by municipality?}}. In substantive terms this variable tells us how dense a municipality is in terms of poverty. We call the key independent variable ``treatment'' variable as after matching procedures it works \emph{as-if} random (\citet[]{Ho2006}).
 
 % This variable had to be dichotomized
-%% \Sexpr{median(m.data$wagehalf)
-The treatment variable was originally continuous and \autoref{fig:tgraph} plots its distribution\footnote{\autoref{fig:tgraph} corresponds to the matched set.}. For reasons we explain below, it was necessary to dichotomize this variable at the median\footnote{NUMBER HERE}, vertical-dashed line.}. We call this variable \emph{Density of the Poor} and after  dichotomizing it, it takes two values, \emph{High Density} and \emph{Low Density}.
+The treatment variable was originally continuous and \autoref{fig:tgraph} plots its distribution\footnote{\autoref{fig:tgraph} corresponds to the matched set.}. For reasons we explain below, it was necessary to dichotomize this variable at the median\footnote{NUMBER HERE}, vertical-dashed line. We call this variable \emph{Density of the Poor} and after  dichotomizing it, it takes two values, \emph{High Density} and \emph{Low Density}.
 
-%<<tgraph, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of the Treatment Variable', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%## Distribution treatment var
-%# Labels
-%@
 
 % Explaining the threshold
 The threshold denotes treatment and control observations. Below the vertical-dashed line are the control observations, while above the line are the treatment observations. Substantively, individuals in the \emph{low} poverty-dense context live mixed with poor, middle-income and rich people. On the contrary, individuals in the \emph{high} poor-dense context, live surrounded only by poor people. This is where the size of the poor is ``high''. 
@@ -453,14 +448,13 @@ After dropping NUMBER HERE observations in the treated group and NUMBER HERE in 
 \subsection*{Control Variables}
 
 % Why I included the control variables I included
-Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). \citet[]{Weitz-shapiro} argues that ``the interaction between political competition and poverty will explain variation in clientelism''. Following this strategy, official electoral data for the 2008 municipal elections was collected and the variable called \emph{municipal opposition} was constructed\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}. The variable measures the percentage of seats that are not controlled by the party of the mayor in a given municipal council. Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \cite{Stokes2005}, \cite{Dixit:1996wp} and \cite{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
+Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). \citet[]{Weitz-shapiro} argues that ``the interaction between political competition and poverty will explain variation in clientelism''. Following this strategy, official electoral data for the 2008 municipal elections was collected and the variable called \emph{municipal opposition} was constructed\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}. The variable measures the percentage of seats that are not controlled by the party of the mayor in a given municipal council. Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit:1996wp} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
 
 
 
 \subsection*{Estimation Method}
 
-
-{\color{SAY I USED GEE see Hanley2003a}}
+{\color{red}SAY I USED GEE see Hanley2003a}
 
 It is important to stress that this identification strategy is not about municipalities. That would mean to incur in ecological fallacy. What the treatment variable captures is a characteristic that every individual shares with his/her environment. Hence, the variable reflects features of the average individual at a micro-level. 
 
@@ -468,8 +462,6 @@ As clientelism can only take two values, 1 when clientelism occurs and 0 otherwi
 
 \subsection*{Results} 
 
-%<<tab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
-%@
 
 
 \autoref{tab:1} shows the estimations\footnote{The main model in this paper, is Model 4 in \autoref{tab:1}. All robustness checks, scatter plots and extra statistical evidence replicate this model. When the standard errors are clustered by municipality or when fixed-effects are included, the results reveal the same substantive effects for most of the models.}. \emph{High density} is positive, statistically significant and robust across all specifications. As expected, \emph{income} is negative, but very weak and non-significant. In substantive terms, these findings strongly suggest that what drives machines to target clientelism is the socioeconomic level of groups, irrespective of individual levels of income. In other words, a poor individual that lives where the density of the poor is low has less chances of receiving clientelistic goods compared to an \emph{equally} poor individual who lives where the density of the poor is high. The \emph{political involvement index} is positive but non-significant. Population size and the interaction term proposed in \citet[]{Weitz-shapiro}\footnote{Implementing what \citet[]{Armstrong:2010jk} suggests, \autoref{fig:weitz:1} corroborates the results in \autoref{tab:1}.} do not seem to have an impact both effects are almost indistinguishable from zero and also non-significant.
@@ -477,22 +469,15 @@ As clientelism can only take two values, 1 when clientelism occurs and 0 otherwi
 \subsection*{The Density of the Poor}
 
 
-%<<fig:4, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Probability of Clientelism Given the Treatment (Density Function Plot)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%# Simulation
-%@
-
 % The treatment variable works and it is very strong.
 \autoref{tab:1} strongly suggests that controlling for everything else, including group membership, individual income and population size, individuals who live in poverty clusters have a higher probability of being bribed. \autoref{fig:fig:4} shows a probability density plot. Following \citet[]{King2000}, after the main model was estimated, the parameters were simulated 2,500 times in order to build more stable estimates. The plot strongly suggests that someone living in a highly-poor dense area has twice the chances of being bribed than someone living in an area where the density of the poor is low NUMBER HERE, keeping individual income levels balanced in both groups.
-%(\Sexpr{100*(round(mean(X1), digits = 2))}\% vs \Sexpr{100*(round(mean(X2), digits = 2))}\%)
 
 
 
 \subsection*{Is Associationism Associated to Clientelism?}
 
-%<<int:1, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Interaction term: Population Size and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%@
 
-% On the issue of log(Pop)*Associastionism
+% On the issue of 
 New research argues that associations at the local level are strongly associated with clientelism. For example, \citet[]{Rueda2014a} interacts population size with group membership. The argument is that small groups would represent a less risky investment for the broker, while associations would provide a much more effective and cheaper aggregated monitoring. However, given the nature of clientelism, most empirical models deal with binary response variables. Consequently, interaction terms within the limited dependent variables are complicated. ``The magnitude of the interaction effect in nonlinear models does not equal the marginal effect of the interaction term, can be of opposite sign, and its statistical significance is not [usually] calculated by standard softwares'' (\citet[]{Ai2003}). Due to cross-partial derivatives are not an alternative either, simulation methods are required to estimate the combined effects of the interaction term (\citet[]{WilliamJ.Wales2013}). 
 
 % The plot shows a non existent relationship.
@@ -502,16 +487,12 @@ Repeating the process described above on simulations,  \autoref{fig:int:1} takes
 % Associationism and Size of the Poor as confounded factors
 Results regarding population size and associationism are not consistent with past research. Aside from that, another aspect that needs attention is the relationship between the size of the poor and associationism. As argued before, new research on clientelism finds that there is an association between group membership and clientelism. However, in theory, it would be reasonable to expect that poor individuals join associations at the local level to solve their problems. Keeping coordination costs constant, groups typically are formed to address collectively problems that otherwise would be much costly to solve by individuals on their own\footnote{{\color{red}DO WE NEED TO SUPPORT THIS VERY INTUITIVE OBSERVATION?}}. If that were the case, high-poor density ought to be confounded with group membership. However, we still do not know whether brokers target individuals \emph{because they are related to an association} (standard finding in the literature so far) or \emph{because brokers target their resources to highly populated poor groups} (this paper's argument). 
 
-%<<int:2, echo = FALSE, tidy=TRUE, fig.pos='H', warning=FALSE, message=FALSE, fig.cap='High Density and Political Involvement (simulated predicted probabilities)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%@
-
 % Comments on the plot
 Using the estimates from the main model,  \autoref{fig:int:2} plots simulated expected probabilities of clientelism by different values of political involvement. Conveniently, it decomposes this relationship by high-poverty density (blue) and low poverty density (red). The plot \emph{strongly} suggests that, controlling for everything else, as \emph{political involvement} increases, \emph{in general}, clientelism has a higher probability. \emph{However}, once we decompose this probability by high and low poverty densities, it is very clear that what really drives the general upward trend is the highly-dense poverty context, \emph{not political involvement itself}. These findings might explain why other papers have found (statistical) evidence in favor of group membership and associationism. It seems safe to suggest that what mainly explains clientelism is not membership into associations \emph{per se}, but \emph{the aggregated economic composition of the group}. 
 
 \subsection*{Robustness Checks\label{robcheck}}
 
 
-%Finally, \autoref{tab:2} shows the main model assuming different functional forms. Both \texttt{logit} and \texttt{probit} specifications show the same substantive effects\footnote{In theory, all these specifications should be similar. However, we show them for purposes of transparency.}. 
 
 Additionally, due that clientelism generate mostly zeros, a zero-inflated Poisson regression was considered (see \citet{Long:1997wv}). This specification assumes that the process that inflates the zeros (not shown) is driven by \emph{income} and \emph{high density}\footnote{\emph{Income} was excluded from the non-zero specification because of multicollinearity.}. The treatment variable behaves very well regardless of the assumed functional form. \autoref{gps:tab} shows the same models run in \autoref{tab:1} but using a generalized propensity score  as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this specification is that the GPS does not require to dichotomize the treatment variable. The substantive results are the same. After implementing what \citet[]{Fong2015} suggest, \autoref{fig:gps:fig} consistently shows that as the density of the poor increases, the probability of clientelism increases considerably. 
 
@@ -529,56 +510,6 @@ All and all, group membership itself does not seem to be associated to clienteli
 
 \section*{Appendix}
 
-% Original Distribution of Outcome Variable
-%<<match3, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Original Distribution of Outcome Variable (matched set)', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%@
-
-
-% Computing L statistic
-%<<lstat, echo = FALSE, tidy=TRUE, message = F, cache = TRUE>>=
-%@
-
-%\begin{table}[H] \centering 
-%  \caption{Sensitivity Analysis: $\mathcal{L}$ Static} 
-%  \label{tab:sens} 
-%\scriptsize 
-%\begin{tabular}{lcc}
-%\hline
-%\multicolumn{1}{c}{{\bf Covariate}}&\multicolumn{1}{c}{{\bf $\mathcal{L}$ Statistic}}&\multicolumn{1}{c}{{\bf Difference in Means}}\\
-%\hline 
-%Income 						& \Sexpr{l.income}  & \Sexpr{st.income} \\
-%Perception of Corruption 	& \Sexpr{l.exc7}  & \Sexpr{st.exc7} \\
-%Political Involvement Index & \Sexpr{l.polinv}  & \Sexpr{st.polinv} \\
-%Urban 						& \Sexpr{l.urban}  & \Sexpr{st.urban} \\
-%Population (ln)				& \Sexpr{l.logpop} 	& \Sexpr{st.logpop} \\
-%Years of Schooling 			& \Sexpr{l.ed} 	& \Sexpr{st.ed} 	\\
-%Municipal Opposition 		& \Sexpr{l.munopp} 	& \Sexpr{st.munopp} 	\\
-%Political Id 				& \Sexpr{l.vb3} 	& \Sexpr{st.vb3} 	\\
-%\hline
-%\end{tabular} 
-%\end{table} 
-
-
-
-% Summary Stats Matched Set
-%<<sumtab:1, echo=FALSE, comment=NA, results='asis', cache = T>>=
-%@
-
-% Summary Stats Raw Set
-%<<sumtab:2, echo=FALSE, comment=NA, results='asis', cache = T>>=
-%@
-
-% QQ Plots
-%<<balance, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Testing Pre and Post Matching Covariate Balance', fig.align='center', fig.width=3.5, fig.height=3.5,fig.show='asis',dpi=600,cache = TRUE>>=
-%@
-
-
-% GPS
-%<<gps:tab,echo=FALSE, comment=NA, results='asis', cache = T>>=
-%@
-
-%<<gps:fig, echo = FALSE, tidy=TRUE, fig.pos='H', warning = FALSE, message = F, fig.cap='Expected Value Given Continuous Treatment (GPS Weighting, 800 simulations per each value on the X-axis)', fig.align='center', fig.width=7, fig.height=3.5,fig.show='asis',dpi=1000,cache = TRUE>>=
-%@
 
 
 
