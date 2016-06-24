@@ -42,7 +42,7 @@
 \pagestyle{fancy} % All pages have headers and footers
 \fancyhead{} % Blank out the default header
 \fancyfoot{} % Blank out the default footer
-\fancyhead[C]{Paper 1  $\bullet$ v.2} % Custom header text
+\fancyhead[C]{Draft  $\bullet$ Please DO NOT cite} % Custom header text
 \fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 %----------------------------------------------------------------------------------------
@@ -53,6 +53,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{rotating}
+\usepackage{pbox}
 \usepackage{paracol}
 \usepackage{textcomp}
 \usepackage{caption}
@@ -189,22 +190,51 @@
 % CONTENT 
 %----------------------------------------------------------------------------------------
 
+\newpage
+
 % OK groups vs individuals: hook 1
-There is no agreement on when parties target individuals and when parties should target groups. The distributive politics and vote-buying literatures have traditionally followed two different practices. This decision seems to be grounded on rather research design strategies than on theoretical foundations. Consequently, it has been implied that the two strategies are  interchangeable. On the one hand, the distributive politics literature has mostly focused on groups, usually districts or provinces (\citet[]{Dixit1996}, \citet[]{Khemani2015}, \citet[]{Calvo2004}). In this literature, incumbent parties deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of individuals. On the other hand, the vote-buying literature has typically focused on individuals and their characteristics such as socio-economic or electoral profiles (\citet[]{Carlin2015}). 
+There is no agreement on when parties target individuals and when parties should target groups. The distributive politics and vote-buying literatures have traditionally followed two different practices. Unfortunately, this decision seems to be grounded on foundations of research design than theoretical reasons. Consequently, it has been implied that the two strategies are interchangeable. On the one hand, the distributive politics literature has mostly focused on groups, usually districts or provinces (\citet[]{Dixit1996}, \citet[]{Khemani2015}, \citet[]{Calvo2004}). In this literature, incumbent parties deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of individuals. On the other hand, the vote-buying literature has typically focused on individuals and their characteristics such as socio-economic or electoral profiles (\citet[]{Carlin2015}). 
 
 % OK income: hook 2
 The most consolidated agreement is on the positive effects of poverty on clientelism (\citet[]{Calvo2004,Weitz-shapiro}). \citet{Kitschelt2000}\footnote{See also Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}.}, For example, \citet{Brusco2004}, \citet[]{Stokes:2013cj} and \citet[]{Nazareno2008a} explain that since the poor derive more utility from immediate transfers than future and risky returns associated to policy packages, clientelistic political parties target the poor \emph{only}. This canonical predictor has been recently challenged, however. \citet{GonzalezOcantos:2012vr} and \citet[]{Holland2015} explain that income (measured at the individual level) has little or no effect on clientelism. Why do newer papers with more sophisticated methodological techniques report null fundings on poverty, the \emph{most} important predictor of clientelism? 
 
 % OK questions
-The lack of clarity on whether parties should target groups or/and individuals and when (if) they should switch strategies, leave us in big confusion. For example, the literature is not explicit on whether ``the poor'' constitute poor \emph{groups} or poor \emph{individuals}. There has not been an explicit effort to theorize about the different set of incentives these two targeting strategies present to both parties and individuals (either considered on their own or nested in groups). For example, \citet[10]{Kitschelt2007} argue that political parties target ``individuals \emph{or} identifiable small groups''\footnote{Emphasis added.}. However, it is not clear what makes parties to focus on one or the other, or both at the same time, why and how. This paper tries to shed light on those issues.
+The lack of clarity on whether parties should target groups or/and individuals and when (if) they should switch or combine strategies, leave us in big confusion. For example, the literature is not explicit on whether ``the poor'' constitute poor \emph{groups} or poor \emph{individuals} (or both). There has not been an explicit effort to theorize about the different set of incentives these two targeting strategies present to both parties and individuals (either considered on their own or nested in groups). For example, \citet[10]{Kitschelt2007} argue that political parties target ``individuals \emph{or} identifiable small groups''\footnote{Emphasis added.}. However, it is not clear what makes parties to focus on one or the other, or both at the same time, why and how. This paper tries to shed light on those issues.
 
-% OK Summary of the paper: LIT REVIEW // ARGUMENT // METHODS
-This paper proceeds as follows. First, it reviews classic and newer research on vote buying, particularly paying attention to the tension in the literature regarding the lack of clarity on whether parties target individuals and/or groups and when. Second, it presents the argument. Expanding on some recent research, we also stresses the role of political competition. In addition to that, the argument and the empirics also decompose the different effects on clientelism of ``being poor'' and ``living in a poor area''. Altogether, four ideal types are presented, poor individuals nested in (1) poor and (2) non-poor clusters, and non-poor individuals nested in (3) poor and (4) non-poor contexts. The mechanic of the argument is novel as it makes the case that parties switch strategies depending on these three dimensions simultaneously. The argument departs from the canonical (and until recently) (un)challenged finding that only ``the'' poor receive clientelism. Each of these ideal types presents a series of incentives for both brokers and individuals that make them engage in clientelism, either delivering it or accepting it. This paper argues that brokers engage in individual targeting when individuals are highly identifiable, that is, when poor individuals live in rather non-poor areas and when non-poor individuals live in poor areas. Simultaneously, when incumbent politicians are electorally challenged (and in need of more electoral support), brokers target areas where the density of the poor is large \emph{regardless of individual incomes}. In these contexts, the poor are targeted since brokers take advantage of the spillover effects large concentrations of poor individuals provide. Non-poor are also targeted, since in these contexts they are more noticeable, and can be kept more accountable. Third, the paper presents the methodology. Exploiting within-municipality variations of individual income in both low and high density contexts in Brazil, and a matched design, the empirical section tests and presents supporting evidence for each of the ideal types. Fourth, the paper offers some final considerations.
+% OK ARGUMENT and // Summary of the paper: LIT REVIEW // METHODS (0)
+We argue that the decision brokers face on whether to target groups or individuals is context specific. The paper systematizes this decision by arguing that the outcome is a function of three factors, i.e. individuals' income level, whether individuals are nested within poor or non-poor contexts, and the level of political competition. Given the nesting structure of the argument and the empirics, we are able to provide interesting predictions such as the decomposing the different effects on clientelism of ``being poor'' and ``living in a poor area''. To the best of our knowledge, this is the first time such comparison is made. Four ideal types are presented, poor individuals nested in (1) poor and (2) non-poor clusters, and non-poor individuals nested in (3) poor and (4) non-poor contexts. In addition to that, depending on how challenged the incumbent party is, brokers take advantage of the different economic incentives each combination has, deploying either individual or group-targeting strategies for each. 
+
+%  OK ARGUMENT and // Summary of the paper: LIT REVIEW // METHODS (1)
+Each combination presents different incentives for both brokers and individuals that make them engage in clientelism, either delivering it or accepting it. The argument has three constitutive parts. First, when individuals are highly identifiable, such as when the poor are nested within non-poor areas or when the non-poor are nested within poor areas, brokers will be in a better position to keep those individuals more accountable. Second, when political competition is low there are less incentives to spend too much resources on clientelism, if at all. For example, even when non-poor individuals nested in poor contexts are more identifiable, under low electoral pressures, clientelism is very low. Third, low personal incomes are neither a sufficient nor a necessary condition for clientelism. Though higher individual incomes discount faster immediate clientelistic transfers, \emph{in general but not always} poor individuals have more probabilities of receiving it. One of the important propositions of the argument is that clientelism is not channeled to individuals only because of their personal incomes. In fact, non-poor individuals (under certain conditions) receive clientelism too. Consequently, we depart from the canonical (and until recently) (un)challenged finding that only ``the'' poor receive clientelism. 
+
+
+\begin{table}[h]
+\captionsetup{justification=centering}
+\caption{Clientelistic Targeting: Strategy Set\label{tab:strategy:set}}
+\hspace{2cm}\begin{tabular}{ r|c|c| }
+\multicolumn{1}{r}{}
+& \multicolumn{1}{c}{Poor Individuals} & \multicolumn{1}{c}{Non-Poor Individuals} \\
+\cline{2-3}
+Low Competition  & \pbox{15cm}{\relax\ifvmode\centering\fi {\bf Low Density} \\ \emph{Easily identifiable}} & \pbox{15cm}{\relax\ifvmode\centering\fi{ \bf Low Density} \\ \emph{Expensive/Low clientelism}\\ \emph{Corruption}}\\
+\cline{2-3}
+High Competition & \pbox{15cm}{\relax\ifvmode\centering\fi{\bf High Density} \\ \emph{Spillover effects}} & \pbox{20cm}{\relax\ifvmode\centering\fi {\bf High Density}\\ \emph{Easily identifiable}} \\
+\cline{2-3}
+\end{tabular}
+\end{table}
+
+
+% OK ARGUMENT and // Summary of the paper: LIT REVIEW // METHODS (2)
+The four ideal situations in these three contexts are exemplified in \autoref{tab:strategy:set}. Brokers will engage in \emph{individual targeting} in quadrants 1 and 4. As part of what is gained securing each vote is spent in making sure that happens, individual targeting represents a safer investments though its returns are much more limited. Quadrant 1 has higher clientelism than quadrant 4 as poor have higher marginal returns for the same dollar spent in clientelism compared to the non-poor people in quadrant 4. Quadrant 3 represents a situation when politicians are in high need of more electoral support, and when the size of the poor is large, they engage in group-monitoring. Rather than securing each vote individually, brokers take advantage of the spillover effects of clientelism. Finally, quadrant 2 represents a situation where non-poor individuals nested in non-poor areas have a some probability of receiving clientelism. We theorize that in contexts where there exists less political competition, there also exists less checks and balances too. Even when politicians are not in need of more electoral support, they engage in this expensive form of clientelism which might be termed as corruption.
+
+
+% This paper proceeds as follows
+This paper proceeds as follows. First, it reviews classic and newer research on vote buying, particularly paying attention to the tension in the literature regarding the lack of clarity on whether parties target individuals and/or groups and when. Second, it presents the details of the argument. Third, the paper presents the methodology. Exploiting within-municipality variations of individual income in both low and high density contexts in Brazil, and a matched design, the empirical section tests and presents supporting evidence for each of the ideal types. Fourth, the paper offers some final considerations.
+
 
 \section*{When do parties target individuals and when groups?} 
 
 % OK new papers // PRESENT MAIN THEORIES // (-0)
-In both the classic and the newer literatures coexist theories, methodologies, measurement and identification strategies that either focus on only individual \emph{or} group targeting, assuming that both strategies are interchangeable. In fact, most of the times, the distinction is rather product of the method or epistemological tradition. For example, most ethnographers have considered individual targeting (see for example \citet{Auyero2000}). While papers employing experimental methods tend to vary, but most accounts focus on individuals aggregated at some level (see for example \citet{Weitz-shapiro} and \citet{Gonzalez-Ocantos2012}). Rather than describing a detailed list of works and their methodologies, the important point is that what has driven the decision to study group-based and/or individual-based targeting strategies (by separate or jointly, as this paper does) has been mostly driven by considerations of research design. Unfortunately, there is no clear theory for why, how and when parties would engage in one or the other. In addition to that, this interchangeability also \emph{implies} that there is no difference between these strategies. As this paper suggests, the structure of incentives each of them provides is something that the literature should address.
+In both the classic and the newer literatures coexist theories, methodologies, measurement and identification strategies that either focus on only individual \emph{or} group targeting, assuming that both strategies are interchangeable. In fact, most of the times, the distinction is rather product of the method or epistemological tradition. For example, most ethnographers have considered individual targeting (see for example \citet{Auyero2000} and \citet{Szwarcberg2013}). While papers employing experimental methods tend to vary, but most accounts focus on individuals aggregated at some level (see for example \citet{Weitz-shapiro} and \citet{Gonzalez-Ocantos2012}). Rather than describing a detailed list of works and their methodologies, the important point is that what has driven the decision to study group-based and/or individual-based targeting strategies (by separate or jointly, as this paper does) has been mostly driven by considerations of research design. Unfortunately, there is no clear theory for why, how and when parties would engage in one or the other. In addition to that, this interchangeability also \emph{implies} that there is no difference between these strategies. As this paper suggests, the structure of incentives each of them provides is something that the literature should address.
 
 % OK new papers // PRESENT MAIN THEORIES - bajada //
 The lack of theoretical discussion on whether parties target groups and/or individuals, and when, has produced a tension in the vote-buying literature. This tension is more noticeable when we consider how three standard \emph{contextual} predictors of clientelism (population size, associationism  and political competition) interplay differently when we make the explicit distinction between \emph{individual} and \emph{group} poverty.
@@ -220,19 +250,37 @@ Parties systematically target small-sized communities. Though implied that the l
 % OK new papers // PRESENT MAIN THEORIES // size and networks (2)
 Another important contextual explanatory factor is whether individuals are involved in certain social networks. According to the literature, civic associations might help solving a big portion of the challenges large-sized groups present to brokers. In low-information environments most brokers cannot observe individual electoral behavior. As argued above, brokers might resort to different strategies instead of just stop being clientelistic. Given this impossibility to observe individual's behavior, brokers employ substitutes that allow them to make safer inferences, even in large-sized group contexts, for example by outsourcing monitoring and enforcing to formal and/or informal \emph{networks}. \citet{Schaffer2015} explains that clientelism is ``socially multiplied'', as party machines target individuals ``who are opinion-leading epicenters'' in informal situations. If parties buy turnout (\citet[]{Nichter2008}), they will most probably target associations too, as ``citizens immersed in clientelistic networks [...] have a higher probability of voting than the rest'' (\citet[p. 7]{Carreras2013}). In a similar vein, \citet{Calvo2012} argue that parties target formal ``partisan networks'', in what has been called ``organization buying'' (\citet[p. 250-251]{Stokes:2013cj}). For example, \citet[p. 16]{Holland2015} explains that when ``parties lack their own brokerage networks [they seek] to capitalize on organizational networks instead''. As \citet[]{Rueda2014a} also explains, parties tend to target very specific civic associations\footnote{Particularly, associations of ``seniors and associations of single mothers, organizing trips to recreational centers outside the city where all their expenses are covered'' (p. 13).}. Paradoxically, the stronger the civic society, i.e. the more organized it is, the more clientelism.
 
-
 % criticize network approach
-The positive relationship between group-membership and clientelism seems intuitive and appealing. However, what has not been explored yet is whether clientelism is explained by the ``cluster'' or the ``organization buying''  components attached group-membership. Membership into local grass-root associations typically also involve a situation of high-dense poverty. That is, a situation where 
+The positive relationship between group-membership and clientelism is intuitive and appealing. However, what has not been explored yet is whether clientelism is explained by the ``nesting'' or the ``organization buying''  components attached group-membership. Membership into local grass-root associations typically also involve a situation where (typically) poor individuals are nested in contexts of high-poor density. Keeping coordination costs constant, groups typically are formed to address collective problems that otherwise would be much costly to solve by individuals on their own. If that were the case, formal group \emph{membership} should be spuriously related to clientelism. Is clientelism associated to group membership \emph{itself}, or is it associated to the density of the poor that is also present in associations? This paper supports the intuition that there is a positive relationship on clientelism. However, given the identification strategy employed in this paper, we are able to separate the effects of being involved at the local level at different poverty-density nesting levels. Though local involvement does have a positive effect on clientelism, the larger the density of the poor, the higher probability of being targeted. 
 
 % HERE
 
-Keeping coordination costs constant, groups typically are formed to address collective problems that otherwise would be much costly to solve by individuals on their own. If this were the case, formal group membership should be spuriously related to clientelism.  In other words, is clientelism associated to group membership itself, or is it associated to the density of the poor that is also present in associations? The models here presented suggest that once the effects of associationism are separated by different poverty density levels, it becomes very clear that what explains clientelism is the density of the poor, not membership association.
-
-Is it that parties target associations (i.e. groups) because they are organized or because they are composed by poor individuals? 
-
-
 % PRESENT HERE THE political competition ISSUE
-\citet[]{Weitz-shapiro} studies how high political competition levels in the presence of low socioeconomic levels are positively associated to clientelism in some Argentine municipalities. In her argument, the middle class condemns clientelistic practices , ``due to self-interest or because of \emph{moral} concern[s]''\footnote{Emphasis is mine.}. Clientelistic politicians anticipating those costs, opt-out of clientelism. 
+In an important paper, \citet[]{Weitz-shapiro} argues that higher levels of political competition in the presence of low socioeconomic levels at the municipal level are positively associated to clientelism in some Argentine municipalities. In the absence of these two, politicians opt-out of clientelism to avoid audience costs. This paper adopts the same empirical strategy and measures poverty (and political competition) at the municipal level. However, it makes the idea of ``costs'' more explicit. In \citet[]{Weitz-shapiro}'s argument, losses are conceptualized in terms of ``moral costs''\footnote{\citet[]{Weitz-shapiro} argues that politicians opt-out of clientelism since non-poor individuals are more likely to condemn clientelism ``due to self-interest or because of \emph{moral} concern[s]''. Self-interest refers to the idea that what is distributed through clientelism is discounted from the pool of resources theoretically available to be spent on policy packages.}. In a similar vein, \citet{Carlin2015} citizens endowed with more democratic values feel more``moral repugnance'' for clientelism. \citet{Vicente2014} argues that vote-buying practices have an ``immoral/illegal connotation'', while \citet{Gonzalez-Ocantos2012} find individuals usually do not elicit truthful answers when directly asked about clientelism. The idea of the ``psychic costs'' attached to clientelism can be problematized, however. \citet{GonzalezOcantos2014} find that while the concrete benefits obtained through clientelism are in generally well understood, ``the abstract societal costs of such exchanges are often distant from the every-day world in which clientelistic relationships are formed''. More educated individuals condemn more, individuals with more exposure  to it along with the poor condemn less. 
+
+
+
+
+
+
+
+
+
+ ## Psychic Costs: ``Democratic objections to clientelism may take a variety of forms [...] Citizens who attach a high value to the integrity of the democratic process may [...] object to the fact that clientelism exploits poor voters''.
+  ## Psychic Costs/ ``moral repugnance'' (Carlin2001)`` Brokers want to avoid democrats because they are relatively costly [producing] ``audience'' costs'' p. 16.
+  ## Psychic Costs/Vicente2014: 2013: ``This large difference is likely due to the immoral/illegal connotation vote-buying practices have in STP''.
+  ## Psychic Costs/Szwarcberg2013: ``challenges the assumption that parties and candidates with access to material benefits will always distribute goods to low-income voters in exchange for electoral support''. ``Candidates who are capable of using and prefer to use clientelism are encouraged to employ these strategies by a per- verse system of incentives that promotes the careers of clientelistic candidates to the detriment of candidates who are either unable or unwilling to use such strategies'' (p. 50). HOWEVER THIS PAPER CANT EXPLAIN THE LONG-RUN EQUILIBRIA. IT MIGHT BE TRUE THAT **SOME** CANDIDATES MIGHT NOT WANT TO USE CLIENTELISM. HOWEVER, THEY ARE KICKED OUT OF THE CYCLE AND REPLACED FOR ONES THAT ARE. IT DOES NOT EXPLAIN WHY SOME CANDIDATES USE. IT JUST REPORTS THAT THE ONES WHO DON'T USE IT, DIE. 
+
+
+# SHapiro
+  ## ``High competition should be compatible with clientelism when poverty is high, but should decrease the incentives for clientelism where poverty is low''.
+  ##``although clientelism is a vote-getting tactic aimed at the poor, non-poor voters are likely to punish politicians who engage in it. The salience of these costs should vary with the share of the population that is non-poor and a politician’s security in office''.
+  ## ``Statistical analysis supports the claim that neither poverty nor political competition alone explains why some politicians opt out of clientelism. Only when a large opposition presence is coupled with a sizable middle class does the use of clientelism decline''
+
+
+
+
+
 
 
 
@@ -242,7 +290,11 @@ We are left with many questions. First, there is no consensus on how individual 
 
 
 
+% purpose of this paper: 
 
+
+		``Existing research looks almost exclusively at individuals’ socio- economic and, especially, electoral profile'' (Carlin2015).
+		``Yet our knowledge of who parties target remains incomplete''  (Carlin2015).
 
 
 
@@ -552,9 +604,7 @@ EDITORS COMMENTS:
 the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
 
 # My argument
-	## Framing: 
-		``Existing research looks almost exclusively at individuals’ socio- economic and, especially, electoral profile'' (Carlin2015).
-		``Yet our knowledge of who parties target remains incomplete''  (Carlin2015).
+	## 
 
 
 		### The paper argues that brokers have an incentive structure that changes depending on patterns of competition and the size of the poor group. Hence, poverty structure, whether the individuals are nested in contexts of high or low ``poverty density'' and the political constrains incumbents face at every election, are not a substitute for individual characteristics or macro-structural conditions, but rather they complement them.
@@ -576,10 +626,7 @@ the magnitude and significance of the coefficient on the interaction term either
 	## SIze argument: Gingerich and Medina 2013; Rueda 2015; Stokes et al. 2013)
 
 
-# SHapiro
-  ## ``High competition should be compatible with clientelism when poverty is high, but should decrease the incentives for clientelism where poverty is low''.
-  ##``although clientelism is a vote-getting tactic aimed at the poor, non-poor voters are likely to punish politicians who engage in it. The salience of these costs should vary with the share of the population that is non-poor and a politician’s security in office''.
-  ## ``Statistical analysis supports the claim that neither poverty nor political competition alone explains why some politicians opt out of clientelism. Only when a large opposition presence is coupled with a sizable middle class does the use of clientelism decline''
+
 %  ## ``Almost universally, scholars of clientelism treat and analyze the practice as an exchange between politicians and their poor clients''.
  % ## ``In both older and more recent works on clientelism, poverty, either directly or when manifest through income inequality, is cited as a powerful predictor of clientelism'' : SEE Brusco et al. (2004), Huntington (1968), Scott (1969), and Robinson and Verdier (2002).
  % ## Psychic Costs: ``The non-poor might object to clientelism either due to self-interest or because of moral concern about the practice''
@@ -638,9 +685,4 @@ Similarly, \emph[p. 16]{Carlin2001} argues that  // moral repugnance // democrat
   
   ## ``To the extent clientelism serves as a signal of low-quality government performance, middle class voters are unlikely to support a politician who relies on it''.
   ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades basicas insatisfechas”)''.
-  ## Psychic Costs: ``Democratic objections to clientelism may take a variety of forms [...] Citizens who attach a high value to the integrity of the democratic process may [...] object to the fact that clientelism exploits poor voters''.
-  ## Psychic Costs/ ``moral repugnance'' (Carlin2001)`` Brokers want to avoid democrats because they are relatively costly [producing] ``audience'' costs'' p. 16.
-  ## Psychic Costs/Vicente2014: 2013: ``This large difference is likely due to the immoral/illegal connotation vote-buying practices have in STP''.
-  ## Psychic Costs/Szwarcberg2013: ``challenges the assumption that parties and candidates with access to material benefits will always distribute goods to low-income voters in exchange for electoral support''. ``Candidates who are capable of using and prefer to use clientelism are encouraged to employ these strategies by a per- verse system of incentives that promotes the careers of clientelistic candidates to the detriment of candidates who are either unable or unwilling to use such strategies'' (p. 50). HOWEVER THIS PAPER CANT EXPLAIN THE LONG-RUN EQUILIBRIA. IT MIGHT BE TRUE THAT **SOME** CANDIDATES MIGHT NOT WANT TO USE CLIENTELISM. HOWEVER, THEY ARE KICKED OUT OF THE CYCLE AND REPLACED FOR ONES THAT ARE. IT DOES NOT EXPLAIN WHY SOME CANDIDATES USE. IT JUST REPORTS THAT THE ONES WHO DON'T USE IT, DIE. 
-
-
+ 

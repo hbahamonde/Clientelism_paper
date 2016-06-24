@@ -931,7 +931,11 @@ t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significativ
 t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 
 
+### quadrants 1 and 4
+t.test(low.poor.lowcomp$x, high.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 
+### quadrants 3-4
+t.test(high.poor.highcomp$x, high.rich.highcomp$x,conf.level = 0.99, paired = T) # significative pvalue = significantly different
 
 
 
