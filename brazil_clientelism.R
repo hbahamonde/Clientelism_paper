@@ -751,6 +751,7 @@ gee.dich.m.1.s = zelig(m1.m,
                        data = m.data,
                        cite = F)
 
+
 gee.dich.m.2.s = zelig(m2.m, 
                        model = "logit.gee",
                        id = "municipality", 
@@ -1308,6 +1309,10 @@ gee.dich.m.2.s.munopp = data.frame(
 colnames(gee.dich.m.2.s.munopp) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # high
 
 
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
+
 ### df's
 ### low
 df.low = data.frame(
@@ -1393,6 +1398,9 @@ gee.dich.m.3.s.polinv = data.frame(
       num=300)$getqi(qi="ev", xvalue="range"))
 colnames(gee.dich.m.3.s.polinv) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  
 
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
 
 ### df's
 ### low
