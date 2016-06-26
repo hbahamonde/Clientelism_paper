@@ -216,7 +216,7 @@ Each combination presents different incentives for both brokers and individuals 
 \multicolumn{1}{r}{}
 & \multicolumn{1}{c}{Poor Individuals} & \multicolumn{1}{c}{Non-Poor Individuals} \\
 \cline{2-3}
-Low Competition  &  {\bf Low Density}, \emph{identifiable, individual targeting, low clientelism} & {\bf Low Density}, \emph{expensive/corruption, lowest clientelism}\\
+Low Competition  &  {\bf Low Density}, \emph{identifiable, individual targeting, low clientelism} & {\bf Low Density}, \emph{expensive, lowest clientelism}\\
 \cline{2-3}
 High Competition & {\bf High Density}, \emph{spillover effects, group targeting, highest clientelism} & {\bf High Density}, \emph{identifiable, individual targeting, low clientelism} \\
 \cline{2-3}
@@ -225,7 +225,7 @@ High Competition & {\bf High Density}, \emph{spillover effects, group targeting,
 
 
 % OK ARGUMENT and // Summary of the paper: LIT REVIEW // METHODS (2)
-The four ideal situations in these three contexts are exemplified in \autoref{tab:strategy:set}. Brokers will engage in \emph{individual targeting} in quadrants 1 and 4. As part of what is gained securing each vote is spent in making sure that happens, individual targeting represents a safer investments though its returns are much more limited. Quadrant 1 has higher clientelism than quadrant 4 as poor have higher marginal returns for the same dollar spent in clientelism compared to the non-poor people in quadrant 4. Quadrant 3 represents a situation when politicians are in high need of more electoral support, and when the size of the poor is large, they engage in group-monitoring. Rather than securing each vote individually, brokers take advantage of the spillover effects of clientelism. Finally, quadrant 2 represents a situation where non-poor individuals nested in non-poor areas have a some probability of receiving clientelism. Here brokers engage in group targeting. We theorize that in contexts where there exists less political competition, there also exists less checks and balances too. Even when politicians are not in need of more electoral support, they engage in this expensive form of clientelism which might be understood as embezzlement or corruption.
+The four ideal situations in these three contexts are exemplified in \autoref{tab:strategy:set}. Brokers will engage in \emph{individual targeting} in quadrants 1 and 4. As part of what is gained securing each vote is spent in making sure that happens, individual targeting represents a safer investments though its returns are much more limited. Quadrant 1 has higher clientelism than quadrant 4 as poor have higher marginal returns for the same dollar spent in clientelism compared to the non-poor people in quadrant 4. Quadrant 3 represents a situation when politicians are in high need of more electoral support, and when the size of the poor is large, they engage in group-monitoring. Rather than securing each vote individually, brokers take advantage of the spillover effects of clientelism. Finally, quadrant 2 represents a situation where non-poor individuals nested in non-poor areas have a some probability of receiving clientelism. Here brokers engage in group targeting. We theorize that in contexts where there exists less political competition, there also exists less checks and balances too. Even when politicians are not in need of more electoral support, they engage in this expensive form of clientelism which might be understood as embezzlement.
 
 
 % This paper proceeds as follows
@@ -286,7 +286,7 @@ Generalizing the idea that the poor have higher discount rates, we argue that th
 \subsection*{Individual Targeting}
 
 %% identifiable
-Brokers will have incentives to engage in individual targeting when targets are easily identifiable. Identifiability helps brokers to keep targeted individuals electorally accountable. Higher levels of identification also reduce the costs of keeping the clientelistic contract enforceable. Whereas individual targeting is the safest bet a broker can make, this mechanism is more expensive as it requires brokers having close relationships with  clients. Party machines know that more resources will need to be allocated to finance dedicated individual targeting for specific individuals. Personalized individual targeting supposes brokers with good-quality local information. Scholars generally agree that the source of information are social networks. For example, \citet[p. 15]{Carlin2015} argues that ``[u]nquestionably, brokers are deeply nested in social networks'', while \citet[p. 864]{Inan2012a} argues that  brokers ``hire respected community leaders in each village to interact with voters to promote their candidacy and offer them money [..] in exchange for the promise of their vote''. Building on this idea, our argument supposes brokers with local knowledge too. However, this knowledge comes from the individual's notoriety rather than his/her ties with local groups. Our identification strategy allows us to investigate this mechanism.
+Brokers will have incentives to engage in individual targeting when targets are easily \emph{identifiable}. Identifiability helps brokers to keep targeted individuals electorally accountable. Higher levels of identification also reduce the costs of keeping the clientelistic contract enforceable. Whereas individual targeting is the safest bet a broker can make, this mechanism is more expensive as it requires brokers having close relationships with  clients. Party machines know that more resources will need to be allocated to finance dedicated individual targeting for specific individuals. Personalized individual targeting supposes brokers with good-quality local information. Scholars generally agree that the source of information are social networks. For example, \citet[p. 15]{Carlin2015} argues that ``[u]nquestionably, brokers are deeply nested in social networks'', while \citet[p. 864]{Inan2012a} argues that  brokers ``hire respected community leaders in each village to interact with voters to promote their candidacy and offer them money [..] in exchange for the promise of their vote''. Building on this idea, our argument supposes brokers with local knowledge too. However, this knowledge comes from the individual's notoriety rather than his/her ties with local groups. Our identification strategy allows us to investigate this mechanism.
 
 
 %% political competition
@@ -294,116 +294,416 @@ When political competition is low, politicians will have incentives to target id
 
 \subsection*{Group Targeting}
 
-% Group Targeting: waiting
-Brokers will have incentives to target groups even when individual targets are not identifiable, \emph{if} the socio-economic level of the group provides spillover effects. This portion of the argument considers that individuals who are inserted in targeted groups still vote for the broker's party even when if they have not received the benefit. For example, \citet[]{Rueda2014a} proposes a formal model which suggests that vote buying is facilitated when voters care about the welfare of other voters. While \citet[p. 65]{Auyero:2000ta} explains the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the \emph{broker's inner circle} and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of the circle, she was in the pool of potential beneficiaries. It was only a ``matter of time'' so she could get the job. Building on this intuition, our model presents two ideal types, \emph{actual} and \emph{potential} beneficiaries. Actual beneficiaries receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow''. 
+% Group Targeting: waiting // introducing potential beneficiaries
+Brokers will have incentives to target groups even when individual targets are not identifiable, \emph{if} the socio-economic level of the group provides \emph{spillover} effects. This portion of the argument considers that individuals who are inserted in targeted groups still vote for the broker's party even when they have not received the benefit. For example, \citet[]{Rueda2014a} proposes a formal model which suggests that vote buying is facilitated when voters care about the welfare of other voters. While \citet[p. 65]{Auyero:2000ta} explains the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the \emph{broker's inner circle} and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of the circle, she was in the pool of potential beneficiaries. It was only a ``matter of time'' so she could get the job. Building on this intuition, our model presents two ideal types, \emph{actual} and \emph{potential} beneficiaries. The former receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow'', while the latter do not receive benefits today (in the expectation of receiving them in the future) but \emph{still} vote for the broker's candidate ``tomorrow''.
 
-% Group Targeting: potential beneficiaries
-Group targeting, in part, is possible since potential beneficiaries, even when they have not received the benefit, still vote for the broker's candidate, in the hope of being benefited in the short run. Potential beneficiaries have two possible strategies. First, they could defect and vote for another candidate, who might or might not bring them benefits. Second, potential beneficiaries could continue voting for the known broker and wait. Individual income also plays a role. Given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the current broker's party) than defecting. In a slightly different research project, \citet[p. 20]{Magaloni:2008bq} explains that under non-democratic contexts, voters have incentives to keep voting for the incumbent government, even when they oppose it. The Mexican PRI lasted so long not because of electoral fraud but because voters supported what it represented the ``known devil''. As she explains, hegemonic parties survive when they are able to sustain long-term economic growth and a constant supply of clientelistic transfers. \citet[p. 14]{Zarazaga2014} explains that ``[b]rokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this''. Building on these ideas, we argue that the transaction cost of switching brokers is very costly since it also involves building confidence relationships with the new broker from scratch. Reputation costs also keep targeted individuals disciplined. Having defected with the former broker once, makes the voter a defection-prone type one, increasing even more the cost of building those relationships. 
+% Group Targeting: potential beneficiaries // explanation - expansion
+In part, group targeting is possible because potential beneficiaries still vote for the broker's candidate without the benefit (in the hope of being benefited in the short run). Potential beneficiaries have two possible strategies. First, they could defect and vote for another candidate, who might or might not bring them benefits. Second, potential beneficiaries could continue voting for the known broker and wait. Individual income also plays a role. Given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the current broker's party) than defecting. In a slightly different research project, \citet[p. 20]{Magaloni:2008bq} explains that under non-democratic contexts, voters have incentives to keep voting for the incumbent government, \emph{even when they oppose it}. The Mexican PRI lasted so long not because of electoral fraud but because voters supported what it represented the ``known devil''. As she explains, hegemonic parties survive when they are able to sustain long-term economic growth and a constant supply of clientelistic transfers. As of vote-buying, \citet[p. 14]{Zarazaga2014} explains that ``[b]rokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this''. Building on these ideas, we argue that the transaction cost of switching brokers or defecting is very costly since it also involves building confidence relationships with the new broker from scratch. Reputation costs also keep targeted individuals disciplined. Having defected with the former broker once, makes the voter a defection-prone type one, increasing even more the cost of building those relationships. 
 
-% quadrant 3
-When political competition is high, brokers will be in need of securing more electoral support. However, when targeting individuals with low income masked in areas where the density of the poor is high, brokers cannot incur in the extremely high costs of engaging in individual targeting. Rather than that, brokers have economic incentives to target groups of poor individuals and rely on the spillovers these type of concentrations provide. For the reasons explained above, when brokers invest in this type of targeting, the benefits are multiplied since they mobilize electoral support from \emph{actual} and \emph{potential} beneficiaries. Quadrant 3 in \autoref{tab:strategy:set} depicts such settings: reduced-cost targeting in low-information environments and self-enforced compliance with the broker of potential and actual beneficiaries.
+% quadrant 3 and 2
+When political competition is high, brokers will be in need of securing more electoral support at the lowest price. The cheapest source of electoral support lives in the intersection of low income individuals masked in areas where the density of the poor is high. However, under these circumstances brokers cannot incur in the extremely high costs of engaging in individual targeting. Since individuals are masked within their environments, in these cases identifiability is difficult to get. Rather than that, brokers have economic incentives to target these groups of poor individuals but rely on the spillovers these type of groups provide. For the reasons explained above, when brokers invest in group targeting, the electoral benefits for the broker get multiplied. What is invested in \emph{actual} beneficiaries also makes \emph{potential} beneficiaries to vote for the broker's party. Quadrant 3 in \autoref{tab:strategy:set} depicts such settings. In low-information environments, brokers take advantage of self-enforced compliance mechanisms. Turning into quadrant 2, non-poor individuals nested in non-poor groups are also difficult to identify. However, given that non-poor individuals give less value to the same dollar invested in clientelism than poor individuals, brokers will target these groups only when brokers have less electoral pressures (low political competition). In this setting, elected members have more room to move, and hence embezzlement (as a way of expensive clientelism) is more likely. In these cases, clientelism has the lowest levels.
 
-% quadrant 2
-Non-poor individuals nested in non-poor groups are also difficult to identify. 
+\section*{Case Selection, Data and Design}
 
+% explain the identification strategy, introducing Brazil as the case
+We are interested in testing the effects on receiving clientelism of individuals with different income levels being nested in communities with different poverty sizes at different levels of political competition. Empirically the unit of analysis is individuals (with different income levels) nested in municipalities with different sizes of the poor group exposed to different municipal political opposition levels. We find Brazil to be a good case as it has its poverty structure is diverse in the sense that it is easier to find poor individuals nested in non-poor areas and vice versa. To ensure this assumption holds, we preprocess the data using a matching design, which it is explained below. Particularly, we use survey data for Brazil from 2010 from \citet{LAPOP2010}\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available''. The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas.}. 
 
+<<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+# Load the data
+library(foreign) # install.packages("foreign") 
+dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
 
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Recoding vars
+dat <- na.omit(dat)
+dat$ed <- as.numeric(dat$ed)
+dat$vb3 <- as.numeric(dat$vb3)
+dat$exc7 <- as.numeric(dat$exc7)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv <- as.numeric(dat$polinv)
+dat$polinv1 <- as.numeric(dat$polinv1)
+dat$polinv2 <- as.numeric(dat$polinv2)
+dat$polinv3 <- as.numeric(dat$polinv3)
+dat$polinv4 <- as.numeric(dat$polinv4)
+dat$polinv5 <- as.numeric(dat$polinv5)
+dat$ing4 <- as.numeric(dat$ing4)
 
 
+# constructing relative wealth index (Cordova 2009)
+library(car) # install.packages("car") 
+dat$wealth1 = recode(as.numeric(dat$wealth1), "1 = 0 ; 2 = 1")
+dat$wealth2 = recode(as.numeric(dat$wealth2), "1 = 0 ; 2 = 1")
+dat$wealth3 = recode(as.numeric(dat$wealth3), "1 = 0 ; 2 = 1")
+dat$wealth4 = recode(as.numeric(dat$wealth4), "1 = 0 ; 2 = 1")
+dat$wealth5 = recode(as.numeric(dat$wealth5), "1 = 0 ; 2 = 1 ; 3 = 2 ; 4 = 3")
+dat$wealth6 = recode(as.numeric(dat$wealth6), "1 = 0 ; 2 = 1")
+dat$wealth7 = recode(as.numeric(dat$wealth7), "1 = 0 ; 2 = 1")
+dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
+dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
+dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
 
-\section*{Poverty Density} 
-
-% Why I introduce "poverty density": Because individual targeting doesn't work
-Where does the current literature on clientelism leave us? First, it is ambivalent about whether party machines target groups or individuals. There does not seem to be acknowledgment that this distinction is an important one. 
-
-% Why DENSITY OF THE POOR MATTERS AND WORKS
-This paper argues that brokers target clusters of poor individuals. The meaning of a cluster is very intuitive. It means agglomerations of individuals who share some common factor. In this case, the factor is poverty. We theorize that this common factor (1) reduces monitoring costs by expanding the electoral support base from \emph{actual} beneficiaries only, to \emph{actual} and \emph{potential} beneficiaries. It also (2) makes bribed individuals more accountable by making both groups dependable on much-needed individual transfers, making clientelistic investment less risky.
-
-
-% Poverty clusters: Why does it reduce monitoring costs? (0)
-When poor individuals live in a high-poor dense area (i.e., in a ``cluster'' of poor individuals), clientelism has a multiplicative effect. \emph{Actual} beneficiaries (bribed individuals) comply to keep the benefits going (\citet[]{Rueda2014a,Zarazaga2014}). This paper claims that \emph{potential} beneficiaries (not-yet bribed individuals) comply too because they \emph{might} receive benefits in the future. If a broker has proven to be effective in mobilizing individual benefits to other people in the past, it is reasonable to infer that he might benefit not-yet bribed individuals in the future too. Hence \emph{potential} beneficiaries even when not currently bribed, have strong incentives to support the broker's candidate and vote for him. Others have explained that clientelism has a (social) multiplier effect when targeted at center-nodes in social networks (\citet{Schaffer2015}). The standard empirical strategy is to capture this variance including a variable for involvement in groups at the local level. The model here presented is more flexible in that it allows the existence of a latent (and informal) group: poor people living close to each other, a ``cluster''. As discussed in the empirical section as well, the model does not require formal membership in groups.
-
-
-
-
-% What others have considered is incomplete: organization buying doesn't really apply (1)
-%Network effects seem really intuitive and appealing. However, what has not been explored yet is whether clientelism is explained by the ``cluster'' or the ``network'' components attached to association membership. Membership into local grass-root associations typically also involve a situation of high-dense poverty. Keeping coordination costs constant, groups typically are formed to address collectively problems that otherwise would be much costly to solve by individuals on their own. Hence, formal group membership might be spuriously related to clientelism.  In other words, is clientelism associated to group membership itself, or is it associated to the density of the poor that is also present in associations? The models here presented suggest that once the effects of associationism are separated by different poverty density levels, it becomes very clear that what explains clientelism is the density of the poor, not membership association.
-
-\section*{Case Selection and Design}
-
-% The Ideal experiment
-If we seek to study the causal effect of living in a high-poor dense area as opposed to live in a low-poor dense area on the likelihood of receiving clientelism, it is necessary to break any systematic component between the treatment variable and the rest of the covariates. In theory, an ideal experiment would follow the next structure. First, we would need an individual with a fixed level of income living under the low-poor dense area (control condition). Theoretically, we would need the same individual with the same level of income, but living under the high-poor dense area (treatment condition). This design has two important advantages. First, any systematic relationship between the treatment variable (\emph{the density of the poor}) and other covariates (such as \emph{income}, in this example) is broken. Second, and as a consequence, given that everything is exactly the same in ``both'' individuals but the treatment received, any change in clientelism should be safely attributed to the presence of the treatment. Additionally, since we are also interested in studying the possible causal effect of living in a highly (scarcely) populated zone or being (or not) involved in local association on the likelihood of receiving clientelism, it is necessary also to break any systematic relationship between these two factors and the treatment variable proposed here. Similarly, the same counterfactual logic described above should be applied. Given that this theoretical design is impossible, this paper takes advantage of matching methods to study the causal effects of these variables on clientelism. 
+## splitting df in two
+dat.ur <- subset(dat, dat$urban == "Ur")
+dat.ru <- subset(dat, dat$urban == "Ru")
 
 
-% Why Brazil?
-Since individual income and the aggregated levels of poverty at the local level are not heavily confounded, the Brazilian case offers a good opportunity to test this theory\footnote{The correlation between the two is NUMBER HERE (unmatched set).}. To make sure, in Brazil it is easier to find a poor individual living in a non-poor context. One particularity of matching methods is that they typically delete observations that cannot be paired. Since aggregate and individual levels of poverty are not strongly correlated, the deleting process for one variable will not affect the deleting process for the other, as neither correctly predicts the other. That is why this paper choose Brazil as a case to test this theory.
 
+## PCA for RURAL and URBAN
+wealth.dat.ur = data.frame(dat.ur$wealth1,dat.ur$wealth2,dat.ur$wealth3, dat.ur$wealth4, dat.ur$wealth5, dat.ur$wealth6, dat.ur$wealth7, dat.ur$wealth8, dat.ur$wealth9, dat.ur$wealth10)
+wealth.dat.ru = data.frame(dat.ru$wealth1,dat.ru$wealth2,dat.ru$wealth3, dat.ru$wealth4, dat.ru$wealth5, dat.ru$wealth6, dat.ru$wealth7, dat.ru$wealth8, dat.ru$wealth9, dat.ru$wealth10)
+
+
+dat.ur$wealth = 
+        (princomp(wealth.dat.ur, scores = T)$scores[,1] * (dat.ur$wealth1-mean(dat.ur$wealth1) / sd(dat.ur$wealth1))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,2] * (dat.ur$wealth1-mean(dat.ur$wealth2) / sd(dat.ur$wealth2))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,3] * (dat.ur$wealth1-mean(dat.ur$wealth3) / sd(dat.ur$wealth3))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,4] * (dat.ur$wealth1-mean(dat.ur$wealth4) / sd(dat.ur$wealth4))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,5] * (dat.ur$wealth1-mean(dat.ur$wealth5) / sd(dat.ur$wealth5))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,6] * (dat.ur$wealth1-mean(dat.ur$wealth6) / sd(dat.ur$wealth6))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,7] * (dat.ur$wealth1-mean(dat.ur$wealth7) / sd(dat.ur$wealth7))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,8] * (dat.ur$wealth1-mean(dat.ur$wealth8) / sd(dat.ur$wealth8))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,9] * (dat.ur$wealth1-mean(dat.ur$wealth9) / sd(dat.ur$wealth9))) + 
+        (princomp(wealth.dat.ur, scores = T)$scores[,10] * (dat.ur$wealth1-mean(dat.ur$wealth10) / sd(dat.ur$wealth10)))        
+
+
+
+dat.ru$wealth = 
+        (princomp(wealth.dat.ru, scores = T)$scores[,1] * (dat.ru$wealth1-mean(dat.ru$wealth1) / sd(dat.ru$wealth1))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,2] * (dat.ru$wealth1-mean(dat.ru$wealth2) / sd(dat.ru$wealth2))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,3] * (dat.ru$wealth1-mean(dat.ru$wealth3) / sd(dat.ru$wealth3))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,4] * (dat.ru$wealth1-mean(dat.ru$wealth4) / sd(dat.ru$wealth4))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,5] * (dat.ru$wealth1-mean(dat.ru$wealth5) / sd(dat.ru$wealth5))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,6] * (dat.ru$wealth1-mean(dat.ru$wealth6) / sd(dat.ru$wealth6))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,7] * (dat.ru$wealth1-mean(dat.ru$wealth7) / sd(dat.ru$wealth7))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,8] * (dat.ru$wealth1-mean(dat.ru$wealth8) / sd(dat.ru$wealth8))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,9] * (dat.ru$wealth1-mean(dat.ru$wealth9) / sd(dat.ru$wealth9))) + 
+        (princomp(wealth.dat.ru, scores = T)$scores[,10] * (dat.ru$wealth1-mean(dat.ru$wealth10) / sd(dat.ru$wealth10)))  
+
+## combining the two DF's
+dat = rbind(dat.ur, dat.ru)
+
+
+# municipal population from census
+pop.municipalities = data.frame(
+        municipality=c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                        "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                        "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                        "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                        "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                        "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                        "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"),  # 7
+        pop=c(51160, 2051, 455657, 2375151, 4551, 309011, 10583, 2570160, # 1
+              17077, 5405, 551098, 37748, 855048, 62769, 2452185, 318640, # 2
+              15193, 4568, 92883, 44859, 644620, 25647, 143123, 116610, # 3
+              17002, 197965, 8397, 216745, 31154, 387779, 259815, 4288, # 4
+              39979, 106290, 328275, 311611, 14189, 11031, 428527, 44701, 6163, # 5
+              26415, 55551, 336038, 6320446, 20179, 629921, 84469, # 6
+              41657, 11253503, 53825, 24294, 23983, 76202) # 7 CORREGIR VERA CRUZ Y VER QUE ESTADO SON LAS OBS QUE TENGO, HAY COMO 4 VERA CRUCES
+        )
+
+## merge datasets
+dat = merge(dat, pop.municipalities, by=c("municipality"), all.x =T)
+
+
+# create variable large
+library(foreign)
+wagehalf.d <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/proportionofpoorcensus.dta")
+
+wagehalf.d = data.frame(cbind(municipality = c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                                   "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                                   "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                                   "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                                   "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                                   "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                                   "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"), 
+                 large = as.numeric(wagehalf.d$wagehalf >= median(wagehalf.d$wagehalf))
+                 )
+           )
+dat = merge(dat, wagehalf.d, by=c("municipality"), all.x =T)
+
+## recode large
+library(car) # install.packages("car") 
+dat$large <- as.numeric(dat$large)
+dat$large <- recode(dat$large, "1 = 0 ; 2 = 1")
+
+# Constructing Matched Set
+set.seed(604)
+library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
+# wealth + urban + munopp + polinv,  
+m.out <- matchit(large ~ wealth + urban + munopp + polinv,
+                 discard = "hull.both", 
+                 method = "cem",
+                 data = dat,
+                 verbose = F
+                 )
+
+
+#print. <- print(m.out)
+sum.match = summary(m.out)
+
+# Match Data
+m.data <- match.data(m.out)
+
+
+# Recode client1dummy after matching
+library(car) # install.packages("car") 
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+
+#
+# Transform the continuous "pop" variable in ten segments // mostly for simulation purposes
+pop.10.m = cut(m.data$pop, breaks = c(0,
+                                      quantile(m.data$pop, .10), 
+                                      quantile(m.data$pop, .20), 
+                                      quantile(m.data$pop, .30), 
+                                      quantile(m.data$pop, .40),
+                                      quantile(m.data$pop, .50),
+                                      quantile(m.data$pop, .60),
+                                      quantile(m.data$pop, .70),
+                                      quantile(m.data$pop, .80),
+                                      quantile(m.data$pop, .90),
+                                      quantile(m.data$pop, 1)
+), 
+include.lowest=T, labels=c(
+  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
+)
+
+
+pop.10.r = cut(dat$pop, breaks = c(0,
+                                   quantile(dat$pop, .10), 
+                                   quantile(dat$pop, .20), 
+                                   quantile(dat$pop, .30), 
+                                   quantile(dat$pop, .40),
+                                   quantile(dat$pop, .50),
+                                   quantile(dat$pop, .60),
+                                   quantile(dat$pop, .70),
+                                   quantile(dat$pop, .80),
+                                   quantile(dat$pop, .90),
+                                   quantile(dat$pop, 1)
+), 
+include.lowest=T, labels=c(
+  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
+)
+
+## attaching
+m.data$pop.10.m = as.numeric(pop.10.m)
+dat$pop.10.r = as.numeric(pop.10.r)
+@
+
+
+\subsection*{Density of the Poor, Political Competition and Income}
+
+% size of the poor
+To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, we construct a variable that measures the percentage of individuals who live with less than half of the minimum wage. Given that we know the municipality of residence for each individual interviewed by LAPOP we triangulate that percentage for each observation. To be able to construct the matched dataset, the variable had to be dichotomized at the median (\Sexpr{as.numeric(median(m.data$wagehalf))}\%). Although there have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). As a robustness, we still provide alternative models using the original continuous variable, matching on the generalized propensity score. The \texttt{GPS} is used as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this specification is that the The \texttt{GPS} does not require dichotomization. 
+
+
+<<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of the Size of the Poor', fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = TRUE>>=
+## Plot Density
+library(ggplot2)
+ggplot() + 
+  geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
+  geom_segment(data= 
+                 m.data, aes(
+                   x = (wagehalf=median(m.data$wagehalf)), 
+                   y = 0, 
+                   xend = (wagehalf=median(m.data$wagehalf)), 
+                   yend = .0305), 
+               linetype="dashed", 
+               size=1.5, 
+               colour = "forestgreen") + 
+               xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
+               ylab("Density") + 
+               theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) 
+@
+
+
+% Matching
+
+
+
+advantage of matching methods to preprocess the data (\citet{King2011}) and prune any systematic relationship between group poverty and individual income. \autoref{fig:municipality:wealth:large:plot} in the Appendix shows that the raw dataset has embedded into them low levels of correlation (\Sexpr{round(cor(dat$wagehalf, dat$wealth), 2)}), while the matched set has even lower levels (\Sexpr{round(cor(m.data$wagehalf, m.data$wealth), 2)}). To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. This strategy seeks to break any systematic relationship between the size of the poor and these variables by balancing the distributions of these variables via a deleting procedure. After this procedure, a good overall balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). The advantages of matching are that preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{King2015b})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. \autoref{tab:sum:stats:r} and \autoref{tab:sum:stats:m} provide summary statistics for both the matched and raw datasets {\color{red}PENDING}. Both the preprocessed and processed dataset has \Sexpr{length(levels(m.data$municipality))} municipalities. \autoref{fig:municipality:income:large:plot} shows which 
+
+
+
+% WORKING HERE, dont delete
+\subsection*{Outcome Variable}
+We take clientelism question which asked individuals \emph{a candidate or someone from a political party offered you something, like a favor, food, or any other benefit or thing in return for your vote or support? Has this happened \emph{often}, \emph{sometimes} or \emph{never}?} \citet[614]{Carreras2013a} and \citet[]{Holland2015} use the same dataset and outcome variable. As they explain, the question did not ask whether respondents took the offer, hence it should not be an important source of bias. The alternatives \emph{often} (\Sexpr{as.numeric(table(m.data$clientelism)["Often"])}) and \emph{sometimes} (\Sexpr{as.numeric(table(m.data$clientelism)["Sometimes"])}) were collapsed into one to have a dichotomous response variable.
+
+
+
+
+% HERE
+
+
+
+
+\autoref{fig:municipality:sample:plot} shows the distribution of observations by municipalities, by income levels in both raw and matches datasets.
+
+
+<<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance', fig.align='center', fig.width=9, fig.height=4,dpi=10000,cache = TRUE>>=
+# DISTRIBUTION PLOTS PRE AND POST MATCHING
+## Matched
+library(ggplot2)
+balance.1.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$wealth[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("Matched Set") + 
+  xlab("Wealth Index") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  ylim(limits = c(0, 0.085)) +
+  theme(axis.title=element_text(size=10))
+
+balance.2.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$urban[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$urban[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Urban") + 
+  theme_bw() + 
+  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
+  ylim(limits = c(0, 15)) +
+  theme(axis.title=element_text(size=10))
+
+
+balance.3.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$munopp[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  ylim(limits = c(0, .12)) +
+  theme(axis.title=element_text(size=10))
+
+
+balance.4.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(m.data$polinv[m.data$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw() + 
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  ylim(limits = c(0, .5)) +
+  theme(axis.title=element_text(size=10))
+
+
+
+## RAW
+balance.1.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$wealth[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$wealth[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("Raw Set") + 
+  xlab("Wealth Index") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  ylim(limits = c(0, 0.085)) +
+  theme(axis.title=element_text(size=10))
+
+balance.2.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$urban[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$urban[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Urban") + 
+  theme_bw() + 
+  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
+  ylim(limits = c(0, 15)) +
+  theme(axis.title=element_text(size=10))
+
+
+balance.3.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$munopp[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$munopp[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  ylim(limits = c(0, .12)) +
+  theme(axis.title=element_text(size=10))
+
+
+balance.4.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$polinv[dat$large==1])), fill = "blue", alpha = .1) + 
+  geom_density(aes(x=as.numeric(dat$polinv[dat$large==0])), fill = "red", alpha = .1) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  ylim(limits = c(0, .5)) +
+  theme(axis.title=element_text(size=10))
+
+
+library(cowplot) # install.packages("cowplot")
+balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m, nrow = 1, align = "v", scale = 1)
+balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r, nrow = 1, align = "v", scale = 1)
+plot_grid(balance.matched,balance.raw,  nrow = 2)
+@
+
+
+
+<<municipality:income:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+## HIGH df
+high.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 1]),
+  Density = c(rep("High", length(m.data$municipality[as.numeric(m.data$large == 1)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 1]
+)
+
+## LOW df
+low.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 0]),
+  Density = c(rep("Low", length(m.data$municipality[as.numeric(m.data$large == 0)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 0]
+)
+
+## rbinding the two of them
+density.d = data.frame(rbind(high.d, low.d))
+#density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
+
+## plot
+library(ggplot2)
+ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+  geom_bar() + 
+  geom_point(data=density.d, 
+             position = position_jitter(width = 0.6), 
+             size = I(1),
+             aes(
+               x=as.factor(Municipality), 
+               y=Wealth,
+               alpha=Wealth))+
+  #coord_flip() +
+  xlab("") + 
+  ylab("Frequency (matched set)") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+
+######
+## Combine mun.p1, mun.p2
+#library(cowplot) # install.packages("cowplot")
+#plot_grid(mun.p1,mun.p2,  nrow = 2)
+@
+
+% HERE
 
  
 \section*{Empirical Analyses}
 
-\subsection*{Data}
-
-% Data
-I use survey data from the Latin American Public Opinion Project for Brazil 2010 (pre-matching N = 1,585) \citet{LAPOP2010}\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available''.}. The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas. All variables used in this work along some descriptives are described in \autoref{sumtab:1} for the matched set and  \autoref{sumtab:2} for the raw sample. 
-
-
 \subsection*{Outcome Variable}
 
 
-% Introducing Outcome Variable
-This paper explains the frequency of clientelism, hence it considers the next variable from the LAPOP data: \emph{[i]n recent years and thinking about election campaigns, has a candidate or someone from a political party offered you something, like a favor, food, or any other benefit or thing in return for your vote or support? Has this happened \emph{often}, \emph{sometimes} or \emph{never}?} This question might cause biased estimates due to social desirability bias ( \citet[]{GonzalezOcantos:2012vr}). However, as \citet[614]{Carreras2013a} and \citet[]{Holland2015} (who use the same dataset and outcome variable) explain, the question does not ask whether respondents took the offer, in consequence, it should not be an important source of bias\footnote{The other question asked among those who did receive goods whether they were more prone or not to voting for the candidate or party that offered them those goods. As this question was not directly related to the frequency of clientelism, it was not used.}.
-
-% Outcome variable needs to be dichotomized
-The \emph{degree} in which clientelism happens is not substantively important to test the argument. Consequently, alternatives \emph{often} and \emph{sometimes} were collapsed into one category, leaving \emph{never} unchanged. \autoref{fig:clien2r} plots the binary distribution of the dependent variable\footnote{\autoref{fig:match3} plots the original distribution of the dependent variable.}.
 
 
 \subsection*{Treatment Variable}
-
-% Explain the logic of this variable
-This paper hypothesizes that clientelism will be higher when the density of the poor is high. To test this argument, it was constructed a variable that comes from the triangulation between the LAPOP dataset and the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}. The treatment variable is the \emph{percentage of people who lives with less than half of the minimum wage in a given municipality}\footnote{{\color{red}Should we need a table with descriptives by municipality?}}. In substantive terms this variable tells us how dense a municipality is in terms of poverty. We call the key independent variable ``treatment'' variable as after matching procedures it works \emph{as-if} random (\citet[]{Ho2006}).
-
-% This variable had to be dichotomized
-The treatment variable was originally continuous and \autoref{fig:tgraph} plots its distribution\footnote{\autoref{fig:tgraph} corresponds to the matched set.}. For reasons we explain below, it was necessary to dichotomize this variable at the median\footnote{NUMBER HERE}, vertical-dashed line. We call this variable \emph{Density of the Poor} and after  dichotomizing it, it takes two values, \emph{High Density} and \emph{Low Density}.
-
-
-% Explaining the threshold
-The threshold denotes treatment and control observations. Below the vertical-dashed line are the control observations, while above the line are the treatment observations. Substantively, individuals in the \emph{low} poverty-dense context live mixed with poor, middle-income and rich people. On the contrary, individuals in the \emph{high} poor-dense context, live surrounded only by poor people. This is where the size of the poor is ``high''. 
-
-% Introducing, Justifying and Explaining matching
-One of the main goals of social sciences is to produce parsimonious causal explanations about the world. Therefore extra caution about the data generating process of the treatment variable is required. Individuals are clearly not randomly assigned to either the \emph{high} or the \emph{low} poverty-dense contexts. There are systematic pretreatment factors that lead individuals to live in either low-dense poverty areas or high-dense poverty areas. Not accounting for this non-random assignment might bias the results (\citet{Ho2006}). In order to make the treatment variable \emph{as-if} random, we follow \citet{King2015b}'s advice and preprocess the data using a class of exact matching called ``coarsen exact matching'' (\texttt{CEM})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. The substantive idea behind matching is to force treatment and control distributions to be balanced across covariates (\citet[3]{King2011}). Matching also reduces model dependence by deleting observations that fall outside the common support area (\citet{Ho2006}). The deletion procedure prevents the analyst of making extreme counterfactuals as it discards treatment and control observations that fall outside the convex hull, which is defined as the polygon that bounds the vector of covariates (\citet{King2005a}). \texttt{CEM} has many advantages over other algorithms,  particularly, in what respects to ``its ability to reduce imbalance, model dependence, estimation error, bias, variance, mean square error, and other criteria'' (\citet[p. 2]{Iacus2011}). As a cautionary note, matching designs \emph{do not} produce covariate balance in the way fully randomized experiments do. Matching \emph{approximates} what randomization does by selecting on observables, not on a truly random process. Yet it is a good way to \emph{approximate} covariate balance before the parametric stage. 
-
-% Explaining why I had to dichotomize the treatment var.
-It was necessary to dichotomize the treatment variable. Although there has been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. Therefore, the density of the poor was dichotomized at the median (see \autoref{fig:tgraph}). As robustness checks, different cutoffs were considered (not shown). However, they show the same substantive results. We show also the main estimations but weighted by a generalized propensity score. This strategy does not require the dichotomization of the treatment variable. \autoref{fig:gps:fig} shows the same substantive results.
-
-% Being explicit about the matching procedure
-In order to match treatment with control observations, the equation below was fitted. The covariates that were included do not have to be ex-post factors so to not incur in post-treatment bias. \autoref{eq:1} considers \emph{schooling} and \emph{income}\footnote{The \emph{Income} question has the following wording: ``\emph{Into which of the following income ranges does the total monthly income of this household fit, including remittances from abroad and the income of all the working adults and children?}''. According to the codebook, the 10-choice question is \emph{based on the currency and distribution of the country}.} as pre-treatment factors. By including \texttt{log}\emph{(population)} and \emph{political involvement} we will be able to break any systematic relationship between the \emph{density of the poor} and these covariates.
 
 \begin{equation}\label{eq:1}
 Pr(\text{Clientelism}=1) = \texttt{logit}^{-1}(\beta_{0} + \beta_{1}\text{\texttt{log}(Population)} + \beta_{2}\text{Political Involvement} + \beta_{3}\text{Income} + \beta_{4}\text{Schooling}) 
 \end{equation}
 
-% USE THIS STRUCTURE: \Sexpr{sum.match$nn[8]}
+% USE THIS STRUCTURE: 
 After dropping NUMBER HERE observations in the treated group and NUMBER HERE in the control group, the procedure matches NUMBER HERE treated observations with NUMBER HERE control observations. A very good balance was obtained. \autoref{fig:balance} shows the quantiles of treated and control groups, pre and post matching procedures. Once the matched set was built and the unmatched observations were discarded, several logistic regressions were estimated, for several combinations of control variables (see \autoref{tab:1}).
 
 
@@ -456,7 +756,10 @@ Using the estimates from the main model,  \autoref{fig:int:2} plots simulated ex
 
 
 
-Additionally, due that clientelism generate mostly zeros, a zero-inflated Poisson regression was considered (see \citet{Long:1997wv}). This specification assumes that the process that inflates the zeros (not shown) is driven by \emph{income} and \emph{high density}\footnote{\emph{Income} was excluded from the non-zero specification because of multicollinearity.}. The treatment variable behaves very well regardless of the assumed functional form. \autoref{gps:tab} shows the same models run in \autoref{tab:1} but using a generalized propensity score  as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this specification is that the GPS does not require to dichotomize the treatment variable. The substantive results are the same. After implementing what \citet[]{Fong2015} suggest, \autoref{fig:gps:fig} consistently shows that as the density of the poor increases, the probability of clientelism increases considerably. 
+Additionally, due that clientelism generate mostly zeros, a zero-inflated Poisson regression was considered (see \citet{Long:1997wv}). This specification assumes that the process that inflates the zeros (not shown) is driven by \emph{income} and \emph{high density}\footnote{\emph{Income} was excluded from the non-zero specification because of multicollinearity.}. The treatment variable behaves very well regardless of the assumed functional form. \autoref{gps:tab} shows the same models run in \autoref{tab:1} but using a 
+
+
+The substantive results are the same. After implementing what \citet[]{Fong2015} suggest, \autoref{fig:gps:fig} consistently shows that as the density of the poor increases, the probability of clientelism increases considerably. 
 
 Lastly, \autoref{tab:sens} shows evidence about bias reduction (or increase) using the $\mathcal{L}$ statistic test for imbalance (\citet[]{Iacus2011}). When $\mathcal{L}=1$ there is perfect imbalance, while when $\mathcal{L}=0$ there is perfect balance. In substantive terms, perfect balance means that covariates are identical under the treatment and control conditions. Moreover, when the data is perfectly balanced, the treatment assignment mechanism is ignorable. The table also shows the difference in means given a switch from control to treatment conditions. The matched set seems to have a very good balance\footnote{Matching breaks the systematic bias between the treatment variable (the density of the poor) and the rest of the covariates. It does \emph{not} break the systematic relationship respect to the outcome variable, i.e. clientelism. Hence statistical significance is still possible between income and clientelism as this relationship is not zeroed by matching methods.}. 
 
@@ -472,8 +775,132 @@ All and all, group membership itself does not seem to be associated to clienteli
 
 \section*{Appendix}
 
+<<tab:sum:stats:r, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+1+2
+@
+<<tab:sum:stats:m, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+1+2
+@
 
 
+<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+## df of matched set
+municipality.m = data.frame(
+  Municipality = as.factor(m.data$municipality),
+  Sample = c(rep("Matched", length(m.data$municipality))
+             )
+)
+
+## df of raw set
+municipality.r = data.frame(
+  Municipality = as.factor(dat$municipality),
+  Sample = c(rep("Raw", length(dat$municipality))
+  )
+)
+
+## rbinding the two of them
+municipality.d = data.frame(rbind(municipality.m, municipality.r))
+municipality.d = data.frame(table(municipality.d))
+
+## plot
+#library(ggplot2)
+#ggplot(municipality.d, aes(factor(Municipality), Freq, fill = Sample)) + geom_bar(stat = "identity") + coord_flip() +
+#  xlab("Municipality") + 
+#  ylab("Frequency") + 
+#  #coord_flip() +
+#  theme_bw()
+
+library(ggplot2)
+#mun.p1 = 
+  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity") +
+  xlab("") + 
+  ylab("Frequency") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+@
+
+
+<<municipality:wealth:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Pre and Post Matching Observations by Wealth Index and Density of the Poor', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = TRUE>>=
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+library(ggplot2)
+
+### Matched Set
+density.wealth.m= ggplot() + geom_point(
+  aes(
+    y=as.factor(m.data$large), 
+    x=m.data$wealth, 
+    colour=m.data$large,
+    alpha = 1/length(m.data$wealth)), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Matched Set") + 
+  ylab("Density of \nthe Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+### Raw Set
+density.wealth.r= ggplot() + geom_point(
+  aes(
+    y=as.factor(dat$large), 
+    x=dat$wealth, 
+    colour=dat$large,
+    alpha = 1/length(dat$large)), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Raw Set") + 
+  ylab("Density of \nthe Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
+@
+
+<<balance:distance:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Balance between High and Low Density conditions, Pre and Post Matching ', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = TRUE>>=
+# Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
+Distance = m.out$distance
+Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
+Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
+
+
+
+library(ggplot2)
+#distance.p=
+ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=.1) +
+  ylab("Estimated Density") + 
+  xlab("Distance") + 
+  theme_bw() +
+  theme(
+    axis.title.y = element_text(size = 10), 
+    axis.title.x = element_text(size = 10),
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+@
+
+
+<<balance:distance:tests, echo = FALSE, warning = FALSE, message = F, cache = TRUE>>=
+
+
+@
+
+
+\newpage
 
 \bibliography{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library,/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013}
 \bibliographystyle{plainnat}

@@ -1466,7 +1466,7 @@ plot_grid(p1,p2,p3,  ncol = 1)
 ######################################################
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/m.data.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 library(car)
 
 
@@ -1594,7 +1594,11 @@ stargazer(dat.r,
 
 
 ############################################################
-# Distribution of Individuals by Municipality
+# Distribution of Individuals by Municipality [municipality:sample:plot]
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
 
 ## df of matched set
 municipality.m = data.frame(
@@ -1612,18 +1616,30 @@ municipality.r = data.frame(
 
 ## rbinding the two of them
 municipality.d = data.frame(rbind(municipality.m, municipality.r))
-
+municipality.d = data.frame(table(municipality.d))
 
 ## plot
+#library(ggplot2)
+#ggplot(municipality.d, aes(factor(Municipality), Freq, fill = Sample)) + geom_bar(stat = "identity") + coord_flip() +
+#  xlab("Municipality") + 
+#  ylab("Frequency") + 
+#  #coord_flip() +
+#  theme_bw()
+
 library(ggplot2)
-ggplot(municipality.d, aes(factor(Municipality), fill = Sample)) + geom_bar() + coord_flip() +
-  xlab("Municipality") + 
+#mun.p1 = 
+  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity") +
+  xlab("") + 
   ylab("Frequency") + 
-  theme_bw()
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+  
 
 ############################################################
-# Distribution of Individuals by High/Low COnditions and municipality
+# Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
 
+  
 ## HIGH df
 high.d = data.frame(
   Municipality = as.factor(m.data$municipality[m.data$large == 1]),
@@ -1640,30 +1656,38 @@ low.d = data.frame(
 
 ## rbinding the two of them
 density.d = data.frame(rbind(high.d, low.d))
-
+#density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
 
 ## plot
 library(ggplot2)
 ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
   geom_bar() + 
   geom_point(data=density.d, 
-             position = position_jitter(width = 0.5), 
-             size = I(1.5),
+             position = position_jitter(width = 0.6), 
+             size = I(1),
              aes(
-    x=as.factor(Municipality), 
-    y= abs(min(m.data$wealth))+Wealth, 
-    alpha=Wealth)) + 
-  coord_flip() +
-  xlab("Municipality") + 
-  ylab("Frequency") + 
+               x=as.factor(Municipality), 
+               y=Wealth,
+               alpha=Wealth))+
+  #coord_flip() +
+  xlab("") + 
+  ylab("Frequency (matched set)") + 
   theme_bw() +
-  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+
+######
+## Combine mun.p1, mun.p2
+#library(cowplot) # install.packages("cowplot")
+#plot_grid(mun.p1,mun.p2,  nrow = 2)
 
 
 ############################################################
-# Distribution of Individuals by High/Low COnditions and Wealth
+# Distribution of Individuals by High/Low COnditions and Wealth [municipality:wealth:large:plot]
 
-## plot
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
 library(ggplot2)
 
 ### Matched Set
@@ -1671,13 +1695,17 @@ density.wealth.m= ggplot() + geom_point(
   aes(
     y=as.factor(m.data$large), 
     x=m.data$wealth, 
-    colour=m.data$large), 
+    colour=m.data$large,
+    alpha = 1/length(m.data$wealth)), 
   position = position_jitter(width = 5)) +
   xlab("Wealth Index: Matched Set") + 
-  ylab("Density of the Poor") + 
+  ylab("Density of \nthe Poor") + 
   xlim(min(dat$wealth), max(dat$wealth)) +
   theme_bw() +
-  theme(legend.position="none") +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
   scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
 
 ### Raw Set
@@ -1685,20 +1713,22 @@ density.wealth.r= ggplot() + geom_point(
   aes(
     y=as.factor(dat$large), 
     x=dat$wealth, 
-    colour=dat$large), 
+    colour=dat$large,
+    alpha = 1/length(dat$large)), 
   position = position_jitter(width = 5)) +
   xlab("Wealth Index: Raw Set") + 
-  ylab("Density of the Poor") + 
+  ylab("Density of \nthe Poor") + 
   xlim(min(dat$wealth), max(dat$wealth)) +
   theme_bw() +
-  theme(legend.position="none") +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
   scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
 
 library(cowplot) # install.packages("cowplot")
 plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
 
-
-  
 
 ############################################################
 # Distribution Outcome Variable Binary Outcome
@@ -1742,7 +1772,7 @@ ggplot(m.data, aes(x=wagehalf)) +
   geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
 
 
-## Plot Density
+## Plot Density [tgraph:plot]
 library(ggplot2)
 ggplot() + 
   geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
@@ -1757,7 +1787,12 @@ ggplot() +
                colour = "forestgreen") + 
                xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
                ylab("Density") + 
-               theme_bw()
+               theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) 
+  
 
 
 ######################################################
@@ -1766,15 +1801,25 @@ ggplot() +
 
 # Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
 Distance = m.out$distance
-Discarded = m.out$discarded
-Treated = dat$clien1dummy
+Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
+Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
+
+
 
 library(ggplot2)
-ggplot() + geom_density(aes(x=Distance, colour=Discarded, linetype=Treated), alpha=.1) +
+#distance.p=
+ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=.1) +
   ylab("Estimated Density") + 
   xlab("Distance") + 
-  theme_bw()
-  
+  theme_bw() +
+  theme(
+    axis.title.y = element_text(size = 10), 
+    axis.title.x = element_text(size = 10),
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+
 
 
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
@@ -1872,6 +1917,20 @@ library(cowplot) # install.packages("cowplot")
 balance.matched= plot_grid(balance.1.m,balance.2.m,balance.3.m,balance.4.m, nrow = 1, align = "v", scale = 1)
 balance.raw= plot_grid(balance.1.r,balance.2.r,balance.3.r,balance.4.r, nrow = 1, align = "v", scale = 1)
 plot_grid(balance.matched,balance.raw,  nrow = 2)
+#plot_grid(balancing1234,distance.p,  nrow = 2)
+
+
+
+# alternative layout
+#balance.matched1= plot_grid(balance.1.m,balance.2.m, nrow = 1, align = "v", scale = 1)
+#balance.matched2= plot_grid(balance.1.r,balance.2.r, nrow = 1, align = "v", scale = 1)
+#p12 = plot_grid(balance.matched1,balance.matched2,  ncol = 1)
+#balance.matched3= plot_grid(balance.3.m,balance.4.m, nrow = 1, align = "v", scale = 1)
+#balance.matched4= plot_grid(balance.3.r,balance.4.r, nrow = 1, align = "v", scale = 1)
+#p34 = plot_grid(balance.matched3,balance.matched4,  ncol = 1)
+#balance.p1234= plot_grid(p12,p34, nrow = 2, align = "v", scale = 1)
+#plot_grid(balance.p1234,distance.p,  ncol = 2)
+
 
 
 
@@ -1915,12 +1974,7 @@ imb.r.d=data.frame(
   
 )
 
-imb.d = rbind(imb.m.d, imb.r.d)
-
-
-
-
-
+data.frame(cbind(imb.m.d, imb.r.d))
 
 
 
