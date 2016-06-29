@@ -303,11 +303,6 @@ In part, group targeting is possible because potential beneficiaries still vote 
 % quadrant 3 and 2
 When political competition is high, brokers will be in need of securing more electoral support at the lowest price. The cheapest source of electoral support lives in the intersection of low income individuals masked in areas where the density of the poor is high. However, under these circumstances brokers cannot incur in the extremely high costs of engaging in individual targeting. Since individuals are masked within their environments, in these cases identifiability is difficult to get. Rather than that, brokers have economic incentives to target these groups of poor individuals but rely on the spillovers these type of groups provide. For the reasons explained above, when brokers invest in group targeting, the electoral benefits for the broker get multiplied. What is invested in \emph{actual} beneficiaries also makes \emph{potential} beneficiaries to vote for the broker's party. Quadrant 3 in \autoref{tab:strategy:set} depicts such settings. In low-information environments, brokers take advantage of self-enforced compliance mechanisms. Turning into quadrant 2, non-poor individuals nested in non-poor groups are also difficult to identify. However, given that non-poor individuals give less value to the same dollar invested in clientelism than poor individuals, brokers will target these groups only when brokers have less electoral pressures (low political competition). In this setting, elected members have more room to move, and hence embezzlement (as a way of expensive clientelism) is more likely. In these cases, clientelism has the lowest levels.
 
-\section*{Case Selection, Data and Design}
-
-% explain the identification strategy, introducing Brazil as the case
-We are interested in testing the effects on receiving clientelism of individuals with different income levels being nested in communities with different poverty sizes at different levels of political competition. Empirically the unit of analysis is individuals (with different income levels) nested in municipalities with different sizes of the poor group exposed to different municipal political opposition levels. We find Brazil to be a good case as it has its poverty structure is diverse in the sense that it is easier to find poor individuals nested in non-poor areas and vice versa. To ensure this assumption holds, we preprocess the data using a matching design, which it is explained below. Particularly, we use survey data for Brazil from 2010 from \citet{LAPOP2010}\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available''. The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas.}. 
-
 <<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
 # Load the data
 library(foreign) # install.packages("foreign") 
@@ -425,6 +420,26 @@ library(car) # install.packages("car")
 dat$large <- as.numeric(dat$large)
 dat$large <- recode(dat$large, "1 = 0 ; 2 = 1")
 
+
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
+
+
+# Transform the continuous "treatment" variable in four segments
+wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
+                                          quantile(dat$wagehalf, .25), 
+                                          quantile(dat$wagehalf, .50), 
+                                          quantile(dat$wagehalf, .75), 
+                                          quantile(dat$wagehalf, 1)), include.lowest=T, labels=c("0-25","25-50","50-75","75-100")
+)
+
+dat$wagehalf.4 = wagehalf.4
+
+
+# save unmatched dataset
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
 # Constructing Matched Set
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
@@ -439,6 +454,7 @@ m.out <- matchit(large ~ wealth + urban + munopp + polinv,
 
 #print. <- print(m.out)
 sum.match = summary(m.out)
+
 
 # Match Data
 m.data <- match.data(m.out)
@@ -488,13 +504,58 @@ include.lowest=T, labels=c(
 ## attaching
 m.data$pop.10.m = as.numeric(pop.10.m)
 dat$pop.10.r = as.numeric(pop.10.r)
-@
 
+# save matched dataset
+save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+@
+\section*{Case Selection, Data and Design}
+
+% explain the identification strategy, introducing Brazil as the case
+The unit of analysis is individuals. Particularly, we are interested in testing the effects of individuals with different income levels being nested in communities with different poverty sizes at different levels of political competition on receiving clientelism. We find Brazil to be a good case, and so we use survey data from 2010 from \citet{LAPOP2010}\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available''. The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas.} to tests this idea. Brazil constitutes a good case as its poverty structure allows having poor individuals nested in non-poor areas (and vice versa). Simply put, low income levels do not properly classify individuals into high-poverty density contexts (and vice versa). To ensure this assumption holds, the data was preprocessed using a matching algorithm which is explained below. In this case, the advantage of this method is that, based on observables, the systematic relationship between income and the density of the poor is forced to be zero (\citet{King2011}). \autoref{fig:municipality:wealth:large:plot} in the Appendix shows that the raw dataset have already embedded into them low levels of correlation (\Sexpr{round(cor(dat$wagehalf, dat$wealth), 2)}), while the matched dataset have even lower levels (\Sexpr{round(cor(m.data$wagehalf, m.data$wealth), 2)}). 
+
+
+<<municipality:income:large:plot:matched, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+## HIGH df
+high.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 1]),
+  Density = c(rep("High", length(m.data$municipality[as.numeric(m.data$large == 1)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 1]
+)
+
+## LOW df
+low.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 0]),
+  Density = c(rep("Low", length(m.data$municipality[as.numeric(m.data$large == 0)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 0]
+)
+
+## rbinding the two of them
+density.d = data.frame(rbind(high.d, low.d))
+#density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
+
+## plot
+library(ggplot2)
+ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+  geom_bar() + 
+  geom_point(data=density.d, 
+             position = position_jitter(width = 0.6), 
+             size = I(1),
+             aes(
+               x=as.factor(Municipality), 
+               y=Wealth,
+               alpha=Wealth))+
+  #coord_flip() +
+  xlab("") + 
+  ylab("Frequency (matched set)") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+@
 
 \subsection*{Density of the Poor, Political Competition and Income}
 
-% size of the poor
-To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, we construct a variable that measures the percentage of individuals who live with less than half of the minimum wage. Given that we know the municipality of residence for each individual interviewed by LAPOP we triangulate that percentage for each observation. To be able to construct the matched dataset, the variable had to be dichotomized at the median (\Sexpr{as.numeric(median(m.data$wagehalf))}\%). Although there have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). As a robustness, we still provide alternative models using the original continuous variable, matching on the generalized propensity score. The \texttt{GPS} is used as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this specification is that the The \texttt{GPS} does not require dichotomization. 
+% Density of the Poor
+To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, a variable that measures the percentage of individuals who live with less than half of the minimum wage was constructed. Given that we observe the municipality of residence for each individual interviewed by LAPOP, we were able to triangulate that percentage for each individual. Although this percentage was originally a semi-continuous variable, it had to be dichotomized at the median to be able to construct the matched (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%). There have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). However, we still provide alternative models using the original continuous variable as a robustness, matching on the generalized propensity score. In these cases, the \texttt{GPS} is used as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this strategy is that it does not require dichotomization. 
 
 
 <<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of the Size of the Poor', fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = TRUE>>=
@@ -509,7 +570,7 @@ ggplot() +
                    xend = (wagehalf=median(m.data$wagehalf)), 
                    yend = .0305), 
                linetype="dashed", 
-               size=1.5, 
+               size=.5, 
                colour = "forestgreen") + 
                xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
                ylab("Density") + 
@@ -522,27 +583,7 @@ ggplot() +
 
 
 % Matching
-
-
-
-advantage of matching methods to preprocess the data (\citet{King2011}) and prune any systematic relationship between group poverty and individual income. \autoref{fig:municipality:wealth:large:plot} in the Appendix shows that the raw dataset has embedded into them low levels of correlation (\Sexpr{round(cor(dat$wagehalf, dat$wealth), 2)}), while the matched set has even lower levels (\Sexpr{round(cor(m.data$wagehalf, m.data$wealth), 2)}). To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. This strategy seeks to break any systematic relationship between the size of the poor and these variables by balancing the distributions of these variables via a deleting procedure. After this procedure, a good overall balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). The advantages of matching are that preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{King2015b})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. \autoref{tab:sum:stats:r} and \autoref{tab:sum:stats:m} provide summary statistics for both the matched and raw datasets {\color{red}PENDING}. Both the preprocessed and processed dataset has \Sexpr{length(levels(m.data$municipality))} municipalities. \autoref{fig:municipality:income:large:plot} shows which 
-
-
-
-% WORKING HERE, dont delete
-\subsection*{Outcome Variable}
-We take clientelism question which asked individuals \emph{a candidate or someone from a political party offered you something, like a favor, food, or any other benefit or thing in return for your vote or support? Has this happened \emph{often}, \emph{sometimes} or \emph{never}?} \citet[614]{Carreras2013a} and \citet[]{Holland2015} use the same dataset and outcome variable. As they explain, the question did not ask whether respondents took the offer, hence it should not be an important source of bias. The alternatives \emph{often} (\Sexpr{as.numeric(table(m.data$clientelism)["Often"])}) and \emph{sometimes} (\Sexpr{as.numeric(table(m.data$clientelism)["Sometimes"])}) were collapsed into one to have a dichotomous response variable.
-
-
-
-
-% HERE
-
-
-
-
-\autoref{fig:municipality:sample:plot} shows the distribution of observations by municipalities, by income levels in both raw and matches datasets.
-
+To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. This strategy sought to break any systematic relationships between the size of the poor and these variables by balancing the distribution of these variables via a deleting procedure\footnote{The final procedure matched \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,1])} individuals living in the low-density condition with \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,2])} individuals living in the high-density condition.}. A good overall-balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). From a statistical standpoint, preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{King2015b})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. \autoref{tab:sum:stats:r} and \autoref{tab:sum:stats:m} provide summary statistics for both the matched and raw datasets {\color{red}PENDING}. Both the preprocessed and raw datasets have \Sexpr{length(levels(m.data$municipality))} municipalities. \autoref{fig:municipality:income:large:plot:matched} shows the municipalities and which ones are considered as ``high'' or ``low'' in terms of the density of the poor. The figure also shows that there exists  considerable variance regarding income in both high and low poverty density conditions\footnote{\autoref{municipality:sample:plot} shows the distribution of observations by municipalities, by income levels in both raw and matches datasets.}.
 
 <<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance', fig.align='center', fig.width=9, fig.height=4,dpi=10000,cache = TRUE>>=
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
@@ -643,74 +684,21 @@ plot_grid(balance.matched,balance.raw,  nrow = 2)
 @
 
 
+% Political Competition // Income
+To measure political competition, the paper follows the advice of \citet[]{Weitz-shapiro}. Official electoral data for the 2008 municipal elections were collected\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}. This variable measures the percentage of seats that are \emph{not} controlled by the mayor's party in a given municipal council. People who are somewhat better off than their neighbors but live in poor areas may not ``feel'' poor. If this is the case, this could confound the results\footnote{I thank the reviewers of LAPS for this suggestion.}. Also, when answering the questioner, individuals might not want to reveal their true incomes (either because it is too low or too high). Following the advice of \citet{Cordova2008,Cordova2009,Cordova2010}, a relative wealth index (RWI) was constructed. Using principal component analyses, the index measures wealth based on actual assets weighted by how common those assets are. Different indexes were constructed for urban and rural contexts.
 
-<<municipality:income:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
-## HIGH df
-high.d = data.frame(
-  Municipality = as.factor(m.data$municipality[m.data$large == 1]),
-  Density = c(rep("High", length(m.data$municipality[as.numeric(m.data$large == 1)]))),
-  Wealth = as.numeric(m.data$wealth)[m.data$large == 1]
-)
-
-## LOW df
-low.d = data.frame(
-  Municipality = as.factor(m.data$municipality[m.data$large == 0]),
-  Density = c(rep("Low", length(m.data$municipality[as.numeric(m.data$large == 0)]))),
-  Wealth = as.numeric(m.data$wealth)[m.data$large == 0]
-)
-
-## rbinding the two of them
-density.d = data.frame(rbind(high.d, low.d))
-#density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
-
-## plot
-library(ggplot2)
-ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
-  geom_bar() + 
-  geom_point(data=density.d, 
-             position = position_jitter(width = 0.6), 
-             size = I(1),
-             aes(
-               x=as.factor(Municipality), 
-               y=Wealth,
-               alpha=Wealth))+
-  #coord_flip() +
-  xlab("") + 
-  ylab("Frequency (matched set)") + 
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
-        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
-######
-## Combine mun.p1, mun.p2
-#library(cowplot) # install.packages("cowplot")
-#plot_grid(mun.p1,mun.p2,  nrow = 2)
-@
-
-% HERE
-
- 
-\section*{Empirical Analyses}
 
 \subsection*{Outcome Variable}
 
-
-
-
-\subsection*{Treatment Variable}
-
-\begin{equation}\label{eq:1}
-Pr(\text{Clientelism}=1) = \texttt{logit}^{-1}(\beta_{0} + \beta_{1}\text{\texttt{log}(Population)} + \beta_{2}\text{Political Involvement} + \beta_{3}\text{Income} + \beta_{4}\text{Schooling}) 
-\end{equation}
-
-% USE THIS STRUCTURE: 
-After dropping NUMBER HERE observations in the treated group and NUMBER HERE in the control group, the procedure matches NUMBER HERE treated observations with NUMBER HERE control observations. A very good balance was obtained. \autoref{fig:balance} shows the quantiles of treated and control groups, pre and post matching procedures. Once the matched set was built and the unmatched observations were discarded, several logistic regressions were estimated, for several combinations of control variables (see \autoref{tab:1}).
+Clientelism was measured using the question that asks if \emph{a candidate or someone from a political party offered [the individual] something, like a favor, food, or any other benefit or thing in return for [her/his] vote or support?} Subjects could answer whether this had happened \emph{often}, \emph{sometimes} or \emph{never}. \citet[614]{Carreras2013a} and \citet[]{Holland2015} use the same dataset and outcome variable. As they explain, the question did not ask if respondents took the offer, hence it should not be an important source of bias. The alternatives \emph{often} (\Sexpr{as.numeric(table(m.data$clientelism)["Often"])}) and \emph{sometimes} (\Sexpr{as.numeric(table(m.data$clientelism)["Sometimes"])}) were collapsed into one to have a dichotomous response variable.
 
 
 \subsection*{Control Variables}
 
+% HERE
+
 % Why I included the control variables I included
-Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). \citet[]{Weitz-shapiro} argues that ``the interaction between political competition and poverty will explain variation in clientelism''. Following this strategy, official electoral data for the 2008 municipal elections was collected and the variable called \emph{municipal opposition} was constructed\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}. The variable measures the percentage of seats that are not controlled by the party of the mayor in a given municipal council. Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit:1996wp} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
+Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit:1996wp} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
 
 
 
@@ -783,7 +771,7 @@ All and all, group membership itself does not seem to be associated to clienteli
 @
 
 
-<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Pre and Post Matching Deletion', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 

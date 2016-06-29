@@ -119,6 +119,22 @@ library(car) # install.packages("car")
 dat$large <- as.numeric(dat$large)
 dat$large <- recode(dat$large, "1 = 0 ; 2 = 1")
 
+
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
+
+
+# Transform the continuous "treatment" variable in four segments
+wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
+                                          quantile(dat$wagehalf, .25), 
+                                          quantile(dat$wagehalf, .50), 
+                                          quantile(dat$wagehalf, .75), 
+                                          quantile(dat$wagehalf, 1)), include.lowest=T, labels=c("0-25","25-50","50-75","75-100")
+)
+
+dat$wagehalf.4 = wagehalf.4
+
+
 # save unmatched dataset
 save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
@@ -137,6 +153,7 @@ m.out <- matchit(large ~ wealth + urban + munopp + polinv,
 
 #print. <- print(m.out)
 sum.match = summary(m.out)
+
 
 # Match Data
 m.data <- match.data(m.out)
@@ -256,7 +273,7 @@ m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wageha
 # m2: contextual
 m2.r = formula(clien1dummy ~ wealth*munopp*as.numeric(wagehalf.4) + pop.10.m + weights)
 # m3: political
-m3.r = formula(clien1dummy ~ polinv*wealth + polinv*as.numeric(wagehalf.4) + ing4 + vb3 + exc7 + weights)
+m3.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
 ####### formulas
 
 
@@ -325,22 +342,6 @@ extract.geepack <- function(model) {
 # load data
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
-## transform the wagehalf variable
-dat$wagehalf = round(dat$wagehalf, digits=0)
-
-
-# Transform the continuous "treatment" variable in four segments
-wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
-  quantile(dat$wagehalf, .25), 
-  quantile(dat$wagehalf, .50), 
-  quantile(dat$wagehalf, .75), 
-  quantile(dat$wagehalf, 1)), include.lowest=T, labels=c("0-25","25-50","50-75","75-100")
-  )
-
-dat$wagehalf.4 = wagehalf.4
-
-
-
 
 ## Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
@@ -402,6 +403,330 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
 #####################################################################
 ### C O E F F I C I E N T   P L O T 
 #####################################################################
+
+
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+####### formulas
+#### MATCHED SAMPLE
+# m1: economic
+m1.m = formula(clien1dummy ~ large + wealth + large:wealth + ed)
+# m2: contextual
+m2.m = formula(clien1dummy ~ wealth*munopp*large + pop.10.m)
+# m3: political
+m3.m = formula(clien1dummy ~ polinv*wealth + polinv*large + ing4 + vb3 + exc7)
+#### 
+m1.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
+# m2: contextual
+m2.r = formula(clien1dummy ~ wealth*munopp*as.numeric(wagehalf.4) + pop.10.m + weights)
+# m3: political
+m3.r = formula(clien1dummy ~ as.numeric(wagehalf.4) + wealth + as.numeric(wagehalf.4):wealth + ed + weights)
+####### formulas
+
+
+## models
+library(Zelig)
+
+set.seed(602); options(scipen=999)
+
+
+### matched
+coef.out.m.1 = zelig(m1.m, model = "logit.gee",id = "municipality", weights = "wt",std.err = "san.se",corstr = "independence",data = m.data,cite = F)
+coef.out.m.2 = zelig(m2.m, model = "logit.gee", id = "municipality", weights = "wt", std.err = "san.se", corstr = "independence",data = m.data,cite = F)
+coef.out.m.3 = zelig(m3.m, model = "logit.gee", id = "municipality", weights = "wt", std.err = "san.se", corstr = "independence", data = m.data, cite = F)
+### raw
+coef.out.r.1 = zelig(m1.r, model = "logit.gee",id = "municipality", weights = "wt",std.err = "san.se",corstr = "independence",data = m.data,cite = F)
+coef.out.r.2 = zelig(m1.r, model = "logit.gee", id = "municipality", weights = "wt", std.err = "san.se", corstr = "independence",data = m.data,cite = F)
+coef.out.r.3 = zelig(m1.r, model = "logit.gee", id = "municipality", weights = "wt", std.err = "san.se", corstr = "independence", data = m.data, cite = F)
+
+
+## simulations
+
+x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large))
+
+sim(x = x, num=1000)
+
+
+#### matched
+
+##### coef.out.m.1
+coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.ed = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.large.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, large:wealth == mean(m.data$large:wealth)+sd(m.data$large:wealth)), num=1000)$getqi(qi="ev"))
+
+##### coef.out.m.2
+coef.out.m.1.wealth = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.pop.10.m = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth.munopp = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth.large = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:large == mean(m.data$wealth:large)+sd(m.data$wealth:large)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.munopp.large  = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, munopp:large  == mean(m.data$munopp:large )+sd(m.data$munopp:large )), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth.munopp.large  = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:munopp:large  == mean(m.data$wealth:munopp:large )+sd(m.data$wealth:munopp:large )), num=1000)$getqi(qi="ev"))
+
+##### coef.out.m.3
+coef.out.m.1.polinv = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.ing4 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.vb3 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.exc7 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.polinv.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.polinv.large = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:large == mean(m.data$polinv:large)+sd(m.data$polinv:large)), num=1000)$getqi(qi="ev"))
+
+
+#### raw
+##### coef.out.m.1
+coef.out.m.1.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.ed = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wagehalf.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4):wealth == mean(m.data$as.numeric(wagehalf.4):wealth)+sd(m.data$as.numeric(wagehalf.4):wealth)), num=1000)$getqi(qi="ev"))
+
+##### coef.out.m.2
+coef.out.m.2.wealth = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.2.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=1000)$getqi(qi="ev"))
+coef.out.m.2.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+coef.out.m.2.pop.10.m = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=1000)$getqi(qi="ev"))
+coef.out.m.2.wealth.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=1000)$getqi(qi="ev"))
+coef.out.m.2.wealth.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:as.numeric(wagehalf.4) == mean(m.data$wealth:as.numeric(wagehalf.4))+sd(m.data$wealth:as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+coef.out.m.2.munopp.wagehalf  = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp:as.numeric(wagehalf.4)  == mean(m.data$munopp:as.numeric(wagehalf.4) )+sd(m.data$munopp:as.numeric(wagehalf.4) )), num=1000)$getqi(qi="ev"))
+coef.out.m.2.wealth.munopp.wagehalf  = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:munopp:as.numeric(wagehalf.4)  == mean(m.data$wealth:munopp:as.numeric(wagehalf.4) )+sd(m.data$wealth:munopp:as.numeric(wagehalf.4) )), num=1000)$getqi(qi="ev"))
+
+##### coef.out.m.3
+coef.out.m.3.polinv = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+coef.out.m.3.ing4 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.vb3 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.exc7 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.polinv.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.3.polinv.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:as.numeric(wagehalf.4) == mean(m.data$polinv:as.numeric(wagehalf.4))+sd(m.data$polinv:as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
+
+coef.plot=  data.frame(
+  beta = c(
+    as.numeric(mean(coef.out.m.1.large$mean)),
+    as.numeric(mean(coef.out.m.1.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.ed$mean)),
+    as.numeric(mean(coef.out.m.1.large.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.munopp$mean)),
+    as.numeric(mean(coef.out.m.1.large$mean)),
+    as.numeric(mean(coef.out.m.1.pop.10.m$mean)),
+    as.numeric(mean(coef.out.m.1.wealth.munopp$mean)),
+    as.numeric(mean(coef.out.m.1.wealth.large$mean)),
+    as.numeric(mean(coef.out.m.1.munopp.large$mean)),
+    as.numeric(mean(coef.out.m.1.wealth.munopp.large$mean)),
+    as.numeric(mean(coef.out.m.1.polinv$mean)),
+    as.numeric(mean(coef.out.m.1.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.large$mean)),
+    as.numeric(mean(coef.out.m.1.ing4$mean)),
+    as.numeric(mean(coef.out.m.1.vb3$mean)),
+    as.numeric(mean(coef.out.m.1.exc7$mean)),
+    as.numeric(mean(coef.out.m.1.polinv.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.polinv.large$mean)),
+    as.numeric(mean(coef.out.m.1.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.1.wealth$mean)),
+    as.numeric(mean(coef.out.m.1.ed$mean)),
+    as.numeric(mean(coef.out.m.1.wagehalf.wealth$mean)),
+    as.numeric(mean(coef.out.m.2.wealth$mean)),
+    as.numeric(mean(coef.out.m.2.munopp$mean)),
+    as.numeric(mean(coef.out.m.2.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.2.pop.10.m$mean)),
+    as.numeric(mean(coef.out.m.2.wealth.munopp$mean)),
+    as.numeric(mean(coef.out.m.2.wealth.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.2.munopp.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.2.wealth.munopp.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.3.polinv$mean)),
+    as.numeric(mean(coef.out.m.3.wealth$mean)),
+    as.numeric(mean(coef.out.m.3.wagehalf$mean)),
+    as.numeric(mean(coef.out.m.3.ing4$mean)),
+    as.numeric(mean(coef.out.m.3.vb3$mean)),
+    as.numeric(mean(coef.out.m.3.exc7$mean)),
+    as.numeric(mean(coef.out.m.3.polinv.wealth$mean)),
+    as.numeric(mean(coef.out.m.3.polinv.wagehalf$mean))
+    ),
+  upper = c(
+    as.numeric(CI(coef.out.m.1.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.ed$mean)[1]),
+    as.numeric(CI(coef.out.m.1.large.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.munopp$mean)[1]),
+    as.numeric(CI(coef.out.m.1.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.pop.10.m$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth.munopp$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.munopp.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth.munopp.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.polinv$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.ing4$mean)[1]),
+    as.numeric(CI(coef.out.m.1.vb3$mean)[1]),
+    as.numeric(CI(coef.out.m.1.exc7$mean)[1]),
+    as.numeric(CI(coef.out.m.1.polinv.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.polinv.large$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.1.ed$mean)[1]),
+    as.numeric(CI(coef.out.m.1.wagehalf.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.2.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.2.munopp$mean)[1]),
+    as.numeric(CI(coef.out.m.2.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.2.pop.10.m$mean)[1]),
+    as.numeric(CI(coef.out.m.2.wealth.munopp$mean)[1]),
+    as.numeric(CI(coef.out.m.2.wealth.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.2.munopp.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.2.wealth.munopp.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.3.polinv$mean)[1]),
+    as.numeric(CI(coef.out.m.3.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.3.wagehalf$mean)[1]),
+    as.numeric(CI(coef.out.m.3.ing4$mean)[1]),
+    as.numeric(CI(coef.out.m.3.vb3$mean)[1]),
+    as.numeric(CI(coef.out.m.3.exc7$mean)[1]),
+    as.numeric(CI(coef.out.m.3.polinv.wealth$mean)[1]),
+    as.numeric(CI(coef.out.m.3.polinv.wagehalf$mean)[1])
+  ),
+  lower = c(
+    as.numeric(CI(coef.out.m.1.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.ed$mean)[3]),
+    as.numeric(CI(coef.out.m.1.large.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.munopp$mean)[3]),
+    as.numeric(CI(coef.out.m.1.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.pop.10.m$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth.munopp$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.munopp.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth.munopp.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.polinv$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.ing4$mean)[3]),
+    as.numeric(CI(coef.out.m.1.vb3$mean)[3]),
+    as.numeric(CI(coef.out.m.1.exc7$mean)[3]),
+    as.numeric(CI(coef.out.m.1.polinv.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.polinv.large$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.1.ed$mean)[3]),
+    as.numeric(CI(coef.out.m.1.wagehalf.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.2.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.2.munopp$mean)[3]),
+    as.numeric(CI(coef.out.m.2.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.2.pop.10.m$mean)[3]),
+    as.numeric(CI(coef.out.m.2.wealth.munopp$mean)[3]),
+    as.numeric(CI(coef.out.m.2.wealth.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.2.munopp.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.2.wealth.munopp.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.3.polinv$mean)[3]),
+    as.numeric(CI(coef.out.m.3.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.3.wagehalf$mean)[3]),
+    as.numeric(CI(coef.out.m.3.ing4$mean)[3]),
+    as.numeric(CI(coef.out.m.3.vb3$mean)[3]),
+    as.numeric(CI(coef.out.m.3.exc7$mean)[3]),
+    as.numeric(CI(coef.out.m.3.polinv.wealth$mean)[3]),
+    as.numeric(CI(coef.out.m.3.polinv.wagehalf$mean)[3])
+  ),
+  Model = c(
+    rep("Model 1",4),
+    rep("Model 2",8),
+    rep("Model 3",8),
+    rep("Model 1",4),
+    rep("Model 2",8),
+    rep("Model 3",8)),
+  Data = c(
+    rep("Matched", 4+8+8),
+    rep("GPS", 4+8+8)
+    ),
+  Variable = c(
+    "Size of the Poor",
+    "Wealth Index",
+    "Years of Education",
+    "Size of the Poor * Wealth Index",
+    "Wealth Index",
+    "Municipal Opposition",
+    "Size of the Poor",
+    "Municipal Population",
+    "Wealth Index * Municipal Opposition",
+    "Wealth Index * Size of the Poor",
+    "Municipal Opposition * Size of the Poor",
+    "Wealth Index * Municipal Opposition * Size of the Poor",
+    "Political Involvement",
+    "Wealth Index",
+    "Size of the Poor",
+    "Democratic Support",
+    "Party Id",
+    "Perception of Corruption",
+    "Political Involvement * Wealth Index",
+    "Political Involvement * Size of the Poor",
+    "Size of the Poor",
+    "Wealth Index",
+    "Years of Education",
+    "Size of the Poor * Wealth Index",
+    "Wealth Index",
+    "Municipal Opposition",
+    "Size of the Poor",
+    "Municipal Population",
+    "Wealth Index * Municipal Opposition",
+    "Wealth Index * Size of the Poor",
+    "Municipal Opposition * Size of the Poor",
+    "Wealth Index * Municipal Opposition * Size of the Poor",
+    "Political Involvement",
+    "Wealth Index",
+    "Size of the Poor",
+    "Democratic Support",
+    "Party Id",
+    "Perception of Corruption",
+    "Political Involvement * Wealth Index",
+    "Political Involvement * Size of the Poor"
+    )
+)
+
+
+# Plot
+library(ggplot2)
+ggplot(coef.plot, aes(
+  x = Variable, 
+  y = beta, 
+  ymin = upper, 
+  ymax = lower,
+  colour = Model,
+  shape = Data,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.8), fill = NA) + 
+  #geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Simulated Expected Values") +
+  ggtitle("Expected Value of Clientelism") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  scale_y_continuous(limits = c(.09, .18)) + 
+  #facet_grid(Model ~ .) +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1767,7 +2092,7 @@ ggplot(m.data, aes(x=wagehalf)) +
   geom_histogram(binwidth=2.5, alpha=.7) + 
   #geom_density(alpha=.1) +
   theme_bw() +
-  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
+  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
   xlab("Density of the Poor") + ylab("Frequency") +
   geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
 
@@ -1783,7 +2108,7 @@ ggplot() +
                    xend = (wagehalf=median(m.data$wagehalf)), 
                    yend = .0305), 
                linetype="dashed", 
-               size=1.5, 
+               size=.5, 
                colour = "forestgreen") + 
                xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
                ylab("Density") + 
