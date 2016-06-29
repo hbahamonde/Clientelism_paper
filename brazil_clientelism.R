@@ -404,6 +404,8 @@ gee.cont.rgps.3.t = extract.geepack(gee.cont.rgps.3 <- geeglm(m3.r,
 ### C O E F F I C I E N T   P L O T 
 #####################################################################
 
+# HERE
+
 
 # load data
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
@@ -445,66 +447,172 @@ coef.out.r.3 = zelig(m1.r, model = "logit.gee", id = "municipality", weights = "
 
 ## simulations
 
-x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large))
+coef.out.m.1.large = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=10000)$getqi(qi="ev")) - as.numeric(sim(x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)), num=10000)$getqi(qi="ev")))
 
-sim(x = x, num=1000)
+coef.out.m.1.wealth = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev")))
 
+coef.out.m.1.ed = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)), num=10000)$getqi(qi="ev")))
 
-#### matched
-
-##### coef.out.m.1
-coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.ed = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.large.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, large:wealth == mean(m.data$large:wealth)+sd(m.data$large:wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.large.wealth = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, large:wealth == mean(m.data$large:wealth)+sd(m.data$large:wealth)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, large:wealth == mean(m.data$large:wealth)), num=10000)$getqi(qi="ev")))
 
 ##### coef.out.m.2
-coef.out.m.1.wealth = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.pop.10.m = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth.munopp = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth.large = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:large == mean(m.data$wealth:large)+sd(m.data$wealth:large)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.munopp.large  = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, munopp:large  == mean(m.data$munopp:large )+sd(m.data$munopp:large )), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth.munopp.large  = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, wealth:munopp:large  == mean(m.data$wealth:munopp:large )+sd(m.data$wealth:munopp:large )), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wealth = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.munopp = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.large = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.2, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.2, cond = T, large = mean(m.data$large)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.pop.10.m = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.wealth.munopp = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:munopp == mean(m.data$wealth:munopp)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.wealth.large = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:large == mean(m.data$wealth:large)+sd(m.data$wealth:large)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:large == mean(m.data$wealth:large)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.munopp.large  = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.1, cond = T, munopp:large  == mean(m.data$munopp:large )+sd(m.data$munopp:large )), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, munopp:large  == mean(m.data$munopp:large )), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.wealth.munopp.large  = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:munopp:large  == mean(m.data$wealth:munopp:large )+sd(m.data$wealth:munopp:large )), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth:munopp:large  == mean(m.data$wealth:munopp:large )), num=10000)$getqi(qi="ev")))
 
 ##### coef.out.m.3
-coef.out.m.1.polinv = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.large = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.ing4 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.vb3 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.exc7 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.polinv.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.polinv.large = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:large == mean(m.data$polinv:large)+sd(m.data$polinv:large)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.polinv = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.wealth = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.large = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.3, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, large = mean(m.data$large)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.ing4 = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)), num=10000)$getqi(qi="ev")))
+
+
+
+coef.out.m.1.vb3 = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)), num=10000)$getqi(qi="ev")))
+
+coef.out.m.1.exc7 = data.frame(mean = as.numeric(sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.polinv.wealth = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)), num=10000)$getqi(qi="ev")))
+
+
+coef.out.m.1.polinv.large = data.frame(mean =as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:large == mean(m.data$polinv:large)+sd(m.data$polinv:large)), num=10000)$getqi(qi="ev")) -as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:large == mean(m.data$polinv:large)), num=10000)$getqi(qi="ev")))
 
 
 #### raw
 ##### coef.out.m.1
-coef.out.m.1.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.ed = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=1000)$getqi(qi="ev"))
-coef.out.m.1.wagehalf.wealth = data.frame(mean = sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4):wealth == mean(m.data$as.numeric(wagehalf.4):wealth)+sd(m.data$as.numeric(wagehalf.4):wealth)), num=1000)$getqi(qi="ev"))
+coef.out.m.1.wagehalf = data.frame(mean =
+                                     as.numeric(sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev")) -
+                                     as.numeric(sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.1.wealth = data.frame(mean = 
+                                   as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev"))-
+                                   as.numeric(sim(x = setx(coef.out.m.1, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.1.ed = data.frame(mean = 
+                               as.numeric(sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)+sd(m.data$ed)), num=10000)$getqi(qi="ev")) -
+                               as.numeric(sim(x = setx(coef.out.m.1, cond = T, ed = mean(m.data$ed)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.1.wagehalf.wealth = data.frame(mean = 
+                                            as.numeric(sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4):wealth == mean(m.data$as.numeric(wagehalf.4):wealth)+sd(m.data$as.numeric(wagehalf.4):wealth)), num=10000)$getqi(qi="ev")) -
+                                            as.numeric(sim(x = setx(coef.out.m.1, cond = T, as.numeric(wagehalf.4):wealth == mean(m.data$as.numeric(wagehalf.4):wealth)), num=10000)$getqi(qi="ev"))
+)
 
 ##### coef.out.m.2
-coef.out.m.2.wealth = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.2.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=1000)$getqi(qi="ev"))
-coef.out.m.2.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
-coef.out.m.2.pop.10.m = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=1000)$getqi(qi="ev"))
-coef.out.m.2.wealth.munopp = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=1000)$getqi(qi="ev"))
-coef.out.m.2.wealth.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:as.numeric(wagehalf.4) == mean(m.data$wealth:as.numeric(wagehalf.4))+sd(m.data$wealth:as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
-coef.out.m.2.munopp.wagehalf  = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, munopp:as.numeric(wagehalf.4)  == mean(m.data$munopp:as.numeric(wagehalf.4) )+sd(m.data$munopp:as.numeric(wagehalf.4) )), num=1000)$getqi(qi="ev"))
-coef.out.m.2.wealth.munopp.wagehalf  = data.frame(mean =sim(x = setx(coef.out.m.2, cond = T, wealth:munopp:as.numeric(wagehalf.4)  == mean(m.data$wealth:munopp:as.numeric(wagehalf.4) )+sd(m.data$wealth:munopp:as.numeric(wagehalf.4) )), num=1000)$getqi(qi="ev"))
+coef.out.m.2.wealth = data.frame(mean =
+                                   as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev")) -
+                                   as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.2.munopp = data.frame(mean =
+                                   as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)+sd(m.data$munopp)), num=10000)$getqi(qi="ev")) -
+                                   as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp = mean(m.data$munopp)), num=10000)$getqi(qi="ev")) 
+)
+
+coef.out.m.2.wagehalf = data.frame(mean =
+                                     as.numeric(sim(x = setx(coef.out.m.2, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))-
+                                     as.numeric(sim(x = setx(coef.out.m.2, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+
+coef.out.m.2.pop.10.m = data.frame(mean =
+                                     as.numeric(sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)+sd(m.data$pop.10.m)), num=10000)$getqi(qi="ev")) -
+                                     as.numeric(sim(x = setx(coef.out.m.2, cond = T, pop.10.m = mean(m.data$pop.10.m)), num=10000)$getqi(qi="ev"))
+)
+
+
+
+coef.out.m.2.wealth.munopp = data.frame(mean =
+                                          as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:munopp == mean(m.data$wealth:munopp)+sd(m.data$wealth:munopp)), num=10000)$getqi(qi="ev")) -
+                                          as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:munopp == mean(m.data$wealth:munopp)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.2.wealth.wagehalf = data.frame(mean =
+                                            as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:as.numeric(wagehalf.4) == mean(m.data$wealth:as.numeric(wagehalf.4))+sd(m.data$wealth:as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev")) -
+                                            as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:as.numeric(wagehalf.4) == mean(m.data$wealth:as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.2.munopp.wagehalf  = data.frame(mean =
+                                             as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp:as.numeric(wagehalf.4)  == mean(m.data$munopp:as.numeric(wagehalf.4)) +sd(m.data$munopp:as.numeric(wagehalf.4) )), num=10000)$getqi(qi="ev")) -
+                                             as.numeric(sim(x = setx(coef.out.m.2, cond = T, munopp:as.numeric(wagehalf.4)  == mean(m.data$munopp:as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+
+coef.out.m.2.wealth.munopp.wagehalf  = data.frame(mean =
+                                                    as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:munopp:as.numeric(wagehalf.4)  == mean(m.data$wealth:munopp:as.numeric(wagehalf.4) )+sd(m.data$wealth:munopp:as.numeric(wagehalf.4) )), num=10000)$getqi(qi="ev")) -
+                                                    as.numeric(sim(x = setx(coef.out.m.2, cond = T, wealth:munopp:as.numeric(wagehalf.4)  == mean(m.data$wealth:munopp:as.numeric(wagehalf.4) )), num=10000)$getqi(qi="ev"))
+)
 
 ##### coef.out.m.3
-coef.out.m.3.polinv = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
-coef.out.m.3.ing4 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.vb3 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.exc7 = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.polinv.wealth = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=1000)$getqi(qi="ev"))
-coef.out.m.3.polinv.wagehalf = data.frame(mean =sim(x = setx(coef.out.m.3, cond = T, polinv:as.numeric(wagehalf.4) == mean(m.data$polinv:as.numeric(wagehalf.4))+sd(m.data$polinv:as.numeric(wagehalf.4))), num=1000)$getqi(qi="ev"))
+coef.out.m.3.polinv = data.frame(mean =
+                                   as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)+sd(m.data$polinv)), num=10000)$getqi(qi="ev")) -
+                                   as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv = mean(m.data$polinv)), num=10000)$getqi(qi="ev"))
+)
+
+
+coef.out.m.3.wealth = data.frame(mean =
+                                   as.numeric(sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)+sd(m.data$wealth)), num=10000)$getqi(qi="ev")) -
+                                   as.numeric(sim(x = setx(coef.out.m.3, cond = T, wealth = mean(m.data$wealth)), num=10000)$getqi(qi="ev"))
+)
+
+
+coef.out.m.3.wagehalf = data.frame(mean = 
+                                     as.numeric(sim(x = setx(coef.out.m.3, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))+sd(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev")) -
+                                     as.numeric(sim(x = setx(coef.out.m.3, cond = T, as.numeric(wagehalf.4) == mean(m.data$as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.3.ing4 = data.frame(mean = 
+                                 as.numeric(sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)+sd(m.data$ing4)), num=10000)$getqi(qi="ev")) -
+                                 as.numeric(sim(x = setx(coef.out.m.3, cond = T, ing4 = mean(m.data$ing4)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.3.vb3 = data.frame(mean = 
+                                as.numeric(sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)+sd(m.data$vb3)), num=10000)$getqi(qi="ev")) -
+                                as.numeric(sim(x = setx(coef.out.m.3, cond = T, vb3 = mean(m.data$vb3)), num=10000)$getqi(qi="ev"))
+)
+
+
+coef.out.m.3.exc7 = data.frame(mean = 
+                                 as.numeric(sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)+sd(m.data$exc7)), num=10000)$getqi(qi="ev")) -
+                                 as.numeric(sim(x = setx(coef.out.m.3, cond = T, exc7 = mean(m.data$exc7)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.3.polinv.wealth = data.frame(mean = 
+                                          as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)+sd(m.data$polinv:wealth)), num=10000)$getqi(qi="ev")) -
+                                          as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:wealth == mean(m.data$polinv:wealth)), num=10000)$getqi(qi="ev"))
+)
+
+coef.out.m.3.polinv.wagehalf = data.frame(mean =
+                                            as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:as.numeric(wagehalf.4) == mean(m.data$polinv:as.numeric(wagehalf.4))+sd(m.data$polinv:as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev")) -
+                                            as.numeric(sim(x = setx(coef.out.m.3, cond = T, polinv:as.numeric(wagehalf.4) == mean(m.data$polinv:as.numeric(wagehalf.4))+sd(m.data$polinv:as.numeric(wagehalf.4))), num=10000)$getqi(qi="ev"))
+)
+
+
+# alternative plot of GOF
+#plot(density(sim(x = setx(coef.out.m.1, cond = T, large = mean(m.data$large)+sd(m.data$large)), num=1000)$getqi(qi="pv")))
+#lines(density(m.data$clien1dummy))
 
 
 # to compute confidence intervals
@@ -694,35 +802,93 @@ coef.plot=  data.frame(
 )
 
 
-# Plot
+model.1.plot = subset(coef.plot, coef.plot$Model=="Model 1")
+model.2.plot = subset(coef.plot, coef.plot$Model=="Model 2")
+model.3.plot = subset(coef.plot, coef.plot$Model=="Model 3")
+
+
+# Plot Model 1
 library(ggplot2)
-ggplot(coef.plot, aes(
+model.1.plot.g= 
+  ggplot(model.1.plot, aes(
   x = Variable, 
   y = beta, 
   ymin = upper, 
   ymax = lower,
-  colour = Model,
-  shape = Data,
+  #colour = Model,
+  colour = Data,
   position="dodge"
 )) +
-  geom_pointrange(position=position_dodge(width=0.8), fill = NA) + 
-  #geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
   coord_flip() + 
   xlab("") + 
   ylab("Simulated Expected Values") +
-  ggtitle("Expected Value of Clientelism") +
+  ggtitle("Economic Model") +
   #guides(colour=FALSE) +
   #theme(legend.position="none") + 
   theme_bw() +
-  scale_y_continuous(limits = c(.09, .18)) + 
-  #facet_grid(Model ~ .) +
+  #scale_y_continuous(limits = c(.09, .18)) + 
+  #facet_grid(Variable ~ .) +
   #labs(colour = "Sample") +
   theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
 
 
+# Plot Model 2
+library(ggplot2)
+model.2.plot.g= 
+  ggplot(model.2.plot, aes(
+  x = Variable, 
+  y = beta, 
+  ymin = upper, 
+  ymax = lower,
+  #colour = Model,
+  colour = Data,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Simulated Expected Values") +
+  ggtitle("Contextual Model") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #scale_y_continuous(limits = c(.09, .18)) + 
+  #facet_grid(Variable ~ .) +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
+
+# Plot Model 3
+library(ggplot2)
+model.3.plot.g= 
+  ggplot(model.3.plot, aes(
+  x = Variable, 
+  y = beta, 
+  ymin = upper, 
+  ymax = lower,
+  #colour = Model,
+  colour = Data,
+  position="dodge"
+)) +
+  geom_pointrange(position=position_dodge(width=0.3), fill = NA) + 
+  geom_hline(yintercept = 0, alpha = 1/3, colour = gray(1/2), lty = 2) +
+  coord_flip() + 
+  xlab("") + 
+  ylab("Simulated Expected Values") +
+  ggtitle("Individual Characteristics Model") +
+  #guides(colour=FALSE) +
+  #theme(legend.position="none") + 
+  theme_bw() +
+  #scale_y_continuous(limits = c(.09, .18)) + 
+  #facet_grid(Variable ~ .) +
+  #labs(colour = "Sample") +
+  theme(legend.key = element_rect(colour = NA, fill = NA, size = 0.5)) 
 
 
-
+library(cowplot) # install.packages("cowplot")
+plot_grid(model.1.plot.g, model.2.plot.g, model.3.plot.g,  ncol = 1, nrow = 3)
 
 
 
