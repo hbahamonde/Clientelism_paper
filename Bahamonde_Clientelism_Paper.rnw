@@ -305,6 +305,11 @@ When political competition is high, brokers will be in need of securing more ele
 
 <<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
 # Load the data
+cat("\014")
+rm(list=ls())
+#setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
+
+# Load the data
 library(foreign) # install.packages("foreign") 
 dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
 
@@ -435,38 +440,6 @@ wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
 
 dat$wagehalf.4 = wagehalf.4
 
-
-# save unmatched dataset
-save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-
-
-# Constructing Matched Set
-set.seed(604)
-library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-# wealth + urban + munopp + polinv,  
-m.out <- matchit(large ~ wealth + urban + munopp + polinv,
-                 discard = "hull.both", 
-                 method = "cem",
-                 data = dat,
-                 verbose = F
-                 )
-
-
-#print. <- print(m.out)
-sum.match = summary(m.out)
-
-
-# Match Data
-m.data <- match.data(m.out)
-
-
-# Recode client1dummy after matching
-library(car) # install.packages("car") 
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-
-#
 # Transform the continuous "pop" variable in ten segments // mostly for simulation purposes
 pop.10.m = cut(m.data$pop, breaks = c(0,
                                       quantile(m.data$pop, .10), 
@@ -502,12 +475,43 @@ include.lowest=T, labels=c(
 )
 
 ## attaching
-m.data$pop.10.m = as.numeric(pop.10.m)
-dat$pop.10.r = as.numeric(pop.10.r)
+dat$pop.10 = as.numeric(pop.10.r)
+
+
+# save unmatched dataset
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+# Constructing Matched Set
+set.seed(604)
+library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
+# wealth + urban + munopp + polinv,  
+m.out <- matchit(large ~ wealth + urban + munopp + polinv,
+                 discard = "hull.both", 
+                 method = "cem",
+                 data = dat,
+                 verbose = F
+                 )
+
+
+#print. <- print(m.out)
+sum.match = summary(m.out)
+
+
+# Match Data
+m.data <- match.data(m.out)
+
+
+# Recode client1dummy after matching
+library(car) # install.packages("car") 
+m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
+m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
 # save matched dataset
 save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 @
+
+
 \section*{Case Selection, Data and Design}
 
 % explain the identification strategy, introducing Brazil as the case
@@ -555,7 +559,7 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
 \subsection*{Density of the Poor, Political Competition and Income}
 
 % Density of the Poor
-To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, a variable that measures the percentage of individuals who live with less than half of the minimum wage was constructed. Given that we observe the municipality of residence for each individual interviewed by LAPOP, we were able to triangulate that percentage for each individual. Although this percentage was originally a semi-continuous variable, it had to be dichotomized at the median to be able to construct the matched (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%). There have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). However, we still provide alternative models using the original continuous variable as a robustness, matching on the generalized propensity score. In these cases, the \texttt{GPS} is used as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this strategy is that it does not require dichotomization. 
+To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, a variable that measures the percentage of individuals who live with less than half of the minimum wage was constructed. Given that we observe the municipality of residence for each individual interviewed by LAPOP, we were able to triangulate that percentage for each individual. Although this percentage was originally a semi-continuous variable, it had to be dichotomized at the median to be able to construct the matched (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%). There have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). However, we still provide alternative models using the original continuous variable as a robustness, matching on the generalized propensity score. In these cases, the \texttt{GPS} is used as a weighting regressor not as a matching device (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b}). The advantage of this strategy is that it does not require dichotomization. The same covariates used in the \texttt{CEM} matching procedure were used in the \texttt{GPS} procedure.
 
 
 <<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of the Size of the Poor', fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = TRUE>>=
@@ -583,7 +587,7 @@ ggplot() +
 
 
 % Matching
-To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. This strategy sought to break any systematic relationships between the size of the poor and these variables by balancing the distribution of these variables via a deleting procedure\footnote{The final procedure matched \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,1])} individuals living in the low-density condition with \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,2])} individuals living in the high-density condition.}. A good overall-balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). From a statistical standpoint, preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{King2015b})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. \autoref{tab:sum:stats:r} and \autoref{tab:sum:stats:m} provide summary statistics for both the matched and raw datasets {\color{red}PENDING}. Both the preprocessed and raw datasets have \Sexpr{length(levels(m.data$municipality))} municipalities. \autoref{fig:municipality:income:large:plot:matched} shows the municipalities and which ones are considered as ``high'' or ``low'' in terms of the density of the poor. The figure also shows that there exists  considerable variance regarding income in both high and low poverty density conditions\footnote{\autoref{municipality:sample:plot} shows the distribution of observations by municipalities, by income levels in both raw and matches datasets.}.
+To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. This strategy sought to break any systematic relationships between the size of the poor and these variables by balancing the distribution of these variables via a deleting procedure\footnote{The final procedure matched \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,1])} individuals living in the low-density condition with \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,2])} individuals living in the high-density condition.}. A good overall-balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). From a statistical standpoint, preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{King2015b})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}).}. \autoref{tab:sum:stats:r} and \autoref{tab:sum:stats:m} provide summary statistics for both the matched and raw datasets {\color{red}PENDING}. The preprocessed dataset have \Sexpr{library(plyr);nrow(count(m.data$municipality))} while the raw datasets (GPS) have \Sexpr{library(plyr);nrow(count(dat$municipality))} municipalities. \autoref{fig:municipality:income:large:plot:matched} shows the municipalities and which ones are considered as ``high'' or ``low'' in terms of the density of the poor. The figure also shows that there exists  considerable variance regarding income in both high and low poverty density conditions\footnote{\autoref{municipality:sample:plot} shows the distribution of observations by municipalities, by income levels in both raw and matches datasets.}.
 
 <<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance', fig.align='center', fig.width=9, fig.height=4,dpi=10000,cache = TRUE>>=
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
@@ -690,37 +694,40 @@ To measure political competition, the paper follows the advice of \citet[]{Weitz
 
 \subsection*{Outcome Variable}
 
+
+% our dependent variable is the proportion of fixations, during the ambiguous region, to the animal (the potential recipient, e.g., the horse). This captures the degree to which participants expect the recipient rather than the theme. [...] Following Barr (2008), proportion of fixations to the animal and the object were first empirical logit-transformed [...]
+
 Clientelism was measured using the question that asks if \emph{a candidate or someone from a political party offered [the individual] something, like a favor, food, or any other benefit or thing in return for [her/his] vote or support?} Subjects could answer whether this had happened \emph{often}, \emph{sometimes} or \emph{never}. \citet[614]{Carreras2013a} and \citet[]{Holland2015} use the same dataset and outcome variable. As they explain, the question did not ask if respondents took the offer, hence it should not be an important source of bias. The alternatives \emph{often} (\Sexpr{as.numeric(table(m.data$clientelism)["Often"])}) and \emph{sometimes} (\Sexpr{as.numeric(table(m.data$clientelism)["Sometimes"])}) were collapsed into one to have a dichotomous response variable.
 
 
 \subsection*{Control Variables}
 
-% HERE
+% HERE p% Why I included the control variables I included
 
-% Why I included the control variables I included
-Following the advice of \citet{Ho2006}, the same set of covariates in \autoref{eq:1} were included in the parametric stage. \emph{Perception of Corruption} was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that group association is related to clientelism. These associations allow for bloc-turnout and lower defection rates (\citet[]{Stokes:2013cj}). Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{Attendance frequency to religious organizations, meetings of a community improvement committee and meetings of a political party/organization, with variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13} in the LAPOP dataset, respectively.}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Following their strategy, a dummy for \emph{urban} was included. In a similar vein, \citet[]{Rueda2014a} interacts population size at the municipal level with a variable that captures ``political involvement''. To account for that, census data (from 2010), particularly population size at the municipal level was collected and interacted with ``political involvement''\footnote{I use \citet[]{Holland2015}'s strategy again.} (model 5, \autoref{tab:1}). Finally, both terms were interacted (model 6, \autoref{tab:1}). Lastly, building upon some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit:1996wp} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea is to see whether machines target supporters or not.
+%Following the advice of \citet{Ho2006}, the same set of covariates in the matching procedure were used in the parametric stage. I DONT SAY THIS SINCE IN THE MATCHING PART I INCLUDED urban and in the parametric MUN POP.
 
+Perception of Corruption was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals\footnote{I thank Cesar Zucco for this suggestion.}. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that brokers target civic associations. Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (here called ``political involvement'') was created \footnote{This variable was constructed adding up the frequency of attendance at religious organizations, community improvement committees and political party meetings (variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13}, respectively).}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to be monitored, and also represent a safer bet for brokers (\citet[]{Rueda2014a}). Using census data, we included a variable to measure population size at the municipal level. Building upon some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit:1996wp} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id}) was included. The idea was to see whether machines target supporters or not. Individual levels of democratic support should be negatively associated with clientelism (\citet{Carlin2015}). Using the same dataset, a variable measuring democratic support was included. \citet{GonzalezOcantos2014} finds that schooling plays a negative role on clientelism, hence we control for educational levels too.
 
 
 \subsection*{Estimation Method}
 
-{\color{red}SAY I USED GEE see Hanley2003a}
+% introducing
+This paper is concerned with the likelihood of an individual, conditioned on several factors, to receive clientelism. Individuals (the unit of analysis) are clustered around a  number of important factors such as political competition at the municipal level, municipal poverty and municipal population size. In order to account for the clustering effects these factors have on individuals, several logistic regression GEE models were fitted. Generalized estimating equations were introduced by \citet{Liang1986} to fit clustered, repeated (i.e. correlated) and panel data, especially when they are binary (\citet{Hanley2003a}). GEE models are similar to random effects (\citet{Gardiner2009}) in that they allow observations to be nested in hierarchical structures. These models require analysts to parameterize the working correlation matrix. Though \citet[p. 139]{Hedeker2006} explain that ``although the GEE is robust to misspecification of the correlation structure''\footnote{\citet[p. 402]{Carlin2001} argue that ``Relatively minor differences in estimates may arise depending on how the estimating equations are weighted, in particular within the generalized estimating equation (GEE) framework, on the choice of ``working correlation'' structure that is used to capture within-subject correlations''. \citet{Westgate2016} and \citet[p. 227]{Gardiner2009} make the same point.}, \citet[p. 166]{Hardin2013} point out that ``[i]f the observations are clustered (not collected over time), then [...] the exchangeable correlation structure'' is the most appropriated working correlation matrix. Following this strategy, we fit GEE logistic models using both the raw dataset (weighted by the GPS) and the matched datasets assuming an exchangeable correlation matrix.
 
-It is important to stress that this identification strategy is not about municipalities. That would mean to incur in ecological fallacy. What the treatment variable captures is a characteristic that every individual shares with his/her environment. Hence, the variable reflects features of the average individual at a micro-level. 
+% gee problems // simulation
+GEE methods are common in these circumstances. As in any random-effect type of model, their estimates remain in practice uninterpretable, however (\citet{Carlin2001}). This problem is augmented given the nature of our interactive hypotheses being tested in this paper\footnote{Interestingly, though both \citet[p. 76]{Brambor2005} and \citet[footnote 5]{Berry2012} argue that the same solutions they propose for linear models apply for non-linear models, I do not find support for this claim neither in the applied econometrics nor in the statistics literature, briefly surveyed in this paper.}. Moreover, these problems are even more complex when it comes to generalized models. A series of challenges arise. As \citet{Ai2003} explain, \emph{(1) the interaction effect could be nonzero, even when the estimation says it is zero, (2) the statistical significance of the interaction effect cannot be tested with a simple t-test on the coefficient of the interaction term, (3) the interaction effect is conditional on the independent variables, unlike the interaction effect in linear models, and (4) the interaction effect may have different signs for different values of covariates}.  \citet[p. 74]{Brambor2005} offer the same advice, i.e. ``one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term''. Some have argued to completely abandon hypotheses testing when it comes to interaction terms within nonlinear models. For example, \citet[p. 11]{Greene2010} argues that ``the most informative point in the analysis at which to do hypothesis testing is at the model building step, not at the analysis step''. Other alternative tools such as cross-partial derivatives are not an advisable either, hence simulation methods are required (\citet[]{WilliamJ.Wales2013}). Particularly, we follow the simulation approach introduced in \citet{King2000}. This procedure requires to estimate the model as usual but then use the point estimates to generate (via simulation) a (new) larger distribution. Relying on the central limit theorem, with enough sampling draws the new simulated distribution approximates with great degree of precision some \emph{feature} of the original distribution. This quantity of interest is usually the mean. This method is particularly well suited for interaction terms and nonlinear models (\citet{WilliamJ.Wales2013}). From a substantive standpoint, simulation methods allow sampling distributions at fixed values of the independent variables. This will be important to simulate the expected value of clientelism for different ``profiles'', such as \emph{non}-poor individuals nested in \emph{high}-poor dense municipalities in contexts of \emph{high} political competition, and others.
 
-As clientelism can only take two values, 1 when clientelism occurs and 0 otherwise, it needs to be estimated using a logistic regression. However, as \autoref{fig:clien2r} shows, clientelism is a rare event. For this reason this variable is estimated via a rare event logistic regression which corrects problems due to rare events (\citet{King2001a}, \citet{King:2001wo})\footnote{We report different estimation methods as well in the \hyperref[robcheck]{Robustness Checks}.}. 
 
 \subsection*{Results} 
 
+Given that it is ``often impossible to evaluate conditional hypotheses using only the information provided in traditional results tables'' (\citet[p. 76]{Brambor2005})\footnote{Moreover, they point out that ``the coefficient on the constitutive term X must not be interpreted as the average effect of a change in X on Y as it can in a linear-additive regression model [...] the coefficient on X only captures the effect of X on Y when Z is zero. [...] It is, therefore, incorrect to say that a positive and significant coefficient on X (or Z) indicates that an increase in X (or Z) is expected to lead to an increase in Y'' (p. 72).}, we rather focus on the substantive results using simulation methods\footnote{\autoref{tab:1} in the appendix shows the raw results. The first column shows the results for the matched dataset while the second column shows the results for the GPS sample.}. 
 
 
-\autoref{tab:1} shows the estimations\footnote{The main model in this paper, is Model 4 in \autoref{tab:1}. All robustness checks, scatter plots and extra statistical evidence replicate this model. When the standard errors are clustered by municipality or when fixed-effects are included, the results reveal the same substantive effects for most of the models.}. \emph{High density} is positive, statistically significant and robust across all specifications. As expected, \emph{income} is negative, but very weak and non-significant. In substantive terms, these findings strongly suggest that what drives machines to target clientelism is the socioeconomic level of groups, irrespective of individual levels of income. In other words, a poor individual that lives where the density of the poor is low has less chances of receiving clientelistic goods compared to an \emph{equally} poor individual who lives where the density of the poor is high. The \emph{political involvement index} is positive but non-significant. Population size and the interaction term proposed in \citet[]{Weitz-shapiro}\footnote{Implementing what \citet[]{Armstrong:2010jk} suggests, \autoref{fig:weitz:1} corroborates the results in \autoref{tab:1}.} do not seem to have an impact both effects are almost indistinguishable from zero and also non-significant.
 
-\subsection*{The Density of the Poor}
+\paragraph{Density of the Poor, Political Competition and Income}
 
+% HERE put graph and comment on it
 
-% The treatment variable works and it is very strong.
-\autoref{tab:1} strongly suggests that controlling for everything else, including group membership, individual income and population size, individuals who live in poverty clusters have a higher probability of being bribed. \autoref{fig:fig:4} shows a probability density plot. Following \citet[]{King2000}, after the main model was estimated, the parameters were simulated 2,500 times in order to build more stable estimates. The plot strongly suggests that someone living in a highly-poor dense area has twice the chances of being bribed than someone living in an area where the density of the poor is low NUMBER HERE, keeping individual income levels balanced in both groups.
 
 
 
@@ -728,7 +735,7 @@ As clientelism can only take two values, 1 when clientelism occurs and 0 otherwi
 
 
 % On the issue of 
-New research argues that associations at the local level are strongly associated with clientelism. For example, \citet[]{Rueda2014a} interacts population size with group membership. The argument is that small groups would represent a less risky investment for the broker, while associations would provide a much more effective and cheaper aggregated monitoring. However, given the nature of clientelism, most empirical models deal with binary response variables. Consequently, interaction terms within the limited dependent variables are complicated. ``The magnitude of the interaction effect in nonlinear models does not equal the marginal effect of the interaction term, can be of opposite sign, and its statistical significance is not [usually] calculated by standard softwares'' (\citet[]{Ai2003}). Due to cross-partial derivatives are not an alternative either, simulation methods are required to estimate the combined effects of the interaction term (\citet[]{WilliamJ.Wales2013}). 
+New research argues that associations at the local level are strongly associated with clientelism. For example, \citet[]{Rueda2014a} interacts population size with group membership. The argument is that small groups would represent a less risky investment for the broker, while associations would provide a much more effective and cheaper aggregated monitoring. However, given the nature of clientelism, most empirical models deal with binary response variables. Consequently, interaction terms within the limited dependent variables are complicated. ``The magnitude of the interaction effect in nonlinear models does not equal the marginal effect of the interaction term, can be of opposite sign, and its statistical significance is not [usually] calculated by standard softwares'' (\citet[]{Ai2003}). 
 
 % The plot shows a non existent relationship.
 Repeating the process described above on simulations,  \autoref{fig:int:1} takes the estimates of model 5 in \autoref{fig:int:1} and plots 600 simulated expected probabilities for each level of political involvement on the probability of clientelism. The figure shows an interaction between the log of population and the political involvement index (see \citet[]{Holland2015,Rueda2014a}), particularly, going from the minimum (red) to the maximum (blue) population (in log scale). On the one hand, the estimates of model 5 in \autoref{tab:1} are consistent with the theory. The estimate is (weakly) negative and non significant. More importantly, \autoref{fig:int:1} suggests that once this interaction term is decomposed by changes in population size for different values of political involvement, there is no strong evidence to suggest that small-sized population (in red) have higher probabilities of clientelism compared to big-sized population municipalities (in blue). In other words, both groups do not seem to be classified by their membership in different population sizes.
@@ -919,13 +926,7 @@ EDITORS COMMENTS:
 
 
 
-# Why I excluded constitutive terms of the interaction terms:
-## Brambor2005: 72. ``he coefficient on the constitutive term X must not be interpreted as the average effect of a change in X on Y as it can in a linear-additive regression model. As the above discussion should have made clear, the coefficient on X only captures the effect of X on Y when Z is zero. [SEE HERE] Similarly, it should be obvious that the coefficient on Z only captures the effect of Z on Y when X is zero.9 It is, therefore, incorrect to say that a positive and significant coefficient on X (or Z) indicates that an increase in X (or Z) is expected to lead to an increase in Y'' This indicates why either SIZE OF THE POOR as a constitutive term AND ANU OTHER CONSTITUTIVE TERM cannot be interpreted alone.
 
-## Brambor2005: 76 ``often impossible to evaluate conditional hypotheses using only the information provided in traditional results tables''
-
-## Brambor2005:74 The analyst cannot even infer whether X has a meaningful conditional effect on Y from
-the magnitude and significance of the coefficient on the interaction term either.12 As we showed earlier, it is perfectly possible for the marginal effect of X on Y to be significant for substantively relevant values of the modifying variable Z even if the coefficient on the interaction term is insignificant. Note what this means. It means that one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term. Numerous articles ignore this point and drop interaction terms if this coefficient is insignificant
 
 # My argument
 	## 
@@ -957,7 +958,7 @@ the magnitude and significance of the coefficient on the interaction term either
  % ## ``To the extent clientelism serves as a signal of low-quality government performance, middle class voters are unlikely to support a politician who relies on it''.
  % ## ``I use the most widely available measure of poverty in Argentina, the proportion of households in each municipality with NBI (“necesidades basicas insatisfechas”)''.
  % ## Psychic Costs: ``Democratic objections to clientelism may take a variety of forms [...] Citizens who attach a high value to the integrity of the democratic process may [...] object to the fact that clientelism exploits poor voters''.
- % ## Psychic Costs/ ``moral repugnance'' (Carlin2001)`` Brokers want to avoid democrats because they are relatively costly [producing] ``audience'' costs'' p. 16.
+ % ## Psychic Costs/ ``moral repugnance'' (Carlin2015)`` Brokers want to avoid democrats because they are relatively costly [producing] ``audience'' costs'' p. 16.
  % ## Psychic Costs/Vicente2014: 2013: ``This large difference is likely due to the immoral/illegal connotation vote-buying practices have in STP''.
  % ## Psychic Costs/Szwarcberg2013: ``challenges the assumption that parties and candidates with access to material benefits will always distribute goods to low-income voters in exchange for electoral support''. ``Candidates who are capable of using and prefer to use clientelism are encouraged to employ these strategies by a per- verse system of incentives that promotes the careers of clientelistic candidates to the detriment of candidates who are either unable or unwilling to use such strategies'' (p. 50). HOWEVER THIS PAPER CANT EXPLAIN THE LONG-RUN EQUILIBRIA. IT MIGHT BE TRUE THAT **SOME** CANDIDATES MIGHT NOT WANT TO USE CLIENTELISM. HOWEVER, THEY ARE KICKED OUT OF THE CYCLE AND REPLACED FOR ONES THAT ARE. IT DOES NOT EXPLAIN WHY SOME CANDIDATES USE. IT JUST REPORTS THAT THE ONES WHO DON'T USE IT, DIE. 
 
@@ -984,10 +985,6 @@ the magnitude and significance of the coefficient on the interaction term either
  ## # Why not so much emphasis on Brazilian politics. : ``The theoretical mechanism highlighted here is not directly tied to the idiosyncrasies of the Colombian democratic experience''
 
 
-
- # My argument
- 	## Work that links micro and macro explanations of clientelism. Particularly, how macro poverty levels change the incentives of politicians to engage in clientelism at the micro level.
- 	## Actual/Latent receivers and the idea of ``networks'' (See Calvo and Murillo 2012).
  
 
 
@@ -1005,7 +1002,7 @@ the magnitude and significance of the coefficient on the interaction term either
 
 
 
-Similarly, \emph[p. 16]{Carlin2001} argues that  // moral repugnance // democratic 
+Similarly, \emph[p. 16]{Carlin2015} argues that  // moral repugnance // democratic 
 
 
   ## ``In both older and more recent works on clientelism, poverty, either directly or when manifest through income inequality, is cited as a powerful predictor of clientelism'' : SEE Brusco et al. (2004), Huntington (1968), Scott (1969), and Robinson and Verdier (2002).
