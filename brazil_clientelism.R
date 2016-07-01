@@ -135,17 +135,17 @@ wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
 dat$wagehalf.4 = as.numeric(wagehalf.4)
 
 # Transform the continuous "pop" variable in ten segments // mostly for simulation purposes
-pop.10.m = cut(m.data$pop, breaks = c(0,
-                                      quantile(m.data$pop, .10), 
-                                      quantile(m.data$pop, .20), 
-                                      quantile(m.data$pop, .30), 
-                                      quantile(m.data$pop, .40),
-                                      quantile(m.data$pop, .50),
-                                      quantile(m.data$pop, .60),
-                                      quantile(m.data$pop, .70),
-                                      quantile(m.data$pop, .80),
-                                      quantile(m.data$pop, .90),
-                                      quantile(m.data$pop, 1)
+pop.10.m = cut(dat$pop, breaks = c(0,
+                                      quantile(dat$pop, .10), 
+                                      quantile(dat$pop, .20), 
+                                      quantile(dat$pop, .30), 
+                                      quantile(dat$pop, .40),
+                                      quantile(dat$pop, .50),
+                                      quantile(dat$pop, .60),
+                                      quantile(dat$pop, .70),
+                                      quantile(dat$pop, .80),
+                                      quantile(dat$pop, .90),
+                                      quantile(dat$pop, 1)
 ), 
 include.lowest=T, labels=c(
   "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
@@ -162,11 +162,19 @@ pop.10.r = cut(dat$pop, breaks = c(0,
                                    quantile(dat$pop, .70),
                                    quantile(dat$pop, .80),
                                    quantile(dat$pop, .90),
-                                   quantile(dat$pop, 1)
-), 
-include.lowest=T, labels=c(
-  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
-)
+                                   quantile(dat$pop, 1)), 
+               include.lowest=T, labels=c(
+                 "0-10",
+                 "11-20",
+                 "21-30",
+                 "31-40",
+                 "41-50",
+                 "51-60",
+                 "61-70", 
+                 "71-80", 
+                 "81-90",
+                 "91-100")
+               )
 
 ## attaching
 dat$pop.10 = as.numeric(pop.10.r)
@@ -205,30 +213,10 @@ m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
 
-#####################################################################
-### PARAMETRIC models
-#####################################################################
-
-cat("\014")
-rm(list=ls())
-
-############ formulas
-model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + polinv*wealth + ing4 + vb3 + exc7 + ed)
-model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + polinv*wealth + ing4 + vb3 + exc7 + ed + weights)
-
-
-
-############ GENERATE THE GPS vector
-
-# load data
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-
-
-## Generating the Propensity Score 
+# Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
 fit <- CBPS(as.factor(wagehalf.4) ~  wealth + urban + munopp + polinv,
-              #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
+            #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
             data = dat, 
             iterations = 25000, 
             twostep = TRUE, # F
@@ -238,74 +226,38 @@ fit <- CBPS(as.factor(wagehalf.4) ~  wealth + urban + munopp + polinv,
 
 
 ## transform the weight var. // Attaching weights to DF // sorting for GEE models
-dat$weights = fit$weights
+dat$weights = as.numeric(fit$weights)
 
-################################################
-options(scipen=999)
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+#####################################################################
+### PARAMETRIC models
+#####################################################################
+
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 ## Recode Before modeling
 dat$clien1dummy <- as.numeric(dat$clien1dummy)
 library(car)
 dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
 
+# formulas
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + polinv*wealth + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + polinv*wealth + ing4 + vb3 + exc7 + ed + weights)
+
+
+################################################
+options(scipen=999)
+
 
 ### GEE: In gee there is no quasipossion, because gee is in a way already quasi.
 ### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
 ### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
 
-
-
 # models
-library(geepack) # install.packages("geepack")
-
-extract.geepack <- function(model) {
-  s <- summary(model)
-  names <- rownames(s$coef)
-  co <- s$coef[, 1]
-  se <- s$coef[, 2]
-  pval <- s$coef[, 4]
-  
-  n <- nrow(model.frame(model))
-  nclust <- length(s$geese$clusz)
-  
-  gof = c(n, nclust)
-  gof.names = c("Num. obs.", "Num. clust.")
-  
-  tr <- createTexreg(
-    coef.names = names,
-    coef = co,
-    se = se,
-    pvalues = pval,
-    gof.names = gof.names,
-    gof = gof,
-    gof.decimal = rep(FALSE, length(gof))
-  )
-  return(tr)
-}
-
-
-model.m.t = extract.geepack(model.m.model <- geeglm(model.m,
-                               family = binomial(link = "logit"), 
-                               id = municipality, 
-                               weights = wt,
-                               std.err = "san.se",
-                               corstr = "exchangeable",
-                               data = m.data))
-
-library(geepack) # install.packages("geepack")
-model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
-                                 family = binomial(link = "logit"), 
-                                 id = municipality, 
-                                 #weights = wt,
-                                 std.err = "san.se",
-                                 corstr = "exchangeable",
-                                 data = dat))
-
-#####################################################################
-### T A B L E S :   G P S   A N D   M A T C H E D   S A M P L E S 
-#####################################################################
-
-
 library(texreg)
 extract.geepack <- function(model) {
   s <- summary(model)
@@ -332,7 +284,24 @@ extract.geepack <- function(model) {
   return(tr)
 }
 
+library(geepack) # install.packages("geepack")
+model.m.t = extract.geepack(model.m.model <- geeglm(model.m,
+                               family = binomial(link = "logit"), 
+                               id = municipality, 
+                               weights = wt,
+                               std.err = "san.se",
+                               corstr = "exchangeable",
+                               data = m.data))
 
+model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
+                                 family = binomial(link = "logit"), 
+                                 id = municipality, 
+                                 weights = wt,
+                                 std.err = "san.se",
+                                 corstr = "exchangeable",
+                                 data = dat))
+
+# table
 screenreg(
   c(model.m.t,model.gps.t), 
   caption = "Generalized Estimating Logistic Equations: Clientelism",
@@ -358,11 +327,12 @@ custom.coef.names = c(
   "Municipal Opposition * Density of the Poor", 
   "Wealth Index * Municipal Opposition * Density of the Poor"),
 custom.model.names = c(
-  "Matched Dataset",
-  "GPS Dataset"),
+  "Matched Data",
+  "Weighted Data"),
 label = "tab:1",
-custom.note = "%stars. Clustered Standard Errors in parentheses.",
+custom.note = "%stars. Clustered standard errors at the municipality level.",
 fontsize = "scriptsize",
+digits = 3,
 center = TRUE,
 no.margin = TRUE, 
 float.pos = "h"
@@ -473,7 +443,6 @@ low.poor.highcomp = data.frame(competition = rep("High Competition", 1000000),in
 low.rich.lowcomp = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 low.rich.highcomp = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 
-
 # plot
 library(ggplot2)
 ggplot() + 
@@ -490,6 +459,9 @@ ggplot() +
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
   facet_grid(competition~income, scales ="free")
 
+
+## TRY HIGHEST DENSITY PLOT
+
 ## t test on these distributions
 ### 1
 t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
@@ -502,7 +474,7 @@ t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significat
 
 
 ### quadrants 1 and 4
-t.test(low.poor.lowcomp$x, high.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(low.poor.lowcomp$x, high.rich.highcomp$x, alt="greater",conf.level = 0.95) # significative pvalue = significantly different
 
 ### quadrants 3-4
 t.test(high.poor.highcomp$x, high.rich.highcomp$x,conf.level = 0.99, paired = T) # significative pvalue = significantly different
@@ -525,26 +497,26 @@ set.seed(602); options(scipen=999)
 
 
 # simulation DISTRIBUTION PLOTS // low pop
-high.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10.m = min(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 
 
 
 # simulation DISTRIBUTION PLOTS // high pop
-high.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = max(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(gee.dich.m.2.s, cond = TRUE,large = min(m.data$large), pop.10.m = max(m.data$pop.10.m) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
 
 
 
@@ -583,7 +555,6 @@ p2 = ggplot() +
 
 library(cowplot) # install.packages("cowplot")
 plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
-
 
 
 ##########################
@@ -655,81 +626,6 @@ plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
 #####################################################################
 
 
-##########################
-#  LARGE * POP
-##########################
-
-## low 
-model.m.s.low = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
-               large = min(m.data$large), 
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)), 
-      num=300)$getqi(qi="ev", xvalue="range"))
-colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # low
-
-
-## high
-gee.dich.m.2.high = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
-               large = max(m.data$large), 
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
-colnames(gee.dich.m.2.high) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
-
-
-## pop.10
-gee.dich.m.2.pop.10 = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
-colnames(gee.dich.m.2.pop.10) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
-
-
-
-library(Rmisc) # install.packages("Rmisc")
-
-### low
-df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("Low Density", ncol(model.m.s.low)),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]))
-)
-
-
-
-### high
-df.high = data.frame(
-  mean = c(mean(gee.dich.m.2.high$`1`),mean(gee.dich.m.2.high$`2`),mean(gee.dich.m.2.high$`3`),mean(gee.dich.m.2.high$`4`),mean(gee.dich.m.2.high$`5`),mean(gee.dich.m.2.high$`6`),mean(gee.dich.m.2.high$`7`),mean(gee.dich.m.2.high$`8`), mean(gee.dich.m.2.high$`9`),mean(gee.dich.m.2.high$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("High Density", ncol(gee.dich.m.2.high)),
-  Upper = c(as.numeric(CI(gee.dich.m.2.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.high$`10`)[1])),
-  Lower =c(as.numeric(CI(gee.dich.m.2.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.high$`10`)[3]))
-)
-
-### pop
-df.pop.alone = data.frame(
-  mean = c(mean(gee.dich.m.2.pop.10$`1`),mean(gee.dich.m.2.pop.10$`2`),mean(gee.dich.m.2.pop.10$`3`),mean(gee.dich.m.2.pop.10$`4`),mean(gee.dich.m.2.pop.10$`5`),mean(gee.dich.m.2.pop.10$`6`),mean(gee.dich.m.2.pop.10$`7`),mean(gee.dich.m.2.pop.10$`8`), mean(gee.dich.m.2.pop.10$`9`),mean(gee.dich.m.2.pop.10$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("Population Size", ncol(gee.dich.m.2.pop.10)),
-  Upper = c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[1])),
-  Lower =c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[3]))
-)
-
-
-### combined two df's
-pop.d= rbind(df.high, df.low,df.pop.alone)
-
-
-
-### plot
-library(ggplot2)
-ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
-  stat_smooth() + 
-  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
-  stat_smooth(aes(x=Population,y=mean)) +
-  xlab("Municipal Population Size") + ylab("Expected Value of Clientelism") + 
-  theme_bw() + 
-  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
 
 ##########################
@@ -816,7 +712,7 @@ wealth.d= rbind(df.high, df.low,df.wealth.alone)
 
 ### plot
 library(ggplot2)
-p1=ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) + 
+ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
   stat_smooth(aes(x=Wealth,y=mean)) +
@@ -825,10 +721,16 @@ p1=ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) +
   theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
 
+#####################################################################
+#####################################################################
+
+
+
+
+
 
 ##########################
 #  LARGE * MUNOPP:
-##########################
 
 
 # simulation
@@ -910,7 +812,7 @@ munopp.d= rbind(df.high, df.low,df.munopp.alone)
 
 ### plot
 library(ggplot2)
-p2=ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) + 
+ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
   stat_smooth(aes(x=Opposition,y=mean)) +
@@ -920,9 +822,7 @@ p2=ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) +
 
 
 ##########################
-#  LARGE * POLINV: 
-##########################
-
+#  LARGE * POLINV:  // LARGE * POP
 
 # simulation
 library(Zelig)
@@ -999,7 +899,7 @@ polinv.d= rbind(df.high, df.low,df.polinv.alone)
 
 ### plot
 library(ggplot2)
-p3=ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
+p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
   stat_smooth(aes(x=Opposition,y=mean)) +
@@ -1007,12 +907,85 @@ p3=ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) +
   theme_bw() + 
   theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
+##########################
+#  LARGE * POP
+##########################
 
-######################################################
-#  Combined Plots
+## low 
+model.m.s.low = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = min(m.data$large), 
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # low
+
+
+## high
+gee.dich.m.2.high = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = max(m.data$large), 
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.high) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
+
+
+## pop.10
+gee.dich.m.2.pop.10 = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.pop.10) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
+
+
+
+library(Rmisc) # install.packages("Rmisc")
+
+### low
+df.low = data.frame(
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("Low Density", ncol(model.m.s.low)),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]))
+)
+
+### high
+df.high = data.frame(
+  mean = c(mean(gee.dich.m.2.high$`1`),mean(gee.dich.m.2.high$`2`),mean(gee.dich.m.2.high$`3`),mean(gee.dich.m.2.high$`4`),mean(gee.dich.m.2.high$`5`),mean(gee.dich.m.2.high$`6`),mean(gee.dich.m.2.high$`7`),mean(gee.dich.m.2.high$`8`), mean(gee.dich.m.2.high$`9`),mean(gee.dich.m.2.high$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("High Density", ncol(gee.dich.m.2.high)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.high$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.high$`10`)[3]))
+)
+
+### pop
+df.pop.alone = data.frame(
+  mean = c(mean(gee.dich.m.2.pop.10$`1`),mean(gee.dich.m.2.pop.10$`2`),mean(gee.dich.m.2.pop.10$`3`),mean(gee.dich.m.2.pop.10$`4`),mean(gee.dich.m.2.pop.10$`5`),mean(gee.dich.m.2.pop.10$`6`),mean(gee.dich.m.2.pop.10$`7`),mean(gee.dich.m.2.pop.10$`8`), mean(gee.dich.m.2.pop.10$`9`),mean(gee.dich.m.2.pop.10$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("Population Size", ncol(gee.dich.m.2.pop.10)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[3]))
+)
+
+
+### combined two df's
+pop.d= rbind(df.high, df.low,df.pop.alone)
+
+
+
+### plot
+library(ggplot2)
+p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Population,y=mean)) +
+  xlab("Municipal Population Size") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(axis.title.y=element_text(colour="white"), legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
+###################################
+
 library(cowplot) # install.packages("cowplot")
-plot_grid(p1,p2,p3,  ncol = 1)
-
+plot_grid(p1,p2,  nrow = 1, labels = "auto")
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
@@ -1027,6 +1000,7 @@ library(car)
 
 ########################################################
 # Descriptive Stats Matched Set
+## [tab:sum:stats:m]
 
 # matched sample
 m.data.clien1dummy <- m.data$clien1dummy 
@@ -1076,7 +1050,7 @@ library(stargazer, quietly = T)
 stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
-          label = "sumtab:1",
+          label = "sumtab:matched",
           type = "text",
           font.size = "scriptsize",
           style= "apsr",
@@ -1137,7 +1111,7 @@ library(stargazer, quietly = T)
 stargazer(dat.r, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
-          label = "sumtab:2",
+          label = "sumtab:raw",
           type = "text",
           font.size = "scriptsize",
           style= "apsr",
@@ -1148,7 +1122,8 @@ stargazer(dat.r,
 
 
 ############################################################
-# Distribution of Individuals by Municipality [municipality:sample:plot]
+# Distribution of Individuals by Municipality 
+# [municipality:sample:plot]
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
@@ -1192,7 +1167,7 @@ library(ggplot2)
 
 ############################################################
 # Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
-
+# [municipality:income:large:plot:matched]
   
 ## HIGH df
 high.d = data.frame(
@@ -1307,6 +1282,7 @@ ggplot(data=m.data, aes(x=clientelism)) +
 
 ############################################################
 ## Distribution treatment var
+# [tgraph:plot]
 # Labels
 ggplot.labels1 <- data.frame(
   time = c(15, 60), 
@@ -1377,6 +1353,7 @@ ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=
 
 
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
+# [balance:plot]
 ## Matched
 library(ggplot2)
 balance.1.m=ggplot() + 
