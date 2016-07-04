@@ -188,12 +188,14 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
 # m.out <- matchit(large ~ wealth + urban + munopp + polinv,
-m.out <- matchit(large ~ wealth + munopp + polinv,
-                 discard = "hull.both", 
-                 method = "cem",
+m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+                 discard = "both", 
+                 method = "full",
                  data = dat,
                  verbose = F
 )
+
+
 
 
 #print. <- print(m.out)
@@ -215,7 +217,7 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 
 # Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
-fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv,
+fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv + pop.10,
             #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
             data = dat, 
             iterations = 25000, 
@@ -244,9 +246,9 @@ dat$clien1dummy <- as.numeric(dat$clien1dummy)
 library(car)
 dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
 
-# formulas
-model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + polinv + ing4 + vb3 + exc7 + ed)
-model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + polinv + ing4 + vb3 + exc7 + ed + weights)
+# formulas 
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
 
 
 ################################################
@@ -430,37 +432,77 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 ##########################
 ##### BY Competition and Income
 ##########################
-
+# [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
 # simulation DISTRIBUTION PLOTS
 library(Zelig)
-high.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000), income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
+high.poor.lowcomp = data.frame(competition = rep("Low Competition", 250), income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.poor.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+
+
+# data frame
+library(Rmisc) # install.packages("Rmisc")
+plot.d = data.frame(
+  mean = c(
+    as.numeric(CI(high.poor.lowcomp$x)[2]), 
+    as.numeric(CI(high.poor.highcomp$x)[2]), 
+    as.numeric(CI(high.rich.lowcomp$x)[2]), 
+    as.numeric(CI(high.rich.highcomp$x)[2]), 
+    as.numeric(CI(low.poor.lowcomp$x)[2]), 
+    as.numeric(CI(low.poor.highcomp$x)[2]), 
+    as.numeric(CI(low.rich.lowcomp$x)[2]), 
+    as.numeric(CI(low.rich.highcomp$x)[2])
+  ),
+  upper = c(
+    as.numeric(CI(high.poor.lowcomp$x)[1]), 
+    as.numeric(CI(high.poor.highcomp$x)[1]),
+    as.numeric(CI(high.rich.lowcomp$x)[1]),
+    as.numeric(CI(high.rich.highcomp$x)[1]),
+    as.numeric(CI(low.poor.lowcomp$x)[1]),
+    as.numeric(CI(low.poor.highcomp$x)[1]),
+    as.numeric(CI(low.rich.lowcomp$x)[1]),
+    as.numeric(CI(low.rich.highcomp$x)[1])
+  ),
+  lower = c(
+    as.numeric(CI(high.poor.lowcomp$x)[3]), 
+    as.numeric(CI(high.poor.highcomp$x)[3]),
+    as.numeric(CI(high.rich.lowcomp$x)[3]),
+    as.numeric(CI(high.rich.highcomp$x)[3]),
+    as.numeric(CI(low.poor.lowcomp$x)[3]),
+    as.numeric(CI(low.poor.highcomp$x)[3]),
+    as.numeric(CI(low.rich.lowcomp$x)[3]),
+    as.numeric(CI(low.rich.highcomp$x)[3])
+  ),
+  Density = c(rep("High", 4), rep("Low", 4)),
+  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 2),
+  Competition = rep(c("Low Competition","High Competition"),4)
+)
 
 # plot
 library(ggplot2)
-ggplot() + 
-  geom_density(aes(x=x, colour="High"), data= high.poor.lowcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.poor.highcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.rich.lowcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.rich.highcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.poor.lowcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.poor.highcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.rich.lowcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.rich.highcomp) + 
-  ylab("Estimated Density") + xlab("Expected Value of Clientelism") +
-  theme_bw() +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor") +
-  facet_grid(competition~income, scales ="free")
+ggplot(plot.d, aes(Density, mean,
+                   ymin = upper,
+                   ymax=lower,
+                   colour = Density)) + geom_errorbar(width=0.2) + 
+  facet_grid(Competition~Wealth, scales ="free") +
+  ylab("Probability of being Targeted") + xlab("Density of the Poor") +
+  theme_bw() + theme(legend.position="none") +
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8))  + 
+  scale_colour_discrete(name = "Density of the Poor")
 
-
+############################### OTHERS
 # means highest values
 ## quadrant 1
 mean(low.poor.lowcomp$x)
@@ -476,13 +518,13 @@ mean(low.rich.lowcomp$x)
 
 ## t test on these distributions
 ### 1
-t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
 ### 2
-t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
 ### 3
-t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.poor.highcomp$x, low.poor.highcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
 ### 4
-t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
 
 
 ## high/low quadrant 1
@@ -495,7 +537,7 @@ wilcox.test(low.poor.lowcomp$x,high.poor.lowcomp$x, paired = TRUE, alternative =
 t.test(low.poor.lowcomp$x, high.rich.highcomp$x, alt="greater",conf.level = 0.95) # significative pvalue = significantly different
 
 ### quadrants 3-4
-wilcox.test(high.poor.highcomp$x, high.rich.highcomp$x,correct = F, alternative = "greater") # significative pvalue = significantly different
+wilcox.test(high.poor.highcomp$x, high.rich.highcomp$x,paired = T, alternative = "greater") # significative pvalue = significantly different
 
 
 ### quadrant 2
@@ -510,6 +552,37 @@ wilcox.test(low.rich.lowcomp$x,high.rich.lowcomp$x, paired = TRUE, alternative =
 ### MAKE A TABLE IN RNW using this sequence.
 t = t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
 as.numeric(t$estimate[2])
+
+
+
+######################################################
+# Plot Wealthy Also Receive Clientelism
+######################################################
+# [wealth:client:plot]
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+library(ggplot2)
+
+ggplot() + geom_jitter(
+  width = 4,
+  height = 1, 
+  alpha = 1/4,
+  aes(
+    y=as.factor(dat$clien1dummy), 
+    x=as.numeric(dat$wealth), 
+    colour=as.numeric(dat$clien1dummy))) +
+  xlab("Wealth Index") + 
+  ylab("Offered him/her to buy vote") + 
+  theme_bw()+
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8),
+        legend.position="none")
+    
 
 
 
@@ -805,35 +878,38 @@ library(Rmisc) # install.packages("Rmisc")
 
 ### df's
 ### low
+
+# low
 df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`), mean(model.m.s.low$`11`), mean(model.m.s.low$`12`),mean(model.m.s.low$`13`),mean(model.m.s.low$`14`),mean(model.m.s.low$`15`),mean(model.m.s.low$`16`),mean(model.m.s.low$`17`),mean(model.m.s.low$`18`),mean(model.m.s.low$`19`),mean(model.m.s.low$`20`), mean(model.m.s.low$`21`),mean(model.m.s.low$`22`),mean(model.m.s.low$`23`),mean(model.m.s.low$`24`),mean(model.m.s.low$`25`),mean(model.m.s.low$`26`),mean(model.m.s.low$`27`),mean(model.m.s.low$`28`), mean(model.m.s.low$`29`),mean(model.m.s.low$`30`), mean(model.m.s.low$`31`), mean(model.m.s.low$`32`),mean(model.m.s.low$`33`),mean(model.m.s.low$`34`),mean(model.m.s.low$`35`),mean(model.m.s.low$`36`),mean(model.m.s.low$`37`),mean(model.m.s.low$`38`),mean(model.m.s.low$`39`),mean(model.m.s.low$`40`),mean(model.m.s.low$`41`)),
+  mean = c(as.numeric(CI(model.m.s.low$`1`)["mean"]),as.numeric(CI(model.m.s.low$`2`)["mean"]),as.numeric(CI(model.m.s.low$`3`)["mean"]),as.numeric(CI(model.m.s.low$`4`)["mean"]),as.numeric(CI(model.m.s.low$`5`)["mean"]),as.numeric(CI(model.m.s.low$`6`)["mean"]),as.numeric(CI(model.m.s.low$`7`)["mean"]),as.numeric(CI(model.m.s.low$`8`)["mean"]),as.numeric(CI(model.m.s.low$`9`)["mean"]),as.numeric(CI(model.m.s.low$`10`)["mean"]),as.numeric(CI(model.m.s.low$`11`)["mean"]),as.numeric(CI(model.m.s.low$`12`)["mean"]),as.numeric(CI(model.m.s.low$`13`)["mean"]),as.numeric(CI(model.m.s.low$`14`)["mean"]),as.numeric(CI(model.m.s.low$`15`)["mean"]),as.numeric(CI(model.m.s.low$`16`)["mean"]),as.numeric(CI(model.m.s.low$`17`)["mean"]),as.numeric(CI(model.m.s.low$`18`)["mean"]),as.numeric(CI(model.m.s.low$`19`)["mean"]),as.numeric(CI(model.m.s.low$`20`)["mean"]),as.numeric(CI(model.m.s.low$`21`)["mean"]),as.numeric(CI(model.m.s.low$`22`)["mean"]),as.numeric(CI(model.m.s.low$`23`)["mean"]),as.numeric(CI(model.m.s.low$`24`)["mean"]),as.numeric(CI(model.m.s.low$`25`)["mean"]),as.numeric(CI(model.m.s.low$`26`)["mean"]),as.numeric(CI(model.m.s.low$`27`)["mean"]),as.numeric(CI(model.m.s.low$`28`)["mean"]),as.numeric(CI(model.m.s.low$`29`)["mean"]),as.numeric(CI(model.m.s.low$`30`)["mean"]),as.numeric(CI(model.m.s.low$`31`)["mean"]),as.numeric(CI(model.m.s.low$`32`)["mean"]),as.numeric(CI(model.m.s.low$`33`)["mean"]),as.numeric(CI(model.m.s.low$`34`)["mean"]),as.numeric(CI(model.m.s.low$`35`)["mean"]),as.numeric(CI(model.m.s.low$`36`)["mean"]),as.numeric(CI(model.m.s.low$`37`)["mean"]),as.numeric(CI(model.m.s.low$`38`)["mean"]),as.numeric(CI(model.m.s.low$`39`)["mean"]),as.numeric(CI(model.m.s.low$`40`)["mean"]),as.numeric(CI(model.m.s.low$`41`)["mean"]),as.numeric(CI(model.m.s.low$`42`)["mean"]),as.numeric(CI(model.m.s.low$`43`)["mean"]),as.numeric(CI(model.m.s.low$`44`)["mean"]),as.numeric(CI(model.m.s.low$`45`)["mean"]),as.numeric(CI(model.m.s.low$`46`)["mean"]),as.numeric(CI(model.m.s.low$`47`)["mean"]),as.numeric(CI(model.m.s.low$`48`)["mean"]),as.numeric(CI(model.m.s.low$`49`)["mean"]),as.numeric(CI(model.m.s.low$`50`)["mean"]),as.numeric(CI(model.m.s.low$`51`)["mean"]),as.numeric(CI(model.m.s.low$`52`)["mean"]),as.numeric(CI(model.m.s.low$`53`)["mean"]),as.numeric(CI(model.m.s.low$`54`)["mean"]),as.numeric(CI(model.m.s.low$`55`)["mean"]),as.numeric(CI(model.m.s.low$`56`)["mean"]),as.numeric(CI(model.m.s.low$`57`)["mean"]),as.numeric(CI(model.m.s.low$`58`)["mean"])),
   Type = rep("Low Density", ncol(model.m.s.low)),
   Opposition = min(m.data$munopp):max(m.data$munopp),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1]), as.numeric(CI(model.m.s.low$`11`)[1]), as.numeric(CI(model.m.s.low$`12`)[1]), as.numeric(CI(model.m.s.low$`13`)[1]), as.numeric(CI(model.m.s.low$`14`)[1]), as.numeric(CI(model.m.s.low$`15`)[1]), as.numeric(CI(model.m.s.low$`16`)[1]), as.numeric(CI(model.m.s.low$`17`)[1]), as.numeric(CI(model.m.s.low$`18`)[1]), as.numeric(CI(model.m.s.low$`19`)[1]), as.numeric(CI(model.m.s.low$`20`)[1]), as.numeric(CI(model.m.s.low$`21`)[1]), as.numeric(CI(model.m.s.low$`22`)[1]), as.numeric(CI(model.m.s.low$`23`)[1]), as.numeric(CI(model.m.s.low$`24`)[1]), as.numeric(CI(model.m.s.low$`25`)[1]), as.numeric(CI(model.m.s.low$`26`)[1]), as.numeric(CI(model.m.s.low$`27`)[1]), as.numeric(CI(model.m.s.low$`28`)[1]), as.numeric(CI(model.m.s.low$`29`)[1]), as.numeric(CI(model.m.s.low$`30`)[1]), as.numeric(CI(model.m.s.low$`31`)[1]), as.numeric(CI(model.m.s.low$`32`)[1]), as.numeric(CI(model.m.s.low$`33`)[1]), as.numeric(CI(model.m.s.low$`34`)[1]), as.numeric(CI(model.m.s.low$`35`)[1]), as.numeric(CI(model.m.s.low$`36`)[1]), as.numeric(CI(model.m.s.low$`37`)[1]), as.numeric(CI(model.m.s.low$`38`)[1]), as.numeric(CI(model.m.s.low$`39`)[1]), as.numeric(CI(model.m.s.low$`40`)[1]),as.numeric(CI(model.m.s.low$`41`)[1])),
-  Lower = c(
-    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]), as.numeric(CI(model.m.s.low$`11`)[3]), as.numeric(CI(model.m.s.low$`12`)[3]), as.numeric(CI(model.m.s.low$`13`)[3]), as.numeric(CI(model.m.s.low$`14`)[3]), as.numeric(CI(model.m.s.low$`15`)[3]), as.numeric(CI(model.m.s.low$`16`)[3]), as.numeric(CI(model.m.s.low$`17`)[3]), as.numeric(CI(model.m.s.low$`18`)[3]), as.numeric(CI(model.m.s.low$`19`)[3]), as.numeric(CI(model.m.s.low$`20`)[3]),as.numeric(CI(model.m.s.low$`21`)[3]), as.numeric(CI(model.m.s.low$`22`)[3]), as.numeric(CI(model.m.s.low$`23`)[3]), as.numeric(CI(model.m.s.low$`24`)[3]), as.numeric(CI(model.m.s.low$`25`)[3]), as.numeric(CI(model.m.s.low$`26`)[3]), as.numeric(CI(model.m.s.low$`27`)[3]), as.numeric(CI(model.m.s.low$`28`)[3]), as.numeric(CI(model.m.s.low$`29`)[3]), as.numeric(CI(model.m.s.low$`30`)[3]), as.numeric(CI(model.m.s.low$`31`)[3]), as.numeric(CI(model.m.s.low$`32`)[3]), as.numeric(CI(model.m.s.low$`33`)[3]), as.numeric(CI(model.m.s.low$`34`)[3]), as.numeric(CI(model.m.s.low$`35`)[3]), as.numeric(CI(model.m.s.low$`36`)[3]), as.numeric(CI(model.m.s.low$`37`)[3]), as.numeric(CI(model.m.s.low$`38`)[3]), as.numeric(CI(model.m.s.low$`39`)[3]), as.numeric(CI(model.m.s.low$`40`)[3]),as.numeric(CI(model.m.s.low$`41`)[3]))
-)
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)["upper"]),as.numeric(CI(model.m.s.low$`2`)["upper"]),as.numeric(CI(model.m.s.low$`3`)["upper"]),as.numeric(CI(model.m.s.low$`4`)["upper"]),as.numeric(CI(model.m.s.low$`5`)["upper"]),as.numeric(CI(model.m.s.low$`6`)["upper"]),as.numeric(CI(model.m.s.low$`7`)["upper"]),as.numeric(CI(model.m.s.low$`8`)["upper"]),as.numeric(CI(model.m.s.low$`9`)["upper"]),as.numeric(CI(model.m.s.low$`10`)["upper"]),as.numeric(CI(model.m.s.low$`11`)["upper"]),as.numeric(CI(model.m.s.low$`12`)["upper"]),as.numeric(CI(model.m.s.low$`13`)["upper"]),as.numeric(CI(model.m.s.low$`14`)["upper"]),as.numeric(CI(model.m.s.low$`15`)["upper"]),as.numeric(CI(model.m.s.low$`16`)["upper"]),as.numeric(CI(model.m.s.low$`17`)["upper"]),as.numeric(CI(model.m.s.low$`18`)["upper"]),as.numeric(CI(model.m.s.low$`19`)["upper"]),as.numeric(CI(model.m.s.low$`20`)["upper"]),as.numeric(CI(model.m.s.low$`21`)["upper"]),as.numeric(CI(model.m.s.low$`22`)["upper"]),as.numeric(CI(model.m.s.low$`23`)["upper"]),as.numeric(CI(model.m.s.low$`24`)["upper"]),as.numeric(CI(model.m.s.low$`25`)["upper"]),as.numeric(CI(model.m.s.low$`26`)["upper"]),as.numeric(CI(model.m.s.low$`27`)["upper"]),as.numeric(CI(model.m.s.low$`28`)["upper"]),as.numeric(CI(model.m.s.low$`29`)["upper"]),as.numeric(CI(model.m.s.low$`30`)["upper"]),as.numeric(CI(model.m.s.low$`31`)["upper"]),as.numeric(CI(model.m.s.low$`32`)["upper"]),as.numeric(CI(model.m.s.low$`33`)["upper"]),as.numeric(CI(model.m.s.low$`34`)["upper"]),as.numeric(CI(model.m.s.low$`35`)["upper"]),as.numeric(CI(model.m.s.low$`36`)["upper"]),as.numeric(CI(model.m.s.low$`37`)["upper"]),as.numeric(CI(model.m.s.low$`38`)["upper"]),as.numeric(CI(model.m.s.low$`39`)["upper"]),as.numeric(CI(model.m.s.low$`40`)["upper"]),as.numeric(CI(model.m.s.low$`41`)["upper"]),as.numeric(CI(model.m.s.low$`42`)["upper"]),as.numeric(CI(model.m.s.low$`43`)["upper"]),as.numeric(CI(model.m.s.low$`44`)["upper"]),as.numeric(CI(model.m.s.low$`45`)["upper"]),as.numeric(CI(model.m.s.low$`46`)["upper"]),as.numeric(CI(model.m.s.low$`47`)["upper"]),as.numeric(CI(model.m.s.low$`48`)["upper"]),as.numeric(CI(model.m.s.low$`49`)["upper"]),as.numeric(CI(model.m.s.low$`50`)["upper"]),as.numeric(CI(model.m.s.low$`51`)["upper"]),as.numeric(CI(model.m.s.low$`52`)["upper"]),as.numeric(CI(model.m.s.low$`53`)["upper"]),as.numeric(CI(model.m.s.low$`54`)["upper"]),as.numeric(CI(model.m.s.low$`55`)["upper"]),as.numeric(CI(model.m.s.low$`56`)["upper"]),as.numeric(CI(model.m.s.low$`57`)["upper"]),as.numeric(CI(model.m.s.low$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.low$`1`)["lower"]),as.numeric(CI(model.m.s.low$`2`)["lower"]),as.numeric(CI(model.m.s.low$`3`)["lower"]),as.numeric(CI(model.m.s.low$`4`)["lower"]),as.numeric(CI(model.m.s.low$`5`)["lower"]),as.numeric(CI(model.m.s.low$`6`)["lower"]),as.numeric(CI(model.m.s.low$`7`)["lower"]),as.numeric(CI(model.m.s.low$`8`)["lower"]),as.numeric(CI(model.m.s.low$`9`)["lower"]),as.numeric(CI(model.m.s.low$`10`)["lower"]),as.numeric(CI(model.m.s.low$`11`)["lower"]),as.numeric(CI(model.m.s.low$`12`)["lower"]),as.numeric(CI(model.m.s.low$`13`)["lower"]),as.numeric(CI(model.m.s.low$`14`)["lower"]),as.numeric(CI(model.m.s.low$`15`)["lower"]),as.numeric(CI(model.m.s.low$`16`)["lower"]),as.numeric(CI(model.m.s.low$`17`)["lower"]),as.numeric(CI(model.m.s.low$`18`)["lower"]),as.numeric(CI(model.m.s.low$`19`)["lower"]),as.numeric(CI(model.m.s.low$`20`)["lower"]),as.numeric(CI(model.m.s.low$`21`)["lower"]),as.numeric(CI(model.m.s.low$`22`)["lower"]),as.numeric(CI(model.m.s.low$`23`)["lower"]),as.numeric(CI(model.m.s.low$`24`)["lower"]),as.numeric(CI(model.m.s.low$`25`)["lower"]),as.numeric(CI(model.m.s.low$`26`)["lower"]),as.numeric(CI(model.m.s.low$`27`)["lower"]),as.numeric(CI(model.m.s.low$`28`)["lower"]),as.numeric(CI(model.m.s.low$`29`)["lower"]),as.numeric(CI(model.m.s.low$`30`)["lower"]),as.numeric(CI(model.m.s.low$`31`)["lower"]),as.numeric(CI(model.m.s.low$`32`)["lower"]),as.numeric(CI(model.m.s.low$`33`)["lower"]),as.numeric(CI(model.m.s.low$`34`)["lower"]),as.numeric(CI(model.m.s.low$`35`)["lower"]),as.numeric(CI(model.m.s.low$`36`)["lower"]),as.numeric(CI(model.m.s.low$`37`)["lower"]),as.numeric(CI(model.m.s.low$`38`)["lower"]),as.numeric(CI(model.m.s.low$`39`)["lower"]),as.numeric(CI(model.m.s.low$`40`)["lower"]),as.numeric(CI(model.m.s.low$`41`)["lower"]),as.numeric(CI(model.m.s.low$`42`)["lower"]),as.numeric(CI(model.m.s.low$`43`)["lower"]),as.numeric(CI(model.m.s.low$`44`)["lower"]),as.numeric(CI(model.m.s.low$`45`)["lower"]),as.numeric(CI(model.m.s.low$`46`)["lower"]),as.numeric(CI(model.m.s.low$`47`)["lower"]),as.numeric(CI(model.m.s.low$`48`)["lower"]),as.numeric(CI(model.m.s.low$`49`)["lower"]),as.numeric(CI(model.m.s.low$`50`)["lower"]),as.numeric(CI(model.m.s.low$`51`)["lower"]),as.numeric(CI(model.m.s.low$`52`)["lower"]),as.numeric(CI(model.m.s.low$`53`)["lower"]),as.numeric(CI(model.m.s.low$`54`)["lower"]),as.numeric(CI(model.m.s.low$`55`)["lower"]),as.numeric(CI(model.m.s.low$`56`)["lower"]),as.numeric(CI(model.m.s.low$`57`)["lower"]),as.numeric(CI(model.m.s.low$`58`)["lower"])))
 
-### high
+
+# high
 df.high = data.frame(
-  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`), mean(model.m.s.high$`9`),mean(model.m.s.high$`10`), mean(model.m.s.high$`11`), mean(model.m.s.high$`12`),mean(model.m.s.high$`13`),mean(model.m.s.high$`14`),mean(model.m.s.high$`15`),mean(model.m.s.high$`16`),mean(model.m.s.high$`17`),mean(model.m.s.high$`18`),mean(model.m.s.high$`19`),mean(model.m.s.high$`20`), mean(model.m.s.high$`21`),mean(model.m.s.high$`22`),mean(model.m.s.high$`23`),mean(model.m.s.high$`24`),mean(model.m.s.high$`25`),mean(model.m.s.high$`26`),mean(model.m.s.high$`27`),mean(model.m.s.high$`28`), mean(model.m.s.high$`29`),mean(model.m.s.high$`30`), mean(model.m.s.high$`31`), mean(model.m.s.high$`32`),mean(model.m.s.high$`33`),mean(model.m.s.high$`34`),mean(model.m.s.high$`35`),mean(model.m.s.high$`36`),mean(model.m.s.high$`37`),mean(model.m.s.high$`38`),mean(model.m.s.high$`39`),mean(model.m.s.high$`40`),mean(model.m.s.high$`41`)),
+  mean = c(as.numeric(CI(model.m.s.high$`1`)["mean"]),as.numeric(CI(model.m.s.high$`2`)["mean"]),as.numeric(CI(model.m.s.high$`3`)["mean"]),as.numeric(CI(model.m.s.high$`4`)["mean"]),as.numeric(CI(model.m.s.high$`5`)["mean"]),as.numeric(CI(model.m.s.high$`6`)["mean"]),as.numeric(CI(model.m.s.high$`7`)["mean"]),as.numeric(CI(model.m.s.high$`8`)["mean"]),as.numeric(CI(model.m.s.high$`9`)["mean"]),as.numeric(CI(model.m.s.high$`10`)["mean"]),as.numeric(CI(model.m.s.high$`11`)["mean"]),as.numeric(CI(model.m.s.high$`12`)["mean"]),as.numeric(CI(model.m.s.high$`13`)["mean"]),as.numeric(CI(model.m.s.high$`14`)["mean"]),as.numeric(CI(model.m.s.high$`15`)["mean"]),as.numeric(CI(model.m.s.high$`16`)["mean"]),as.numeric(CI(model.m.s.high$`17`)["mean"]),as.numeric(CI(model.m.s.high$`18`)["mean"]),as.numeric(CI(model.m.s.high$`19`)["mean"]),as.numeric(CI(model.m.s.high$`20`)["mean"]),as.numeric(CI(model.m.s.high$`21`)["mean"]),as.numeric(CI(model.m.s.high$`22`)["mean"]),as.numeric(CI(model.m.s.high$`23`)["mean"]),as.numeric(CI(model.m.s.high$`24`)["mean"]),as.numeric(CI(model.m.s.high$`25`)["mean"]),as.numeric(CI(model.m.s.high$`26`)["mean"]),as.numeric(CI(model.m.s.high$`27`)["mean"]),as.numeric(CI(model.m.s.high$`28`)["mean"]),as.numeric(CI(model.m.s.high$`29`)["mean"]),as.numeric(CI(model.m.s.high$`30`)["mean"]),as.numeric(CI(model.m.s.high$`31`)["mean"]),as.numeric(CI(model.m.s.high$`32`)["mean"]),as.numeric(CI(model.m.s.high$`33`)["mean"]),as.numeric(CI(model.m.s.high$`34`)["mean"]),as.numeric(CI(model.m.s.high$`35`)["mean"]),as.numeric(CI(model.m.s.high$`36`)["mean"]),as.numeric(CI(model.m.s.high$`37`)["mean"]),as.numeric(CI(model.m.s.high$`38`)["mean"]),as.numeric(CI(model.m.s.high$`39`)["mean"]),as.numeric(CI(model.m.s.high$`40`)["mean"]),as.numeric(CI(model.m.s.high$`41`)["mean"]),as.numeric(CI(model.m.s.high$`42`)["mean"]),as.numeric(CI(model.m.s.high$`43`)["mean"]),as.numeric(CI(model.m.s.high$`44`)["mean"]),as.numeric(CI(model.m.s.high$`45`)["mean"]),as.numeric(CI(model.m.s.high$`46`)["mean"]),as.numeric(CI(model.m.s.high$`47`)["mean"]),as.numeric(CI(model.m.s.high$`48`)["mean"]),as.numeric(CI(model.m.s.high$`49`)["mean"]),as.numeric(CI(model.m.s.high$`50`)["mean"]),as.numeric(CI(model.m.s.high$`51`)["mean"]),as.numeric(CI(model.m.s.high$`52`)["mean"]),as.numeric(CI(model.m.s.high$`53`)["mean"]),as.numeric(CI(model.m.s.high$`54`)["mean"]),as.numeric(CI(model.m.s.high$`55`)["mean"]),as.numeric(CI(model.m.s.high$`56`)["mean"]),as.numeric(CI(model.m.s.high$`57`)["mean"]),as.numeric(CI(model.m.s.high$`58`)["mean"])),
   Type = rep("High Density", ncol(model.m.s.high)),
   Opposition = min(m.data$munopp):max(m.data$munopp),
-  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1]), as.numeric(CI(model.m.s.high$`11`)[1]), as.numeric(CI(model.m.s.high$`12`)[1]), as.numeric(CI(model.m.s.high$`13`)[1]), as.numeric(CI(model.m.s.high$`14`)[1]), as.numeric(CI(model.m.s.high$`15`)[1]), as.numeric(CI(model.m.s.high$`16`)[1]), as.numeric(CI(model.m.s.high$`17`)[1]), as.numeric(CI(model.m.s.high$`18`)[1]), as.numeric(CI(model.m.s.high$`19`)[1]), as.numeric(CI(model.m.s.high$`20`)[1]), as.numeric(CI(model.m.s.high$`21`)[1]), as.numeric(CI(model.m.s.high$`22`)[1]), as.numeric(CI(model.m.s.high$`23`)[1]), as.numeric(CI(model.m.s.high$`24`)[1]), as.numeric(CI(model.m.s.high$`25`)[1]), as.numeric(CI(model.m.s.high$`26`)[1]), as.numeric(CI(model.m.s.high$`27`)[1]), as.numeric(CI(model.m.s.high$`28`)[1]), as.numeric(CI(model.m.s.high$`29`)[1]), as.numeric(CI(model.m.s.high$`30`)[1]), as.numeric(CI(model.m.s.high$`31`)[1]), as.numeric(CI(model.m.s.high$`32`)[1]), as.numeric(CI(model.m.s.high$`33`)[1]), as.numeric(CI(model.m.s.high$`34`)[1]), as.numeric(CI(model.m.s.high$`35`)[1]), as.numeric(CI(model.m.s.high$`36`)[1]), as.numeric(CI(model.m.s.high$`37`)[1]), as.numeric(CI(model.m.s.high$`38`)[1]), as.numeric(CI(model.m.s.high$`39`)[1]), as.numeric(CI(model.m.s.high$`40`)[1]),as.numeric(CI(model.m.s.high$`41`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]), as.numeric(CI(model.m.s.high$`11`)[3]), as.numeric(CI(model.m.s.high$`12`)[3]), as.numeric(CI(model.m.s.high$`13`)[3]), as.numeric(CI(model.m.s.high$`14`)[3]), as.numeric(CI(model.m.s.high$`15`)[3]), as.numeric(CI(model.m.s.high$`16`)[3]), as.numeric(CI(model.m.s.high$`17`)[3]), as.numeric(CI(model.m.s.high$`18`)[3]), as.numeric(CI(model.m.s.high$`19`)[3]), as.numeric(CI(model.m.s.high$`20`)[3]),as.numeric(CI(model.m.s.high$`21`)[3]), as.numeric(CI(model.m.s.high$`22`)[3]), as.numeric(CI(model.m.s.high$`23`)[3]), as.numeric(CI(model.m.s.high$`24`)[3]), as.numeric(CI(model.m.s.high$`25`)[3]), as.numeric(CI(model.m.s.high$`26`)[3]), as.numeric(CI(model.m.s.high$`27`)[3]), as.numeric(CI(model.m.s.high$`28`)[3]), as.numeric(CI(model.m.s.high$`29`)[3]), as.numeric(CI(model.m.s.high$`30`)[3]), as.numeric(CI(model.m.s.high$`31`)[3]), as.numeric(CI(model.m.s.high$`32`)[3]), as.numeric(CI(model.m.s.high$`33`)[3]), as.numeric(CI(model.m.s.high$`34`)[3]), as.numeric(CI(model.m.s.high$`35`)[3]), as.numeric(CI(model.m.s.high$`36`)[3]), as.numeric(CI(model.m.s.high$`37`)[3]), as.numeric(CI(model.m.s.high$`38`)[3]), as.numeric(CI(model.m.s.high$`39`)[3]), as.numeric(CI(model.m.s.high$`40`)[3]),as.numeric(CI(model.m.s.high$`41`)[3]))
-)
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)["upper"]),as.numeric(CI(model.m.s.high$`2`)["upper"]),as.numeric(CI(model.m.s.high$`3`)["upper"]),as.numeric(CI(model.m.s.high$`4`)["upper"]),as.numeric(CI(model.m.s.high$`5`)["upper"]),as.numeric(CI(model.m.s.high$`6`)["upper"]),as.numeric(CI(model.m.s.high$`7`)["upper"]),as.numeric(CI(model.m.s.high$`8`)["upper"]),as.numeric(CI(model.m.s.high$`9`)["upper"]),as.numeric(CI(model.m.s.high$`10`)["upper"]),as.numeric(CI(model.m.s.high$`11`)["upper"]),as.numeric(CI(model.m.s.high$`12`)["upper"]),as.numeric(CI(model.m.s.high$`13`)["upper"]),as.numeric(CI(model.m.s.high$`14`)["upper"]),as.numeric(CI(model.m.s.high$`15`)["upper"]),as.numeric(CI(model.m.s.high$`16`)["upper"]),as.numeric(CI(model.m.s.high$`17`)["upper"]),as.numeric(CI(model.m.s.high$`18`)["upper"]),as.numeric(CI(model.m.s.high$`19`)["upper"]),as.numeric(CI(model.m.s.high$`20`)["upper"]),as.numeric(CI(model.m.s.high$`21`)["upper"]),as.numeric(CI(model.m.s.high$`22`)["upper"]),as.numeric(CI(model.m.s.high$`23`)["upper"]),as.numeric(CI(model.m.s.high$`24`)["upper"]),as.numeric(CI(model.m.s.high$`25`)["upper"]),as.numeric(CI(model.m.s.high$`26`)["upper"]),as.numeric(CI(model.m.s.high$`27`)["upper"]),as.numeric(CI(model.m.s.high$`28`)["upper"]),as.numeric(CI(model.m.s.high$`29`)["upper"]),as.numeric(CI(model.m.s.high$`30`)["upper"]),as.numeric(CI(model.m.s.high$`31`)["upper"]),as.numeric(CI(model.m.s.high$`32`)["upper"]),as.numeric(CI(model.m.s.high$`33`)["upper"]),as.numeric(CI(model.m.s.high$`34`)["upper"]),as.numeric(CI(model.m.s.high$`35`)["upper"]),as.numeric(CI(model.m.s.high$`36`)["upper"]),as.numeric(CI(model.m.s.high$`37`)["upper"]),as.numeric(CI(model.m.s.high$`38`)["upper"]),as.numeric(CI(model.m.s.high$`39`)["upper"]),as.numeric(CI(model.m.s.high$`40`)["upper"]),as.numeric(CI(model.m.s.high$`41`)["upper"]),as.numeric(CI(model.m.s.high$`42`)["upper"]),as.numeric(CI(model.m.s.high$`43`)["upper"]),as.numeric(CI(model.m.s.high$`44`)["upper"]),as.numeric(CI(model.m.s.high$`45`)["upper"]),as.numeric(CI(model.m.s.high$`46`)["upper"]),as.numeric(CI(model.m.s.high$`47`)["upper"]),as.numeric(CI(model.m.s.high$`48`)["upper"]),as.numeric(CI(model.m.s.high$`49`)["upper"]),as.numeric(CI(model.m.s.high$`50`)["upper"]),as.numeric(CI(model.m.s.high$`51`)["upper"]),as.numeric(CI(model.m.s.high$`52`)["upper"]),as.numeric(CI(model.m.s.high$`53`)["upper"]),as.numeric(CI(model.m.s.high$`54`)["upper"]),as.numeric(CI(model.m.s.high$`55`)["upper"]),as.numeric(CI(model.m.s.high$`56`)["upper"]),as.numeric(CI(model.m.s.high$`57`)["upper"]),as.numeric(CI(model.m.s.high$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.high$`1`)["lower"]),as.numeric(CI(model.m.s.high$`2`)["lower"]),as.numeric(CI(model.m.s.high$`3`)["lower"]),as.numeric(CI(model.m.s.high$`4`)["lower"]),as.numeric(CI(model.m.s.high$`5`)["lower"]),as.numeric(CI(model.m.s.high$`6`)["lower"]),as.numeric(CI(model.m.s.high$`7`)["lower"]),as.numeric(CI(model.m.s.high$`8`)["lower"]),as.numeric(CI(model.m.s.high$`9`)["lower"]),as.numeric(CI(model.m.s.high$`10`)["lower"]),as.numeric(CI(model.m.s.high$`11`)["lower"]),as.numeric(CI(model.m.s.high$`12`)["lower"]),as.numeric(CI(model.m.s.high$`13`)["lower"]),as.numeric(CI(model.m.s.high$`14`)["lower"]),as.numeric(CI(model.m.s.high$`15`)["lower"]),as.numeric(CI(model.m.s.high$`16`)["lower"]),as.numeric(CI(model.m.s.high$`17`)["lower"]),as.numeric(CI(model.m.s.high$`18`)["lower"]),as.numeric(CI(model.m.s.high$`19`)["lower"]),as.numeric(CI(model.m.s.high$`20`)["lower"]),as.numeric(CI(model.m.s.high$`21`)["lower"]),as.numeric(CI(model.m.s.high$`22`)["lower"]),as.numeric(CI(model.m.s.high$`23`)["lower"]),as.numeric(CI(model.m.s.high$`24`)["lower"]),as.numeric(CI(model.m.s.high$`25`)["lower"]),as.numeric(CI(model.m.s.high$`26`)["lower"]),as.numeric(CI(model.m.s.high$`27`)["lower"]),as.numeric(CI(model.m.s.high$`28`)["lower"]),as.numeric(CI(model.m.s.high$`29`)["lower"]),as.numeric(CI(model.m.s.high$`30`)["lower"]),as.numeric(CI(model.m.s.high$`31`)["lower"]),as.numeric(CI(model.m.s.high$`32`)["lower"]),as.numeric(CI(model.m.s.high$`33`)["lower"]),as.numeric(CI(model.m.s.high$`34`)["lower"]),as.numeric(CI(model.m.s.high$`35`)["lower"]),as.numeric(CI(model.m.s.high$`36`)["lower"]),as.numeric(CI(model.m.s.high$`37`)["lower"]),as.numeric(CI(model.m.s.high$`38`)["lower"]),as.numeric(CI(model.m.s.high$`39`)["lower"]),as.numeric(CI(model.m.s.high$`40`)["lower"]),as.numeric(CI(model.m.s.high$`41`)["lower"]),as.numeric(CI(model.m.s.high$`42`)["lower"]),as.numeric(CI(model.m.s.high$`43`)["lower"]),as.numeric(CI(model.m.s.high$`44`)["lower"]),as.numeric(CI(model.m.s.high$`45`)["lower"]),as.numeric(CI(model.m.s.high$`46`)["lower"]),as.numeric(CI(model.m.s.high$`47`)["lower"]),as.numeric(CI(model.m.s.high$`48`)["lower"]),as.numeric(CI(model.m.s.high$`49`)["lower"]),as.numeric(CI(model.m.s.high$`50`)["lower"]),as.numeric(CI(model.m.s.high$`51`)["lower"]),as.numeric(CI(model.m.s.high$`52`)["lower"]),as.numeric(CI(model.m.s.high$`53`)["lower"]),as.numeric(CI(model.m.s.high$`54`)["lower"]),as.numeric(CI(model.m.s.high$`55`)["lower"]),as.numeric(CI(model.m.s.high$`56`)["lower"]),as.numeric(CI(model.m.s.high$`57`)["lower"]),as.numeric(CI(model.m.s.high$`58`)["lower"])))
+
+
 
 ### munopp
-df.munopp.alone = data.frame(
-  mean = c(mean(model.m.s.munopp$`1`),mean(model.m.s.munopp$`2`),mean(model.m.s.munopp$`3`),mean(model.m.s.munopp$`4`),mean(model.m.s.munopp$`5`),mean(model.m.s.munopp$`6`),mean(model.m.s.munopp$`7`),mean(model.m.s.munopp$`8`), mean(model.m.s.munopp$`9`),mean(model.m.s.munopp$`10`), mean(model.m.s.munopp$`11`), mean(model.m.s.munopp$`12`),mean(model.m.s.munopp$`13`),mean(model.m.s.munopp$`14`),mean(model.m.s.munopp$`15`),mean(model.m.s.munopp$`16`),mean(model.m.s.munopp$`17`),mean(model.m.s.munopp$`18`),mean(model.m.s.munopp$`19`),mean(model.m.s.munopp$`20`), mean(model.m.s.munopp$`21`),mean(model.m.s.munopp$`22`),mean(model.m.s.munopp$`23`),mean(model.m.s.munopp$`24`),mean(model.m.s.munopp$`25`),mean(model.m.s.munopp$`26`),mean(model.m.s.munopp$`27`),mean(model.m.s.munopp$`28`), mean(model.m.s.munopp$`29`),mean(model.m.s.munopp$`30`), mean(model.m.s.munopp$`31`), mean(model.m.s.munopp$`32`),mean(model.m.s.munopp$`33`),mean(model.m.s.munopp$`34`),mean(model.m.s.munopp$`35`),mean(model.m.s.munopp$`36`),mean(model.m.s.munopp$`37`),mean(model.m.s.munopp$`38`),mean(model.m.s.munopp$`39`),mean(model.m.s.munopp$`40`),mean(model.m.s.munopp$`41`)),
+df.munopp = data.frame(
+  mean = c(as.numeric(CI(model.m.s.munopp$`1`)["mean"]),as.numeric(CI(model.m.s.munopp$`2`)["mean"]),as.numeric(CI(model.m.s.munopp$`3`)["mean"]),as.numeric(CI(model.m.s.munopp$`4`)["mean"]),as.numeric(CI(model.m.s.munopp$`5`)["mean"]),as.numeric(CI(model.m.s.munopp$`6`)["mean"]),as.numeric(CI(model.m.s.munopp$`7`)["mean"]),as.numeric(CI(model.m.s.munopp$`8`)["mean"]),as.numeric(CI(model.m.s.munopp$`9`)["mean"]),as.numeric(CI(model.m.s.munopp$`10`)["mean"]),as.numeric(CI(model.m.s.munopp$`11`)["mean"]),as.numeric(CI(model.m.s.munopp$`12`)["mean"]),as.numeric(CI(model.m.s.munopp$`13`)["mean"]),as.numeric(CI(model.m.s.munopp$`14`)["mean"]),as.numeric(CI(model.m.s.munopp$`15`)["mean"]),as.numeric(CI(model.m.s.munopp$`16`)["mean"]),as.numeric(CI(model.m.s.munopp$`17`)["mean"]),as.numeric(CI(model.m.s.munopp$`18`)["mean"]),as.numeric(CI(model.m.s.munopp$`19`)["mean"]),as.numeric(CI(model.m.s.munopp$`20`)["mean"]),as.numeric(CI(model.m.s.munopp$`21`)["mean"]),as.numeric(CI(model.m.s.munopp$`22`)["mean"]),as.numeric(CI(model.m.s.munopp$`23`)["mean"]),as.numeric(CI(model.m.s.munopp$`24`)["mean"]),as.numeric(CI(model.m.s.munopp$`25`)["mean"]),as.numeric(CI(model.m.s.munopp$`26`)["mean"]),as.numeric(CI(model.m.s.munopp$`27`)["mean"]),as.numeric(CI(model.m.s.munopp$`28`)["mean"]),as.numeric(CI(model.m.s.munopp$`29`)["mean"]),as.numeric(CI(model.m.s.munopp$`30`)["mean"]),as.numeric(CI(model.m.s.munopp$`31`)["mean"]),as.numeric(CI(model.m.s.munopp$`32`)["mean"]),as.numeric(CI(model.m.s.munopp$`33`)["mean"]),as.numeric(CI(model.m.s.munopp$`34`)["mean"]),as.numeric(CI(model.m.s.munopp$`35`)["mean"]),as.numeric(CI(model.m.s.munopp$`36`)["mean"]),as.numeric(CI(model.m.s.munopp$`37`)["mean"]),as.numeric(CI(model.m.s.munopp$`38`)["mean"]),as.numeric(CI(model.m.s.munopp$`39`)["mean"]),as.numeric(CI(model.m.s.munopp$`40`)["mean"]),as.numeric(CI(model.m.s.munopp$`41`)["mean"]),as.numeric(CI(model.m.s.munopp$`42`)["mean"]),as.numeric(CI(model.m.s.munopp$`43`)["mean"]),as.numeric(CI(model.m.s.munopp$`44`)["mean"]),as.numeric(CI(model.m.s.munopp$`45`)["mean"]),as.numeric(CI(model.m.s.munopp$`46`)["mean"]),as.numeric(CI(model.m.s.munopp$`47`)["mean"]),as.numeric(CI(model.m.s.munopp$`48`)["mean"]),as.numeric(CI(model.m.s.munopp$`49`)["mean"]),as.numeric(CI(model.m.s.munopp$`50`)["mean"]),as.numeric(CI(model.m.s.munopp$`51`)["mean"]),as.numeric(CI(model.m.s.munopp$`52`)["mean"]),as.numeric(CI(model.m.s.munopp$`53`)["mean"]),as.numeric(CI(model.m.s.munopp$`54`)["mean"]),as.numeric(CI(model.m.s.munopp$`55`)["mean"]),as.numeric(CI(model.m.s.munopp$`56`)["mean"]),as.numeric(CI(model.m.s.munopp$`57`)["mean"]),as.numeric(CI(model.m.s.munopp$`58`)["mean"])),
   Type = rep("Municipal Opposition", ncol(model.m.s.munopp)),
   Opposition = min(m.data$munopp):max(m.data$munopp),
-  Upper = c(as.numeric(CI(model.m.s.munopp$`1`)[1]), as.numeric(CI(model.m.s.munopp$`2`)[1]), as.numeric(CI(model.m.s.munopp$`3`)[1]), as.numeric(CI(model.m.s.munopp$`4`)[1]), as.numeric(CI(model.m.s.munopp$`5`)[1]), as.numeric(CI(model.m.s.munopp$`6`)[1]), as.numeric(CI(model.m.s.munopp$`7`)[1]), as.numeric(CI(model.m.s.munopp$`8`)[1]), as.numeric(CI(model.m.s.munopp$`9`)[1]), as.numeric(CI(model.m.s.munopp$`10`)[1]), as.numeric(CI(model.m.s.munopp$`11`)[1]), as.numeric(CI(model.m.s.munopp$`12`)[1]), as.numeric(CI(model.m.s.munopp$`13`)[1]), as.numeric(CI(model.m.s.munopp$`14`)[1]), as.numeric(CI(model.m.s.munopp$`15`)[1]), as.numeric(CI(model.m.s.munopp$`16`)[1]), as.numeric(CI(model.m.s.munopp$`17`)[1]), as.numeric(CI(model.m.s.munopp$`18`)[1]), as.numeric(CI(model.m.s.munopp$`19`)[1]), as.numeric(CI(model.m.s.munopp$`20`)[1]), as.numeric(CI(model.m.s.munopp$`21`)[1]), as.numeric(CI(model.m.s.munopp$`22`)[1]), as.numeric(CI(model.m.s.munopp$`23`)[1]), as.numeric(CI(model.m.s.munopp$`24`)[1]), as.numeric(CI(model.m.s.munopp$`25`)[1]), as.numeric(CI(model.m.s.munopp$`26`)[1]), as.numeric(CI(model.m.s.munopp$`27`)[1]), as.numeric(CI(model.m.s.munopp$`28`)[1]), as.numeric(CI(model.m.s.munopp$`29`)[1]), as.numeric(CI(model.m.s.munopp$`30`)[1]), as.numeric(CI(model.m.s.munopp$`31`)[1]), as.numeric(CI(model.m.s.munopp$`32`)[1]), as.numeric(CI(model.m.s.munopp$`33`)[1]), as.numeric(CI(model.m.s.munopp$`34`)[1]), as.numeric(CI(model.m.s.munopp$`35`)[1]), as.numeric(CI(model.m.s.munopp$`36`)[1]), as.numeric(CI(model.m.s.munopp$`37`)[1]), as.numeric(CI(model.m.s.munopp$`38`)[1]), as.numeric(CI(model.m.s.munopp$`39`)[1]), as.numeric(CI(model.m.s.munopp$`40`)[1]),as.numeric(CI(model.m.s.munopp$`41`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.munopp$`1`)[3]), as.numeric(CI(model.m.s.munopp$`2`)[3]), as.numeric(CI(model.m.s.munopp$`3`)[3]), as.numeric(CI(model.m.s.munopp$`4`)[3]), as.numeric(CI(model.m.s.munopp$`5`)[3]), as.numeric(CI(model.m.s.munopp$`6`)[3]), as.numeric(CI(model.m.s.munopp$`7`)[3]), as.numeric(CI(model.m.s.munopp$`8`)[3]), as.numeric(CI(model.m.s.munopp$`9`)[3]), as.numeric(CI(model.m.s.munopp$`10`)[3]), as.numeric(CI(model.m.s.munopp$`11`)[3]), as.numeric(CI(model.m.s.munopp$`12`)[3]), as.numeric(CI(model.m.s.munopp$`13`)[3]), as.numeric(CI(model.m.s.munopp$`14`)[3]), as.numeric(CI(model.m.s.munopp$`15`)[3]), as.numeric(CI(model.m.s.munopp$`16`)[3]), as.numeric(CI(model.m.s.munopp$`17`)[3]), as.numeric(CI(model.m.s.munopp$`18`)[3]), as.numeric(CI(model.m.s.munopp$`19`)[3]), as.numeric(CI(model.m.s.munopp$`20`)[3]),as.numeric(CI(model.m.s.munopp$`21`)[3]), as.numeric(CI(model.m.s.munopp$`22`)[3]), as.numeric(CI(model.m.s.munopp$`23`)[3]), as.numeric(CI(model.m.s.munopp$`24`)[3]), as.numeric(CI(model.m.s.munopp$`25`)[3]), as.numeric(CI(model.m.s.munopp$`26`)[3]), as.numeric(CI(model.m.s.munopp$`27`)[3]), as.numeric(CI(model.m.s.munopp$`28`)[3]), as.numeric(CI(model.m.s.munopp$`29`)[3]), as.numeric(CI(model.m.s.munopp$`30`)[3]), as.numeric(CI(model.m.s.munopp$`31`)[3]), as.numeric(CI(model.m.s.munopp$`32`)[3]), as.numeric(CI(model.m.s.munopp$`33`)[3]), as.numeric(CI(model.m.s.munopp$`34`)[3]), as.numeric(CI(model.m.s.munopp$`35`)[3]), as.numeric(CI(model.m.s.munopp$`36`)[3]), as.numeric(CI(model.m.s.munopp$`37`)[3]), as.numeric(CI(model.m.s.munopp$`38`)[3]), as.numeric(CI(model.m.s.munopp$`39`)[3]), as.numeric(CI(model.m.s.munopp$`40`)[3]),as.numeric(CI(model.m.s.munopp$`41`)[3]))
-)
+  Upper = c(as.numeric(CI(model.m.s.munopp$`1`)["upper"]),as.numeric(CI(model.m.s.munopp$`2`)["upper"]),as.numeric(CI(model.m.s.munopp$`3`)["upper"]),as.numeric(CI(model.m.s.munopp$`4`)["upper"]),as.numeric(CI(model.m.s.munopp$`5`)["upper"]),as.numeric(CI(model.m.s.munopp$`6`)["upper"]),as.numeric(CI(model.m.s.munopp$`7`)["upper"]),as.numeric(CI(model.m.s.munopp$`8`)["upper"]),as.numeric(CI(model.m.s.munopp$`9`)["upper"]),as.numeric(CI(model.m.s.munopp$`10`)["upper"]),as.numeric(CI(model.m.s.munopp$`11`)["upper"]),as.numeric(CI(model.m.s.munopp$`12`)["upper"]),as.numeric(CI(model.m.s.munopp$`13`)["upper"]),as.numeric(CI(model.m.s.munopp$`14`)["upper"]),as.numeric(CI(model.m.s.munopp$`15`)["upper"]),as.numeric(CI(model.m.s.munopp$`16`)["upper"]),as.numeric(CI(model.m.s.munopp$`17`)["upper"]),as.numeric(CI(model.m.s.munopp$`18`)["upper"]),as.numeric(CI(model.m.s.munopp$`19`)["upper"]),as.numeric(CI(model.m.s.munopp$`20`)["upper"]),as.numeric(CI(model.m.s.munopp$`21`)["upper"]),as.numeric(CI(model.m.s.munopp$`22`)["upper"]),as.numeric(CI(model.m.s.munopp$`23`)["upper"]),as.numeric(CI(model.m.s.munopp$`24`)["upper"]),as.numeric(CI(model.m.s.munopp$`25`)["upper"]),as.numeric(CI(model.m.s.munopp$`26`)["upper"]),as.numeric(CI(model.m.s.munopp$`27`)["upper"]),as.numeric(CI(model.m.s.munopp$`28`)["upper"]),as.numeric(CI(model.m.s.munopp$`29`)["upper"]),as.numeric(CI(model.m.s.munopp$`30`)["upper"]),as.numeric(CI(model.m.s.munopp$`31`)["upper"]),as.numeric(CI(model.m.s.munopp$`32`)["upper"]),as.numeric(CI(model.m.s.munopp$`33`)["upper"]),as.numeric(CI(model.m.s.munopp$`34`)["upper"]),as.numeric(CI(model.m.s.munopp$`35`)["upper"]),as.numeric(CI(model.m.s.munopp$`36`)["upper"]),as.numeric(CI(model.m.s.munopp$`37`)["upper"]),as.numeric(CI(model.m.s.munopp$`38`)["upper"]),as.numeric(CI(model.m.s.munopp$`39`)["upper"]),as.numeric(CI(model.m.s.munopp$`40`)["upper"]),as.numeric(CI(model.m.s.munopp$`41`)["upper"]),as.numeric(CI(model.m.s.munopp$`42`)["upper"]),as.numeric(CI(model.m.s.munopp$`43`)["upper"]),as.numeric(CI(model.m.s.munopp$`44`)["upper"]),as.numeric(CI(model.m.s.munopp$`45`)["upper"]),as.numeric(CI(model.m.s.munopp$`46`)["upper"]),as.numeric(CI(model.m.s.munopp$`47`)["upper"]),as.numeric(CI(model.m.s.munopp$`48`)["upper"]),as.numeric(CI(model.m.s.munopp$`49`)["upper"]),as.numeric(CI(model.m.s.munopp$`50`)["upper"]),as.numeric(CI(model.m.s.munopp$`51`)["upper"]),as.numeric(CI(model.m.s.munopp$`52`)["upper"]),as.numeric(CI(model.m.s.munopp$`53`)["upper"]),as.numeric(CI(model.m.s.munopp$`54`)["upper"]),as.numeric(CI(model.m.s.munopp$`55`)["upper"]),as.numeric(CI(model.m.s.munopp$`56`)["upper"]),as.numeric(CI(model.m.s.munopp$`57`)["upper"]),as.numeric(CI(model.m.s.munopp$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.munopp$`1`)["lower"]),as.numeric(CI(model.m.s.munopp$`2`)["lower"]),as.numeric(CI(model.m.s.munopp$`3`)["lower"]),as.numeric(CI(model.m.s.munopp$`4`)["lower"]),as.numeric(CI(model.m.s.munopp$`5`)["lower"]),as.numeric(CI(model.m.s.munopp$`6`)["lower"]),as.numeric(CI(model.m.s.munopp$`7`)["lower"]),as.numeric(CI(model.m.s.munopp$`8`)["lower"]),as.numeric(CI(model.m.s.munopp$`9`)["lower"]),as.numeric(CI(model.m.s.munopp$`10`)["lower"]),as.numeric(CI(model.m.s.munopp$`11`)["lower"]),as.numeric(CI(model.m.s.munopp$`12`)["lower"]),as.numeric(CI(model.m.s.munopp$`13`)["lower"]),as.numeric(CI(model.m.s.munopp$`14`)["lower"]),as.numeric(CI(model.m.s.munopp$`15`)["lower"]),as.numeric(CI(model.m.s.munopp$`16`)["lower"]),as.numeric(CI(model.m.s.munopp$`17`)["lower"]),as.numeric(CI(model.m.s.munopp$`18`)["lower"]),as.numeric(CI(model.m.s.munopp$`19`)["lower"]),as.numeric(CI(model.m.s.munopp$`20`)["lower"]),as.numeric(CI(model.m.s.munopp$`21`)["lower"]),as.numeric(CI(model.m.s.munopp$`22`)["lower"]),as.numeric(CI(model.m.s.munopp$`23`)["lower"]),as.numeric(CI(model.m.s.munopp$`24`)["lower"]),as.numeric(CI(model.m.s.munopp$`25`)["lower"]),as.numeric(CI(model.m.s.munopp$`26`)["lower"]),as.numeric(CI(model.m.s.munopp$`27`)["lower"]),as.numeric(CI(model.m.s.munopp$`28`)["lower"]),as.numeric(CI(model.m.s.munopp$`29`)["lower"]),as.numeric(CI(model.m.s.munopp$`30`)["lower"]),as.numeric(CI(model.m.s.munopp$`31`)["lower"]),as.numeric(CI(model.m.s.munopp$`32`)["lower"]),as.numeric(CI(model.m.s.munopp$`33`)["lower"]),as.numeric(CI(model.m.s.munopp$`34`)["lower"]),as.numeric(CI(model.m.s.munopp$`35`)["lower"]),as.numeric(CI(model.m.s.munopp$`36`)["lower"]),as.numeric(CI(model.m.s.munopp$`37`)["lower"]),as.numeric(CI(model.m.s.munopp$`38`)["lower"]),as.numeric(CI(model.m.s.munopp$`39`)["lower"]),as.numeric(CI(model.m.s.munopp$`40`)["lower"]),as.numeric(CI(model.m.s.munopp$`41`)["lower"]),as.numeric(CI(model.m.s.munopp$`42`)["lower"]),as.numeric(CI(model.m.s.munopp$`43`)["lower"]),as.numeric(CI(model.m.s.munopp$`44`)["lower"]),as.numeric(CI(model.m.s.munopp$`45`)["lower"]),as.numeric(CI(model.m.s.munopp$`46`)["lower"]),as.numeric(CI(model.m.s.munopp$`47`)["lower"]),as.numeric(CI(model.m.s.munopp$`48`)["lower"]),as.numeric(CI(model.m.s.munopp$`49`)["lower"]),as.numeric(CI(model.m.s.munopp$`50`)["lower"]),as.numeric(CI(model.m.s.munopp$`51`)["lower"]),as.numeric(CI(model.m.s.munopp$`52`)["lower"]),as.numeric(CI(model.m.s.munopp$`53`)["lower"]),as.numeric(CI(model.m.s.munopp$`54`)["lower"]),as.numeric(CI(model.m.s.munopp$`55`)["lower"]),as.numeric(CI(model.m.s.munopp$`56`)["lower"]),as.numeric(CI(model.m.s.munopp$`57`)["lower"]),as.numeric(CI(model.m.s.munopp$`58`)["lower"])))
+
+
 
 ### combined two df's
-munopp.d= rbind(df.high, df.low,df.munopp.alone)
+munopp.d= rbind(df.high, df.low,df.munopp)
 
 
 ### plot
@@ -892,31 +968,31 @@ library(Rmisc) # install.packages("Rmisc")
 ### df's
 ### low
 df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`)),
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`), mean(model.m.s.low$`10`)),
   Type = rep("Low Density", ncol(model.m.s.low)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1])),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
   Lower = c(
-    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]))
+    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]))
 )
 
 ### high
 df.high = data.frame(
-  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`)),
+  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`), mean(model.m.s.high$`9`), mean(model.m.s.high$`10`)),
   Type = rep("High Density", ncol(model.m.s.high)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1])),
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1])),
   Lower = c(
-    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]))
+    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]))
 )
 
 ### polinv
 df.polinv.alone = data.frame(
-  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`)),
+  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`), mean(model.m.s.polinv$`9`), mean(model.m.s.polinv$`10`)),
   Type = rep("Political Involvement", ncol(model.m.s.polinv)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]))
+  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1]), as.numeric(CI(model.m.s.polinv$`9`)[1]), as.numeric(CI(model.m.s.polinv$`10`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]), as.numeric(CI(model.m.s.polinv$`9`)[3]), as.numeric(CI(model.m.s.polinv$`10`)[3]))
 )
 
 ### combined two df's
@@ -1361,7 +1437,7 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 
 # Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
-Distance = m.out$distance
+Distance = as.vector(m.out$distance)
 Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
 Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
 
@@ -1403,6 +1479,14 @@ balance.1.m=ggplot() +
   scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
+balance.2.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$pop.10), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Population") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
 balance.3.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$munopp), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
   ylab("") + 
@@ -1429,6 +1513,14 @@ balance.1.r=ggplot() +
   ylim(limits = c(0, 0.085)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
+balance.2.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$pop.10), colour = factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Population") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
 balance.3.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$munopp), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
   ylab("") + 
@@ -1448,15 +1540,17 @@ balance.4.r=ggplot() +
 
 plots <- plot_grid(
   balance.1.m + theme(legend.position="none"), 
+  balance.2.m + theme(legend.position="none"), 
   balance.3.m + theme(legend.position="none"), 
   balance.4.m + theme(legend.position="none"), 
   balance.1.r + theme(legend.position="none"), 
+  balance.2.r + theme(legend.position="none"), 
   balance.3.r + theme(legend.position="none"), 
   balance.4.r + theme(legend.position="none"),
   align = 'vh', 
   hjust = -1, 
   nrow = 2,
-  ncol = 3
+  ncol = 4
 )
 
 grobs <- ggplotGrob(balance.4.r + theme(legend.position="bottom"))$grobs

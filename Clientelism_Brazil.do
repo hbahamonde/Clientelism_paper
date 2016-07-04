@@ -330,7 +330,7 @@ merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_pap
 drop _merge
 
 
-keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
+keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp male   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
 
 rename r1 wealth1
 rename r3 wealth2

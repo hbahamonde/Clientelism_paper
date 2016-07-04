@@ -195,7 +195,37 @@ Do parties target individuals or groups? This is a fundamental question to under
 There is no agreement on when parties target individuals or groups of individuals. The distributive politics and vote-buying literatures have traditionally followed two different practices. Unfortunately, this decision seems to be grounded on foundations of research design rather than on theoretical reasons. Consequently, it has been implied that the two strategies are interchangeable. On the one hand, the distributive politics literature has mostly focused on groups, usually districts or provinces (\citet[]{Dixit1996}, \citet[]{Khemani2015}, \citet[]{Calvo2004}). In this literature, incumbent parties deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of individuals. On the other hand, the vote-buying literature has typically focused on individuals and their characteristics such as socio-economic or electoral profiles (\citet[]{Carlin2015}). 
 
 % OK income: hook 2
-The most consolidated agreement is on the positive effects of poverty on vote-buying (\citet[]{Calvo2004,Weitz-shapiro})\footnote{Vote-buying is ``the proffering to voters of cash or (more commonly) minor consumption goods by political parties, in office or in opposition, in exchange for the recipient's vote'' (\citet[p. 67]{Brusco2004}). In the rest of this note, we use clientelism and vote-buying interchangeable.}. \citet{Kitschelt2000}\footnote{See also Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}.}, For example, \citet{Brusco2004}, \citet[]{Stokes:2013cj} and \citet[]{Nazareno2008a} explain that since the poor derive more utility from immediate transfers than future and risky returns associated to policy packages, clientelistic political parties target the poor \emph{only}. For example, \citet[p. 12]{Weitz-Shapiro:2014aa} explains that``[a]lmost universally, scholars of clientelism treat and analyze the practice as an exchange between politicians and their poor clients''. This canonical predictor has been recently challenged, however. \citet{Szwarcberg2013} ``challenges the assumption [brokers] with access to material benefits will always distribute goods to low-income voters in exchange for electoral support'', while \citet{Gonzalez-Ocantos2012} and \citet[]{Holland2015} explain that income (measured at the individual level) has little or no effect on vote-buying. Why do newer scholarly work report null fundings on poverty, the \emph{most} important predictor of vote-buying? Perhaps more importantly, \emph{under what conditions} do poor individuals receive clientelism?
+The most consolidated agreement is on the positive effects of poverty on vote-buying (\citet[]{Calvo2004,Weitz-shapiro})\footnote{Vote-buying is ``the proffering to voters of cash or (more commonly) minor consumption goods by political parties, in office or in opposition, in exchange for the recipient's vote'' (\citet[p. 67]{Brusco2004}). In the rest of this note, we use clientelism and vote-buying interchangeable.}. \citet{Kitschelt2000}\footnote{See also Kitschelt and Altamirano in \citet[ch. 10]{Carlin:2015}.}, For example, \citet{Brusco2004}, \citet[]{Stokes:2013cj} and \citet[]{Nazareno2008a} explain that since the poor derive more utility from immediate transfers than future and risky returns associated to policy packages, clientelistic political parties target the poor \emph{only}. For example, \citet[p. 12]{Weitz-Shapiro:2014aa} explains that``[a]lmost universally, scholars of clientelism treat and analyze the practice as an exchange between politicians and their poor clients''. This canonical predictor has been recently challenged, however. \citet{Szwarcberg2013} ``challenges the assumption [brokers] with access to material benefits will always distribute goods to low-income voters in exchange for electoral support'', while \citet{Gonzalez-Ocantos2012} and \citet[]{Holland2015} explain that income (measured at the individual level) has little or no effect on vote-buying. Why do newer scholarly work report null fundings on poverty, the \emph{most} important predictor of vote-buying? The dataset analyzed in this paper strongly suggest that brokers do target non-poor individuals (see \autoref{fig:wealth:client:plot}). Currently, the literature does not offer a satisfactory answer for this phenomena. \emph{Under what conditions} do poor and non-poor individuals receive clientelism? We present a theory that sheds light on these questions by explaining when and why group and individual targeting are efficient.
+
+
+<<wealth:client:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Individual Wealth and Vote-Buying', fig.align='center', fig.width=4, fig.height=3,dpi=10000,cache = TRUE>>=
+# load data set
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+# load library
+library(ggplot2)
+
+# plot
+ggplot() + geom_jitter(
+  width = 4,
+  height = 1, 
+  alpha = 1/4,
+  aes(
+    y=as.factor(dat$clien1dummy), 
+    x=as.numeric(dat$wealth), 
+    colour=as.numeric(dat$clien1dummy))) +
+  xlab("Wealth Index") + 
+  ylab("Offered him/her to buy vote") + 
+  theme_bw()+
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8),
+        legend.position="none")
+@
+
 
 % OK questions
 The lack of clarity on whether parties should target groups or/and individuals and when (if) they should switch or combine strategies, leave us in a big confusion. \citet[]{Zarazaga2015a} argues that brokers do not offer a uniform reward to all voters. We generalize this idea and argue that depending on the incentive structure, brokers target groups or individuals. As we explain below, part of the incentives are shaped by individual wealth. However, an important gap in the literature is that it is not explicit on whether ``the poor'' constitute poor \emph{groups} or poor \emph{individuals} (or both). There has not been an explicit effort to theorize about the different set of incentives these two targeting strategies present to both parties and individuals. For example, \citet[10]{Kitschelt2007} argue that political parties target ``individuals \emph{or} identifiable small groups''\footnote{Emphasis added.}. However, it is not clear what makes parties to focus on one or the other, or both at the same time, why and how. This paper tries to shed light on those issues.
@@ -213,18 +243,18 @@ Each combination presents different incentives for both brokers and individuals 
 %\hspace{-0.1cm}
 \begin{tabular}{ r|p{4cm}|p{4cm}| }
 \multicolumn{1}{r}{}
-& \multicolumn{1}{c}{Low-Income Individuals} & \multicolumn{1}{c}{Non-Poor Individuals} \\
+& \multicolumn{1}{c}{Non-Poor Individuals} & \multicolumn{1}{c}{Low-Income Individuals} \\
 \cline{2-3}
-Low Competition  &  {\bf Low Density}, \emph{identifiable, individual targeting, low clientelism} & {\bf Low Density}, \emph{expensive, lowest clientelism}\\
+High Competition  & {\bf Poor Municipalities}, \emph{identifiable, individual targeting} & {\bf Poor Municipalities}, \emph{spillover effects, group targeting, cheap vote-buying} \\
 \cline{2-3}
-High Competition & {\bf High Density}, \emph{spillover effects, group targeting, highest clientelism} & {\bf High Density}, \emph{identifiable, individual targeting, low clientelism} \\
+Low Competition  & {\bf Non-Poor Municipalities}, \emph{group targeting, expensive vote-buying, lack of checks and balances, embezzlement} &  {\bf Non-Poor Municipalities}, \emph{identifiable, individual targeting}\\
 \cline{2-3}
 \end{tabular}
 \end{table}
 
 
 % OK ARGUMENT and // Summary of the paper: LIT REVIEW // METHODS (2)
-The four ideal types in these three contexts are exemplified in \autoref{tab:strategy:set}. Brokers will engage in \emph{individual targeting} in quadrants 1 and 4. As part of what is gained securing each vote is spent in making sure that happens, individual targeting represents a safer investments though its returns are much more limited. Quadrant 1 has higher clientelism than quadrant 4 as poor have higher marginal returns for the same dollar spent in clientelism compared to the non-poor people in quadrant 4. Quadrant 3 represents a situation when politicians are in high need of more electoral support. In this context the size of the poor is large so brokers engage in group targeting rather than individual targeting. Rather than securing each vote individually, brokers take advantage of the spillover effects of clientelism. Finally, quadrant 2 represents a situation where non-poor individuals nested in non-poor areas have some probability of receiving clientelism. Here brokers engage in group targeting. We theorize that in contexts where there exists less political competition, there also exists less checks and balances too, and hence incumbents have more room to move. Even when politicians are not in need of more electoral support, if they engaged in this expensive form of clientelism, we could think about it in terms of embezzlement.
+The four ideal types in these three contexts are exemplified in \autoref{tab:strategy:set}. Individual targeting is expensive. A considerable portion of what is gained securing each vote is spent in one-to-one targeting. Hence, though this strategy represents a safer investments, its returns are much more limited. We argue that brokers will engage in \emph{individual targeting} when individuals are easily identifiable. As explain below, non-poor individuals nested in poor areas and low-income individuals nested non-poor areas (quadrant 4) are more noticeable, reducing the cost of targeting. Brokers engage in \emph{group targeting} when individuals, due to their nesting structure, provide economies of scale and spillovers. Quadrant 2 represents a situation when politicians are in high need of more electoral support. This risk makes brokers to abandon individual targeting and engage in group targeting. By targeting poor individuals in poor areas, brokers mobilize electoral support from voters who have not been targeted yet, in the hope of being benefited in the future. Finally, quadrant 3 represents a situation where non-poor individuals are nested in non-poor areas. Here brokers engage in group targeting too. We theorize that in contexts where there is less political competition, there less checks and balances and hence incumbents have more room to move. Even when politicians are not in need of more electoral support, they engage in this expensive form of clientelism, which we term as embezzlement.
 
 
 % This paper proceeds as follows
@@ -280,26 +310,30 @@ We are left with many questions. There is no consensus on how individual charact
 \section*{Argument\label{argument}}
  
 % Intro
-Generalizing the idea that the poor have higher discount rates, we argue that the effects of ``being poor'' and ``living in a poor area'' posit different types of incentives depending on how electorally challenged politicians are. Depending on the incentive structure, brokers are expected to target groups or individuals. These distinctions are novel and improve our understanding of clientelism. In our argument, when certain conditions are met, non-poor individuals do receive clientelism. This might explain why some newer research has not found evidence in support of the most widely accepted predictor in the literature. In addition to that, our research design allow us to observe how  individual income and the density of the poor contribute in different ways to shape broker's structure incentive to engage in different types of targeting strategies.
+Generalizing the idea that the poor have higher discount rates, we argue that the effects of ``being poor'' and ``living in a poor area'' posit different types of incentives depending on how electorally challenged politicians are. Depending on the incentive structure, we expect brokers to target groups or individuals. These distinctions are novel and improve our understanding of clientelism. In our argument, when certain conditions are met, non-poor individuals do receive clientelism as well. This might explain why some newer research has not found evidence in support of the most widely accepted predictor of clientelism in the literature. In addition to that, our research design allows us to observe how individual income and the density of the poor contribute in different ways to shape broker's structure incentive to engage in different types of targeting strategies.
 
 \subsection*{Individual Targeting}
 
-%% identifiable
-Brokers will have incentives to engage in individual targeting when targets are easily \emph{identifiable}. Identifiability helps brokers to keep targeted individuals electorally accountable. Higher levels of identification also reduce the costs of keeping the clientelistic contract enforceable. Whereas individual targeting is the safest bet a broker can make, this mechanism is more expensive as it requires brokers having close relationships with  clients. Personalized individual targeting supposes brokers with good-quality local information. The literature usually argues that this information is gathered by brokers who are deeply rooted in the communities they target. For example, \citet[p. 15]{Carlin2015} argue that ``[u]nquestionably, brokers are deeply nested in social networks''. While \citet[p. 864]{Inan2012a} point out, brokers ``hire respected community leaders in each village to interact with voters to promote their candidacy and offer them money [..] in exchange for the promise of their vote''. Our argument generalizes this intuition by  relaxing the need for third-party sources of information. In our framework, brokers target individuals based on their notoriety rather than his/her ties with local groups. This idea is very intuitive. Should brokers engage in individual targeting, they rather visit highly noticeable \emph{poor} households in \emph{non-poor} neighborhood. As these houses stand out in a non-poor context, it is easy for brokers to notice whether these houses need material constructions, whether there are wakes in which they can contribute with flowers or birthday parties where to bring a birthday cake. Poor households need not be close to each other, they just need to be visible enough for brokers to detect their needs.
+%% identifiable 0
+Brokers will have incentives to engage in individual targeting when targets are more easy to \emph{identify}. Identifiability helps brokers to keep targeted individuals electorally accountable. Higher levels of identification also reduce the costs of keeping the clientelistic contract enforceable. Specially, when it comes to monitoring. Whereas individual targeting is the safest bet a broker can make, this mechanism is more expensive as it requires brokers having close relationships with  clients. Close broker-client relationships provide brokers good quality information. The literature usually argues that information is gathered by brokers who are deeply rooted in the communities they target. For example, \citet[p. 15]{Carlin2015} argue that ``[u]nquestionably, brokers are deeply nested in social networks''. While \citet[p. 864]{Inan2012a} point out, brokers ``hire respected community leaders in each village to interact with voters to promote their candidacy and offer them money [..] in exchange for the promise of their vote''. 
 
-%% political competition
-When political competition is low, brokers will have incentives to target identifiable low-income individuals nested in low-poor density contexts (quadrant 1 in \autoref{tab:strategy:set}), but when political competition is high, brokers will have incentives to target identifiable non-poor individuals nested in high-poor density contexts (quadrant 4 in \autoref{tab:strategy:set}). As argued before, individual targeting is expensive. Hence, brokers resort to this strategy only when it is necessary. When political contestation is low there is no need to invest too much on clientelism. Given that low-income individuals have higher discount rates and hence they are cheaper to buy, they are ideal targets in this context: low-income individuals with higher discount rates who are highly identifiable. However, when politicians are heavily contested, brokers have no other choice than spend more resources on clientelism to keep the party in office. Besides targeting quadrant 1, they also target identifiable non-poor individuals nested in poor contexts in quadrant 4. Though these clients they are even more expensive to buy, engaging in this strategy is justifiable to stay the office. Brokers want to stay in quadrant 1, but have no choice than going to quadrant 4 when political competition is high. This paper then generalizes the argument in \citet{Weitz-shapiro}. In this particular context, when political competition is low, party machines do not stop being clientelistic, but engage in individual targeting aiming identifiable individuals with larger discount rates (i.e., low-income individuals in quadrant 1).
+%% identifiable 1
+We claim that the capacity brokers have to identify potential clients does not come from third-party sources (i.e. group membership). Generalizing the intuition that brokers need good-quality information, we argue that one of the few observables brokers have at their disposition is how noticeable individuals are in their respective contexts. In low-information environments, this new piece of knowledge should be very informative and brokers should be able to update their behavior accordingly. We propose that brokers target individuals based on their notoriety rather than their ties to groups. This idea is very intuitive. Should brokers engage in individual targeting, they rather visit highly noticeable \emph{poor} households in \emph{non-poor} neighborhood, for example. As these houses stand out in non-poor contexts, it is easy for brokers to notice whether these houses need material constructions, whether there are wakes in which they could contribute with flowers or birthday parties where to bring birthday cakes. Poor households need not to be close to each other, they just need to be visible enough for brokers to detect their needs. Consequently, income alone does not play a role on its own. Rather, it is how income interacts with the density of the poor, making individuals more/less identifiable. Individuals will be more noticeable when non-poor individuals are nested in poor areas (quadrant 1 in \autoref{tab:strategy:set}), and when poor individuals are nested in non-poor areas (quadrant 4 in \autoref{tab:strategy:set}). 
 
 \subsection*{Group Targeting}
 
-% Group Targeting: waiting // introducing potential beneficiaries
-Brokers will have incentives to target groups even when individual targets are not identifiable, \emph{if} the socio-economic level of the group provides \emph{spillover} effects. We argue that individuals who are inserted in targeted groups still vote for the broker's party even if they have not received benefits. For example, \citet[p. 65]{Auyero2000} explains the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the \emph{broker's inner circle} and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of the circle, she was in the pool of potential beneficiaries. It was only a ``matter of time'' so she could get the job. Building on this intuition, our model presents two ideal types, \emph{actual} and \emph{potential} beneficiaries. The former receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow'', while the latter do not receive benefits today (in the expectation of receiving them in the future) but \emph{still} vote for the broker's candidate ``tomorrow''. In such a dynamic, only actual beneficiaries know their type, while potential beneficiaries are uncertain when their type will change. No matter what the type is, both of them keep voting for the broker's party. Actual beneficiaries vote for the party to keep their type, while potential beneficiaries do it to be able to eventually shift types (to actual beneficiaries). In this sense, when the potential type votes for the party (even in the absence of benefits), that actually helps actual beneficiaries to keep their type. In a similar argument, \citet[]{Rueda2014a} proposes a formal model which suggests that vote buying is facilitated when voters care about the welfare of other voters. 
+% Group Targeting: presenting the impossibility of identification.
+However, when individual income and the economic development of the area coincide (i.e., poor individuals nested in poor areas, and non-poor individuals nested in non-poor areas), individual targeting is no longer efficient.  Under these circumstances brokers cannot incur in the extremely high costs of engaging in individual targeting. Since individuals are masked within their environments, in these cases identifiability is difficult to achieve. As individual targets are difficult to identify, it forces brokers to resort to the \emph{spillover} effects these groups provide, and engage in group targeting instead. \autoref{tab:strategy:set} depicts poor individuals nested in poor areas in quadrant 2 and non-poor individuals nested in non-poor areas in quadrant 3. 
+
+
+% waiting // introducing potential beneficiaries
+Group targeting works because it mobilizes electoral support from potential clients who have not received benefits yet. For example, \citet[p. 65]{Auyero2000} explains the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the \emph{broker's inner circle} and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of the circle, she was in the pool of potential beneficiaries. It was only a ``matter of time'' so she could get the job. Building on this intuition, our model presents two ideal types, \emph{actual} and \emph{potential} beneficiaries. The former receives particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow'', while the latter do not receive benefits today (in the expectation of receiving them in the future) but \emph{still} vote for the broker's candidate ``tomorrow''. In such a dynamic, actual beneficiaries want to keep their type, so they keep supporting the broker's candidate. Potential beneficiaries want to change types, but are uncertain when that might happen, so they keep supporting the broker's candidate too. This mechanisms to be sustainable needs the broker's ability of not allowing the transaction costs of switching strategies more than what it costs to wait to be benefited. No matter what the type is, both of them keep voting for the broker's party. Actual beneficiaries vote for the party to keep their type, while potential beneficiaries do it to be able to eventually shift types (to actual beneficiaries). In this sense, when potential beneficiaries vote for the party (even in the absence of benefits), that actually \emph{helps} actual beneficiaries to \emph{keep} their type. In a similar argument, \citet[]{Rueda2014a} proposes a formal model which suggests that vote buying is facilitated when voters care about the welfare of other voters. 
 
 % Group Targeting: potential beneficiaries // explanation - expansion
-In part, group targeting is possible because potential beneficiaries still vote for the broker's candidate without the benefit (in the hope of being benefited in the short run). Potential beneficiaries have two possible strategies. First, they could defect and vote for another candidate, who might or might not bring them benefits. Second, potential beneficiaries could continue voting for the known broker, and wait. Individual income also plays a role. Given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the current broker's party) than defecting. In a slightly different research project, \citet[p. 20]{Magaloni:2008bq} explains that under non-democratic contexts, voters have incentives to keep voting for the incumbent government, \emph{even when they oppose it}. The Mexican PRI lasted so long not because of electoral fraud but because voters supported what it represented the ``known devil''. As she explains, hegemonic parties survive when they are able to sustain long-term economic growth and a constant supply of clientelistic transfers. As of vote-buying, \citet[p. 14]{Zarazaga2014} explains that ``[b]rokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this''. We argue that the transaction cost of switching brokers or defecting is very high since it also involves building confidence relationships with the new broker from scratch. Reputation costs also keep targeted individuals disciplined. Having defected with the former broker once, makes the voter a defection-prone type, increasing even more the cost of building those relationships. 
+Potential beneficiaries have two possible strategies. First, they could defect and vote for another candidate, who might or might not bring them benefits. Alternatively, potential beneficiaries could continue voting for the known broker, and wait. Individual income also plays a role. Given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the broker's party) than defecting. In a slightly different research project, \citet[p. 20]{Magaloni:2008bq} explains that under non-democratic contexts, voters have incentives to keep voting for the incumbent government, \emph{even when they oppose it}. The Mexican PRI lasted so long not because of electoral fraud but because voters supported what it represented the ``known devil'' for them. As she explains, hegemonic parties survive when they are able to sustain long-term economic growth and a constant supply of clientelistic transfers. As of vote-buying, \citet[p. 14]{Zarazaga2014} explains that ``[b]rokers and voters' interests are aligned. The flow of resources to voters is dependent on their brokers' electoral success. If the broker loses the election and is replaced, clients do not know what the new broker will offer them. A new broker may access fewer resources or choose to distribute them to other people; brokers often remind voters about this''. We argue that the transaction cost of switching brokers or defecting is very high since it also involves building confidence relationships with the new broker from scratch. Reputation costs also keep clients disciplined. Having defected with the former broker once, makes the voter a defection-prone type, increasing even more the cost of building those relationships with the new broker. For these reasons, we claim that brokers exploit these self-enforced compliance dynamics. 
 
-% quadrant 3 and 2
-When political competition is high, brokers will be in need of securing more electoral support at the lowest price possible. The cheapest source of electoral support is in the intersection of low income individuals masked in areas where the density of the poor is high. Under these circumstances brokers cannot incur in the extremely high costs of engaging in individual targeting. Since individuals are masked within their environments, in these cases identifiability is difficult to achieve. Rather than that, brokers have economic incentives to target these groups of low-income individuals but rely on the spillovers these type of groups provide. For the reasons explained above, electoral benefits get multiplied when brokers invest in group targeting. What is invested in \emph{actual} beneficiaries also makes \emph{potential} beneficiaries to vote for the broker's party. Quadrant 3 in \autoref{tab:strategy:set} depicts such settings. In low-information environments, brokers take advantage of self-enforced compliance mechanisms. Turning into quadrant 2, non-poor individuals nested in non-poor groups are also difficult to identify. Given that non-poor individuals give less value to the same dollar invested in clientelism than low-income individuals, the former are more expensive. Hence, broker will target them only when politicians have less electoral pressures (i.e. low political competition). More expensive individuals to target also supposes a situation where politicians have more room to move, being able to mobilize more resources to buy votes from non-poor individuals. This situation is sustained due to the very low levels of political opposition itself, low accountability and lack of effective checks and balances. We expect that inn these cases clientelism has the lowest levels.
+% quadrant 3 and 2, but giving emphasis to non poor (quadrant 3).
+Individual income and the economic development of the area coincide in quadrant 2 (poor individuals nested in poor areas) and in quadrant 3 (non-poor individuals nested in non-poor areas). The cheapest source of electoral support is in the former. As such, it should show higher levels of clientelism. What is invested in \emph{actual} beneficiaries also mobilizes \emph{potential} beneficiaries. However, vote-buying is also targeted to non-poor individuals as in quadrant 3 (see also \autoref{fig:wealth:client:plot}). Though vote-buying has decreasing returns to scale in non-poor individuals, low levels of political contestation give local politicians more room to move, allowing them to divert local resources into more expensive ways of targeting. This situation is sustained due to the very low levels of political opposition itself. In other words, secured seats should be associated to expensive clientelism. One way this is possible is via embezzlement, which should be associated to lack of political competition and low levels of checks and balances. 
 
 <<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
 cat("\014")
@@ -491,12 +525,14 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
 # m.out <- matchit(large ~ wealth + urban + munopp + polinv,
-m.out <- matchit(large ~ wealth + munopp + polinv,
-                 discard = "hull.both", 
-                 method = "cem",
+m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+                 discard = "both", 
+                 method = "full",
                  data = dat,
                  verbose = F
 )
+
+
 
 
 #print. <- print(m.out)
@@ -518,7 +554,7 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 
 # Generating the Propensity Score 
 library(CBPS, quietly = T) # install.packages("CBPS")
-fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv,
+fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv + pop.10,
             #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
             data = dat, 
             iterations = 25000, 
@@ -583,6 +619,7 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 @
 
+{\color{red}CMBIAR CEM A FULL MAtching}
 
 % Density of the Poor
 To measure the size of the poor, we follow a similar strategy presented in \citet{Weitz-shapiro}, measuring the degree of poverty at the municipal level. Using information from the 2010 Brazilian census\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.}, a variable that measures the percentage of individuals who live with less than half of the minimum wage was constructed. Given that we observe the municipality of residence for each individual in the survey, we were able to merge that percentage with the LAPOP dataset. Although this value was originally a semi-continuous variable, it had to be dichotomized at the median (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%) to be able to construct the matched sample. There have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses (\citet{Ratkovic2012}, \citet{Hirano2004}), algorithms capable to match on continuous treatment variables are not common. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). However, we still provide alternative specifications using the original continuous variable as a robustness, weighting on the generalized propensity score (see \citet{Imbens2004}, \citet{Guardabascio2014} and \citet[]{Imai2014b})\footnote{To generate the weighting vector, we used the \texttt{CBPS R} package (\citet{Fong:2014aa}).}. The advantage of this strategy is that it does not require dichotomization. The same covariates used in the \texttt{CEM} matching procedure were used to create the \texttt{GPS} weighting vector.
@@ -613,7 +650,7 @@ ggplot() +
 
 
 % Matching
-To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. Similarly, the matching strategy sought to break any systematic relationship between the size of the poor and these variables by balancing the distribution of these variables. Matching does so by deleting observations for which matches cannot be found\footnote{The final procedure matched \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,1])} individuals living in the low-density condition with \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,2])} individuals living in the high-density condition.}. A good overall-balance\footnote{See \autoref{fig:balance:distance:plot} in the Appendix.} and covariate balance were obtained (see \autoref{fig:balance:plot}). From a statistical standpoint, preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts from making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{Iacus2011})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}) via the \texttt{MatchIt R} package  (\citet{King2011}).}. \autoref{sumtab:matched} and \autoref{sumtab:raw} provide summary statistics for both the matched and raw datasets\footnote{Tables generated using the \texttt{stargazer R} package (\citet[]{Hlavac:2015qf}).}. The preprocessed dataset have \Sexpr{library(plyr);nrow(count(m.data$municipality))} municipalities while the raw dataset (GPS) have \Sexpr{library(plyr);nrow(count(dat$municipality))}. \autoref{fig:municipality:income:large:plot:matched} shows the municipalities and which ones are considered ``high'' or ``low'' in terms of the density of the poor. The figure also shows that there exists  considerable variance regarding income in both high and low poverty density conditions\footnote{\autoref{fig:municipality:sample:plot} shows the frequency of individuals by municipality in both raw and matches datasets.}.
+To break further systematic relationships between group poverty and other important confounding factors, the size of the community proxied by an urban/rural variable was also included in the matching procedure along with municipal opposition and individual involvement in civic associations. Similarly, the matching strategy sought to break any systematic relationship between the size of the poor and these variables by balancing the distribution of these variables. Matching does so by deleting observations for which matches cannot be found\footnote{The final procedure matched \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,1])} individuals living in the low-density condition with \Sexpr{as.numeric(as.data.frame(sum.match[2])[2,2])} individuals living in the high-density condition.}. A good covariate balance were obtained (see \autoref{fig:balance:plot}). From a statistical standpoint, preprocessed datasets are less model-dependent (\citet{Ho2006}) and prevent analysts from making extreme counterfactuals (\citet{King2005a}). The matching routine used was the ``coarsen exact matching'' \texttt{CEM} which is a class of exact matching (\citet{Iacus2011})\footnote{``The basic idea of CEM is to coarsen each variable by recoding so that substantively indistinguishable values are grouped and assigned the same numerical value (groups may be the same size or different sizes depending on the substance of the problem). Then, the ``exact matching'' algorithm is applied to the coarsened data to determine the matches and to prune unmatched units. Finally, the coarsened data are discarded and the original (uncoarsened) values of the matched data are retained'' (\citet[p. 8]{Iacus2011}). ``Automated coarsening'' was used (\citet[p. 7]{Iacus2009a}) via the \texttt{MatchIt R} package  (\citet{King2011}).}. \autoref{sumtab:matched} and \autoref{sumtab:raw} provide summary statistics for both the matched and raw datasets\footnote{Tables generated using the \texttt{stargazer R} package (\citet[]{Hlavac:2015qf}).}. The preprocessed dataset have \Sexpr{library(plyr);nrow(count(m.data$municipality))} municipalities while the raw dataset (GPS) have \Sexpr{library(plyr);nrow(count(dat$municipality))}. \autoref{fig:municipality:income:large:plot:matched} shows the municipalities and which ones are considered ``high'' or ``low'' in terms of the density of the poor. The figure also shows that there exists  considerable variance regarding income in both high and low poverty density conditions\footnote{\autoref{fig:municipality:sample:plot} shows the frequency of individuals by municipality in both raw and matches datasets.}.
 
 <<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance', fig.align='center', fig.width=9, fig.height=4,dpi=10000,cache = TRUE>>=
 ##
@@ -630,6 +667,14 @@ balance.1.m=ggplot() +
   xlab("Wealth Index") + 
   theme_bw() +
   scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+balance.2.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$pop.10), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Population") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.3.m=ggplot() + 
@@ -658,6 +703,14 @@ balance.1.r=ggplot() +
   ylim(limits = c(0, 0.085)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
+balance.2.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$pop.10), colour = factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Population") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
 balance.3.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$munopp), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
   ylab("") + 
@@ -677,15 +730,17 @@ balance.4.r=ggplot() +
 
 plots <- plot_grid(
   balance.1.m + theme(legend.position="none"), 
+  balance.2.m + theme(legend.position="none"), 
   balance.3.m + theme(legend.position="none"), 
   balance.4.m + theme(legend.position="none"), 
   balance.1.r + theme(legend.position="none"), 
+  balance.2.r + theme(legend.position="none"), 
   balance.3.r + theme(legend.position="none"), 
   balance.4.r + theme(legend.position="none"),
   align = 'vh', 
   hjust = -1, 
   nrow = 2,
-  ncol = 3
+  ncol = 4
 )
 
 grobs <- ggplotGrob(balance.4.r + theme(legend.position="bottom"))$grobs
@@ -693,15 +748,12 @@ legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
 plot_grid(plots, legend, ncol = 1, rel_heights = c(1, .2))
 @
 
-
 % Political Competition // Income
 To measure political competition, the paper follows \citet[]{Weitz-shapiro}. Using official electoral data for the 2008 municipal elections\footnote{\href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{Tribunal Superior Eleitoral}.}, a variable that measures the percentage of seats that are not controlled by the mayor's party in a given municipal council was constructed. Though the survey provides a question for income, people who are somewhat better off than their neighbors but live in poor areas may not ``feel'' poor. If this is the case, this could confound the results\footnote{I thank the reviewers of LAPS for this suggestion.}. Also, when answering the questioner, individuals might not want to reveal their true incomes (either because it is too low or too high). Following the advice of \citet{Cordova2008,Cordova2009,Cordova2010}, a relative wealth index (RWI) was constructed. Using principal component analyses, this index measures wealth based on actual assets weighted by how common those assets are. Different indexes were constructed for urban and rural contexts.
 
 
 \subsection*{Outcome Variable}
 
-
-% our dependent variable is the proportion of fixations, during the ambiguous region, to the animal (the potential recipient, e.g., the horse). This captures the degree to which participants expect the recipient rather than the theme. [...] Following Barr (2008), proportion of fixations to the animal and the object were first empirical logit-transformed [...]
 
 Clientelism was measured using the question that asks if \emph{a candidate or someone from a political party offered [the respondent] something, like a favor, food, or any other benefit or thing in return for [her/his] vote or support?} Subjects could answer whether this had happened \emph{often}, \emph{sometimes} or \emph{never}. \citet[]{Carreras2013a} and \citet[]{Holland2015} use the same dataset and outcome variable. As they explain, the question did not ask if respondents \emph{took} the offer, hence it should not be an important source of bias. In order to have a dichotomous response variable, the alternatives \emph{often} (\Sexpr{as.numeric(table(m.data$clientelism)["Often"])}) and \emph{sometimes} (\Sexpr{as.numeric(table(m.data$clientelism)["Sometimes"])}) were collapsed into one, leaving \emph{never} (\Sexpr{as.numeric(table(m.data$clientelism)["Never"])}) unchanged.
 
@@ -713,7 +765,7 @@ Clientelism was measured using the question that asks if \emph{a candidate or so
 %Following the advice of \citet{Ho2006}, the same set of covariates in the matching procedure were used in the parametric stage. I DONT SAY THIS SINCE IN THE MATCHING PART I INCLUDED urban and in the parametric MUN POP.
 
 Perception of Corruption was included so as to keep constant the effect of respondents who declared clientelistic activity when in reality they were referring to corruption scandals\footnote{I thank Cesar Zucco for this suggestion.}. \citet[]{Rueda2014a,Holland2015,Carreras2013} argue that brokers target civic associations. Following \citet[p. 28]{Holland2015}, who use the same dataset/year, an additive index to measure civic participation (\emph{Political Involvement}) was created\footnote{This variable was constructed adding up the frequency of attendance at religious organizations, community improvement committees and political party meetings (variables \texttt{cp6}, \texttt{cp8} and \texttt{cp13}, respectively).}. Group size has also been claimed to be important (\citet[]{Stokes2005,Kitschelt2007}). Smaller communities are easier to monitor (\citet[]{Rueda2014a}). Using census data, a variable to measure population size at the municipal level was included. Building on some of the distributive politics literature, following particularly \citet{Stokes2005}, \citet{Dixit1996} and \citet{Nichter2008}, a variable that captures party identification (\emph{Political Id.}) was included. The idea was to control for core/swinger targeting. Higher levels of democratic support should be negatively associated with clientelism (\citet{Carlin2015}). Using the same dataset, a variable measuring democratic support was included. \citet{GonzalezOcantos2014} finds that schooling plays a negative role on clientelism, hence we control for educational levels too.
-
+{\color{red}CHECK}
 
 \subsection*{Estimation Method}
 
@@ -728,7 +780,7 @@ Though GEE methods have several advantages due to its flexibility, as in any ran
 Since it is ``impossible to evaluate conditional hypotheses using only the information provided in traditional results tables'' (\citet[p. 76]{Brambor2005}) we rather focus on the substantive results using simulation methods. However, we still present the raw results in \autoref{tab:1} in the Appendix\footnote{Table generated via the \texttt{texreg R} package.}. The first column shows the estimates for the matched dataset while the second column shows the results for the GPS wighted model. Given that virtually all coefficients have the same size and sign, for simplicity, all simulations were performed sampling from the models with the matched dataset. \autoref{fig:plot:four:quadrants} shows evidence for the theoretical model presented in \autoref{tab:strategy:set}.
 
 
-<<plot:four:quadrants, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Simulated Expected Values of Clientelism', fig.align='center', fig.width=13, fig.height=6,dpi=100000,cache = TRUE>>=
+<<plot:four:quadrants, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Simulated Expected Values of Clientelism', fig.align='center', fig.width=4, fig.height=3,dpi=100000,cache = TRUE>>=
 ##########################
 ##### Estimate the models
 ##########################
@@ -742,11 +794,9 @@ dat$clien1dummy <- as.numeric(dat$clien1dummy)
 library(car)
 dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
 
-# formulas
-model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + polinv + ing4 + vb3 + exc7 + ed)
-model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + polinv + ing4 + vb3 + exc7 + ed + weights)
-
-
+# formulas 
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
 
 library(Zelig)
 model.m.s = zelig(model.m, 
@@ -762,35 +812,74 @@ model.m.s = zelig(model.m,
 ##########################
 ##### BY Competition and Income
 ##########################
-
 set.seed(602); options(scipen=999)
 
 # simulation DISTRIBUTION PLOTS
 library(Zelig)
-high.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000), income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-high.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
-low.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
+high.poor.lowcomp = data.frame(competition = rep("Low Competition", 250), income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.poor.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
+low.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+
+
+# data frame
+library(Rmisc) # install.packages("Rmisc")
+plot.d = data.frame(
+  mean = c(
+    as.numeric(CI(high.poor.lowcomp$x)[2]), 
+    as.numeric(CI(high.poor.highcomp$x)[2]), 
+    as.numeric(CI(high.rich.lowcomp$x)[2]), 
+    as.numeric(CI(high.rich.highcomp$x)[2]), 
+    as.numeric(CI(low.poor.lowcomp$x)[2]), 
+    as.numeric(CI(low.poor.highcomp$x)[2]), 
+    as.numeric(CI(low.rich.lowcomp$x)[2]), 
+    as.numeric(CI(low.rich.highcomp$x)[2])
+  ),
+  upper = c(
+    as.numeric(CI(high.poor.lowcomp$x)[1]), 
+    as.numeric(CI(high.poor.highcomp$x)[1]),
+    as.numeric(CI(high.rich.lowcomp$x)[1]),
+    as.numeric(CI(high.rich.highcomp$x)[1]),
+    as.numeric(CI(low.poor.lowcomp$x)[1]),
+    as.numeric(CI(low.poor.highcomp$x)[1]),
+    as.numeric(CI(low.rich.lowcomp$x)[1]),
+    as.numeric(CI(low.rich.highcomp$x)[1])
+  ),
+  lower = c(
+    as.numeric(CI(high.poor.lowcomp$x)[3]), 
+    as.numeric(CI(high.poor.highcomp$x)[3]),
+    as.numeric(CI(high.rich.lowcomp$x)[3]),
+    as.numeric(CI(high.rich.highcomp$x)[3]),
+    as.numeric(CI(low.poor.lowcomp$x)[3]),
+    as.numeric(CI(low.poor.highcomp$x)[3]),
+    as.numeric(CI(low.rich.lowcomp$x)[3]),
+    as.numeric(CI(low.rich.highcomp$x)[3])
+  ),
+  Density = c(rep("High", 4), rep("Low", 4)),
+  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 2),
+  Competition = rep(c("Low Competition","High Competition"),4)
+)
 
 # plot
 library(ggplot2)
-ggplot() + 
-  geom_density(aes(x=x, colour="High"), data= high.poor.lowcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.poor.highcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.rich.lowcomp) + 
-  geom_density(aes(x=x, colour="High"), data= high.rich.highcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.poor.lowcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.poor.highcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.rich.lowcomp) + 
-  geom_density(aes(x=x, colour="Low"), data= low.rich.highcomp) + 
-  ylab("Estimated Density") + xlab("Expected Value of Clientelism") +
-  theme_bw() +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor") +
-  facet_grid(competition~income, scales ="free")
+ggplot(plot.d, aes(Density, mean,
+                   ymin = upper,
+                   ymax=lower,
+                   colour = Density)) + geom_errorbar(width=0.2) + 
+  facet_grid(Competition~Wealth, scales ="free") +
+  ylab("Probability of being Targeted") + xlab("Density of the Poor") +
+  theme_bw() + theme(legend.position="none") +
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8))  + 
+  scale_colour_discrete(name = "Density of the Poor")
 @
 
 
@@ -799,21 +888,34 @@ ggplot() +
 % explain graph
 Analogously to \autoref{tab:strategy:set}, \autoref{fig:plot:four:quadrants} is divided in two panels, for when political competition is high/low and for when individuals are poor/non-poor\footnote{The left panel simulates values for the lower quartile (25\%) while the right panel simulates values for the upper quartile (75\%) of the continuous \texttt{wealth index} variable. The upper panel simulates values for the minimum value of the continuous variable political competition (\Sexpr{min(m.data$munopp)}\%), while the lower panel simulates values for the maximum value (\Sexpr{max(m.data$munopp)}\%) of the same variable.}. For each of these four combinations, we plotted two simulated distributions of the expected values of clientelism. One for when individuals are nested in contexts of high poverty density and one for low poverty nesting.  
 
+% HERE
 
 % present the results: intro
+
+%% political competition
+	Political competition shifts the needs for more electoral support upwards, increasing the frequency of clientelism and also by changing the strategy. This is evident if we compare quadrants 
+	
+	When political competition is low, brokers will have incentives to target identifiable low-income individuals nested in low-poor density contexts (quadrant 4 in \autoref{tab:strategy:set}), but when political competition is high, brokers will have incentives to target identifiable non-poor individuals nested in high-poor density contexts (quadrant 1 in \autoref{tab:strategy:set}). 
+
+
+As argued before, individual targeting is expensive. Hence, brokers resort to this strategy only when it is necessary. 
+
+
+When political contestation is low there is no need to invest too much on clientelism. Given that low-income individuals have higher discount rates and hence they are cheaper to buy, they are ideal targets in this context: low-income individuals with higher discount rates who are highly identifiable. However, when politicians are heavily contested, brokers have no other choice than spend more resources on clientelism to keep the party in office. Besides targeting quadrant 1, they also target identifiable non-poor individuals nested in poor contexts in quadrant 4. Though these clients they are even more expensive to buy, engaging in this strategy is justifiable to stay the office. Brokers want to stay in quadrant 1, but have no choice than going to quadrant 4 when political competition is high. This paper then generalizes the argument in \citet{Weitz-shapiro}. In this particular context, when political competition is low, party machines do not stop being clientelistic, but engage in individual targeting aiming identifiable individuals with larger discount rates (i.e., low-income individuals in quadrant 1).
+
+
+
 The first result is that we find support for \citet{Weitz-shapiro}'s paper, i.e. higher levels of political competition move the probability of receiving clientelism upwards. This probability as expected is conditional on municipal poverty levels. However we also find that wealth reverses the direction in which the density of the poor is associated to clientelism. For example, going from quadrant 4 to quadrant 1 makes poor individuals nested in \emph{non}-poor municipalities (i.e. low poverty density) and exposed to \emph{low} political competition levels \emph{more} likely to be targeted. We also find that clientelism also exists under low-competition levels. 
 
 % present the results: 1
-\autoref{fig:plot:four:quadrants} suggests that brokers engage in \emph{individual} clientelism by targeting poor individuals nested in low-dense municipalities (quadrant 1, with a probability of \Sexpr{round(mean(low.poor.lowcomp$x)*100,0)}\% of being targeted), while they target non-poor individuals in high-poor dense municipalities (quadrant 4, with a probability of \Sexpr{round(mean(high.rich.highcomp$x)*100,0)}\% of being targeted). Clientelism is higher in the latter case because higher electoral pressures incentive motivated brokers to mobilize more electoral support. Inside quadrant 1, the simulated distribution for individuals nested in low-poor density municipalities is consistently larger than the individuals in the high-poor condition. 
+\autoref{fig:plot:four:quadrants} suggests that brokers engage in \emph{individual} targeting  when individuals are poor and nested in low-dense municipalities (quadrant 1, with a probability of \Sexpr{round(mean(low.poor.lowcomp$x)*100,0)}\% of being targeted). Brokers also engage in individual targeting when individuals are not poor but nested in high-poor dense municipalities (quadrant 4, with a probability of \Sexpr{round(mean(high.rich.highcomp$x)*100,0)}\% of being targeted). Clientelism is higher in the latter case because higher electoral pressures incentivize motivated brokers to mobilize more electoral support. Inside quadrant 1, the simulated distributions for individuals nested in low-poor density municipalities is consistently larger than the distributions of individuals exposed to the high-poor condition. According to the Wilcoxon rank sum independence test for non-normal distributions, individuals in the high poverty context (\Sexpr{round(mean(high.poor.lowcomp$x)*100,0)}\% of being targeted) have greater probabilities of being targeted when compared to individuals in the low density context. 
 
 
-% HERE
+ \emph{Group} targeting is more efficient in quadrants 2 and 3. Particularly in the latter, brokers take advantage of the spillover effects of clientelism. In these settings, low-income individuals nested in poor municipalities provide enough economies of scale making brokers to abandon individual targeting. In these contexts, every unit invested in clientelism is multiplied when both actual \emph{and} potential voters are electorally mobilized. Given the faster discount rates of low-income individuals and the necessity of politicians to gather more electoral support, we expected clientelism to be the highest. Though we find these individuals have the highest probability of being targeted (\Sexpr{round(mean(high.poor.highcomp$x)*100,0)}\%), it is very close to non-poor individuals in the high-poor density condition in quadrant 4. However, a Wilcoxon rank sum independence test suggests that this probability is not greater than the probability of individuals in quadrant 3. 
 
 
-According to the Wilcoxon rank sum independence test for non-normal distributions, individuals in the high poverty context (\Sexpr{round(mean(high.poor.lowcomp$x)*100,0)}\% of being targeted) have systematically less probabilities of being targeted compared  to individuals in the low density context. \emph{Group} targeting is more efficient in quadrants 2 and 3. Particularly in the latter, brokers take advantage of the spillover effects of clientelism. In these settings, low-income individuals nested in poor municipalities provide enough economies of scale making brokers to abandon individual targeting. Every unit invested in clientelism is then multiplied when both actual \emph{and} potential voters are electorally mobilized. Given the faster discount rates of low-income individuals and the necessity of politicians to gather more electoral support, we expected clientelism to be the highest. Though we find a high probability of being targeted (\Sexpr{round(mean(high.poor.highcomp$x)*100,0)}\%), it is very close to the low density individuals in quadrant 4. However, a Wilcoxon rank sum independence test suggests 
 
-
-Finally, we were expecting non-poor individuals nested in low-poor dense municipalities under low political competition levels (quadrant 2) to have the lowest probability of being targeted. We find that these individuals have a probability of being targeted of \Sexpr{round(mean(low.rich.lowcomp$x)*100, 0)}\%. However, this distribution is skewed to the right, shifting the mean upwards, and also with very heavy tails. Quadrant 2 hence suggests a diffuse pattern, which is the null finding we were expecting.
+Finally, we were expecting non-poor individuals nested in low-poor dense municipalities exposed to lower levels of political competition (quadrant 2) to have the lowest probability of being targeted. We find that these individuals have a probability of \Sexpr{round(mean(low.rich.lowcomp$x)*100, 0)}\% of being targeted. However, this distribution is skewed to the right, and it has very heavy tails, causing the mean to be upward shifted. Quadrant 2 suggests a diffuse pattern, which is the null finding we were expecting.
 
 
 \subsection*{Population Size and Organization Buying}
@@ -829,7 +931,6 @@ So far we have introduced the idea that brokers shift targeting strategies, dire
 ##########################
 #  LARGE * POLINV: 
 ##########################
-
 library(Zelig)
 set.seed(602); options(scipen=999)
 
@@ -871,31 +972,31 @@ library(Rmisc) # install.packages("Rmisc")
 ### df's
 ### low
 df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`)),
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`), mean(model.m.s.low$`10`)),
   Type = rep("Low Density", ncol(model.m.s.low)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1])),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
   Lower = c(
-    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]))
+    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]))
 )
 
 ### high
 df.high = data.frame(
-  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`)),
+  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`), mean(model.m.s.high$`9`), mean(model.m.s.high$`10`)),
   Type = rep("High Density", ncol(model.m.s.high)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1])),
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1])),
   Lower = c(
-    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]))
+    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]))
 )
 
 ### polinv
 df.polinv.alone = data.frame(
-  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`)),
+  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`), mean(model.m.s.polinv$`9`), mean(model.m.s.polinv$`10`)),
   Type = rep("Political Involvement", ncol(model.m.s.polinv)),
   Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]))
+  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1]), as.numeric(CI(model.m.s.polinv$`9`)[1]), as.numeric(CI(model.m.s.polinv$`10`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]), as.numeric(CI(model.m.s.polinv$`9`)[3]), as.numeric(CI(model.m.s.polinv$`10`)[3]))
 )
 
 ### combined two df's
@@ -991,9 +1092,7 @@ p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) +
 
 library(cowplot) # install.packages("cowplot")
 plot_grid(p1,p2,  nrow = 1, labels = "auto")
-
 @
-
 
 
 \subsection*{Conclusion}
@@ -1315,30 +1414,6 @@ density.wealth.r= ggplot() + geom_point(
 library(cowplot) # install.packages("cowplot")
 plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
 @
-
-<<balance:distance:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Balance between High and Low Density conditions, Pre and Post Matching ', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = TRUE>>=
-# Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
-Distance = m.out$distance
-Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
-Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
-
-
-
-library(ggplot2)
-#distance.p=
-ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=.1) +
-  ylab("Estimated Density") + 
-  xlab("Distance") + 
-  theme_bw() +
-  theme(
-    axis.title.y = element_text(size = 10), 
-    axis.title.x = element_text(size = 10),
-    legend.text = element_text(size = 10),
-    legend.title = element_text(size = 10)) + 
-  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
-@
-
-
 
 \newpage
 
