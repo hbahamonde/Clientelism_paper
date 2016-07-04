@@ -435,14 +435,14 @@ set.seed(602); options(scipen=999)
 
 # simulation DISTRIBUTION PLOTS
 library(Zelig)
-high.poor.lowcomp = data.frame(competition = rep("Low Competition", 10000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.poor.highcomp = data.frame(competition = rep("High Competition", 10000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.lowcomp = data.frame(competition = rep("Low Competition", 10000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-high.rich.highcomp = data.frame(competition = rep("High Competition", 10000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.lowcomp = data.frame(competition = rep("Low Competition", 10000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.poor.highcomp = data.frame(competition = rep("High Competition", 10000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.lowcomp = data.frame(competition = rep("Low Competition", 10000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
-low.rich.highcomp = data.frame(competition = rep("High Competition", 10000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000), income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
+high.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
+high.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
+high.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
+low.poor.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
+low.poor.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
+low.rich.lowcomp = data.frame(competition = rep("Low Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=100000)$getqi(qi="ev"))
+low.rich.highcomp = data.frame(competition = rep("High Competition", 100000),income = rep("Non-Poor Individuals", 100000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=100000)$getqi(qi="ev"))
 
 # plot
 library(ggplot2)
@@ -470,7 +470,7 @@ mean(high.rich.highcomp$x)
 ## quadrant 3
 mean(high.poor.highcomp$x)
 ## quadrant 2
-mean(low.rich.highcomp$x)
+mean(low.rich.lowcomp$x)
 
 
 
@@ -495,7 +495,11 @@ wilcox.test(low.poor.lowcomp$x,high.poor.lowcomp$x, paired = TRUE, alternative =
 t.test(low.poor.lowcomp$x, high.rich.highcomp$x, alt="greater",conf.level = 0.95) # significative pvalue = significantly different
 
 ### quadrants 3-4
-t.test(high.poor.highcomp$x, high.rich.highcomp$x,conf.level = 0.99, paired = T) # significative pvalue = significantly different
+wilcox.test(high.poor.highcomp$x, high.rich.highcomp$x,correct = F, alternative = "greater") # significative pvalue = significantly different
+
+
+### quadrant 2
+wilcox.test(low.rich.lowcomp$x,high.rich.lowcomp$x, paired = TRUE, alternative = "greater")
 
 
 ### quadrant 4
@@ -1397,18 +1401,7 @@ balance.1.m=ggplot() +
   xlab("Wealth Index") + 
   theme_bw() +
   scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
-  ylim(limits = c(0, 0.085)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
-
-balance.2.m=ggplot() + 
-  geom_density(aes(x=as.numeric(m.data$urban),colour =factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
-  ylab("") + 
-  xlab("Urban") + 
-  theme_bw() + 
-  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
-  ylim(limits = c(0, 15)) +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
-
 
 balance.3.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$munopp), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
@@ -1416,7 +1409,6 @@ balance.3.m=ggplot() +
   xlab("Municipal Opposition") + 
   theme_bw() +
   scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
-  ylim(limits = c(0, .12)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.4.m=ggplot() + 
@@ -1425,7 +1417,6 @@ balance.4.m=ggplot() +
   xlab("Political Involvement") + 
   theme_bw() + 
   scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
-  ylim(limits = c(0, .5)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 # RAW
@@ -1435,17 +1426,7 @@ balance.1.r=ggplot() +
   ylab("Raw Set") + 
   xlab("Wealth Index") + 
   theme_bw() +
-  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
   ylim(limits = c(0, 0.085)) +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
-
-balance.2.r=ggplot() + 
-  geom_density(aes(x=as.numeric(dat$urban), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
-  ylab("") + 
-  xlab("Urban") + 
-  theme_bw() + 
-  scale_x_discrete(expand=c(0.1, 0.5),limits=c("Rural","Urban")) +
-  ylim(limits = c(0, 15)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.3.r=ggplot() + 
@@ -1454,7 +1435,6 @@ balance.3.r=ggplot() +
   xlab("Municipal Opposition") + 
   theme_bw() +
   scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
-  ylim(limits = c(0, .12)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.4.r=ggplot() + 
@@ -1463,23 +1443,20 @@ balance.4.r=ggplot() +
   xlab("Political Involvement") + 
   theme_bw() +
   scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
-  ylim(limits = c(0, .5)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 
 plots <- plot_grid(
   balance.1.m + theme(legend.position="none"), 
-  balance.2.m + theme(legend.position="none"), 
   balance.3.m + theme(legend.position="none"), 
   balance.4.m + theme(legend.position="none"), 
   balance.1.r + theme(legend.position="none"), 
-  balance.2.r + theme(legend.position="none"), 
   balance.3.r + theme(legend.position="none"), 
   balance.4.r + theme(legend.position="none"),
   align = 'vh', 
   hjust = -1, 
   nrow = 2,
-  ncol = 4
+  ncol = 3
 )
 
 grobs <- ggplotGrob(balance.4.r + theme(legend.position="bottom"))$grobs
