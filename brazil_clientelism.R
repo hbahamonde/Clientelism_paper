@@ -429,60 +429,104 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 ##########################################################################
 
 
+
 ##########################
 ##### BY Competition and Income
 ##########################
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
-# simulation DISTRIBUTION PLOTS
+N = 500
+
+# simulation matched data
 library(Zelig)
-high.poor.lowcomp = data.frame(competition = rep("Low Competition", 250), income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
-high.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
-high.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
-high.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
-low.poor.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
-low.poor.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
-low.rich.lowcomp = data.frame(competition = rep("Low Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=250)$getqi(qi="ev"))
-low.rich.highcomp = data.frame(competition = rep("High Competition", 250),income = rep("Non-Poor Individuals", 250), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=250)$getqi(qi="ev"))
+high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+
+
+
+# simulation raw/GPS data
+library(Zelig)
+high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+high.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+low.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+low.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+low.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+
+
+
 
 
 # data frame
 library(Rmisc) # install.packages("Rmisc")
 plot.d = data.frame(
   mean = c(
-    as.numeric(CI(high.poor.lowcomp$x)[2]), 
-    as.numeric(CI(high.poor.highcomp$x)[2]), 
-    as.numeric(CI(high.rich.lowcomp$x)[2]), 
-    as.numeric(CI(high.rich.highcomp$x)[2]), 
-    as.numeric(CI(low.poor.lowcomp$x)[2]), 
-    as.numeric(CI(low.poor.highcomp$x)[2]), 
-    as.numeric(CI(low.rich.lowcomp$x)[2]), 
-    as.numeric(CI(low.rich.highcomp$x)[2])
+    as.numeric(CI(high.poor.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[2]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[2]) # matched
   ),
   upper = c(
-    as.numeric(CI(high.poor.lowcomp$x)[1]), 
-    as.numeric(CI(high.poor.highcomp$x)[1]),
-    as.numeric(CI(high.rich.lowcomp$x)[1]),
-    as.numeric(CI(high.rich.highcomp$x)[1]),
-    as.numeric(CI(low.poor.lowcomp$x)[1]),
-    as.numeric(CI(low.poor.highcomp$x)[1]),
-    as.numeric(CI(low.rich.lowcomp$x)[1]),
-    as.numeric(CI(low.rich.highcomp$x)[1])
+    as.numeric(CI(high.poor.lowcomp.gps$x)[1]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[1]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[1]), # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[1]), # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[1]), # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[1]) # matched
   ),
   lower = c(
-    as.numeric(CI(high.poor.lowcomp$x)[3]), 
-    as.numeric(CI(high.poor.highcomp$x)[3]),
-    as.numeric(CI(high.rich.lowcomp$x)[3]),
-    as.numeric(CI(high.rich.highcomp$x)[3]),
-    as.numeric(CI(low.poor.lowcomp$x)[3]),
-    as.numeric(CI(low.poor.highcomp$x)[3]),
-    as.numeric(CI(low.rich.lowcomp$x)[3]),
-    as.numeric(CI(low.rich.highcomp$x)[3])
+    as.numeric(CI(high.poor.lowcomp.gps$x)[3]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[3]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[3]), # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[3]), # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[3]), # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[3]) # matched
   ),
-  Density = c(rep("High", 4), rep("Low", 4)),
-  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 2),
-  Competition = rep(c("Low Competition","High Competition"),4)
+  Density = c(rep("High", 4), rep("Low", 4), rep("High", 4), rep("Low", 4)),
+  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 4),
+  Competition = rep(c("Low Competition","High Competition"),8),
+  Sample = c(rep("Weighted (GPS)", 8), rep("Matched", 8))
 )
 
 # plot
@@ -490,17 +534,18 @@ library(ggplot2)
 ggplot(plot.d, aes(Density, mean,
                    ymin = upper,
                    ymax=lower,
-                   colour = Density)) + geom_errorbar(width=0.2) + 
+                   colour = Sample)) + geom_errorbar(width=0.2) + 
   facet_grid(Competition~Wealth, scales ="free") +
   ylab("Probability of being Targeted") + xlab("Density of the Poor") +
-  theme_bw() + theme(legend.position="none") +
+  theme_bw() + #theme(legend.position="none") +
   theme(strip.text.x = element_text(size = 8), 
         strip.text.y = element_text(size = 8), 
         axis.title=element_text(size=10), 
-        legend.text = element_text(size = 10), 
+        legend.text = element_text(size = 8), 
         legend.title = element_text(size = 10),
         axis.text.y = element_text(size = 8))  + 
-  scale_colour_discrete(name = "Density of the Poor")
+  scale_colour_discrete(name = "Sample")
+
 
 ############################### OTHERS
 # means highest values
