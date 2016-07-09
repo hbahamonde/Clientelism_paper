@@ -20,6 +20,7 @@ dat$polinv3 <- as.numeric(dat$polinv3)
 dat$polinv4 <- as.numeric(dat$polinv4)
 dat$polinv5 <- as.numeric(dat$polinv5)
 dat$ing4 <- as.numeric(dat$ing4)
+dat$munopp = round(dat$munopp, 0)
 
 
 # constructing relative wealth index (Cordova 2009)
@@ -35,6 +36,8 @@ dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
 dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
 dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
 
+
+
 ## splitting df in two
 dat.ur <- subset(dat, dat$urban == "Ur")
 dat.ru <- subset(dat, dat$urban == "Ru")
@@ -46,31 +49,42 @@ wealth.dat.ur = data.frame(dat.ur$wealth1,dat.ur$wealth2,dat.ur$wealth3, dat.ur$
 wealth.dat.ru = data.frame(dat.ru$wealth1,dat.ru$wealth2,dat.ru$wealth3, dat.ru$wealth4, dat.ru$wealth5, dat.ru$wealth6, dat.ru$wealth7, dat.ru$wealth8, dat.ru$wealth9, dat.ru$wealth10)
 
 
-dat.ur$wealth = 
-  (princomp(wealth.dat.ur, scores = T)$scores[,1] * (dat.ur$wealth1-mean(dat.ur$wealth1) / sd(dat.ur$wealth1))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,2] * (dat.ur$wealth1-mean(dat.ur$wealth2) / sd(dat.ur$wealth2))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,3] * (dat.ur$wealth1-mean(dat.ur$wealth3) / sd(dat.ur$wealth3))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,4] * (dat.ur$wealth1-mean(dat.ur$wealth4) / sd(dat.ur$wealth4))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,5] * (dat.ur$wealth1-mean(dat.ur$wealth5) / sd(dat.ur$wealth5))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,6] * (dat.ur$wealth1-mean(dat.ur$wealth6) / sd(dat.ur$wealth6))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,7] * (dat.ur$wealth1-mean(dat.ur$wealth7) / sd(dat.ur$wealth7))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,8] * (dat.ur$wealth1-mean(dat.ur$wealth8) / sd(dat.ur$wealth8))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,9] * (dat.ur$wealth1-mean(dat.ur$wealth9) / sd(dat.ur$wealth9))) + 
-  (princomp(wealth.dat.ur, scores = T)$scores[,10] * (dat.ur$wealth1-mean(dat.ur$wealth10) / sd(dat.ur$wealth10)))        
+# get pca for rural
+wealth_pca_ru <- princomp(wealth.dat.ru, scores = T)
+wealth_loadings_ru <- with(wealth_pca_ru, unclass(loadings))
 
-
-
+# attach scores to dataset
 dat.ru$wealth = 
-  (princomp(wealth.dat.ru, scores = T)$scores[,1] * (dat.ru$wealth1-mean(dat.ru$wealth1) / sd(dat.ru$wealth1))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,2] * (dat.ru$wealth1-mean(dat.ru$wealth2) / sd(dat.ru$wealth2))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,3] * (dat.ru$wealth1-mean(dat.ru$wealth3) / sd(dat.ru$wealth3))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,4] * (dat.ru$wealth1-mean(dat.ru$wealth4) / sd(dat.ru$wealth4))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,5] * (dat.ru$wealth1-mean(dat.ru$wealth5) / sd(dat.ru$wealth5))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,6] * (dat.ru$wealth1-mean(dat.ru$wealth6) / sd(dat.ru$wealth6))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,7] * (dat.ru$wealth1-mean(dat.ru$wealth7) / sd(dat.ru$wealth7))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,8] * (dat.ru$wealth1-mean(dat.ru$wealth8) / sd(dat.ru$wealth8))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,9] * (dat.ru$wealth1-mean(dat.ru$wealth9) / sd(dat.ru$wealth9))) + 
-  (princomp(wealth.dat.ru, scores = T)$scores[,10] * (dat.ru$wealth1-mean(dat.ru$wealth10) / sd(dat.ru$wealth10)))  
+  wealth_loadings_ru[1, 1] * (dat.ru$wealth1-mean(dat.ru$wealth1) / sd(dat.ru$wealth1)) + 
+  wealth_loadings_ru[2, 1] * (dat.ru$wealth2-mean(dat.ru$wealth2) / sd(dat.ru$wealth2)) + 
+  wealth_loadings_ru[3, 1] * (dat.ru$wealth3-mean(dat.ru$wealth3) / sd(dat.ru$wealth3)) + 
+  wealth_loadings_ru[4, 1] * (dat.ru$wealth4-mean(dat.ru$wealth4) / sd(dat.ru$wealth4)) + 
+  wealth_loadings_ru[5, 1] * (dat.ru$wealth5-mean(dat.ru$wealth5) / sd(dat.ru$wealth5)) + 
+  wealth_loadings_ru[6, 1] * (dat.ru$wealth6-mean(dat.ru$wealth6) / sd(dat.ru$wealth6)) + 
+  wealth_loadings_ru[7, 1] * (dat.ru$wealth7-mean(dat.ru$wealth7) / sd(dat.ru$wealth7)) + 
+  wealth_loadings_ru[8, 1] * (dat.ru$wealth8-mean(dat.ru$wealth8) / sd(dat.ru$wealth8)) + 
+  wealth_loadings_ru[9, 1] * (dat.ru$wealth9-mean(dat.ru$wealth9) / sd(dat.ru$wealth9)) + 
+  wealth_loadings_ru[10, 1] * (dat.ru$wealth10-mean(dat.ru$wealth10) / sd(dat.ru$wealth10)) 
+
+
+
+# get pca for urban
+wealth_pca_ur <- princomp(wealth.dat.ur, scores = T)
+wealth_loadings_ur <- with(wealth_pca_ur, unclass(loadings))
+
+# attach scores to dataset
+dat.ur$wealth = 
+  wealth_loadings_ur[1, 1] * (dat.ur$wealth1-mean(dat.ur$wealth1) / sd(dat.ur$wealth1)) + 
+  wealth_loadings_ur[2, 1] * (dat.ur$wealth2-mean(dat.ur$wealth2) / sd(dat.ur$wealth2)) + 
+  wealth_loadings_ur[3, 1] * (dat.ur$wealth3-mean(dat.ur$wealth3) / sd(dat.ur$wealth3)) + 
+  wealth_loadings_ur[4, 1] * (dat.ur$wealth4-mean(dat.ur$wealth4) / sd(dat.ur$wealth4)) + 
+  wealth_loadings_ur[5, 1] * (dat.ur$wealth5-mean(dat.ur$wealth5) / sd(dat.ur$wealth5)) + 
+  wealth_loadings_ur[6, 1] * (dat.ur$wealth6-mean(dat.ur$wealth6) / sd(dat.ur$wealth6)) + 
+  wealth_loadings_ur[7, 1] * (dat.ur$wealth7-mean(dat.ur$wealth7) / sd(dat.ur$wealth7)) + 
+  wealth_loadings_ur[8, 1] * (dat.ur$wealth8-mean(dat.ur$wealth8) / sd(dat.ur$wealth8)) + 
+  wealth_loadings_ur[9, 1] * (dat.ur$wealth9-mean(dat.ur$wealth9) / sd(dat.ur$wealth9)) + 
+  wealth_loadings_ur[10, 1] * (dat.ur$wealth10-mean(dat.ur$wealth10) / sd(dat.ur$wealth10)) 
+
 
 ## combining the two DF's
 dat = rbind(dat.ur, dat.ru)
@@ -187,7 +201,7 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 # Constructing Matched Set
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-# m.out <- matchit(large ~ wealth + urban + munopp + polinv,
+# m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
 m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
                  discard = "both", 
                  method = "full",
@@ -259,6 +273,9 @@ options(scipen=999)
 ### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
 ### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
 
+
+# [tab:results]
+
 # models
 library(texreg)
 extract.geepack <- function(model) {
@@ -302,37 +319,17 @@ model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
                                  std.err = "san.se",
                                  corstr = "exchangeable",
                                  data = dat))
-custom.coef.names = c(
-  "(intercept)",
-  "Wealth Index", 
-  "Municipal Opposition", 
-  "Density of the Poor", 
-  "Municipal Population", 
-  "Political Involvement", 
-  "Democratic Support", 
-  "Political Id.", 
-  "Perception of Corruption", 
-  "Schooling", 
-  "Wealth Index * Municipal Opposition",
-  "Wealth Index * Density of the Poor", 
-  "Municipal Opposition * Density of the Poor", 
-  "Wealth Index * Political Involvement", 
-  "Wealth Index * Municipal Opposition * Density of the Poor", 
-  "Density of the Poor",
-  "Weights", 
-  "Wealth Index * Density of the Poor", 
-  "Municipal Opposition * Density of the Poor", 
-  "Wealth Index * Municipal Opposition * Density of the Poor"),
+custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
 
 
 
 # table
-screenreg(
+texreg(
   c(model.m.t,model.gps.t), 
   caption = "Generalized Estimating Logistic Equations: Clientelism",
-custom.model.names = c(
-  "Matched Data",
-  "Weighted Data"),
+custom.model.names = c("Matched Data","Weighted Data"),
+custom.coef.names = custom.coef.names,
+omit.coef = "weights",
 label = "tab:1",
 custom.note = "%stars. Clustered standard errors at the municipality level.",
 fontsize = "scriptsize",
@@ -342,7 +339,6 @@ no.margin = TRUE,
 float.pos = "h"
 )
 
-# HERE
 
 #####################################################################
 ### S I M U L A T I O N S:                            M  O D E L S
@@ -436,7 +432,7 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
-N = 500
+N = 250
 
 # simulation matched data
 library(Zelig)
@@ -535,7 +531,7 @@ ggplot(plot.d, aes(Density, mean,
                    ymin = upper,
                    ymax=lower,
                    colour = Sample)) + geom_errorbar(width=0.2) + 
-  facet_grid(Competition~Wealth, scales ="free") +
+  facet_grid(Competition~Wealth) +
   ylab("Probability of being Targeted") + xlab("Density of the Poor") +
   theme_bw() + #theme(legend.position="none") +
   theme(strip.text.x = element_text(size = 8), 
@@ -543,8 +539,10 @@ ggplot(plot.d, aes(Density, mean,
         axis.title=element_text(size=10), 
         legend.text = element_text(size = 8), 
         legend.title = element_text(size = 10),
-        axis.text.y = element_text(size = 8))  + 
+        axis.text.y = element_text(size = 8),
+        legend.position="top")  + 
   scale_colour_discrete(name = "Sample")
+
 
 
 ############################### OTHERS
@@ -1148,59 +1146,35 @@ library(car)
 # Descriptive Stats Matched Set
 ## [tab:sum:stats:m]
 
+# clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed
+
 # matched sample
 m.data.clien1dummy <- m.data$clien1dummy 
-m.data.clien1dummy <- as.numeric(m.data.clien1dummy)
-m.data.clien1dummy <- recode(m.data.clien1dummy, "1 = 0 ; 2 = 1")
-
-
-
-m.data.large <- m.data$large 
 m.data.wealth <- m.data$wealth 
 m.data.munopp <- m.data$munopp
+m.data.large <- m.data$large 
+m.data.pop.10 <- m.data$pop.10
+m.data.urban <- as.numeric(recode(as.numeric(m.data$urban), "1 = 0 ; 2 = 1"))
 m.data.polinv <- m.data$polinv 
-
-m.data.exc7 <- m.data$exc7 
 m.data.ing4 <- m.data$ing4
 m.data.vb3 <- m.data$vb3 
-
-m.data.urban <- m.data$urban
-m.data.urban <- as.numeric(m.data.urban)
-m.data.urban <- recode(m.data.urban, "1 = 0 ; 2 = 1")
-
+m.data.exc7 <- m.data$exc7 
 m.data.ed <- m.data$ed
-m.data.ed <- as.numeric(m.data.ed)
-m.data.ed <- recode(m.data.ed, "
-                    1 = 0 ; 
-                    2 = 1 ; 
-                    3 = 2 ; 
-                    4 = 3 ;
-                    5 = 4 ;
-                    6 = 5 ;
-                    7 = 6 ;
-                    8 = 7 ;
-                    9 = 8 ;
-                    10 = 9 ;
-                    11 = 10 ;
-                    12 = 11 ;
-                    13 = 12 ;
-                    14 = 13 ;
-                    15 = 14 ;
-                    16 = 15 ;
-                    17 = 16")
 
-dat.m <- data.frame(m.data.clien1dummy, m.data.large, m.data.wealth, m.data.munopp, m.data.polinv, m.data.exc7, m.data.ing4, m.data.vb3, m.data.urban, m.data.ed)
+# df
+dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.large, m.data.pop.10, m.data.urban, m.data.polinv, m.data.ing4, m.data.vb3, m.data.exc7, m.data.ed)
 
+labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 
 library(stargazer, quietly = T)
 stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
           label = "sumtab:matched",
-          type = "text",
+          type = "latex",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c("Clientelism", "High Density", "Wealth Index", "Municipal Opposition", "Political Involvement", "Perception of Corruption", "Support for Democracy", "Party Id.", "Urban", "Years of Education"),
+          covariate.labels=labels.m,
           table.placement = "h",
           notes.align = "c"
 )
@@ -1211,61 +1185,40 @@ stargazer(dat.m,
 # [tab:sum:stats:r]
 
 # whole sample
-dat.clien1dummy <- dat$clien1dummy 
-dat.clien1dummy <- as.numeric(dat.clien1dummy)
-dat.clien1dummy <- recode(dat.clien1dummy, "1 = 0 ; 2 = 1")
+r.data.clien1dummy <- as.numeric(recode(as.numeric(dat$clien1dummy), "1 = 0 ; 2 = 1"))
+r.data.wealth <- dat$wealth 
+r.data.munopp <- dat$munopp
+r.data.wagehalf.4 <- dat$wagehalf.4 
+r.data.pop.10 <- dat$pop.10
+r.data.urban <- as.numeric(recode(as.numeric(dat$urban), "1 = 0 ; 2 = 1"))
+r.data.polinv <- dat$polinv 
+r.data.ing4 <- dat$ing4
+r.data.vb3 <- dat$vb3 
+r.data.exc7 <- dat$exc7 
+r.data.ed <- dat$ed
 
+# df
+dat.r <- data.frame(r.data.clien1dummy, r.data.wealth, r.data.munopp, r.data.wagehalf.4, r.data.pop.10, r.data.urban, r.data.polinv, r.data.ing4, r.data.vb3, r.data.exc7, r.data.ed)
 
-
-dat.wagehalf.4 <- dat$wagehalf.4 
-dat.wealth <- dat$wealth 
-dat.munopp <- dat$munopp
-dat.polinv <- dat$polinv 
-
-dat.exc7 <- dat$exc7 
-dat.ing4 <- dat$ing4
-dat.vb3 <- dat$vb3 
-
-dat.urban <- dat$urban
-dat.urban <- as.numeric(dat.urban)
-dat.urban <- recode(dat.urban, "1 = 0 ; 2 = 1")
-
-dat.ed <- dat$ed
-dat.ed <- as.numeric(dat.ed)
-dat.ed <- recode(dat.ed, "
-                 1 = 0 ; 
-                 2 = 1 ; 
-                 3 = 2 ; 
-                 4 = 3 ;
-                 5 = 4 ;
-                 6 = 5 ;
-                 7 = 6 ;
-                 8 = 7 ;
-                 9 = 8 ;
-                 10 = 9 ;
-                 11 = 10 ;
-                 12 = 11 ;
-                 13 = 12 ;
-                 14 = 13 ;
-                 15 = 14 ;
-                 16 = 15 ;
-                 17 = 16")
-
-dat.r <- data.frame(dat.clien1dummy, dat.wagehalf.4, dat.wealth, dat.munopp, dat.polinv, dat.exc7, dat.ing4, dat.vb3, dat.urban, dat.ed)
-
+labels.r = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 
 library(stargazer, quietly = T)
 stargazer(dat.r, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
           label = "sumtab:raw",
-          type = "text",
+          type = "latex",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c("Clientelism", "High Density", "Wealth Index", "Municipal Opposition", "Political Involvement", "Perception of Corruption", "Support for Democracy", "Party Id.", "Urban", "Years of Education"),
+          covariate.labels=labels.r,
           table.placement = "h",
           notes.align = "c"
 )
+
+
+
+
+
 
 
 ############################################################
@@ -1304,13 +1257,14 @@ municipality.d = data.frame(table(municipality.d))
 
 library(ggplot2)
 #mun.p1 = 
-  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity") +
+  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity", position=position_dodge()) + 
   xlab("") + 
   ylab("Frequency") + 
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
   
+
 
 ############################################################
 # Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
@@ -1339,11 +1293,11 @@ library(ggplot2)
 ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
   geom_bar() + 
   geom_point(data=density.d, 
-             position = position_jitter(width = 0.6), 
+             position = position_jitter(width = 0.75, height = 1), 
              size = I(1),
              aes(
                x=as.factor(Municipality), 
-               y=Wealth,
+               y=Wealth*10,
                alpha=Wealth))+
   #coord_flip() +
   xlab("") + 
@@ -1506,9 +1460,15 @@ ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=
 
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
 # [balance:plot]
-## Matched
 
+plot(m.out, type="hist")
+
+
+
+## Matched
 ##
+# [balance:plot2]
+
 library(ggplot2)
 library(gtable)
 library(gridExtra)
@@ -1524,13 +1484,13 @@ balance.1.m=ggplot() +
   scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
-balance.2.m=ggplot() + 
-  geom_density(aes(x=as.numeric(m.data$pop.10), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
-  ylab("") + 
-  xlab("Municipal Population") + 
-  theme_bw() +
-  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+#balance.2.m=ggplot() + 
+  #geom_density(aes(x=as.numeric(m.data$pop.10), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  #ylab("") + 
+  #xlab("Municipal Population") + 
+  #theme_bw() +
+  #scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  #theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.3.m=ggplot() + 
   geom_density(aes(x=as.numeric(m.data$munopp), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
@@ -1555,16 +1515,15 @@ balance.1.r=ggplot() +
   ylab("Raw Set") + 
   xlab("Wealth Index") + 
   theme_bw() +
-  ylim(limits = c(0, 0.085)) +
   theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
-balance.2.r=ggplot() + 
-  geom_density(aes(x=as.numeric(dat$pop.10), colour = factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
-  ylab("") + 
-  xlab("Municipal Population") + 
-  theme_bw() +
-  scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
-  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+#balance.2.r=ggplot() + 
+ # geom_density(aes(x=as.numeric(dat$pop.10), colour = factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  #ylab("") + 
+  #xlab("Municipal Population") + 
+  #theme_bw() +
+  #scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  #theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 balance.3.r=ggplot() + 
   geom_density(aes(x=as.numeric(dat$munopp), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
@@ -1585,17 +1544,17 @@ balance.4.r=ggplot() +
 
 plots <- plot_grid(
   balance.1.m + theme(legend.position="none"), 
-  balance.2.m + theme(legend.position="none"), 
+  #balance.2.m + theme(legend.position="none"), 
   balance.3.m + theme(legend.position="none"), 
   balance.4.m + theme(legend.position="none"), 
   balance.1.r + theme(legend.position="none"), 
-  balance.2.r + theme(legend.position="none"), 
+  #balance.2.r + theme(legend.position="none"), 
   balance.3.r + theme(legend.position="none"), 
   balance.4.r + theme(legend.position="none"),
   align = 'vh', 
   hjust = -1, 
   nrow = 2,
-  ncol = 4
+  ncol = 3
 )
 
 grobs <- ggplotGrob(balance.4.r + theme(legend.position="bottom"))$grobs
@@ -1627,34 +1586,30 @@ plot_grid(plots, legend, ncol = 1, rel_heights = c(1, .2))
 library(cem)
 
 dat$urban = as.numeric(dat$urban)
-imb.m <- imbalance(group = m.data$large, data = m.data[c("wealth", "exc7", "polinv", "urban", "ed", "munopp", "ing4")], weights = m.data$wt)
-imb.r <- imbalance(group = dat$large, data = dat[c("wealth", "exc7", "polinv", "urban", "ed", "munopp", "ing4")], weights = dat$wt)
+imb.m <- imbalance(
+  group = m.data$large, 
+  data = m.data[c("wealth", "polinv", "munopp")], 
+  weights = m.data$wt)
+
+imb.r <- imbalance(group = dat$large, data = dat[c("wealth", "polinv", "munopp")], weights = dat$wt)
 
 imb.m.d=data.frame(
   L = round(as.numeric(imb.m$tab[,3]),3),
   Diff = round(as.numeric(imb.m$tab[,1]),3),
-  Sample = rep("Matched",7),
+  Sample = rep("Matched",3),
   Variable = c(c("Wealth Index", 
-                 "Perception Of Corruption", 
                  "Political Involvement", 
-                 "Urban", 
-                 "Education Years", 
-                 "Municipal Opposition", 
-                 "Democratic Support"))
+                 "Municipal Opposition"))
 )
   
 
 imb.r.d=data.frame(
   L = round(as.numeric(imb.r$tab[,3]),3),
   Diff = round(as.numeric(imb.r$tab[,1]),3),
-  Sample = rep("Raw",7),
+  Sample = rep("Raw",3),
   Variable = c(c("Wealth Index", 
-                 "Perception Of Corruption", 
                  "Political Involvement", 
-                 "Urban", 
-                 "Education Years", 
-                 "Municipal Opposition", 
-                 "Democratic Support"))
+                 "Municipal Opposition"))
   
 )
 
