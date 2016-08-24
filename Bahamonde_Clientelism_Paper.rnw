@@ -185,6 +185,10 @@ Do parties target individuals or groups? This is a fundamental question to under
 
 %\hspace*{6.3cm}{\bf 6,614 words}
 
+
+{\bf Download last version of the paper} \href{https://github.com/hbahamonde/Clientelism_paper/raw/LARR_Revisions/Bahamonde_Clientelism_Paper.pdf}{\texttt{here}}
+
+
 %----------------------------------------------------------------------------------------
 % CONTENT 
 %----------------------------------------------------------------------------------------
