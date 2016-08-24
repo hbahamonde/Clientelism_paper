@@ -183,7 +183,7 @@
 Do parties target individuals or groups? This is a fundamental question to understand clientelism, and yet the literature does not offer an answer. This paper argues that, depending on certain conditions, brokers choose to target individuals or groups, although not exclusively. This calculation is made depending on how individuals discount the future, on political pressures to secure higher levels of electoral support and on how dense the concentration of poor individuals is. Specific combinations of these three factors make individuals more identifiable, making individual targeting cheaper. Other combinations provide spillover effects, making brokers to engage in group targeting. Though the theory focuses on targeting, this paper also argues that structural factors rather than individual ones should be considered to explain vote-buying. Structural factors, such as the density of the poor, are one of the few observable factors brokers have to make decisions where to invest in clientelism. Using survey data from Brazil, the paper exploits variations of personal incomes within different poverty-density contexts to support the theory. 
 \end{abstract}
 
-%\hspace*{6.3cm}{\bf 6,614 words}
+\hspace*{6.3cm}{\bf 6,614 words}
 
 
 {\bf Download last version of the paper} \href{https://github.com/hbahamonde/Clientelism_paper/raw/LARR_Revisions/Bahamonde_Clientelism_Paper.pdf}{\texttt{here}}
