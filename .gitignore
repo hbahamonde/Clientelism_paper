@@ -19,7 +19,6 @@
 *.fls
 *.RData
 *.Rhistory
-*.pdf
 *.tex
 LICENSE
 README
