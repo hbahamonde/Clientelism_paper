@@ -324,8 +324,6 @@ Individual income and the economic development of the area coincide in quadrant 
 
 <<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
 # LOAD
-cat("\014")
-rm(list=ls())
 #setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
 
 # Load the data

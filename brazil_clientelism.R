@@ -277,7 +277,7 @@ options(scipen=999)
 # [tab:results]
 
 # models
-library(texreg)
+library(texreg) # install.packages("texreg")
 extract.geepack <- function(model) {
   s <- summary(model)
   names <- rownames(s$coef)
@@ -1166,7 +1166,8 @@ dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.lar
 
 labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 
-library(stargazer, quietly = T)
+
+library(stargazer, quietly = T) # install.packages("stargazer")
 stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
