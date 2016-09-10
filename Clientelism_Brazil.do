@@ -90,6 +90,8 @@ drop exc7
 rename exc7new exc7
 
 
+
+
 label variable exc7 "Percept. of Corruption"
 label variable np2 "Bureaucracy Contacted him/her"
 *label variable cp13 "Political Party Contacted him/her"
@@ -313,6 +315,7 @@ label variable polinv "Political Involvement Index"
 
 * generating large-small size of the poor
 recode wagehalf (5.8/27.5 =0) (27.6/80.9=1), gen(large)
+drop large /* Im gonna generate this in R, using the actual dataset*/
 
 recast byte clien1dummy urban income np2
 drop if clien1dummy==. |  exc7==. | np2==. | cp13==. | urban==. | ed==. | polinv1-polinv5==.
@@ -321,16 +324,13 @@ drop if clien1dummy==. |  exc7==. | np2==. | cp13==. | urban==. | ed==. | polinv
 *save "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism_Brazil_2010_St_Mun_Corrected_READY.dta", replace
 
 
-********************************************************************************************************************************************************************************
-*						M	E	R	G	E	 	o	f	 	M	u	n	i	c	i	p	a	l	 	O	p	p	o	s	i	t	i	o	n
-********************************************************************************************************************************************************************************
-
+* merge with municipal opposition dataset
 *use "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism_Brazil_2010_St_Mun_Corrected_READY.dta", replace
 merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/MunicipalOpposition.dta"
 drop _merge
 
 
-keep municipality wagehalf cp13 vb3 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv large munopp   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
+keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp male   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
 
 rename r1 wealth1
 rename r3 wealth2
@@ -343,40 +343,4 @@ rename r12 wealth8
 rename r14 wealth9
 rename r15 wealth10
 
-
-saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace 
-
-
-
-********************************************************************************************************************************************************************************
-*						M	E	R	G	I	N	G	 	M	U	N	I	C	I	P	A	L	 	P	O	P	U	L	A	T	I	O	N	
-********************************************************************************************************************************************************************************
-
-clear all
-set more off
-cd "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets"
-
-use "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.dta"
-
-*capture search renvars
-*capture search cleanchars
-
-cleanchars , in("ó") out("o") vval
-cleanchars , in("ó") out("o") vval
-
-
-
-
-
-merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.dta"
-drop _merge
-
-
-
-
-
-
-
-
-
-
+saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
