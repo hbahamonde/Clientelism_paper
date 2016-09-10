@@ -19,6 +19,9 @@ dat$polinv2 <- as.numeric(dat$polinv2)
 dat$polinv3 <- as.numeric(dat$polinv3)
 dat$polinv4 <- as.numeric(dat$polinv4)
 dat$polinv5 <- as.numeric(dat$polinv5)
+dat$ing4 <- as.numeric(dat$ing4)
+dat$munopp = round(dat$munopp, 0)
+
 
 # constructing relative wealth index (Cordova 2009)
 library(car) # install.packages("car") 
@@ -33,84 +36,185 @@ dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
 dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
 dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
 
-# splitting df in two
+
+
+## splitting df in two
 dat.ur <- subset(dat, dat$urban == "Ur")
 dat.ru <- subset(dat, dat$urban == "Ru")
 
 
-# computing wealth index in UR settings
-dat.ur$wealth = 
-        (princomp(dat.ur$wealth1)[[1]]*(dat.ur$wealth1-mean(dat.ur$wealth1)))/sd(dat.ur$wealth1) +
-        (princomp(dat.ur$wealth2)[[1]]*(dat.ur$wealth2-mean(dat.ur$wealth2)))/sd(dat.ur$wealth2) +
-        (princomp(dat.ur$wealth3)[[1]]*(dat.ur$wealth3-mean(dat.ur$wealth3)))/sd(dat.ur$wealth3) +
-        (princomp(dat.ur$wealth4)[[1]]*(dat.ur$wealth4-mean(dat.ur$wealth4)))/sd(dat.ur$wealth4) +
-        (princomp(dat.ur$wealth5)[[1]]*(dat.ur$wealth5-mean(dat.ur$wealth5)))/sd(dat.ur$wealth5) +
-        (princomp(dat.ur$wealth6)[[1]]*(dat.ur$wealth6-mean(dat.ur$wealth6)))/sd(dat.ur$wealth6) +
-        (princomp(dat.ur$wealth7)[[1]]*(dat.ur$wealth7-mean(dat.ur$wealth7)))/sd(dat.ur$wealth7) +
-        (princomp(dat.ur$wealth8)[[1]]*(dat.ur$wealth8-mean(dat.ur$wealth8)))/sd(dat.ur$wealth8) +
-        (princomp(dat.ur$wealth9)[[1]]*(dat.ur$wealth9-mean(dat.ur$wealth9)))/sd(dat.ur$wealth9) +
-        (princomp(dat.ur$wealth10)[[1]]*(dat.ur$wealth10-mean(dat.ur$wealth10)))/sd(dat.ur$wealth10)
+
+## PCA for RURAL and URBAN
+wealth.dat.ur = data.frame(dat.ur$wealth1,dat.ur$wealth2,dat.ur$wealth3, dat.ur$wealth4, dat.ur$wealth5, dat.ur$wealth6, dat.ur$wealth7, dat.ur$wealth8, dat.ur$wealth9, dat.ur$wealth10)
+wealth.dat.ru = data.frame(dat.ru$wealth1,dat.ru$wealth2,dat.ru$wealth3, dat.ru$wealth4, dat.ru$wealth5, dat.ru$wealth6, dat.ru$wealth7, dat.ru$wealth8, dat.ru$wealth9, dat.ru$wealth10)
 
 
-# computing wealth index in RU settings
+# get pca for rural
+wealth_pca_ru <- princomp(wealth.dat.ru, scores = T)
+wealth_loadings_ru <- with(wealth_pca_ru, unclass(loadings))
+
+# attach scores to dataset
 dat.ru$wealth = 
-        (princomp(dat.ru$wealth1)[[1]]*(dat.ru$wealth1-mean(dat.ru$wealth1)))/sd(dat.ru$wealth1) +
-        (princomp(dat.ru$wealth2)[[1]]*(dat.ru$wealth2-mean(dat.ru$wealth2)))/sd(dat.ru$wealth2) +
-        (princomp(dat.ru$wealth3)[[1]]*(dat.ru$wealth3-mean(dat.ru$wealth3)))/sd(dat.ru$wealth3) +
-        (princomp(dat.ru$wealth4)[[1]]*(dat.ru$wealth4-mean(dat.ru$wealth4)))/sd(dat.ru$wealth4) +
-        (princomp(dat.ru$wealth5)[[1]]*(dat.ru$wealth5-mean(dat.ru$wealth5)))/sd(dat.ru$wealth5) +
-        (princomp(dat.ru$wealth6)[[1]]*(dat.ru$wealth6-mean(dat.ru$wealth6)))/sd(dat.ru$wealth6) +
-        (princomp(dat.ru$wealth7)[[1]]*(dat.ru$wealth7-mean(dat.ru$wealth7)))/sd(dat.ru$wealth7) +
-        (princomp(dat.ru$wealth8)[[1]]*(dat.ru$wealth8-mean(dat.ru$wealth8)))/sd(dat.ru$wealth8) +
-        (princomp(dat.ru$wealth9)[[1]]*(dat.ru$wealth9-mean(dat.ru$wealth9)))/sd(dat.ru$wealth9) +
-        (princomp(dat.ru$wealth10)[[1]]*(dat.ru$wealth10-mean(dat.ru$wealth10)))/sd(dat.ru$wealth10)
+  wealth_loadings_ru[1, 1] * (dat.ru$wealth1-mean(dat.ru$wealth1) / sd(dat.ru$wealth1)) + 
+  wealth_loadings_ru[2, 1] * (dat.ru$wealth2-mean(dat.ru$wealth2) / sd(dat.ru$wealth2)) + 
+  wealth_loadings_ru[3, 1] * (dat.ru$wealth3-mean(dat.ru$wealth3) / sd(dat.ru$wealth3)) + 
+  wealth_loadings_ru[4, 1] * (dat.ru$wealth4-mean(dat.ru$wealth4) / sd(dat.ru$wealth4)) + 
+  wealth_loadings_ru[5, 1] * (dat.ru$wealth5-mean(dat.ru$wealth5) / sd(dat.ru$wealth5)) + 
+  wealth_loadings_ru[6, 1] * (dat.ru$wealth6-mean(dat.ru$wealth6) / sd(dat.ru$wealth6)) + 
+  wealth_loadings_ru[7, 1] * (dat.ru$wealth7-mean(dat.ru$wealth7) / sd(dat.ru$wealth7)) + 
+  wealth_loadings_ru[8, 1] * (dat.ru$wealth8-mean(dat.ru$wealth8) / sd(dat.ru$wealth8)) + 
+  wealth_loadings_ru[9, 1] * (dat.ru$wealth9-mean(dat.ru$wealth9) / sd(dat.ru$wealth9)) + 
+  wealth_loadings_ru[10, 1] * (dat.ru$wealth10-mean(dat.ru$wealth10) / sd(dat.ru$wealth10)) 
 
-# combining the two DF's
+
+
+# get pca for urban
+wealth_pca_ur <- princomp(wealth.dat.ur, scores = T)
+wealth_loadings_ur <- with(wealth_pca_ur, unclass(loadings))
+
+# attach scores to dataset
+dat.ur$wealth = 
+  wealth_loadings_ur[1, 1] * (dat.ur$wealth1-mean(dat.ur$wealth1) / sd(dat.ur$wealth1)) + 
+  wealth_loadings_ur[2, 1] * (dat.ur$wealth2-mean(dat.ur$wealth2) / sd(dat.ur$wealth2)) + 
+  wealth_loadings_ur[3, 1] * (dat.ur$wealth3-mean(dat.ur$wealth3) / sd(dat.ur$wealth3)) + 
+  wealth_loadings_ur[4, 1] * (dat.ur$wealth4-mean(dat.ur$wealth4) / sd(dat.ur$wealth4)) + 
+  wealth_loadings_ur[5, 1] * (dat.ur$wealth5-mean(dat.ur$wealth5) / sd(dat.ur$wealth5)) + 
+  wealth_loadings_ur[6, 1] * (dat.ur$wealth6-mean(dat.ur$wealth6) / sd(dat.ur$wealth6)) + 
+  wealth_loadings_ur[7, 1] * (dat.ur$wealth7-mean(dat.ur$wealth7) / sd(dat.ur$wealth7)) + 
+  wealth_loadings_ur[8, 1] * (dat.ur$wealth8-mean(dat.ur$wealth8) / sd(dat.ur$wealth8)) + 
+  wealth_loadings_ur[9, 1] * (dat.ur$wealth9-mean(dat.ur$wealth9) / sd(dat.ur$wealth9)) + 
+  wealth_loadings_ur[10, 1] * (dat.ur$wealth10-mean(dat.ur$wealth10) / sd(dat.ur$wealth10)) 
+
+
+## combining the two DF's
 dat = rbind(dat.ur, dat.ru)
 
 
-# Merging Municipal Population Data
-mun.pop = read.csv("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/pop_mun.csv")
+# municipal population from census
+pop.municipalities = data.frame(
+  municipality=c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                  "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                  "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                  "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                  "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                  "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                  "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"),  # 7
+  pop=c(51160, 2051, 455657, 2375151, 4551, 309011, 10583, 2570160, # 1
+        17077, 5405, 551098, 37748, 855048, 62769, 2452185, 318640, # 2
+        15193, 4568, 92883, 44859, 644620, 25647, 143123, 116610, # 3
+        17002, 197965, 8397, 216745, 31154, 387779, 259815, 4288, # 4
+        39979, 106290, 328275, 311611, 14189, 11031, 428527, 44701, 6163, # 5
+        26415, 55551, 336038, 6320446, 20179, 629921, 84469, # 6
+        41657, 11253503, 53825, 24294, 23983, 76202) # 7 CORREGIR VERA CRUZ Y VER QUE ESTADO SON LAS OBS QUE TENGO, HAY COMO 4 VERA CRUCES
+)
+
+## merge datasets
+dat = merge(dat, pop.municipalities, by=c("municipality"), all.x =T)
 
 
-dat$municipality = as.character(dat$municipality)
+# create variable large
+library(foreign)
+wagehalf.d <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/proportionofpoorcensus.dta")
+
+wagehalf.d = data.frame(cbind(municipality = c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
+                                                "Capela",  "Coronel Ezequiel", "Cuiaba", "Curitibanos", "Duque de Caxias", "Embu Guacu", "Fortaleza", "Franca",  # 2
+                                                "Itagiba", "Itaguaje", "Itumbiara", "Itupeva", "Jaboatao dos Guararapes", "Jaciara", "Jaragua do Sul", "Ji Parana", # 3
+                                                "Jijoca de Jericoacoara", "Juazeiro", "Lontra", "Marilia", "Minacu", "Mogi das Cruzes", "Mossoro", "Narandiba", # 4
+                                                "Pacaja", "Passos", "Pelotas", "Ponta Grossa", "Porecatu", "Porto Esperidiao", "Porto Velho", "Pocoes", "Progresso", # 5
+                                                "Redencao", "Rio Bonito", "Rio Branco", "Rio de Janeiro", "Senador Guiomard", "Sao Jose dos Campos", "Sao Joao del Rei", # 6
+                                                "Sao Lourenco", "Sao Paulo", "Timbauba", "Uaua", "Vera Cruz", "Vilhena"), 
+                              large = as.numeric(wagehalf.d$wagehalf >= median(wagehalf.d$wagehalf))
+)
+)
+dat = merge(dat, wagehalf.d, by=c("municipality"), all.x =T)
+
+## recode large
+library(car) # install.packages("car") 
+dat$large <- as.numeric(dat$large)
+dat$large <- recode(dat$large, "1 = 0 ; 2 = 1")
 
 
-library(plyr)
-dat = revalue(dat$municipality, # local dataset, corrected neame
-              c("Acopiara"="Acopiara",
-                "Aloândia" = "Aloândia",
-                "Aparecida de Goiânia"="Aparecida de Goiânia",
-                "Belo Horizonte" = "Belo Horizonte",
-                "Bel\x8em" = "Belém"
-                ))
+## transform the wagehalf variable
+dat$wagehalf = round(dat$wagehalf, digits=0)
 
 
+# Transform the continuous "treatment" variable in four segments
+wagehalf.4 = cut(dat$wagehalf, breaks = c(0,
+                                          quantile(dat$wagehalf, .25), 
+                                          quantile(dat$wagehalf, .50), 
+                                          quantile(dat$wagehalf, .75), 
+                                          quantile(dat$wagehalf, 1)), include.lowest=T, labels=c("0-25","25-50","50-75","75-100")
+)
+
+dat$wagehalf.4 = as.numeric(wagehalf.4)
+
+# Transform the continuous "pop" variable in ten segments // mostly for simulation purposes
+pop.10.m = cut(dat$pop, breaks = c(0,
+                                   quantile(dat$pop, .10), 
+                                   quantile(dat$pop, .20), 
+                                   quantile(dat$pop, .30), 
+                                   quantile(dat$pop, .40),
+                                   quantile(dat$pop, .50),
+                                   quantile(dat$pop, .60),
+                                   quantile(dat$pop, .70),
+                                   quantile(dat$pop, .80),
+                                   quantile(dat$pop, .90),
+                                   quantile(dat$pop, 1)
+), 
+include.lowest=T, labels=c(
+  "0-10","11-20","21-30","31-40", "41-50", "51-60", "61-70", "71-80", "81-90", "91-100")
+)
 
 
+pop.10.r = cut(dat$pop, breaks = c(0,
+                                   quantile(dat$pop, .10), 
+                                   quantile(dat$pop, .20), 
+                                   quantile(dat$pop, .30), 
+                                   quantile(dat$pop, .40),
+                                   quantile(dat$pop, .50),
+                                   quantile(dat$pop, .60),
+                                   quantile(dat$pop, .70),
+                                   quantile(dat$pop, .80),
+                                   quantile(dat$pop, .90),
+                                   quantile(dat$pop, 1)), 
+               include.lowest=T, labels=c(
+                 "0-10",
+                 "11-20",
+                 "21-30",
+                 "31-40",
+                 "41-50",
+                 "51-60",
+                 "61-70", 
+                 "71-80", 
+                 "81-90",
+                 "91-100")
+)
 
-dat.muni = levels(dat$municipality)
+## attaching
+dat$pop.10 = as.numeric(pop.10.r)
 
 
-
-dat = merge(dat, mun.pop, by="municipality")
-
-
-
+# save unmatched dataset
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 
 # Constructing Matched Set
+set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
-#m.out <- matchit(large ~ income + ed + log(pop) + polinv, 
-m.out <- matchit(large ~ income + ed, 
-                 discard = "hull.both", 
-                 method = "cem",
+# m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+                 discard = "both", 
+                 method = "full",
                  data = dat,
                  verbose = F
-                 )
+)
+
+
+
 
 #print. <- print(m.out)
 sum.match = summary(m.out)
+
 
 # Match Data
 m.data <- match.data(m.out)
@@ -120,138 +224,994 @@ m.data <- match.data(m.out)
 library(car) # install.packages("car") 
 m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
 m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
+
+# save matched dataset
+save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
+
+# Generating the Propensity Score 
+library(CBPS, quietly = T) # install.packages("CBPS")
+fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv + pop.10,
+            #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
+            data = dat, 
+            iterations = 25000, 
+            twostep = TRUE, # F
+            method = "over", # EXACT
+            ATT = 0, # 2
+            standardize = F) # F
+
+
+## transform the weight var. // Attaching weights to DF // sorting for GEE models
+dat$weights = as.numeric(fit$weights)
+
+save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+#####################################################################
+### PARAMETRIC models
+#####################################################################
+
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+## Recode Before modeling
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+library(car)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+
+# formulas 
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
+
+
+################################################
+options(scipen=999)
+
+
+### GEE: In gee there is no quasipossion, because gee is in a way already quasi.
+### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
+### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
+
+
+# [tab:results]
+
+# models
+library(texreg) # install.packages("texreg")
+extract.geepack <- function(model) {
+  s <- summary(model)
+  names <- rownames(s$coef)
+  co <- s$coef[, 1]
+  se <- s$coef[, 2]
+  pval <- s$coef[, 4]
+  
+  n <- nrow(model.frame(model))
+  nclust <- length(s$geese$clusz)
+  
+  gof = c(n, nclust)
+  gof.names = c("Num. obs.", "Num. clust.")
+  
+  tr <- createTexreg(
+    coef.names = names,
+    coef = co,
+    se = se,
+    pvalues = pval,
+    gof.names = gof.names,
+    gof = gof,
+    gof.decimal = rep(FALSE, length(gof))
+  )
+  return(tr)
+}
+
+library(geepack) # install.packages("geepack")
+model.m.t = extract.geepack(model.m.model <- geeglm(model.m,
+                               family = binomial(link = "logit"), 
+                               id = municipality, 
+                               weights = wt,
+                               std.err = "san.se",
+                               corstr = "exchangeable",
+                               data = m.data))
+
+model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
+                                 family = binomial(link = "logit"), 
+                                 id = municipality, 
+                                 weights = wt,
+                                 std.err = "san.se",
+                                 corstr = "exchangeable",
+                                 data = dat))
+custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
+
+
+
+# table
+texreg(
+  c(model.m.t,model.gps.t), 
+  caption = "Generalized Estimating Logistic Equations: Clientelism",
+custom.model.names = c("Matched Data","Weighted Data"),
+custom.coef.names = custom.coef.names,
+omit.coef = "weights",
+label = "tab:1",
+custom.note = "%stars. Clustered standard errors at the municipality level.",
+fontsize = "scriptsize",
+digits = 3,
+center = TRUE,
+no.margin = TRUE, 
+float.pos = "h"
+)
+
+
+#####################################################################
+### S I M U L A T I O N S:                            M  O D E L S
+#####################################################################
+
+library(Zelig)
+model.m.s = zelig(model.m, 
+                       model = "logit.gee",
+                       id = "municipality", 
+                       weights = "wt",
+                       std.err = "san.se",
+                       corstr = "exchangeable",
+                       data = m.data, 
+                  cite = F)
+
+                  
+
+
+model.gps.s = zelig(model.gps, 
+                       model = "logit.gee",
+                       id = "municipality", 
+                       weights = "wt",
+                       std.err = "san.se",
+                       corstr = "exchangeable",
+                       data = dat,
+                       cite = F)
+
+
+
+#####################################################################
+### S I M U L A T I O N S:      D  I S T R I B U T I O N   P L O T S 
+#####################################################################
+set.seed(602); options(scipen=999)
+
+
+## matched
+gee.sim.low.matched = data.frame(Low = sim(x = setx(model.m.s, cond = T, large = min(m.data$large)), num=10000)$getqi(qi="ev"))
+gee.sim.high.matched = data.frame(High = sim(x = setx(model.m.s, cond = T, large = max(m.data$large)), num=10000)$getqi(qi="ev"))
+## gps
+gee.sim.low.gps = data.frame(Low = sim(x = setx(model.gps.s, cond = T, wagehalf.4 = min(dat$wagehalf.4)), num=10000)$getqi(qi="ev"))
+gee.sim.high.gps = data.frame(High = sim(x = setx(model.gps.s, cond = T, wagehalf.4 = max(dat$wagehalf.4)), num=10000)$getqi(qi="ev"))
+
+
+
+# plot
+library(ggplot2);library(grid)
+
+large.m1 = 
+  ggplot() + 
+  geom_density(aes(x=Low, fill="Low"),  data= gee.sim.low.matched, alpha = .2) + 
+  geom_density(aes(x=High, fill="High"), data= gee.sim.high.matched, alpha = .2) + 
+  xlab("Expected Value \n of Clientelism") + ylab("Estimated Density") + 
+  theme_bw() + xlab("Expected Value \n of Clientelism") +
+  ggtitle("Matched Dataset") +
+  theme(
+    legend.key = 
+      element_rect(colour = NA, fill = NA, size = 0.5), 
+    panel.margin = unit(0, "lines")) + 
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  guides(fill=FALSE)
+
+large.m2 = 
+  ggplot() + 
+  geom_density(aes(x=Low, fill="Low"), data= gee.sim.low.gps, alpha = .2) + 
+  geom_density(aes(x=High, fill="High"), data= gee.sim.high.gps, alpha = .2) + 
+  ylab("") + xlab("Expected Value \n of Clientelism") +
+  theme_bw() + 
+  ggtitle("Complete Dataset (GPS)") +
+  theme(
+    legend.key = element_rect(colour = NA, fill = NA, size = 0.5),
+    panel.margin = unit(0, "lines"),
+    axis.title.x = element_text(colour = "black")) + 
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) + 
+  guides(fill=FALSE)
+
+
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
+
+
+##########################################################################
+### S I M U L A T I O N S:      D  I S T R I B U T I O N   P L O T S  I I 
+##########################################################################
+
+
+
+##########################
+##### BY Competition and Income
+##########################
+# [plot:four:quadrants]
+set.seed(602); options(scipen=999)
+
+N = 250
+
+# simulation matched data
+library(Zelig)
+high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+high.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
+low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+
+
+
+# simulation raw/GPS data
+library(Zelig)
+high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+high.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+low.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+low.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+low.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
+low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+
+
+
+
+
+# data frame
+library(Rmisc) # install.packages("Rmisc")
+plot.d = data.frame(
+  mean = c(
+    as.numeric(CI(high.poor.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[2]),  # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[2]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[2]),  # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[2]) # matched
+  ),
+  upper = c(
+    as.numeric(CI(high.poor.lowcomp.gps$x)[1]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[1]), # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[1]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[1]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[1]), # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[1]), # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[1]), # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[1]), # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[1]) # matched
+  ),
+  lower = c(
+    as.numeric(CI(high.poor.lowcomp.gps$x)[3]),  # gps
+    as.numeric(CI(high.poor.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.rich.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.rich.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.poor.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.poor.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.rich.lowcomp.gps$x)[3]), # gps
+    as.numeric(CI(low.rich.highcomp.gps$x)[3]), # gps
+    as.numeric(CI(high.poor.lowcomp.m$x)[3]),  # matched
+    as.numeric(CI(high.poor.highcomp.m$x)[3]), # matched
+    as.numeric(CI(high.rich.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(high.rich.highcomp.m$x)[3]), # matched
+    as.numeric(CI(low.poor.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(low.poor.highcomp.m$x)[3]), # matched
+    as.numeric(CI(low.rich.lowcomp.m$x)[3]), # matched
+    as.numeric(CI(low.rich.highcomp.m$x)[3]) # matched
+  ),
+  Density = c(rep("High", 4), rep("Low", 4), rep("High", 4), rep("Low", 4)),
+  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 4),
+  Competition = rep(c("Low Competition","High Competition"),8),
+  Sample = c(rep("Weighted (GPS)", 8), rep("Matched", 8))
+)
+
+# plot
+library(ggplot2)
+ggplot(plot.d, aes(Density, mean,
+                   ymin = upper,
+                   ymax=lower,
+                   colour = Sample)) + geom_errorbar(width=0.2) + 
+  facet_grid(Competition~Wealth) +
+  ylab("Probability of being Targeted") + xlab("Density of the Poor") +
+  theme_bw() + #theme(legend.position="none") +
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 8), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8),
+        legend.position="top")  + 
+  scale_colour_discrete(name = "Sample")
+
+
+
+############################### OTHERS
+# means highest values
+## quadrant 1
+mean(low.poor.lowcomp$x)
+## quadrant 4
+mean(high.rich.highcomp$x)
+
+## quadrant 3
+mean(high.poor.highcomp$x)
+## quadrant 2
+mean(low.rich.lowcomp$x)
+
+
+
+## t test on these distributions
+### 1
+t.test(high.poor.lowcomp$x, low.poor.lowcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
+### 2
+t.test(high.rich.lowcomp$x, low.rich.lowcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
+### 3
+t.test(high.poor.highcomp$x, low.poor.highcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
+### 4
+t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.95, paired = TRUE) # significative pvalue = significantly different
+
+
+## high/low quadrant 1
+# null hypothesis: the distributions of x and y differ by a location shift of mu
+# if p value less than 1, reject the null
+# alternative: x is shifted to the right of y
+wilcox.test(low.poor.lowcomp$x,high.poor.lowcomp$x, paired = TRUE, alternative = "greater")
+
+### quadrants 1 and 4
+t.test(low.poor.lowcomp$x, high.rich.highcomp$x, alt="greater",conf.level = 0.95) # significative pvalue = significantly different
+
+### quadrants 3-4
+wilcox.test(high.poor.highcomp$x, high.rich.highcomp$x,paired = T, alternative = "greater") # significative pvalue = significantly different
+
+
+### quadrant 2
+wilcox.test(low.rich.lowcomp$x,high.rich.lowcomp$x, paired = TRUE, alternative = "greater")
+
+
+### quadrant 4
+wilcox.test(low.rich.lowcomp$x,high.rich.lowcomp$x, paired = TRUE, alternative = "greater")
+
+
+
+### MAKE A TABLE IN RNW using this sequence.
+t = t.test(high.rich.highcomp$x, low.rich.highcomp$x,conf.level = 0.99) # significative pvalue = significantly different
+as.numeric(t$estimate[2])
+
+
+
+######################################################
+# Plot Wealthy Also Receive Clientelism
+######################################################
+# [wealth:client:plot]
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+library(ggplot2)
+
+ggplot() + geom_jitter(
+  width = 4,
+  height = 1, 
+  alpha = 1/4,
+  aes(
+    y=as.factor(dat$clien1dummy), 
+    x=as.numeric(dat$wealth), 
+    colour=as.numeric(dat$clien1dummy))) +
+  xlab("Wealth Index") + 
+  ylab("Offered him/her to buy vote") + 
+  theme_bw()+
+  theme(strip.text.x = element_text(size = 8), 
+        strip.text.y = element_text(size = 8), 
+        axis.title=element_text(size=10), 
+        legend.text = element_text(size = 10), 
+        legend.title = element_text(size = 10),
+        axis.text.y = element_text(size = 8),
+        legend.position="none")
+    
+
+
+
+##########################
+###### By Density, Income, COmpetition and Pop Size //
+##########################
+### PUT IN APPENDIX: SAY THAT I DIDNT FIND SUPPORT //
+### ACTUALLY LARGER POPULATION< MORE CLIENTELISM // ATTENTION THIS IS **NOT** RUEDA'S argument
+
+set.seed(602); options(scipen=999)
+
+
+# simulation DISTRIBUTION PLOTS // low pop
+high.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.lowpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.lowpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = min(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# simulation DISTRIBUTION PLOTS // high pop
+high.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.highpop = data.frame(competition = rep("Low Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 1000000),income = rep("Non-Poor Individuals", 1000000), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), pop.10 = max(m.data$pop.10) ,wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# plot 1 //
+library(ggplot2)
+p1 = ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.lowpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.lowpop, alpha = .2) +
+  ylab("Expected Density: Large Pop. Size") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(competition~income)
+
+# plot 2 //
+library(ggplot2)
+p2 = ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.highpop, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.highpop, alpha = .2) +
+  ylab("Expected Density: Small Pop. Size") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(competition~income)
+
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
+
+
+##########################
+###### By Density, Income, COmpetition and Dem Values //
+##########################
+### PUT IN APPENDIX: SAY THAT I DIDNT FIND SUPPORT //
+
+set.seed(602); options(scipen=999)
+# simulation DISTRIBUTION PLOTS //
+high.poor.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.highcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = max(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+high.poor.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.dem =  data.frame(dem = rep("Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = max(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.poor.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.poor.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .25), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+high.rich.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = max(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+low.rich.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), income = rep("Non-Poor Individuals", 1000000), x = sim(x = setx(model.m.s, cond = TRUE, large = min(m.data$large), wealth= quantile(m.data$wealth, .75), ing4 = min(m.data$ing4),munopp = min(m.data$munopp)), num=1000000)$getqi(qi="ev"))
+
+
+
+# plot 1 //
+library(ggplot2)
+p1=ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.highcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.highcomp.nondem, alpha = .2) +
+  ylab("Expected Density: High Competition") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(dem~income)
+
+# plot 2 //
+library(ggplot2)
+p2=ggplot() + 
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="High Density"), data= high.rich.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.nondem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.poor.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.dem, alpha = .2) +
+  geom_density(aes(x=x, fill="Low Density"), data= low.rich.lowcomp.nondem, alpha = .2) +
+  ylab("Expected Density: Low Competition") + xlab("Expected Value of Clientelism") +
+  theme_bw() +
+  scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
+  facet_grid(dem~income)
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
+
+
+#####################################################################
+### S I M U L A T I O N S:      I N T E R A C T I O N   P L O T S 
+#####################################################################
+
+
+
+
+##########################
+#  LARGE * WEALTH:
+##########################
+
+
+# METHOD 2
+# library(devtools) # install.packages("devtools")
+# install_github('IQSS/Zelig')
+#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
+
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+
+## low 
+model.m.s.low = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = min(m.data$large), 
+               large:wealth,
+               wealth = min(m.data$wealth):max(m.data$wealth)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
+
+
+## high
+model.m.s.high = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = max(m.data$large), 
+               large:wealth,
+               wealth = min(m.data$wealth):max(m.data$wealth)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
+
+
+
+## wealth
+model.m.s.wealth = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large:wealth,
+               wealth = min(m.data$wealth):max(m.data$wealth)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.wealth) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(m.data$wealth)))))  # high
+
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
+### low
+df.low = data.frame(
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`), mean(model.m.s.low$`11`), mean(model.m.s.low$`12`),mean(model.m.s.low$`13`),mean(model.m.s.low$`14`),mean(model.m.s.low$`15`),mean(model.m.s.low$`16`),mean(model.m.s.low$`17`),mean(model.m.s.low$`18`),mean(model.m.s.low$`19`),mean(model.m.s.low$`20`),mean(model.m.s.low$`21`),mean(model.m.s.low$`22`),mean(model.m.s.low$`23`),mean(model.m.s.low$`24`),mean(model.m.s.low$`25`)),Wealth = min(m.data$wealth):max(m.data$wealth),
+  Poverty = rep("Low Density", ncol(model.m.s.low)),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1]), as.numeric(CI(model.m.s.low$`11`)[1]), as.numeric(CI(model.m.s.low$`12`)[1]), as.numeric(CI(model.m.s.low$`13`)[1]), as.numeric(CI(model.m.s.low$`14`)[1]), as.numeric(CI(model.m.s.low$`15`)[1]), as.numeric(CI(model.m.s.low$`16`)[1]), as.numeric(CI(model.m.s.low$`17`)[1]), as.numeric(CI(model.m.s.low$`18`)[1]), as.numeric(CI(model.m.s.low$`19`)[1]), as.numeric(CI(model.m.s.low$`20`)[1]), as.numeric(CI(model.m.s.low$`21`)[1]), as.numeric(CI(model.m.s.low$`22`)[1]), as.numeric(CI(model.m.s.low$`23`)[1]), as.numeric(CI(model.m.s.low$`24`)[1]), as.numeric(CI(model.m.s.low$`25`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]), as.numeric(CI(model.m.s.low$`11`)[3]), as.numeric(CI(model.m.s.low$`12`)[3]), as.numeric(CI(model.m.s.low$`13`)[3]), as.numeric(CI(model.m.s.low$`14`)[3]), as.numeric(CI(model.m.s.low$`15`)[3]), as.numeric(CI(model.m.s.low$`16`)[3]), as.numeric(CI(model.m.s.low$`17`)[3]), as.numeric(CI(model.m.s.low$`18`)[3]), as.numeric(CI(model.m.s.low$`19`)[3]), as.numeric(CI(model.m.s.low$`20`)[3]), as.numeric(CI(model.m.s.low$`21`)[3]), as.numeric(CI(model.m.s.low$`22`)[3]), as.numeric(CI(model.m.s.low$`23`)[3]), as.numeric(CI(model.m.s.low$`24`)[3]), as.numeric(CI(model.m.s.low$`25`)[3]))
+)
+
+
+
+### high
+df.high = data.frame(
+  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`),mean(model.m.s.high$`9`),mean(model.m.s.high$`10`),mean(model.m.s.high$`11`),mean(model.m.s.high$`12`),mean(model.m.s.high$`13`),mean(model.m.s.high$`14`),mean(model.m.s.high$`15`),mean(model.m.s.high$`16`),mean(model.m.s.high$`17`),mean(model.m.s.high$`18`),mean(model.m.s.high$`19`),mean(model.m.s.high$`20`),mean(model.m.s.high$`21`),mean(model.m.s.high$`22`),mean(model.m.s.high$`23`),mean(model.m.s.high$`24`),mean(model.m.s.high$`25`)),
+  Wealth = min(m.data$wealth):max(m.data$wealth),
+  Poverty = rep("High Density", ncol(model.m.s.high)),
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1]), as.numeric(CI(model.m.s.high$`11`)[1]), as.numeric(CI(model.m.s.high$`12`)[1]), as.numeric(CI(model.m.s.high$`13`)[1]), as.numeric(CI(model.m.s.high$`14`)[1]), as.numeric(CI(model.m.s.high$`15`)[1]), as.numeric(CI(model.m.s.high$`16`)[1]), as.numeric(CI(model.m.s.high$`17`)[1]), as.numeric(CI(model.m.s.high$`18`)[1]), as.numeric(CI(model.m.s.high$`19`)[1]), as.numeric(CI(model.m.s.high$`20`)[1]), as.numeric(CI(model.m.s.high$`21`)[1]), as.numeric(CI(model.m.s.high$`22`)[1]), as.numeric(CI(model.m.s.high$`23`)[1]), as.numeric(CI(model.m.s.high$`24`)[1]), as.numeric(CI(model.m.s.high$`25`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]), as.numeric(CI(model.m.s.high$`11`)[3]), as.numeric(CI(model.m.s.high$`12`)[3]), as.numeric(CI(model.m.s.high$`13`)[3]), as.numeric(CI(model.m.s.high$`14`)[3]), as.numeric(CI(model.m.s.high$`15`)[3]), as.numeric(CI(model.m.s.high$`16`)[3]), as.numeric(CI(model.m.s.high$`17`)[3]), as.numeric(CI(model.m.s.high$`18`)[3]), as.numeric(CI(model.m.s.high$`19`)[3]), as.numeric(CI(model.m.s.high$`20`)[3]), as.numeric(CI(model.m.s.high$`21`)[3]), as.numeric(CI(model.m.s.high$`22`)[3]), as.numeric(CI(model.m.s.high$`23`)[3]), as.numeric(CI(model.m.s.high$`24`)[3]), as.numeric(CI(model.m.s.high$`25`)[3]))
+)
+
+### wealth
+df.wealth.alone = data.frame(
+  mean = c(mean(model.m.s.wealth$`1`),mean(model.m.s.wealth$`2`),mean(model.m.s.wealth$`3`),mean(model.m.s.wealth$`4`),mean(model.m.s.wealth$`5`),mean(model.m.s.wealth$`6`),mean(model.m.s.wealth$`7`),mean(model.m.s.wealth$`8`),mean(model.m.s.wealth$`9`),mean(model.m.s.wealth$`10`),mean(model.m.s.wealth$`11`),mean(model.m.s.wealth$`12`),mean(model.m.s.wealth$`13`),mean(model.m.s.wealth$`14`),mean(model.m.s.wealth$`15`),mean(model.m.s.wealth$`16`),mean(model.m.s.wealth$`17`),mean(model.m.s.wealth$`18`),mean(model.m.s.wealth$`19`),mean(model.m.s.wealth$`20`),mean(model.m.s.wealth$`21`),mean(model.m.s.wealth$`22`),mean(model.m.s.wealth$`23`),mean(model.m.s.wealth$`24`),mean(model.m.s.wealth$`25`)),
+  Wealth = min(m.data$wealth):max(m.data$wealth),
+  Poverty = rep("Wealth Index", ncol(model.m.s.wealth)),
+  Upper = c(as.numeric(CI(model.m.s.wealth$`1`)[1]), as.numeric(CI(model.m.s.wealth$`2`)[1]), as.numeric(CI(model.m.s.wealth$`3`)[1]), as.numeric(CI(model.m.s.wealth$`4`)[1]), as.numeric(CI(model.m.s.wealth$`5`)[1]), as.numeric(CI(model.m.s.wealth$`6`)[1]), as.numeric(CI(model.m.s.wealth$`7`)[1]), as.numeric(CI(model.m.s.wealth$`8`)[1]), as.numeric(CI(model.m.s.wealth$`9`)[1]), as.numeric(CI(model.m.s.wealth$`10`)[1]), as.numeric(CI(model.m.s.wealth$`11`)[1]), as.numeric(CI(model.m.s.wealth$`12`)[1]), as.numeric(CI(model.m.s.wealth$`13`)[1]), as.numeric(CI(model.m.s.wealth$`14`)[1]), as.numeric(CI(model.m.s.wealth$`15`)[1]), as.numeric(CI(model.m.s.wealth$`16`)[1]), as.numeric(CI(model.m.s.wealth$`17`)[1]), as.numeric(CI(model.m.s.wealth$`18`)[1]), as.numeric(CI(model.m.s.wealth$`19`)[1]), as.numeric(CI(model.m.s.wealth$`20`)[1]), as.numeric(CI(model.m.s.wealth$`21`)[1]), as.numeric(CI(model.m.s.wealth$`22`)[1]), as.numeric(CI(model.m.s.wealth$`23`)[1]), as.numeric(CI(model.m.s.wealth$`24`)[1]), as.numeric(CI(model.m.s.wealth$`25`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.wealth$`1`)[3]), as.numeric(CI(model.m.s.wealth$`2`)[3]), as.numeric(CI(model.m.s.wealth$`3`)[3]), as.numeric(CI(model.m.s.wealth$`4`)[3]), as.numeric(CI(model.m.s.wealth$`5`)[3]), as.numeric(CI(model.m.s.wealth$`6`)[3]), as.numeric(CI(model.m.s.wealth$`7`)[3]), as.numeric(CI(model.m.s.wealth$`8`)[3]), as.numeric(CI(model.m.s.wealth$`9`)[3]), as.numeric(CI(model.m.s.wealth$`10`)[3]), as.numeric(CI(model.m.s.wealth$`11`)[3]), as.numeric(CI(model.m.s.wealth$`12`)[3]), as.numeric(CI(model.m.s.wealth$`13`)[3]), as.numeric(CI(model.m.s.wealth$`14`)[3]), as.numeric(CI(model.m.s.wealth$`15`)[3]), as.numeric(CI(model.m.s.wealth$`16`)[3]), as.numeric(CI(model.m.s.wealth$`17`)[3]), as.numeric(CI(model.m.s.wealth$`18`)[3]), as.numeric(CI(model.m.s.wealth$`19`)[3]), as.numeric(CI(model.m.s.wealth$`20`)[3]), as.numeric(CI(model.m.s.wealth$`21`)[3]), as.numeric(CI(model.m.s.wealth$`22`)[3]), as.numeric(CI(model.m.s.wealth$`23`)[3]), as.numeric(CI(model.m.s.wealth$`24`)[3]), as.numeric(CI(model.m.s.wealth$`25`)[3]))
+)
+
+
+
+### combined two df's
+wealth.d= rbind(df.high, df.low,df.wealth.alone)
+
+
+### plot
+library(ggplot2)
+ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Wealth,y=mean)) +
+  xlab("Wealth Index") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
+#####################################################################
+#####################################################################
+
+
+
+
+
+
+##########################
+#  LARGE * MUNOPP:
+
+
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+# low 
+model.m.s.low = data.frame(
+  sim(
+    x = setx(model.m.s, cond = TRUE,
+             large = min(m.data$large), 
+             large:munopp,
+             munopp = min(m.data$munopp):max(m.data$munopp)), 
+    num=200)$getqi(qi="ev", xvalue="range"))
+
+colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # low
+
+
+
+# high 
+model.m.s.high = data.frame(
+  sim(
+    x = setx(model.m.s, cond = TRUE,
+             large = max(m.data$large), 
+             large:munopp,
+             munopp = min(m.data$munopp):max(m.data$munopp)), 
+    num=200)$getqi(qi="ev", xvalue="range"))
+
+colnames(model.m.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # low
+
+
+
+# munopp 
+model.m.s.munopp = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large:munopp,
+               munopp = min(m.data$munopp):max(m.data$munopp)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.munopp) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(m.data$munopp)))))  # high
+
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
+
+### df's
+### low
+
+# low
+df.low = data.frame(
+  mean = c(as.numeric(CI(model.m.s.low$`1`)["mean"]),as.numeric(CI(model.m.s.low$`2`)["mean"]),as.numeric(CI(model.m.s.low$`3`)["mean"]),as.numeric(CI(model.m.s.low$`4`)["mean"]),as.numeric(CI(model.m.s.low$`5`)["mean"]),as.numeric(CI(model.m.s.low$`6`)["mean"]),as.numeric(CI(model.m.s.low$`7`)["mean"]),as.numeric(CI(model.m.s.low$`8`)["mean"]),as.numeric(CI(model.m.s.low$`9`)["mean"]),as.numeric(CI(model.m.s.low$`10`)["mean"]),as.numeric(CI(model.m.s.low$`11`)["mean"]),as.numeric(CI(model.m.s.low$`12`)["mean"]),as.numeric(CI(model.m.s.low$`13`)["mean"]),as.numeric(CI(model.m.s.low$`14`)["mean"]),as.numeric(CI(model.m.s.low$`15`)["mean"]),as.numeric(CI(model.m.s.low$`16`)["mean"]),as.numeric(CI(model.m.s.low$`17`)["mean"]),as.numeric(CI(model.m.s.low$`18`)["mean"]),as.numeric(CI(model.m.s.low$`19`)["mean"]),as.numeric(CI(model.m.s.low$`20`)["mean"]),as.numeric(CI(model.m.s.low$`21`)["mean"]),as.numeric(CI(model.m.s.low$`22`)["mean"]),as.numeric(CI(model.m.s.low$`23`)["mean"]),as.numeric(CI(model.m.s.low$`24`)["mean"]),as.numeric(CI(model.m.s.low$`25`)["mean"]),as.numeric(CI(model.m.s.low$`26`)["mean"]),as.numeric(CI(model.m.s.low$`27`)["mean"]),as.numeric(CI(model.m.s.low$`28`)["mean"]),as.numeric(CI(model.m.s.low$`29`)["mean"]),as.numeric(CI(model.m.s.low$`30`)["mean"]),as.numeric(CI(model.m.s.low$`31`)["mean"]),as.numeric(CI(model.m.s.low$`32`)["mean"]),as.numeric(CI(model.m.s.low$`33`)["mean"]),as.numeric(CI(model.m.s.low$`34`)["mean"]),as.numeric(CI(model.m.s.low$`35`)["mean"]),as.numeric(CI(model.m.s.low$`36`)["mean"]),as.numeric(CI(model.m.s.low$`37`)["mean"]),as.numeric(CI(model.m.s.low$`38`)["mean"]),as.numeric(CI(model.m.s.low$`39`)["mean"]),as.numeric(CI(model.m.s.low$`40`)["mean"]),as.numeric(CI(model.m.s.low$`41`)["mean"]),as.numeric(CI(model.m.s.low$`42`)["mean"]),as.numeric(CI(model.m.s.low$`43`)["mean"]),as.numeric(CI(model.m.s.low$`44`)["mean"]),as.numeric(CI(model.m.s.low$`45`)["mean"]),as.numeric(CI(model.m.s.low$`46`)["mean"]),as.numeric(CI(model.m.s.low$`47`)["mean"]),as.numeric(CI(model.m.s.low$`48`)["mean"]),as.numeric(CI(model.m.s.low$`49`)["mean"]),as.numeric(CI(model.m.s.low$`50`)["mean"]),as.numeric(CI(model.m.s.low$`51`)["mean"]),as.numeric(CI(model.m.s.low$`52`)["mean"]),as.numeric(CI(model.m.s.low$`53`)["mean"]),as.numeric(CI(model.m.s.low$`54`)["mean"]),as.numeric(CI(model.m.s.low$`55`)["mean"]),as.numeric(CI(model.m.s.low$`56`)["mean"]),as.numeric(CI(model.m.s.low$`57`)["mean"]),as.numeric(CI(model.m.s.low$`58`)["mean"])),
+  Type = rep("Low Density", ncol(model.m.s.low)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)["upper"]),as.numeric(CI(model.m.s.low$`2`)["upper"]),as.numeric(CI(model.m.s.low$`3`)["upper"]),as.numeric(CI(model.m.s.low$`4`)["upper"]),as.numeric(CI(model.m.s.low$`5`)["upper"]),as.numeric(CI(model.m.s.low$`6`)["upper"]),as.numeric(CI(model.m.s.low$`7`)["upper"]),as.numeric(CI(model.m.s.low$`8`)["upper"]),as.numeric(CI(model.m.s.low$`9`)["upper"]),as.numeric(CI(model.m.s.low$`10`)["upper"]),as.numeric(CI(model.m.s.low$`11`)["upper"]),as.numeric(CI(model.m.s.low$`12`)["upper"]),as.numeric(CI(model.m.s.low$`13`)["upper"]),as.numeric(CI(model.m.s.low$`14`)["upper"]),as.numeric(CI(model.m.s.low$`15`)["upper"]),as.numeric(CI(model.m.s.low$`16`)["upper"]),as.numeric(CI(model.m.s.low$`17`)["upper"]),as.numeric(CI(model.m.s.low$`18`)["upper"]),as.numeric(CI(model.m.s.low$`19`)["upper"]),as.numeric(CI(model.m.s.low$`20`)["upper"]),as.numeric(CI(model.m.s.low$`21`)["upper"]),as.numeric(CI(model.m.s.low$`22`)["upper"]),as.numeric(CI(model.m.s.low$`23`)["upper"]),as.numeric(CI(model.m.s.low$`24`)["upper"]),as.numeric(CI(model.m.s.low$`25`)["upper"]),as.numeric(CI(model.m.s.low$`26`)["upper"]),as.numeric(CI(model.m.s.low$`27`)["upper"]),as.numeric(CI(model.m.s.low$`28`)["upper"]),as.numeric(CI(model.m.s.low$`29`)["upper"]),as.numeric(CI(model.m.s.low$`30`)["upper"]),as.numeric(CI(model.m.s.low$`31`)["upper"]),as.numeric(CI(model.m.s.low$`32`)["upper"]),as.numeric(CI(model.m.s.low$`33`)["upper"]),as.numeric(CI(model.m.s.low$`34`)["upper"]),as.numeric(CI(model.m.s.low$`35`)["upper"]),as.numeric(CI(model.m.s.low$`36`)["upper"]),as.numeric(CI(model.m.s.low$`37`)["upper"]),as.numeric(CI(model.m.s.low$`38`)["upper"]),as.numeric(CI(model.m.s.low$`39`)["upper"]),as.numeric(CI(model.m.s.low$`40`)["upper"]),as.numeric(CI(model.m.s.low$`41`)["upper"]),as.numeric(CI(model.m.s.low$`42`)["upper"]),as.numeric(CI(model.m.s.low$`43`)["upper"]),as.numeric(CI(model.m.s.low$`44`)["upper"]),as.numeric(CI(model.m.s.low$`45`)["upper"]),as.numeric(CI(model.m.s.low$`46`)["upper"]),as.numeric(CI(model.m.s.low$`47`)["upper"]),as.numeric(CI(model.m.s.low$`48`)["upper"]),as.numeric(CI(model.m.s.low$`49`)["upper"]),as.numeric(CI(model.m.s.low$`50`)["upper"]),as.numeric(CI(model.m.s.low$`51`)["upper"]),as.numeric(CI(model.m.s.low$`52`)["upper"]),as.numeric(CI(model.m.s.low$`53`)["upper"]),as.numeric(CI(model.m.s.low$`54`)["upper"]),as.numeric(CI(model.m.s.low$`55`)["upper"]),as.numeric(CI(model.m.s.low$`56`)["upper"]),as.numeric(CI(model.m.s.low$`57`)["upper"]),as.numeric(CI(model.m.s.low$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.low$`1`)["lower"]),as.numeric(CI(model.m.s.low$`2`)["lower"]),as.numeric(CI(model.m.s.low$`3`)["lower"]),as.numeric(CI(model.m.s.low$`4`)["lower"]),as.numeric(CI(model.m.s.low$`5`)["lower"]),as.numeric(CI(model.m.s.low$`6`)["lower"]),as.numeric(CI(model.m.s.low$`7`)["lower"]),as.numeric(CI(model.m.s.low$`8`)["lower"]),as.numeric(CI(model.m.s.low$`9`)["lower"]),as.numeric(CI(model.m.s.low$`10`)["lower"]),as.numeric(CI(model.m.s.low$`11`)["lower"]),as.numeric(CI(model.m.s.low$`12`)["lower"]),as.numeric(CI(model.m.s.low$`13`)["lower"]),as.numeric(CI(model.m.s.low$`14`)["lower"]),as.numeric(CI(model.m.s.low$`15`)["lower"]),as.numeric(CI(model.m.s.low$`16`)["lower"]),as.numeric(CI(model.m.s.low$`17`)["lower"]),as.numeric(CI(model.m.s.low$`18`)["lower"]),as.numeric(CI(model.m.s.low$`19`)["lower"]),as.numeric(CI(model.m.s.low$`20`)["lower"]),as.numeric(CI(model.m.s.low$`21`)["lower"]),as.numeric(CI(model.m.s.low$`22`)["lower"]),as.numeric(CI(model.m.s.low$`23`)["lower"]),as.numeric(CI(model.m.s.low$`24`)["lower"]),as.numeric(CI(model.m.s.low$`25`)["lower"]),as.numeric(CI(model.m.s.low$`26`)["lower"]),as.numeric(CI(model.m.s.low$`27`)["lower"]),as.numeric(CI(model.m.s.low$`28`)["lower"]),as.numeric(CI(model.m.s.low$`29`)["lower"]),as.numeric(CI(model.m.s.low$`30`)["lower"]),as.numeric(CI(model.m.s.low$`31`)["lower"]),as.numeric(CI(model.m.s.low$`32`)["lower"]),as.numeric(CI(model.m.s.low$`33`)["lower"]),as.numeric(CI(model.m.s.low$`34`)["lower"]),as.numeric(CI(model.m.s.low$`35`)["lower"]),as.numeric(CI(model.m.s.low$`36`)["lower"]),as.numeric(CI(model.m.s.low$`37`)["lower"]),as.numeric(CI(model.m.s.low$`38`)["lower"]),as.numeric(CI(model.m.s.low$`39`)["lower"]),as.numeric(CI(model.m.s.low$`40`)["lower"]),as.numeric(CI(model.m.s.low$`41`)["lower"]),as.numeric(CI(model.m.s.low$`42`)["lower"]),as.numeric(CI(model.m.s.low$`43`)["lower"]),as.numeric(CI(model.m.s.low$`44`)["lower"]),as.numeric(CI(model.m.s.low$`45`)["lower"]),as.numeric(CI(model.m.s.low$`46`)["lower"]),as.numeric(CI(model.m.s.low$`47`)["lower"]),as.numeric(CI(model.m.s.low$`48`)["lower"]),as.numeric(CI(model.m.s.low$`49`)["lower"]),as.numeric(CI(model.m.s.low$`50`)["lower"]),as.numeric(CI(model.m.s.low$`51`)["lower"]),as.numeric(CI(model.m.s.low$`52`)["lower"]),as.numeric(CI(model.m.s.low$`53`)["lower"]),as.numeric(CI(model.m.s.low$`54`)["lower"]),as.numeric(CI(model.m.s.low$`55`)["lower"]),as.numeric(CI(model.m.s.low$`56`)["lower"]),as.numeric(CI(model.m.s.low$`57`)["lower"]),as.numeric(CI(model.m.s.low$`58`)["lower"])))
+
+
+# high
+df.high = data.frame(
+  mean = c(as.numeric(CI(model.m.s.high$`1`)["mean"]),as.numeric(CI(model.m.s.high$`2`)["mean"]),as.numeric(CI(model.m.s.high$`3`)["mean"]),as.numeric(CI(model.m.s.high$`4`)["mean"]),as.numeric(CI(model.m.s.high$`5`)["mean"]),as.numeric(CI(model.m.s.high$`6`)["mean"]),as.numeric(CI(model.m.s.high$`7`)["mean"]),as.numeric(CI(model.m.s.high$`8`)["mean"]),as.numeric(CI(model.m.s.high$`9`)["mean"]),as.numeric(CI(model.m.s.high$`10`)["mean"]),as.numeric(CI(model.m.s.high$`11`)["mean"]),as.numeric(CI(model.m.s.high$`12`)["mean"]),as.numeric(CI(model.m.s.high$`13`)["mean"]),as.numeric(CI(model.m.s.high$`14`)["mean"]),as.numeric(CI(model.m.s.high$`15`)["mean"]),as.numeric(CI(model.m.s.high$`16`)["mean"]),as.numeric(CI(model.m.s.high$`17`)["mean"]),as.numeric(CI(model.m.s.high$`18`)["mean"]),as.numeric(CI(model.m.s.high$`19`)["mean"]),as.numeric(CI(model.m.s.high$`20`)["mean"]),as.numeric(CI(model.m.s.high$`21`)["mean"]),as.numeric(CI(model.m.s.high$`22`)["mean"]),as.numeric(CI(model.m.s.high$`23`)["mean"]),as.numeric(CI(model.m.s.high$`24`)["mean"]),as.numeric(CI(model.m.s.high$`25`)["mean"]),as.numeric(CI(model.m.s.high$`26`)["mean"]),as.numeric(CI(model.m.s.high$`27`)["mean"]),as.numeric(CI(model.m.s.high$`28`)["mean"]),as.numeric(CI(model.m.s.high$`29`)["mean"]),as.numeric(CI(model.m.s.high$`30`)["mean"]),as.numeric(CI(model.m.s.high$`31`)["mean"]),as.numeric(CI(model.m.s.high$`32`)["mean"]),as.numeric(CI(model.m.s.high$`33`)["mean"]),as.numeric(CI(model.m.s.high$`34`)["mean"]),as.numeric(CI(model.m.s.high$`35`)["mean"]),as.numeric(CI(model.m.s.high$`36`)["mean"]),as.numeric(CI(model.m.s.high$`37`)["mean"]),as.numeric(CI(model.m.s.high$`38`)["mean"]),as.numeric(CI(model.m.s.high$`39`)["mean"]),as.numeric(CI(model.m.s.high$`40`)["mean"]),as.numeric(CI(model.m.s.high$`41`)["mean"]),as.numeric(CI(model.m.s.high$`42`)["mean"]),as.numeric(CI(model.m.s.high$`43`)["mean"]),as.numeric(CI(model.m.s.high$`44`)["mean"]),as.numeric(CI(model.m.s.high$`45`)["mean"]),as.numeric(CI(model.m.s.high$`46`)["mean"]),as.numeric(CI(model.m.s.high$`47`)["mean"]),as.numeric(CI(model.m.s.high$`48`)["mean"]),as.numeric(CI(model.m.s.high$`49`)["mean"]),as.numeric(CI(model.m.s.high$`50`)["mean"]),as.numeric(CI(model.m.s.high$`51`)["mean"]),as.numeric(CI(model.m.s.high$`52`)["mean"]),as.numeric(CI(model.m.s.high$`53`)["mean"]),as.numeric(CI(model.m.s.high$`54`)["mean"]),as.numeric(CI(model.m.s.high$`55`)["mean"]),as.numeric(CI(model.m.s.high$`56`)["mean"]),as.numeric(CI(model.m.s.high$`57`)["mean"]),as.numeric(CI(model.m.s.high$`58`)["mean"])),
+  Type = rep("High Density", ncol(model.m.s.high)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)["upper"]),as.numeric(CI(model.m.s.high$`2`)["upper"]),as.numeric(CI(model.m.s.high$`3`)["upper"]),as.numeric(CI(model.m.s.high$`4`)["upper"]),as.numeric(CI(model.m.s.high$`5`)["upper"]),as.numeric(CI(model.m.s.high$`6`)["upper"]),as.numeric(CI(model.m.s.high$`7`)["upper"]),as.numeric(CI(model.m.s.high$`8`)["upper"]),as.numeric(CI(model.m.s.high$`9`)["upper"]),as.numeric(CI(model.m.s.high$`10`)["upper"]),as.numeric(CI(model.m.s.high$`11`)["upper"]),as.numeric(CI(model.m.s.high$`12`)["upper"]),as.numeric(CI(model.m.s.high$`13`)["upper"]),as.numeric(CI(model.m.s.high$`14`)["upper"]),as.numeric(CI(model.m.s.high$`15`)["upper"]),as.numeric(CI(model.m.s.high$`16`)["upper"]),as.numeric(CI(model.m.s.high$`17`)["upper"]),as.numeric(CI(model.m.s.high$`18`)["upper"]),as.numeric(CI(model.m.s.high$`19`)["upper"]),as.numeric(CI(model.m.s.high$`20`)["upper"]),as.numeric(CI(model.m.s.high$`21`)["upper"]),as.numeric(CI(model.m.s.high$`22`)["upper"]),as.numeric(CI(model.m.s.high$`23`)["upper"]),as.numeric(CI(model.m.s.high$`24`)["upper"]),as.numeric(CI(model.m.s.high$`25`)["upper"]),as.numeric(CI(model.m.s.high$`26`)["upper"]),as.numeric(CI(model.m.s.high$`27`)["upper"]),as.numeric(CI(model.m.s.high$`28`)["upper"]),as.numeric(CI(model.m.s.high$`29`)["upper"]),as.numeric(CI(model.m.s.high$`30`)["upper"]),as.numeric(CI(model.m.s.high$`31`)["upper"]),as.numeric(CI(model.m.s.high$`32`)["upper"]),as.numeric(CI(model.m.s.high$`33`)["upper"]),as.numeric(CI(model.m.s.high$`34`)["upper"]),as.numeric(CI(model.m.s.high$`35`)["upper"]),as.numeric(CI(model.m.s.high$`36`)["upper"]),as.numeric(CI(model.m.s.high$`37`)["upper"]),as.numeric(CI(model.m.s.high$`38`)["upper"]),as.numeric(CI(model.m.s.high$`39`)["upper"]),as.numeric(CI(model.m.s.high$`40`)["upper"]),as.numeric(CI(model.m.s.high$`41`)["upper"]),as.numeric(CI(model.m.s.high$`42`)["upper"]),as.numeric(CI(model.m.s.high$`43`)["upper"]),as.numeric(CI(model.m.s.high$`44`)["upper"]),as.numeric(CI(model.m.s.high$`45`)["upper"]),as.numeric(CI(model.m.s.high$`46`)["upper"]),as.numeric(CI(model.m.s.high$`47`)["upper"]),as.numeric(CI(model.m.s.high$`48`)["upper"]),as.numeric(CI(model.m.s.high$`49`)["upper"]),as.numeric(CI(model.m.s.high$`50`)["upper"]),as.numeric(CI(model.m.s.high$`51`)["upper"]),as.numeric(CI(model.m.s.high$`52`)["upper"]),as.numeric(CI(model.m.s.high$`53`)["upper"]),as.numeric(CI(model.m.s.high$`54`)["upper"]),as.numeric(CI(model.m.s.high$`55`)["upper"]),as.numeric(CI(model.m.s.high$`56`)["upper"]),as.numeric(CI(model.m.s.high$`57`)["upper"]),as.numeric(CI(model.m.s.high$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.high$`1`)["lower"]),as.numeric(CI(model.m.s.high$`2`)["lower"]),as.numeric(CI(model.m.s.high$`3`)["lower"]),as.numeric(CI(model.m.s.high$`4`)["lower"]),as.numeric(CI(model.m.s.high$`5`)["lower"]),as.numeric(CI(model.m.s.high$`6`)["lower"]),as.numeric(CI(model.m.s.high$`7`)["lower"]),as.numeric(CI(model.m.s.high$`8`)["lower"]),as.numeric(CI(model.m.s.high$`9`)["lower"]),as.numeric(CI(model.m.s.high$`10`)["lower"]),as.numeric(CI(model.m.s.high$`11`)["lower"]),as.numeric(CI(model.m.s.high$`12`)["lower"]),as.numeric(CI(model.m.s.high$`13`)["lower"]),as.numeric(CI(model.m.s.high$`14`)["lower"]),as.numeric(CI(model.m.s.high$`15`)["lower"]),as.numeric(CI(model.m.s.high$`16`)["lower"]),as.numeric(CI(model.m.s.high$`17`)["lower"]),as.numeric(CI(model.m.s.high$`18`)["lower"]),as.numeric(CI(model.m.s.high$`19`)["lower"]),as.numeric(CI(model.m.s.high$`20`)["lower"]),as.numeric(CI(model.m.s.high$`21`)["lower"]),as.numeric(CI(model.m.s.high$`22`)["lower"]),as.numeric(CI(model.m.s.high$`23`)["lower"]),as.numeric(CI(model.m.s.high$`24`)["lower"]),as.numeric(CI(model.m.s.high$`25`)["lower"]),as.numeric(CI(model.m.s.high$`26`)["lower"]),as.numeric(CI(model.m.s.high$`27`)["lower"]),as.numeric(CI(model.m.s.high$`28`)["lower"]),as.numeric(CI(model.m.s.high$`29`)["lower"]),as.numeric(CI(model.m.s.high$`30`)["lower"]),as.numeric(CI(model.m.s.high$`31`)["lower"]),as.numeric(CI(model.m.s.high$`32`)["lower"]),as.numeric(CI(model.m.s.high$`33`)["lower"]),as.numeric(CI(model.m.s.high$`34`)["lower"]),as.numeric(CI(model.m.s.high$`35`)["lower"]),as.numeric(CI(model.m.s.high$`36`)["lower"]),as.numeric(CI(model.m.s.high$`37`)["lower"]),as.numeric(CI(model.m.s.high$`38`)["lower"]),as.numeric(CI(model.m.s.high$`39`)["lower"]),as.numeric(CI(model.m.s.high$`40`)["lower"]),as.numeric(CI(model.m.s.high$`41`)["lower"]),as.numeric(CI(model.m.s.high$`42`)["lower"]),as.numeric(CI(model.m.s.high$`43`)["lower"]),as.numeric(CI(model.m.s.high$`44`)["lower"]),as.numeric(CI(model.m.s.high$`45`)["lower"]),as.numeric(CI(model.m.s.high$`46`)["lower"]),as.numeric(CI(model.m.s.high$`47`)["lower"]),as.numeric(CI(model.m.s.high$`48`)["lower"]),as.numeric(CI(model.m.s.high$`49`)["lower"]),as.numeric(CI(model.m.s.high$`50`)["lower"]),as.numeric(CI(model.m.s.high$`51`)["lower"]),as.numeric(CI(model.m.s.high$`52`)["lower"]),as.numeric(CI(model.m.s.high$`53`)["lower"]),as.numeric(CI(model.m.s.high$`54`)["lower"]),as.numeric(CI(model.m.s.high$`55`)["lower"]),as.numeric(CI(model.m.s.high$`56`)["lower"]),as.numeric(CI(model.m.s.high$`57`)["lower"]),as.numeric(CI(model.m.s.high$`58`)["lower"])))
+
+
+
+### munopp
+df.munopp = data.frame(
+  mean = c(as.numeric(CI(model.m.s.munopp$`1`)["mean"]),as.numeric(CI(model.m.s.munopp$`2`)["mean"]),as.numeric(CI(model.m.s.munopp$`3`)["mean"]),as.numeric(CI(model.m.s.munopp$`4`)["mean"]),as.numeric(CI(model.m.s.munopp$`5`)["mean"]),as.numeric(CI(model.m.s.munopp$`6`)["mean"]),as.numeric(CI(model.m.s.munopp$`7`)["mean"]),as.numeric(CI(model.m.s.munopp$`8`)["mean"]),as.numeric(CI(model.m.s.munopp$`9`)["mean"]),as.numeric(CI(model.m.s.munopp$`10`)["mean"]),as.numeric(CI(model.m.s.munopp$`11`)["mean"]),as.numeric(CI(model.m.s.munopp$`12`)["mean"]),as.numeric(CI(model.m.s.munopp$`13`)["mean"]),as.numeric(CI(model.m.s.munopp$`14`)["mean"]),as.numeric(CI(model.m.s.munopp$`15`)["mean"]),as.numeric(CI(model.m.s.munopp$`16`)["mean"]),as.numeric(CI(model.m.s.munopp$`17`)["mean"]),as.numeric(CI(model.m.s.munopp$`18`)["mean"]),as.numeric(CI(model.m.s.munopp$`19`)["mean"]),as.numeric(CI(model.m.s.munopp$`20`)["mean"]),as.numeric(CI(model.m.s.munopp$`21`)["mean"]),as.numeric(CI(model.m.s.munopp$`22`)["mean"]),as.numeric(CI(model.m.s.munopp$`23`)["mean"]),as.numeric(CI(model.m.s.munopp$`24`)["mean"]),as.numeric(CI(model.m.s.munopp$`25`)["mean"]),as.numeric(CI(model.m.s.munopp$`26`)["mean"]),as.numeric(CI(model.m.s.munopp$`27`)["mean"]),as.numeric(CI(model.m.s.munopp$`28`)["mean"]),as.numeric(CI(model.m.s.munopp$`29`)["mean"]),as.numeric(CI(model.m.s.munopp$`30`)["mean"]),as.numeric(CI(model.m.s.munopp$`31`)["mean"]),as.numeric(CI(model.m.s.munopp$`32`)["mean"]),as.numeric(CI(model.m.s.munopp$`33`)["mean"]),as.numeric(CI(model.m.s.munopp$`34`)["mean"]),as.numeric(CI(model.m.s.munopp$`35`)["mean"]),as.numeric(CI(model.m.s.munopp$`36`)["mean"]),as.numeric(CI(model.m.s.munopp$`37`)["mean"]),as.numeric(CI(model.m.s.munopp$`38`)["mean"]),as.numeric(CI(model.m.s.munopp$`39`)["mean"]),as.numeric(CI(model.m.s.munopp$`40`)["mean"]),as.numeric(CI(model.m.s.munopp$`41`)["mean"]),as.numeric(CI(model.m.s.munopp$`42`)["mean"]),as.numeric(CI(model.m.s.munopp$`43`)["mean"]),as.numeric(CI(model.m.s.munopp$`44`)["mean"]),as.numeric(CI(model.m.s.munopp$`45`)["mean"]),as.numeric(CI(model.m.s.munopp$`46`)["mean"]),as.numeric(CI(model.m.s.munopp$`47`)["mean"]),as.numeric(CI(model.m.s.munopp$`48`)["mean"]),as.numeric(CI(model.m.s.munopp$`49`)["mean"]),as.numeric(CI(model.m.s.munopp$`50`)["mean"]),as.numeric(CI(model.m.s.munopp$`51`)["mean"]),as.numeric(CI(model.m.s.munopp$`52`)["mean"]),as.numeric(CI(model.m.s.munopp$`53`)["mean"]),as.numeric(CI(model.m.s.munopp$`54`)["mean"]),as.numeric(CI(model.m.s.munopp$`55`)["mean"]),as.numeric(CI(model.m.s.munopp$`56`)["mean"]),as.numeric(CI(model.m.s.munopp$`57`)["mean"]),as.numeric(CI(model.m.s.munopp$`58`)["mean"])),
+  Type = rep("Municipal Opposition", ncol(model.m.s.munopp)),
+  Opposition = min(m.data$munopp):max(m.data$munopp),
+  Upper = c(as.numeric(CI(model.m.s.munopp$`1`)["upper"]),as.numeric(CI(model.m.s.munopp$`2`)["upper"]),as.numeric(CI(model.m.s.munopp$`3`)["upper"]),as.numeric(CI(model.m.s.munopp$`4`)["upper"]),as.numeric(CI(model.m.s.munopp$`5`)["upper"]),as.numeric(CI(model.m.s.munopp$`6`)["upper"]),as.numeric(CI(model.m.s.munopp$`7`)["upper"]),as.numeric(CI(model.m.s.munopp$`8`)["upper"]),as.numeric(CI(model.m.s.munopp$`9`)["upper"]),as.numeric(CI(model.m.s.munopp$`10`)["upper"]),as.numeric(CI(model.m.s.munopp$`11`)["upper"]),as.numeric(CI(model.m.s.munopp$`12`)["upper"]),as.numeric(CI(model.m.s.munopp$`13`)["upper"]),as.numeric(CI(model.m.s.munopp$`14`)["upper"]),as.numeric(CI(model.m.s.munopp$`15`)["upper"]),as.numeric(CI(model.m.s.munopp$`16`)["upper"]),as.numeric(CI(model.m.s.munopp$`17`)["upper"]),as.numeric(CI(model.m.s.munopp$`18`)["upper"]),as.numeric(CI(model.m.s.munopp$`19`)["upper"]),as.numeric(CI(model.m.s.munopp$`20`)["upper"]),as.numeric(CI(model.m.s.munopp$`21`)["upper"]),as.numeric(CI(model.m.s.munopp$`22`)["upper"]),as.numeric(CI(model.m.s.munopp$`23`)["upper"]),as.numeric(CI(model.m.s.munopp$`24`)["upper"]),as.numeric(CI(model.m.s.munopp$`25`)["upper"]),as.numeric(CI(model.m.s.munopp$`26`)["upper"]),as.numeric(CI(model.m.s.munopp$`27`)["upper"]),as.numeric(CI(model.m.s.munopp$`28`)["upper"]),as.numeric(CI(model.m.s.munopp$`29`)["upper"]),as.numeric(CI(model.m.s.munopp$`30`)["upper"]),as.numeric(CI(model.m.s.munopp$`31`)["upper"]),as.numeric(CI(model.m.s.munopp$`32`)["upper"]),as.numeric(CI(model.m.s.munopp$`33`)["upper"]),as.numeric(CI(model.m.s.munopp$`34`)["upper"]),as.numeric(CI(model.m.s.munopp$`35`)["upper"]),as.numeric(CI(model.m.s.munopp$`36`)["upper"]),as.numeric(CI(model.m.s.munopp$`37`)["upper"]),as.numeric(CI(model.m.s.munopp$`38`)["upper"]),as.numeric(CI(model.m.s.munopp$`39`)["upper"]),as.numeric(CI(model.m.s.munopp$`40`)["upper"]),as.numeric(CI(model.m.s.munopp$`41`)["upper"]),as.numeric(CI(model.m.s.munopp$`42`)["upper"]),as.numeric(CI(model.m.s.munopp$`43`)["upper"]),as.numeric(CI(model.m.s.munopp$`44`)["upper"]),as.numeric(CI(model.m.s.munopp$`45`)["upper"]),as.numeric(CI(model.m.s.munopp$`46`)["upper"]),as.numeric(CI(model.m.s.munopp$`47`)["upper"]),as.numeric(CI(model.m.s.munopp$`48`)["upper"]),as.numeric(CI(model.m.s.munopp$`49`)["upper"]),as.numeric(CI(model.m.s.munopp$`50`)["upper"]),as.numeric(CI(model.m.s.munopp$`51`)["upper"]),as.numeric(CI(model.m.s.munopp$`52`)["upper"]),as.numeric(CI(model.m.s.munopp$`53`)["upper"]),as.numeric(CI(model.m.s.munopp$`54`)["upper"]),as.numeric(CI(model.m.s.munopp$`55`)["upper"]),as.numeric(CI(model.m.s.munopp$`56`)["upper"]),as.numeric(CI(model.m.s.munopp$`57`)["upper"]),as.numeric(CI(model.m.s.munopp$`58`)["upper"])), 
+  Lower = c(as.numeric(CI(model.m.s.munopp$`1`)["lower"]),as.numeric(CI(model.m.s.munopp$`2`)["lower"]),as.numeric(CI(model.m.s.munopp$`3`)["lower"]),as.numeric(CI(model.m.s.munopp$`4`)["lower"]),as.numeric(CI(model.m.s.munopp$`5`)["lower"]),as.numeric(CI(model.m.s.munopp$`6`)["lower"]),as.numeric(CI(model.m.s.munopp$`7`)["lower"]),as.numeric(CI(model.m.s.munopp$`8`)["lower"]),as.numeric(CI(model.m.s.munopp$`9`)["lower"]),as.numeric(CI(model.m.s.munopp$`10`)["lower"]),as.numeric(CI(model.m.s.munopp$`11`)["lower"]),as.numeric(CI(model.m.s.munopp$`12`)["lower"]),as.numeric(CI(model.m.s.munopp$`13`)["lower"]),as.numeric(CI(model.m.s.munopp$`14`)["lower"]),as.numeric(CI(model.m.s.munopp$`15`)["lower"]),as.numeric(CI(model.m.s.munopp$`16`)["lower"]),as.numeric(CI(model.m.s.munopp$`17`)["lower"]),as.numeric(CI(model.m.s.munopp$`18`)["lower"]),as.numeric(CI(model.m.s.munopp$`19`)["lower"]),as.numeric(CI(model.m.s.munopp$`20`)["lower"]),as.numeric(CI(model.m.s.munopp$`21`)["lower"]),as.numeric(CI(model.m.s.munopp$`22`)["lower"]),as.numeric(CI(model.m.s.munopp$`23`)["lower"]),as.numeric(CI(model.m.s.munopp$`24`)["lower"]),as.numeric(CI(model.m.s.munopp$`25`)["lower"]),as.numeric(CI(model.m.s.munopp$`26`)["lower"]),as.numeric(CI(model.m.s.munopp$`27`)["lower"]),as.numeric(CI(model.m.s.munopp$`28`)["lower"]),as.numeric(CI(model.m.s.munopp$`29`)["lower"]),as.numeric(CI(model.m.s.munopp$`30`)["lower"]),as.numeric(CI(model.m.s.munopp$`31`)["lower"]),as.numeric(CI(model.m.s.munopp$`32`)["lower"]),as.numeric(CI(model.m.s.munopp$`33`)["lower"]),as.numeric(CI(model.m.s.munopp$`34`)["lower"]),as.numeric(CI(model.m.s.munopp$`35`)["lower"]),as.numeric(CI(model.m.s.munopp$`36`)["lower"]),as.numeric(CI(model.m.s.munopp$`37`)["lower"]),as.numeric(CI(model.m.s.munopp$`38`)["lower"]),as.numeric(CI(model.m.s.munopp$`39`)["lower"]),as.numeric(CI(model.m.s.munopp$`40`)["lower"]),as.numeric(CI(model.m.s.munopp$`41`)["lower"]),as.numeric(CI(model.m.s.munopp$`42`)["lower"]),as.numeric(CI(model.m.s.munopp$`43`)["lower"]),as.numeric(CI(model.m.s.munopp$`44`)["lower"]),as.numeric(CI(model.m.s.munopp$`45`)["lower"]),as.numeric(CI(model.m.s.munopp$`46`)["lower"]),as.numeric(CI(model.m.s.munopp$`47`)["lower"]),as.numeric(CI(model.m.s.munopp$`48`)["lower"]),as.numeric(CI(model.m.s.munopp$`49`)["lower"]),as.numeric(CI(model.m.s.munopp$`50`)["lower"]),as.numeric(CI(model.m.s.munopp$`51`)["lower"]),as.numeric(CI(model.m.s.munopp$`52`)["lower"]),as.numeric(CI(model.m.s.munopp$`53`)["lower"]),as.numeric(CI(model.m.s.munopp$`54`)["lower"]),as.numeric(CI(model.m.s.munopp$`55`)["lower"]),as.numeric(CI(model.m.s.munopp$`56`)["lower"]),as.numeric(CI(model.m.s.munopp$`57`)["lower"]),as.numeric(CI(model.m.s.munopp$`58`)["lower"])))
+
+
+
+### combined two df's
+munopp.d= rbind(df.high, df.low,df.munopp)
+
+
+### plot
+library(ggplot2)
+ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Opposition,y=mean)) +
+  xlab("Municipal Opposition") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
+##########################
+#  LARGE * POLINV:  // LARGE * POP
+# [pol.inv:pop.size:plot]
+# simulation
+library(Zelig)
+set.seed(602); options(scipen=999)
+
+
+# low 
+model.m.s.low = data.frame(
+  sim(
+    x = setx(model.m.s, cond = TRUE,
+             large = min(m.data$large), 
+             polinv:large,
+             polinv = min(m.data$polinv):max(m.data$polinv)), 
+    num=700)$getqi(qi="ev", xvalue="range"))
+
+colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # low
+
+# high
+model.m.s.high = data.frame(
+  sim(
+    x = setx(model.m.s, cond = TRUE,
+             large = max(m.data$large), 
+             polinv:large,
+             polinv = min(m.data$polinv):max(m.data$polinv)), 
+    num=700)$getqi(qi="ev", xvalue="range")) ; 
+colnames(model.m.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
+
+
+# polinv 
+model.m.s.polinv = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large:munopp,
+               polinv = min(m.data$polinv):max(m.data$polinv)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.polinv) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  
+
+
+# to compute confidence intervals
+library(Rmisc) # install.packages("Rmisc")
+
+### df's
+### low
+df.low = data.frame(
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`), mean(model.m.s.low$`10`)),
+  Type = rep("Low Density", ncol(model.m.s.low)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
+  Lower = c(
+    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]))
+)
+
+### high
+df.high = data.frame(
+  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`), mean(model.m.s.high$`9`), mean(model.m.s.high$`10`)),
+  Type = rep("High Density", ncol(model.m.s.high)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1])),
+  Lower = c(
+    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]))
+)
+
+### polinv
+df.polinv.alone = data.frame(
+  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`), mean(model.m.s.polinv$`9`), mean(model.m.s.polinv$`10`)),
+  Type = rep("Political Involvement", ncol(model.m.s.polinv)),
+  Opposition = min(m.data$polinv):max(m.data$polinv),
+  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1]), as.numeric(CI(model.m.s.polinv$`9`)[1]), as.numeric(CI(model.m.s.polinv$`10`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]), as.numeric(CI(model.m.s.polinv$`9`)[3]), as.numeric(CI(model.m.s.polinv$`10`)[3]))
+)
+
+### combined two df's
+polinv.d= rbind(df.high, df.low,df.polinv.alone)
+
+
+### plot
+library(ggplot2)
+p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Opposition,y=mean)) +
+  xlab("Political Involvement") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+##########################
+#  LARGE * POP
+##########################
+
+## low 
+model.m.s.low = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = min(m.data$large), 
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)), 
+      num=300)$getqi(qi="ev", xvalue="range"))
+colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # low
+
+
+## high
+gee.dich.m.2.high = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               large = max(m.data$large), 
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.high) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
+
+
+## pop.10
+gee.dich.m.2.pop.10 = data.frame(
+  sim(x = setx(model.m.s, cond = TRUE,
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
+colnames(gee.dich.m.2.pop.10) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
+
+
+
+library(Rmisc) # install.packages("Rmisc")
+
+### low
+df.low = data.frame(
+  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("Low Density", ncol(model.m.s.low)),
+  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
+  Lower =c(as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]))
+)
+
+### high
+df.high = data.frame(
+  mean = c(mean(gee.dich.m.2.high$`1`),mean(gee.dich.m.2.high$`2`),mean(gee.dich.m.2.high$`3`),mean(gee.dich.m.2.high$`4`),mean(gee.dich.m.2.high$`5`),mean(gee.dich.m.2.high$`6`),mean(gee.dich.m.2.high$`7`),mean(gee.dich.m.2.high$`8`), mean(gee.dich.m.2.high$`9`),mean(gee.dich.m.2.high$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("High Density", ncol(gee.dich.m.2.high)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.high$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.high$`10`)[3]))
+)
+
+### pop
+df.pop.alone = data.frame(
+  mean = c(mean(gee.dich.m.2.pop.10$`1`),mean(gee.dich.m.2.pop.10$`2`),mean(gee.dich.m.2.pop.10$`3`),mean(gee.dich.m.2.pop.10$`4`),mean(gee.dich.m.2.pop.10$`5`),mean(gee.dich.m.2.pop.10$`6`),mean(gee.dich.m.2.pop.10$`7`),mean(gee.dich.m.2.pop.10$`8`), mean(gee.dich.m.2.pop.10$`9`),mean(gee.dich.m.2.pop.10$`10`)),
+  Population = min(m.data$pop.10):max(m.data$pop.10),
+  Poverty = rep("Population Size", ncol(gee.dich.m.2.pop.10)),
+  Upper = c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[1])),
+  Lower =c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[3]))
+)
+
+
+### combined two df's
+pop.d= rbind(df.high, df.low,df.pop.alone)
+
+
+
+### plot
+library(ggplot2)
+p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
+  stat_smooth() + 
+  geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  stat_smooth(aes(x=Population,y=mean)) +
+  xlab("Municipal Population Size") + ylab("Expected Value of Clientelism") + 
+  theme_bw() + 
+  theme(axis.title.y=element_text(colour="white"), legend.position="top", legend.title=element_blank(), legend.key = element_rect())
+
+
+###################################
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(p1,p2,  nrow = 1, labels = "auto")
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
 ######################################################
 
-# Subset Data for Descriptive Stats Table
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+library(car)
+
+
+
+########################################################
+# Descriptive Stats Matched Set
+## [tab:sum:stats:m]
+
+# clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed
 
 # matched sample
-m.dat.clien1dummy <- m.data$clien1dummy 
-m.dat.clien1dummy <- dat$clien1dummy 
-m.dat.large <- dat$large 
-m.dat.polinv <- dat$polinv 
-m.dat.exc7 <- dat$exc7 
-m.dat.vb3 <- dat$vb3 
-m.dat.ed <- dat$ed 
-m.dat.income <- dat$income 
-m.dat.munopp <- dat$munopp
-m.dat.pop = dat$pop
-m.dat.logpop = log(m.dat.pop)
-m.dat.urban <- dat$urban
-m.dat.urban <- as.numeric(m.dat.urban)
-m.dat.urban <- recode(m.dat.urban, "1 = 0 ; 2 = 1")
-m.dat.polinv <-  dat$polinv
-m.dat.ed <- dat$ed
-m.dat.ed <- as.numeric(m.dat.ed)
-m.dat.ed <- recode(m.dat.ed, "
-                   1 = 0 ; 
-                   2 = 1 ; 
-                   3 = 2 ; 
-                   4 = 3 ;
-                   5 = 4 ;
-                   6 = 5 ;
-                   7 = 6 ;
-                   8 = 7 ;
-                   9 = 8 ;
-                   10 = 9 ;
-                   11 = 10 ;
-                   12 = 11 ;
-                   13 = 12 ;
-                   14 = 13 ;
-                   15 = 14 ;
-                   16 = 15 ;
-                   17 = 16")
+m.data.clien1dummy <- m.data$clien1dummy 
+m.data.wealth <- m.data$wealth 
+m.data.munopp <- m.data$munopp
+m.data.large <- m.data$large 
+m.data.pop.10 <- m.data$pop.10
+m.data.urban <- as.numeric(recode(as.numeric(m.data$urban), "1 = 0 ; 2 = 1"))
+m.data.polinv <- m.data$polinv 
+m.data.ing4 <- m.data$ing4
+m.data.vb3 <- m.data$vb3 
+m.data.exc7 <- m.data$exc7 
+m.data.ed <- m.data$ed
 
-m.data.s <- data.frame(m.dat.clien1dummy, m.dat.large, m.dat.income, m.dat.exc7, m.dat.polinv, m.dat.urban, m.dat.logpop, m.dat.ed, m.dat.munopp, m.dat.vb3)
+# df
+dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.large, m.data.pop.10, m.data.urban, m.data.polinv, m.data.ing4, m.data.vb3, m.data.exc7, m.data.ed)
 
-# Descriptive Stats Matched Set
-library(stargazer, quietly = T)
-stargazer(m.data.s, 
+labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
+
+
+library(stargazer, quietly = T) # install.packages("stargazer")
+stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
-          label = "sumtab:1",
-          type = "text",
+          label = "sumtab:matched",
+          type = "latex",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
+          covariate.labels=labels.m,
           table.placement = "h",
           notes.align = "c"
 )
 
-# Descriptive Stats Raw Set
 
-# Subset Data for Descriptive Stats Table
+########################################################
+# Descriptive Stats Raw Set
+# [tab:sum:stats:r]
 
 # whole sample
-dat.clien1dummy <- dat$clien1dummy 
-dat.large <- dat$large 
-dat.polinv <- dat$polinv 
-dat.exc7 <- dat$exc7 
-dat.vb3 <- dat$vb3 
-dat.ed <- dat$ed 
-dat.income <- dat$income 
-dat.munopp <- dat$munopp
-dat.pop = dat$pop
-dat.logpop = log(dat.pop)
-dat.urban <- dat$urban
-dat.urban <- as.numeric(dat.urban)
-dat.urban <- recode(dat.urban, "1 = 0 ; 2 = 1")
-dat.polinv <-  dat$polinv
-dat.ed <- dat$ed
-dat.ed <- as.numeric(dat.ed)
-dat.ed <- recode(dat.ed, "
-                 1 = 0 ; 
-                 2 = 1 ; 
-                 3 = 2 ; 
-                 4 = 3 ;
-                 5 = 4 ;
-                 6 = 5 ;
-                 7 = 6 ;
-                 8 = 7 ;
-                 9 = 8 ;
-                 10 = 9 ;
-                 11 = 10 ;
-                 12 = 11 ;
-                 13 = 12 ;
-                 14 = 13 ;
-                 15 = 14 ;
-                 16 = 15 ;
-                 17 = 16")
+r.data.clien1dummy <- as.numeric(recode(as.numeric(dat$clien1dummy), "1 = 0 ; 2 = 1"))
+r.data.wealth <- dat$wealth 
+r.data.munopp <- dat$munopp
+r.data.wagehalf.4 <- dat$wagehalf.4 
+r.data.pop.10 <- dat$pop.10
+r.data.urban <- as.numeric(recode(as.numeric(dat$urban), "1 = 0 ; 2 = 1"))
+r.data.polinv <- dat$polinv 
+r.data.ing4 <- dat$ing4
+r.data.vb3 <- dat$vb3 
+r.data.exc7 <- dat$exc7 
+r.data.ed <- dat$ed
 
-dat.s <- data.frame(dat.clien1dummy, dat.large, dat.income, dat.exc7, dat.polinv, dat.urban, dat.logpop, dat.ed, dat.munopp, dat.vb3)
+# df
+dat.r <- data.frame(r.data.clien1dummy, r.data.wealth, r.data.munopp, r.data.wagehalf.4, r.data.pop.10, r.data.urban, r.data.polinv, r.data.ing4, r.data.vb3, r.data.exc7, r.data.ed)
 
+labels.r = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 
 library(stargazer, quietly = T)
-stargazer(dat, 
+stargazer(dat.r, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
-          label = "sumtab:2",
-          type = "text",
+          label = "sumtab:raw",
+          type = "latex",
           font.size = "scriptsize",
           style= "apsr",
-          covariate.labels=c(
-                  "Clientelism",
-                  "High Density",
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
+          covariate.labels=labels.r,
           table.placement = "h",
           notes.align = "c"
 )
@@ -259,1021 +1219,404 @@ stargazer(dat,
 
 
 
-## Distribution Outcome Variable Binary Outcome
 
-# Plot
 
+
+############################################################
+# Distribution of Individuals by Municipality 
+# [municipality:sample:plot]
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+## df of matched set
+municipality.m = data.frame(
+  Municipality = as.factor(m.data$municipality),
+  Sample = c(rep("Matched", length(m.data$municipality))
+             )
+)
+
+## df of raw set
+municipality.r = data.frame(
+  Municipality = as.factor(dat$municipality),
+  Sample = c(rep("Raw", length(dat$municipality))
+  )
+)
+
+## rbinding the two of them
+municipality.d = data.frame(rbind(municipality.m, municipality.r))
+municipality.d = data.frame(table(municipality.d))
+
+## plot
+#library(ggplot2)
+#ggplot(municipality.d, aes(factor(Municipality), Freq, fill = Sample)) + geom_bar(stat = "identity") + coord_flip() +
+#  xlab("Municipality") + 
+#  ylab("Frequency") + 
+#  #coord_flip() +
+#  theme_bw()
+
+library(ggplot2)
+#mun.p1 = 
+  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity", position=position_dodge()) + 
+  xlab("") + 
+  ylab("Frequency") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+  
+
+
+############################################################
+# Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
+# [municipality:income:large:plot:matched]
+  
+## HIGH df
+high.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 1]),
+  Density = c(rep("High", length(m.data$municipality[as.numeric(m.data$large == 1)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 1]
+)
+
+## LOW df
+low.d = data.frame(
+  Municipality = as.factor(m.data$municipality[m.data$large == 0]),
+  Density = c(rep("Low", length(m.data$municipality[as.numeric(m.data$large == 0)]))),
+  Wealth = as.numeric(m.data$wealth)[m.data$large == 0]
+)
+
+## rbinding the two of them
+density.d = data.frame(rbind(high.d, low.d))
+#density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
+
+## plot
+library(ggplot2)
+ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+  geom_bar() + 
+  geom_point(data=density.d, 
+             position = position_jitter(width = 0.75, height = 1), 
+             size = I(1),
+             aes(
+               x=as.factor(Municipality), 
+               y=Wealth*10,
+               alpha=Wealth))+
+  #coord_flip() +
+  xlab("") + 
+  ylab("Frequency (matched set)") + 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+
+######
+## Combine mun.p1, mun.p2
+#library(cowplot) # install.packages("cowplot")
+#plot_grid(mun.p1,mun.p2,  nrow = 2)
+
+
+############################################################
+# Distribution of Individuals by High/Low COnditions and Wealth [municipality:wealth:large:plot]
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+library(ggplot2)
+
+### Matched Set
+density.wealth.m= ggplot() + geom_point(
+  aes(
+    y=as.factor(m.data$large), 
+    x=m.data$wealth, 
+    colour=m.data$large,
+    alpha = 1/length(m.data$wealth)), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Matched Set") + 
+  ylab("Density of \nthe Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+### Raw Set
+density.wealth.r= ggplot() + geom_point(
+  aes(
+    y=as.factor(dat$large), 
+    x=dat$wealth, 
+    colour=dat$large,
+    alpha = 1/length(dat$large)), 
+  position = position_jitter(width = 5)) +
+  xlab("Wealth Index: Raw Set") + 
+  ylab("Density of \nthe Poor") + 
+  xlim(min(dat$wealth), max(dat$wealth)) +
+  theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
+
+library(cowplot) # install.packages("cowplot")
+plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
+
+
+############################################################
+# Distribution Outcome Variable Binary Outcome
 m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
 library(ggplot2)
 ggplot(data=m.data, aes(x=clien1dummy)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
+  geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+  xlab("Clientelism") + 
+  ylab("Frequency") + 
+  theme_bw()
 
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
 ## Distribution Outcome Variable 3 outcomes
-
-# Plot
 library(ggplot2)
 ggplot(data=m.data, aes(x=clientelism)) + 
-        geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
-        xlab("Clientelism") + 
-        ylab("Frequency") + 
-        theme_bw()
+  geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
+  xlab("Clientelism") + 
+  ylab("Frequency") + 
+  theme_bw()
 
 
-
+############################################################
 ## Distribution treatment var
+# [tgraph:plot]
 # Labels
 ggplot.labels1 <- data.frame(
-        time = c(15, 60), 
-        value = c(75, 75), 
-        label = c("Low (C)", "High (T)"), 
-        type = c("NA*", "MVH")
+  time = c(15, 60), 
+  value = c(75, 75), 
+  label = c("Low (C)", "High (T)"), 
+  type = c("NA*", "MVH")
 )
 
-## Plot
+## Plot BARS
 library(ggplot2)
 ggplot(m.data, aes(x=wagehalf)) + 
-        geom_histogram(binwidth=2.5, alpha=.7) + 
-        #geom_density(alpha=.1) +
-        theme_bw() +
-        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=2, colour = "forestgreen") + 
-        xlab("Density of the Poor") + ylab("Frequency") +
-        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+  geom_histogram(binwidth=2.5, alpha=.7) + 
+  #geom_density(alpha=.1) +
+  theme_bw() +
+  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
+  xlab("Density of the Poor") + ylab("Frequency") +
+  geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+
+
+## Plot Density [tgraph:plot]
+library(ggplot2)
+ggplot() + 
+  geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
+  geom_segment(data= 
+                 m.data, aes(
+                   x = (wagehalf=median(m.data$wagehalf)), 
+                   y = 0, 
+                   xend = (wagehalf=median(m.data$wagehalf)), 
+                   yend = .0305), 
+               linetype="dashed", 
+               size=.5, 
+               colour = "forestgreen") + 
+               xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
+               ylab("Density") + 
+               theme_bw() +
+  theme(
+    legend.position="none", 
+    axis.title.y = element_text(size = 10),
+    axis.title.x = element_text(size = 10)) 
+  
+
 
 ######################################################
 #  B   A   L   A   N   C   E       P   L   O   T   S #
 ######################################################
 
-# 5 x 5 size.
+# load data
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
-# Jitter
-plot(m.out, type = "jitter")
-dev.off()
 
-# Histogram de PSs
-plot(m.out, type = "hist")
-dev.off()
+# Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
+Distance = as.vector(m.out$distance)
+Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
+Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
 
 
-boxplot(distance~clien1dummy,data=m.data, 
-        xlab="Clientelism", 
-        ylab="Propensity Score")
+# [balance:distance:plot]
+library(ggplot2)
+#distance.p=
+ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=.1) +
+  ylab("Estimated Density") + 
+  xlab("Distance") + 
+  theme_bw() +
+  theme(
+    axis.title.y = element_text(size = 10), 
+    axis.title.x = element_text(size = 10),
+    legend.text = element_text(size = 10),
+    legend.title = element_text(size = 10)) + 
+  scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
 
 
-# QQ of de PSs by covariate
-set.seed(602)
-plot(m.out, col = "forestgreen")
-dev.off()
 
 
-######################################################
-#            C o r r e l o g r a m s                 #
-######################################################
+# DISTRIBUTION PLOTS PRE AND POST MATCHING
+# [balance:plot]
 
-munopp <- m.data$munopp
-large  <- m.data$large
-wagehalf <- m.data$wagehalf
-income <- m.data$income
-ed <- m.data$ed
+plot(m.out, type="hist")
 
-m.dataCorr1 <- data.frame(munopp, large, wagehalf, income, ed)
 
-pdf("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation/correlogram.pdf", width = 5, height = 5)
-corrgram.plot <- corrgram(m.dataCorr1, order=TRUE, lower.panel=panel.shade,
-                          upper.panel=panel.pie, text.panel=panel.txt,
-                          main="Correlogram for Matched Data Set")
-dev.off()
 
-# For the correlation
-m.dataCorr2 <- data.frame(large, income)
-corr(m.dataCorr2) # -0.2601744
-
-######################################################
-#              P  a r a m e t r i c                  #
-######################################################
-
-# Recode client1dummy after matching
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-# transform this: simulation methods still don't support log(var).
-m.data$logpop = log(m.data$pop)
-
-
-
-# Models
-
-# METHOD 1
-#source("http://bioconductor.org/biocLite.R")
-#biocLite("graph")
-#biocLite("Rgraphviz")
-#install.packages("Zelig")
-#install.packages("ZeligChoice")
-
-# METHOD 2
-# library(devtools) # install.packages("devtools")
-#install_github('IQSS/Zelig')
-#library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
-
-#relogit.1 <- zelig(clien1dummy ~ large,
-#                   model = "relogit", 
-#                   #robust = TRUE,
-#                   cite = FALSE,
-#                   data = m.data)
-
-#relogit.2 <- zelig(clien1dummy ~ large + exc7 + polinv + urban + logpop + ed,
-#                   model = "relogit", 
-#                   #robust = TRUE,
-#                   cite = FALSE,
-#                   data = m.data)
-
-#relogit.3 <- zelig(clien1dummy ~ income + exc7 + polinv + urban + logpop + ed,
-#                  model = "relogit", 
-#                  #robust = TRUE,
-#                  cite = FALSE,
-#                  data = m.data)
-
-#relogit.4 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-#                  model = "relogit", 
-#                  #robust = TRUE,
-#                  cite = FALSE,
-#                  data = m.data)
-
-#relogit.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv,
-#                  model = "relogit", 
-#                  #robust = TRUE,
-#                  cite = FALSE,
-#                  data = m.data)
-
-#relogit.6 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income, 
-#                  model = "relogit", 
-#                  #robust = TRUE,
-#                  cite = FALSE,
-#                  data = m.data)
-
-
-# Models
-
-## sort data first
-m.data$municipality = sort(m.data$municipality)
-
-
-library(geepack) # install.packages("geepack")
-
-logit.gee.1 <- geeglm(clien1dummy ~ large,
-                      family = binomial, 
-                      id = municipality, 
-                      corstr = "exchangeable",
-                      data = m.data)
-
-logit.gee.2 <- geeglm(clien1dummy ~ large + exc7 + polinv + urban + logpop + ed,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
-                     data = m.data)
-
-logit.gee.3 <- geeglm(clien1dummy ~ income + exc7 + polinv + urban + logpop + ed ,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
-                     data = m.data)
-
-logit.gee.4 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 , 
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
-                     data = m.data)
-
-logit.gee.5 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv ,
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
-                     data = m.data)
-
-logit.gee.6 <- geeglm(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income , 
-                     family = binomial, 
-                     id = municipality, 
-                     corstr = "exchangeable",
-                     data = m.data)
-
-## ---- texreg-extractor-geeglm ----
-extract.geepack <- function(model) {
-        s <- summary(model)
-        names <- rownames(s$coef)
-        co <- s$coef[, 1]
-        se <- s$coef[, 2]
-        pval <- s$coef[, 4]
-        
-        n <- nrow(model.frame(model))
-        nclust <- length(s$geese$clusz)
-        
-        gof = c(n, nclust)
-        gof.names = c("Num. obs.", "Num. clust.")
-        
-        tr <- createTexreg(
-                coef.names = names,
-                coef = co,
-                se = se,
-                pvalues = pval,
-                gof.names = gof.names,
-                gof = gof,
-                gof.decimal = rep(FALSE, length(gof))
-        )
-        return(tr)
-}
-
-
-
-logit.gee.1.d = extract.geepack(logit.gee.1)
-logit.gee.2.d = extract.geepack(logit.gee.2)
-logit.gee.3.d = extract.geepack(logit.gee.3)
-logit.gee.4.d = extract.geepack(logit.gee.4)
-logit.gee.5.d = extract.geepack(logit.gee.5)
-logit.gee.6.d = extract.geepack(logit.gee.6)
-
-
-
-
-library(texreg)
-screenreg(
-        list(logit.gee.1.d, logit.gee.2.d, logit.gee.3.d, logit.gee.4.d, logit.gee.5.d, logit.gee.6.d),
-        custom.coef.names = c(# this gotta be before OMIT.COEFF
-                "(Intercept)",
-                "High Density",
-                "Perception of Corruption",
-                "Political Involvement",
-                "Urban",
-                "Population (ln)",
-                "Education",
-                "Individual Income",
-                "Municipal Opposition",
-                "Political Id",
-                "Political Involvement TIMES Population (ln)",
-                "Individual Income TIMES Municipal Opposition"),
-        caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
-        label = "tab:1",
-        #override.se = logit.robust.se,
-        #override.pvalues = logit.pval,
-        #override.ci.low = logit.robust.se.upper,
-        #override.ci.up = logit.robust.se.lower,
-        stars = c(0.01, 0.05, 0.1),
-        digits = 3,
-        custom.note = "%stars. \n Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
-        fontsize = "scriptsize",
-        float.pos = "h"
-)
-
-
-## Temporary Method to extract RELOGIT objects from Zelig.
-#extract.Zeligrelogit <- function(model, include.aic = TRUE, include.bic = TRUE, 
-#                                 include.loglik = TRUE, include.deviance = TRUE, include.nobs = TRUE, ...) {
-#        g <- model$zelig.out$z.out[[1]]
-#       class(g) <- "glm"
-#       e <- extract(g, include.aic = include.aic, include.bic = include.bic, 
-#                    include.loglik = include.loglik, include.deviance = include.deviance, 
-#                    include.nobs = include.nobs, ...)
-#       return(e)
-#}
-
-#setMethod("extract", signature = className("Zelig-relogit", "Zelig"), 
-#         definition = extract.Zeligrelogit)
-
-
-
-
-##########################
-# Simulation and Plot 1
-##########################
-
-# Match Data
-m.data <- match.data(m.out)
-
-
-# Recode client1dummy after matching
-library(car) # install.packages("car") 
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-# model
-## sort data first
-m.data$municipality = sort(m.data$municipality)
-
-library(Zelig, quietly = T)
-logit.gee.4.z <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                       model = "logit.gee", 
-                       id = "municipality",
-                       cite = FALSE,
-                       data = m.data)
-
-x <- setx(logit.gee.4.z, large = 0)  
-x1 <- setx(logit.gee.4.z, large = 1) 
-
-sim.large2 <- sim(logit.gee.4.z, x = x, x1 = x1, num=2500)
-
-print(summary(sim.large2))
-
-par(mar = rep(2, 4))
-plot(sim.large2)
-
-
-##########################
-# Simulation and Plot 2
-##########################
-
-
-# Match Data
-m.data <- match.data(m.out)
-
-
-# Recode client1dummy after matching
-library(car) # install.packages("car") 
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-# model
-## sort data first
-m.data$municipality = sort(m.data$municipality)
-
-library(Zelig, quietly = T)
-logit.gee.4.z <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                       model = "logit.gee", 
-                       id = "municipality",
-                       cite = FALSE,
-                       data = m.data)
-
-
-# Simulation
-large.0 <- setx(logit.gee.4.z, large =0)
-large.1 <- setx(logit.gee.4.z, large =1)
-set.seed(602)
-Model.large.s <- sim(logit.gee.4.z, x = large.0, x1 = large.1, num=250000)
-
-large.0.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x")); colnames(large.0.s)[1] <- "X1"
-large.1.s = data.frame(Model.large.s$getqi(qi="ev", xvalue="x1")); colnames(large.1.s)[1] <- "X2"
-Model.large.e = cbind(large.0.s,large.1.s)
-
-
-X1 <- Model.large.e$X1
-X2 <- Model.large.e$X2
-
-# Plot
-ggplot.labels2 <- data.frame(
-        time = c(mean(Model.large.e$X1), mean(Model.large.e$X2), mean(Model.large.e$X1), mean(Model.large.e$X2)), 
-        value = c(14, 17, 11, 15), 
-        label = c("Low", "High", round(mean(Model.large.e$X1), 3),round(mean(Model.large.e$X2), 3)), 
-        type = c("NA*", "MVH")
-)
-
-library(ggplot2) # install.packages("ggplot2")
-ggplot() + 
-        geom_density(aes(x=X1), data= Model.large.e,  fill="grey", alpha = .9, linetype="dotted") + 
-        geom_density(aes(x=X2), data=Model.large.e, fill="dark grey", alpha = .8) +
-        xlab("") + ylab("") +
-        theme_bw() +
-        geom_segment(data= Model.large.e, aes(x = mean(X1), y = 0, xend = mean(X1), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
-        geom_segment(data= Model.large.e, aes(x = mean(X2), y = 0, xend = mean(X2), yend = 10), linetype="dashed", size=0.9, colour = "forestgreen") + 
-        theme(legend.title=element_blank()) +
-        geom_text(data = ggplot.labels2, aes(x = time, y = value, label = label),colour = "black", size=4)
-
-##########################
-#   ROBUSTNESS CHECKS    #
-##########################
-
-# Recode client1dummy after matching
-m.data <- match.data(m.out)
-m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
-m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
-
-
-m.4.logit <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3, 
-                   model = "logit", 
-                   robust = TRUE,
-                   cite = FALSE,
-                   data = m.data)
-
-m.4.probit <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3, 
-                    model = "probit", 
-                    robust = TRUE,
-                    cite = FALSE,
-                    data = m.data)
-
-
-m.4.zip <- zeroinfl(clien1dummy ~ large + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 | income + large, data = m.data,  link = "logit")
-
-stargazer(m.4.logit, m.4.probit,m.4.zip, 
-          type = "text", # change to "latex"/"text" when nedded
-          covariate.labels=c(
-                  "High Density", 
-                  "Income",
-                  "Perception of Corruption",
-                  "Political Involvement Index",
-                  "Urban",
-                  "Population (ln)",
-                  "Years of Schooling",
-                  "Municipal Opposition",
-                  "Political Id"),
-          dep.var.labels=c("Clientelism"),
-          label = "tab:2",
-          zero.component=F,
-          notes = "Robust Std. Errors in Parentheses (logit and probit)",
-          title = "Robustness Checks [main model]",
-          font.size = "scriptsize",
-          table.placement = "h",
-          notes.align = "c",
-          style = "apsr")
-
-
-##########################
-#   GPS  Weighting MODELS
-##########################
-
-library(foreign)
-dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
-
-# Recoding vars
-dat <- na.omit(dat)
-dat$ed <- as.numeric(dat$ed)
-dat$vb3 <- as.numeric(dat$vb3)
-dat$exc7 <- as.numeric(dat$exc7)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv <- as.numeric(dat$polinv)
-dat$polinv1 <- as.numeric(dat$polinv1)
-dat$polinv2 <- as.numeric(dat$polinv2)
-dat$polinv3 <- as.numeric(dat$polinv3)
-dat$polinv4 <- as.numeric(dat$polinv4)
-dat$polinv5 <- as.numeric(dat$polinv5)
-
-
-# Generating the Propensity Score 
-library(CBPS, quietly = T) # install.packages("CBPS")
-
-
-fit <- CBPS(wagehalf ~ income, data = dat, iterations = 2500)
-# Attaching weights to DF
-dat$weights = round(fit$weights, digits=10)
-
-
-
-# Recode Before modeling
-dat$clien1dummy <- as.numeric(dat$clien1dummy)
-library(car)
-dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
-dat$logpop = log(dat$pop)
-
-
-# Models
-gps.1 <- glm(clien1dummy ~ wagehalf + weights,
-             family =binomial(link = "logit"),
-             data = dat)
-
-gps.2 <- glm(clien1dummy ~ wagehalf + exc7 + polinv + urban + logpop + ed+ weights,
-             family =binomial(link = "logit"),
-             data = dat)
-
-gps.3 <- glm(clien1dummy ~ income + exc7 + polinv + urban + logpop + ed + weights,
-             family =binomial(link = "logit"),
-             data = dat)
-
-gps.4 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + weights, 
-             family =binomial(link = "logit"),
-             data = dat)
-
-gps.5 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv + weights,
-             family =binomial(link = "logit"),
-             data = dat)
-
-gps.6 <- glm(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + munopp:income + weights, 
-             family =binomial(link = "logit"),
-             data = dat)
-
-# clusterSEs BOOSTRAPPED/clustered
-# library(clusterSEs) # install.packages("clusterSEs")
-# 
-# set.seed(602)
-# gps.1.boost.robust = cluster.bs.glm(gps.1, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.2.boost.robust = cluster.bs.glm(gps.2, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.3.boost.robust = cluster.bs.glm(gps.3, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.4.boost.robust = cluster.bs.glm(gps.4, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.5.boost.robust = cluster.bs.glm(gps.5, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-# gps.6.boost.robust = cluster.bs.glm(gps.6, dat, ~ municipality, ci.level = 0.95, boot.reps = 10000, stratify = T, cluster.se = TRUE, report = TRUE, prog.bar = TRUE)
-
-
-# gps.robust.se.lower.boost= list(c(gps.1.boost.robust$ci[,1]), 
-#                           c(gps.2.boost.robust$ci[,1]), 
-#                         c(gps.3.boost.robust$ci[,1]),
-#                         c(gps.4.boost.robust$ci[,1]),
-#                         c(gps.5.boost.robust$ci[,1]),
-#                         c(gps.6.boost.robust$ci[,1])
-#                         )
-# gps.robust.se.upper.boost= list(c(gps.1.boost.robust$ci[,2]), 
-#                         c(gps.2.boost.robust$ci[,2]), 
-#                         c(gps.3.boost.robust$ci[,2]),
-#                         c(gps.4.boost.robust$ci[,2]),
-#                         c(gps.5.boost.robust$ci[,2]),
-#                         c(gps.6.boost.robust$ci[,2])
-#                         )
-
-
-# screenreg(
-#       list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
-#       omit.coef = "weights", # this gotta be AFTER custo.coef.names
-#       caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
-#       label = "results.gps:1",
-#       override.se = gps.robust.se,
-#       override.ci.low = gps.robust.se.upper.boost,
-#       override.ci.up = gps.robust.se.lower.boost,
-#       digits = 3,
-#       #override.pvalues = gps.pval,
-#       custom.note = "Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
-#       fontsize = "scriptsize",
-#       float.pos = "h"
-# )
-
-
-
-
-
-# CLUSTERED STD ERRORS (but IDK what's the cluster)
-# gps.1.d = data.frame(cbind(Estimate= coef(gps.1), "Robust SE" = sqrt(diag(vcovHC(gps.1, type="HC0"))),
-#       "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.1)/sqrt(diag(vcovHC(gps.1, type="HC0")))), lower.tail=FALSE),
-# LL = coef(gps.1) - 1.96 * sqrt(diag(vcovHC(gps.1, type="HC0"))),
-#     UL = coef(gps.1) + 1.96 * sqrt(diag(vcovHC(gps.1, type="HC0"))))
-#     )
-
-# gps.2.d = data.frame(cbind(Estimate= coef(gps.2), "Robust SE" = sqrt(diag(vcovHC(gps.2, type="HC0"))),
-# "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.2)/sqrt(diag(vcovHC(gps.2, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.2) - 1.96 * sqrt(diag(vcovHC(gps.2, type="HC0"))),
-#     UL = coef(gps.2) + 1.96 * sqrt(diag(vcovHC(gps.2, type="HC0"))))
-# )
-
-
-
-# gps.3.d = data.frame(cbind(Estimate= coef(gps.3), "Robust SE" = sqrt(diag(vcovHC(gps.3, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.3)/sqrt(diag(vcovHC(gps.3, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.3) - 1.96 * sqrt(diag(vcovHC(gps.3, type="HC0"))),
-#     UL = coef(gps.3) + 1.96 * sqrt(diag(vcovHC(gps.3, type="HC0"))))
-# )
-
-
-
-# gps.4.d = data.frame(cbind(Estimate= coef(gps.4), "Robust SE" = sqrt(diag(vcovHC(gps.4, type="HC0"))),
-#       "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.4)/sqrt(diag(vcovHC(gps.4, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.4) - 1.96 * sqrt(diag(vcovHC(gps.4, type="HC0"))),
-#     UL = coef(gps.4) + 1.96 * sqrt(diag(vcovHC(gps.4, type="HC0"))))
-# )
-
-
-
-# gps.5.d = data.frame(cbind(Estimate= coef(gps.5), "Robust SE" = sqrt(diag(vcovHC(gps.5, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.5)/sqrt(diag(vcovHC(gps.5, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.5) - 1.96 * sqrt(diag(vcovHC(gps.5, type="HC0"))),
-#     UL = coef(gps.5) + 1.96 * sqrt(diag(vcovHC(gps.5, type="HC0"))))
-# )
-
-
-
-# gps.6.d = data.frame(cbind(Estimate= coef(gps.6), "Robust SE" = sqrt(diag(vcovHC(gps.6, type="HC0"))),
-#     "Pr(>|z|)" = 2 * pnorm(abs(coef(gps.6)/sqrt(diag(vcovHC(gps.6, type="HC0")))), lower.tail=FALSE),
-#     LL = coef(gps.6) - 1.96 * sqrt(diag(vcovHC(gps.6, type="HC0"))),
-#     UL = coef(gps.6) + 1.96 * sqrt(diag(vcovHC(gps.6, type="HC0"))))
-# )
-
-
-
-# function that does clustered SEs
-vcovCluster <- function(
-        model,
-        cluster
-)
-{
-        require(sandwich)
-        require(lmtest)
-        if(nrow(model.matrix(model))!=length(cluster)){
-                stop("check your data: cluster variable has different N than model")
-        }
-        M <- length(unique(cluster))
-        N <- length(cluster)           
-        K <- model$rank   
-        if(M<50){
-                warning("Fewer than 50 clusters, variances may be unreliable (could try block bootstrap instead).")
-        }
-        dfc <- (M/(M - 1)) * ((N - 1)/(N - K))
-        uj  <- apply(estfun(model), 2, function(x) tapply(x, cluster, sum));
-        rcse.cov <- dfc * sandwich(model, meat = crossprod(uj)/N)
-        return(rcse.cov)
-}
-
-
-library(lmtest)
-library(sandwich)
-library(msm) # install.packages("msm")
-
-
-
-gps.1.robust = coeftest(gps.1, vcov = vcovCluster(gps.1, cluster = as.numeric(dat$municipality)))
-gps.2.robust = coeftest(gps.2, vcov = vcovCluster(gps.2, cluster = as.numeric(dat$municipality)))
-gps.3.robust = coeftest(gps.3, vcov = vcovCluster(gps.3, cluster = as.numeric(dat$municipality)))
-gps.4.robust = coeftest(gps.4, vcov = vcovCluster(gps.4, cluster = as.numeric(dat$municipality)))
-gps.5.robust = coeftest(gps.5, vcov = vcovCluster(gps.5, cluster = as.numeric(dat$municipality)))
-gps.6.robust = coeftest(gps.6, vcov = vcovCluster(gps.6, cluster = as.numeric(dat$municipality)))
-
-
-gps.robust.se = list(c(gps.1.robust[4],gps.1.robust[5], gps.1.robust[6]),
-          c(gps.2.robust[9],gps.2.robust[10], gps.2.robust[11], gps.2.robust[12], gps.2.robust[13], gps.2.robust[14],gps.2.robust[15], gps.2.robust[16]),
-          c(gps.3.robust[9], gps.3.robust[10], gps.3.robust[11], gps.3.robust[12], gps.3.robust[13], gps.3.robust[14], gps.3.robust[15], gps.3.robust[16]),
-          c(gps.4.robust[12], gps.4.robust[13], gps.4.robust[14], gps.4.robust[15], gps.4.robust[16], gps.4.robust[17], gps.4.robust[18], gps.4.robust[19],  gps.4.robust[20],  gps.4.robust[21], gps.4.robust[22]),
-          c(gps.5.robust[13],gps.5.robust[14],gps.5.robust[15],gps.5.robust[16],gps.5.robust[17],gps.5.robust[18],gps.5.robust[19],gps.5.robust[20], gps.5.robust[21], gps.5.robust[22], gps.5.robust[23], gps.5.robust[24]),
-          c(gps.6.robust[13], gps.6.robust[14], gps.6.robust[15], gps.6.robust[16], gps.6.robust[17], gps.6.robust[18], gps.6.robust[19], gps.6.robust[20], gps.6.robust[21], gps.6.robust[22], gps.6.robust[23], gps.6.robust[24])
-)
-
-gps.coeffs = list(c(gps.1.robust[1],gps.1.robust[2], gps.1.robust[3]),
-                  c(gps.2.robust[1],gps.2.robust[2], gps.2.robust[3], gps.2.robust[4], gps.2.robust[5], gps.2.robust[6],gps.2.robust[7], gps.2.robust[8]),
-                  c(gps.3.robust[1], gps.3.robust[2], gps.3.robust[3], gps.3.robust[4], gps.3.robust[5], gps.3.robust[6], gps.3.robust[7], gps.3.robust[8]),
-                  c(gps.4.robust[1], gps.4.robust[2], gps.4.robust[3], gps.4.robust[4], gps.4.robust[5], gps.4.robust[6], gps.4.robust[7], gps.4.robust[8],  gps.4.robust[9],  gps.4.robust[10], gps.4.robust[11]),
-                  c(gps.5.robust[1],gps.5.robust[2],gps.5.robust[3],gps.5.robust[4],gps.5.robust[5],gps.5.robust[6],gps.5.robust[7],gps.5.robust[8], gps.5.robust[9], gps.5.robust[10], gps.5.robust[11], gps.5.robust[12]),
-                  c(gps.6.robust[1], gps.6.robust[2], gps.6.robust[3], gps.6.robust[4], gps.6.robust[5], gps.6.robust[6], gps.6.robust[7], gps.6.robust[8], gps.6.robust[9], gps.6.robust[10], gps.6.robust[11], gps.6.robust[12])
-)
-
-gps.robust.se.upper = list(
-        c(gps.coeffs[[1]] + 1.96*gps.robust.se[[1]]),
-        c(gps.coeffs[[2]] + 1.96*gps.robust.se[[2]]),
-        c(gps.coeffs[[3]] + 1.96*gps.robust.se[[3]]),
-        c(gps.coeffs[[4]] + 1.96*gps.robust.se[[4]]),
-        c(gps.coeffs[[5]] + 1.96*gps.robust.se[[5]]),
-        c(gps.coeffs[[6]] + 1.96*gps.robust.se[[6]])
-        )
-        
-        
-
-gps.robust.se.lower = list(
-        c(gps.coeffs[[1]] - 1.96*gps.robust.se[[1]]),
-        c(gps.coeffs[[2]] - 1.96*gps.robust.se[[2]]),
-        c(gps.coeffs[[3]] - 1.96*gps.robust.se[[3]]),
-        c(gps.coeffs[[4]] - 1.96*gps.robust.se[[4]]),
-        c(gps.coeffs[[5]] - 1.96*gps.robust.se[[5]]),
-        c(gps.coeffs[[6]] - 1.96*gps.robust.se[[6]])
-        )
-
-gps.pval = list(
-        c(gps.1.robust[10], gps.1.robust[11], gps.1.robust[12]),
-        c(gps.2.robust[25], gps.2.robust[26],gps.2.robust[27],gps.2.robust[28],gps.2.robust[29],gps.2.robust[30],gps.2.robust[31],gps.2.robust[32]),
-        c(gps.3.robust[25], gps.3.robust[26],gps.3.robust[27],gps.3.robust[28],gps.3.robust[29],gps.3.robust[30],gps.3.robust[31],gps.3.robust[32]),
-        c(gps.4.robust[34],gps.4.robust[35],gps.4.robust[36],gps.4.robust[37],gps.4.robust[38],gps.4.robust[39],gps.4.robust[40],gps.4.robust[41],gps.4.robust[42],gps.4.robust[43],gps.4.robust[44]),
-        c(gps.5.robust[37],gps.5.robust[38],gps.5.robust[39],gps.5.robust[40],gps.5.robust[41],gps.5.robust[42],gps.5.robust[43],gps.5.robust[44],gps.5.robust[45],gps.5.robust[46],gps.5.robust[47],gps.5.robust[48]),
-        c(gps.6.robust[37],gps.6.robust[38],gps.6.robust[39],gps.6.robust[40],gps.6.robust[41],gps.6.robust[42],gps.6.robust[43],gps.6.robust[44],gps.6.robust[45],gps.6.robust[46],gps.6.robust[47],gps.6.robust[48])
-        )
-
-
-
-library(texreg)
-screenreg(
-        list(gps.1, gps.2, gps.3, gps.4, gps.5, gps.6),
-        custom.coef.names = c(# this gotta be before OMIT.COEFF
-                "(Intercept)",
-                "High Density",
-                "weights",
-                "Perception of Corruption",
-                "Political Involvement",
-                "Urban",
-                "Population (ln)",
-                "Education",
-                "Individual Income",
-                "Municipal Opposition",
-                "Political Id",
-                "Political Involvement TIMES Population (ln)",
-                "Individual Income TIMES Municipal Opposition"),
-        omit.coef = "weights", # this gotta be AFTER custo.coef.names
-        caption = "Models using the Generalized Propensity Score as a weighting device - Unmatched Sample ",
-        label = "results.gps:1",
-        override.se = gps.robust.se,
-        override.pvalues = gps.pval,
-        #override.ci.low = gps.robust.se.upper,
-        #override.ci.up = gps.robust.se.lower,
-        stars = c(0.01, 0.05, 0.1),
-        digits = 3,
-        custom.note = "%stars. \n Robust Standard Errors in All Models. \n Raw sample. \n 95% Confidence Intervals in brackets.",
-        fontsize = "scriptsize",
-        float.pos = "h"
-        )
-
-
-
-
-
-
-##########################
-#   GPS  Weighting PLOT [gps:fig]
-##########################
-# Generating the Propensity Score 
-library(CBPS, quietly = T) # install.packages("CBPS")
-
-
-fit <- CBPS(wagehalf ~ income, data = dat, iterations = 2500)
-# Attaching weights to DF
-dat$weights = round(fit$weights, digits=10)
-
-
-
-# Recode Before modeling
-dat$clien1dummy <- as.numeric(dat$clien1dummy)
-dat$logpop = log(dat$pop)
-library(car)
-dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
-
-
-# model
-## sort data first
-m.data$municipality = sort(m.data$municipality)
-
-library(Zelig, quietly = T)
-
-# Model but using Zelig
-gps.logit.gee.4.z <- zelig(clien1dummy ~ wagehalf + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + weights, 
-                           model = "logit.gee", 
-                           id = "municipality",
-                           cite = FALSE,
-                           data = dat)
-
-# Transformation
-income.range <- min(dat$income):max(dat$income)
-
-# Simulation x0.gps
-low.polinv <- setx(gps.logit.gee.4.z, wagehalf = quantile(dat$wagehalf, .15), income= income.range)
-high.polinv <- setx(gps.logit.gee.4.z, wagehalf = quantile(dat$wagehalf, .95), income= income.range)
-
-
-set.seed(602)
-logit.gee.4.s1.gps <- sim(gps.logit.gee.4.z, x=low.polinv, x1=high.polinv, num=500)
-
-logit.gee.4.low.gps = data.frame(logit.gee.4.s1.gps$getqi(qi="ev", xvalue="range")); colnames(logit.gee.4.low.gps) <- seq(1:ncol(as.data.frame(t(income.range))))  # low
-logit.gee.4.high.gps = data.frame(logit.gee.4.s1.gps$getqi(qi="ev", xvalue="range1")); colnames(logit.gee.4.high.gps) <- seq(1:ncol(as.data.frame(t(income.range))))  # high
-
-
+## Matched
+##
+# [balance:plot2]
 
 library(ggplot2)
-set.seed(602)
-ggplot() + 
-        geom_point(aes(x=income.range[1], y=logit.gee.4.low.gps[1]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[2], y=logit.gee.4.low.gps[2]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[3], y=logit.gee.4.low.gps[3]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[4], y=logit.gee.4.low.gps[4]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[5], y=logit.gee.4.low.gps[5]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[6], y=logit.gee.4.low.gps[6]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[7], y=logit.gee.4.low.gps[7]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[8], y=logit.gee.4.low.gps[8]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[9], y=logit.gee.4.low.gps[9]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[10], y=logit.gee.4.low.gps[10]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[11], y=logit.gee.4.low.gps[11]), position = position_jitter(width = 3), size = I(5), color = "red", alpha = 1/100) +
-        geom_point(aes(x=income.range[1], y=logit.gee.4.high.gps[1]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[2], y=logit.gee.4.high.gps[2]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[3], y=logit.gee.4.high.gps[3]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[4], y=logit.gee.4.high.gps[4]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[5], y=logit.gee.4.high.gps[5]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[6], y=logit.gee.4.high.gps[6]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[7], y=logit.gee.4.high.gps[7]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[8], y=logit.gee.4.high.gps[8]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[9], y=logit.gee.4.high.gps[9]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[10], y=logit.gee.4.high.gps[10]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        geom_point(aes(x=income.range[11], y=logit.gee.4.high.gps[11]), position = position_jitter(width = 3), size = I(5), color = "blue", alpha = 1/100) +
-        xlab("Individual Income") + ylab("Expected Value of Clientelism") + theme_bw()
+library(gtable)
+library(gridExtra)
+library(cowplot)
+
+# matched
+
+balance.1.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$wealth), colour =factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("Matched Set") + 
+  xlab("Wealth Index") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$wealth), max(dat$wealth))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+#balance.2.m=ggplot() + 
+  #geom_density(aes(x=as.numeric(m.data$pop.10), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  #ylab("") + 
+  #xlab("Municipal Population") + 
+  #theme_bw() +
+  #scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  #theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+balance.3.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$munopp), colour = factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+balance.4.m=ggplot() + 
+  geom_density(aes(x=as.numeric(m.data$polinv), colour =factor(m.data$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw() + 
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+# RAW
+
+balance.1.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$wealth), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("Raw Set") + 
+  xlab("Wealth Index") + 
+  theme_bw() +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+#balance.2.r=ggplot() + 
+ # geom_density(aes(x=as.numeric(dat$pop.10), colour = factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  #ylab("") + 
+  #xlab("Municipal Population") + 
+  #theme_bw() +
+  #scale_x_continuous(limits = c(min(dat$pop.10), max(dat$pop.10))) +
+  #theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+balance.3.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$munopp), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Municipal Opposition") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$munopp), max(dat$munopp))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
+
+balance.4.r=ggplot() + 
+  geom_density(aes(x=as.numeric(dat$polinv), colour =factor(dat$large,levels = c(0,1),labels = c("Low", "High")))) + 
+  ylab("") + 
+  xlab("Political Involvement") + 
+  theme_bw() +
+  scale_x_continuous(limits = c(min(dat$polinv), max(dat$polinv))) +
+  theme(axis.title=element_text(size=10), legend.text = element_text(size = 10), legend.title = element_text(size = 10))  + scale_colour_discrete(name = "Density of the Poor")
 
 
-##########################
-#   Plotting Interactions 2 [int:2]
-##########################
-
-# Recode Before modeling
-m.data$logpop = log(m.data$pop)
-
-
-# model
-library(Zelig, quietly = T)
-logit.4.z <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3, 
-                   model = "logit.gee", 
-                   id = "municipality",
-                   cite = FALSE,
-                   data = m.data)
-
-# Simulation A x0.2
-polinv.range <- min(m.data$polinv):max(m.data$polinv)
-logpop.range <- min(m.data$logpop):max(m.data$logpop)
-
-x0.2.A <- setx(logit.4.z, large = 0, polinv = polinv.range)
-set.seed(602)
-logit.4.z.s2.A <- sim(logit.4.z, x=x0.2.A, num=1000)
-logit.4.z.e2.A = data.frame(logit.4.z.s2.A$getqi(qi="ev", xvalue="range")); colnames(logit.4.z.e2.A)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # low
-
-X.scale.2 <- c(mean(logit.4.z.e2.A[,1]), 
-               mean(logit.4.z.e2.A[,2]), 
-               mean(logit.4.z.e2.A[,3]), 
-               mean(logit.4.z.e2.A[,4]), 
-               mean(logit.4.z.e2.A[,5]), 
-               mean(logit.4.z.e2.A[,6])
+plots <- plot_grid(
+  balance.1.m + theme(legend.position="none"), 
+  #balance.2.m + theme(legend.position="none"), 
+  balance.3.m + theme(legend.position="none"), 
+  balance.4.m + theme(legend.position="none"), 
+  balance.1.r + theme(legend.position="none"), 
+  #balance.2.r + theme(legend.position="none"), 
+  balance.3.r + theme(legend.position="none"), 
+  balance.4.r + theme(legend.position="none"),
+  align = 'vh', 
+  hjust = -1, 
+  nrow = 2,
+  ncol = 3
 )
 
-# Simulation B x1.2
-x1.2.B <- setx(logit.4.z, large = 1, polinv = polinv.range)
-set.seed(602)
-logit.4.z.s2.B <- sim(logit.4.z, x=x1.2.B, num=1000)
-logit.4.z.e2.B = data.frame(logit.4.z.s2.B$getqi(qi="ev", xvalue="range")); colnames(logit.4.z.e2.B)<-seq(1:ncol(as.data.frame(t(polinv.range)))) # high
-
-# Plot
-library(ggplot2)
-ggplot() + 
-        geom_point(aes(x=polinv.range[1], y=logit.4.z.e2.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[1], y=logit.4.z.e2.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[2], y=logit.4.z.e2.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[2], y=logit.4.z.e2.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[3], y=logit.4.z.e2.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[3], y=logit.4.z.e2.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[4], y=logit.4.z.e2.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[4], y=logit.4.z.e2.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[5], y=logit.4.z.e2.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[5], y=logit.4.z.e2.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[6], y=logit.4.z.e2.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/100)) +
-        geom_point(aes(x=polinv.range[6], y=logit.4.z.e2.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/100)) +
-        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
-        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
+grobs <- ggplotGrob(balance.4.r + theme(legend.position="bottom"))$grobs
+legend <- grobs[[which(sapply(grobs, function(x) x$name) == "guide-box")]]
+plot_grid(plots, legend, ncol = 1, rel_heights = c(1, .2))
 
 
 
-##########################
-#   Plotting Interactions 1 [int:1]
-##########################
 
-# Transformation
-m.data$logpop = log(m.data$pop)
-polinv.range <- min(m.data$polinv):max(m.data$polinv)
-logpop.range <- min(m.data$logpop):max(m.data$logpop)
+# alternative layout
+#balance.matched1= plot_grid(balance.1.m,balance.2.m, nrow = 1, align = "v", scale = 1)
+#balance.matched2= plot_grid(balance.1.r,balance.2.r, nrow = 1, align = "v", scale = 1)
+#p12 = plot_grid(balance.matched1,balance.matched2,  ncol = 1)
+#balance.matched3= plot_grid(balance.3.m,balance.4.m, nrow = 1, align = "v", scale = 1)
+#balance.matched4= plot_grid(balance.3.r,balance.4.r, nrow = 1, align = "v", scale = 1)
+#p34 = plot_grid(balance.matched3,balance.matched4,  ncol = 1)
+#balance.p1234= plot_grid(p12,p34, nrow = 2, align = "v", scale = 1)
+#plot_grid(balance.p1234,distance.p,  ncol = 2)
 
-# Interacted Model
-gee.logit.z.5 <- zelig(clien1dummy ~ large + income + exc7 + polinv + urban + logpop + ed + munopp + vb3 + logpop:polinv,
-                       model = "logit.gee", 
-                       id = "municipality",
-                       cite = FALSE,
-                       data = m.data)
 
-# Simulations
-x0.1.A <- setx(gee.logit.z.5, polinv = quantile(m.data$polinv, .25), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
-x0.1.B <- setx(gee.logit.z.5, polinv = quantile(m.data$polinv, .75), logpop = seq(min(m.data$logpop):max(m.data$logpop)))
-set.seed(602)
-gee.logit.z.5.s1.A <- sim(gee.logit.z.5, x=x0.1.A, num=600)
-gee.logit.z.5.s1.B <- sim(gee.logit.z.5, x=x0.1.B, num=600)
 
-gee.logit.z.5.e1.A = data.frame(gee.logit.z.5.s1.A$getqi(qi="ev", xvalue="range")); colnames(gee.logit.z.5.e1.A)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # low
-gee.logit.z.5.e1.B = data.frame(gee.logit.z.5.s1.B$getqi(qi="ev", xvalue="range")); colnames(gee.logit.z.5.e1.B)<-seq(1:ncol(as.data.frame(t(seq(min(m.data$logpop):max(m.data$logpop)))))) # high
-
-# Plot
-library(ggplot2)
-ggplot() + 
-        geom_point(aes(x=polinv.range[1], y=gee.logit.z.5.e1.A[1]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[1], y=gee.logit.z.5.e1.B[1]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[2], y=gee.logit.z.5.e1.A[2]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[2], y=gee.logit.z.5.e1.B[2]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[3], y=gee.logit.z.5.e1.A[3]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[3], y=gee.logit.z.5.e1.B[3]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[4], y=gee.logit.z.5.e1.A[4]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[4], y=gee.logit.z.5.e1.B[4]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[5], y=gee.logit.z.5.e1.A[5]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[5], y=gee.logit.z.5.e1.B[5]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[6], y=gee.logit.z.5.e1.A[6]), position = position_jitter(width = 5), size = I(5), color = "red", alpha = I(1/90)) +
-        geom_point(aes(x=polinv.range[6], y=gee.logit.z.5.e1.B[6]), position = position_jitter(width = 5), size = I(5), color = "blue", alpha = I(1/90)) +
-        scale_x_discrete(limits = c(0,1,2,3,4,5), labels=c("0", "1", "2", "3", "4", "5")) +
-        xlab("Political Involvement") + ylab("Expected Value of Clientelism") + theme_bw()
-
-#########
-# TECHNICAL INTERACTION TERMS PLOTS
-#########
-
-#1 
-library(DAMisc) # install.packages("DAMisc")
-logit.int <- glm(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + log(pop):polinv,  
-                 family=binomial(link="logit"), 
-                 data = m.data)
-
-out <- intEff(obj=logit.int, vars=c("log(pop)", "polinv"), data=m.data)
-
-logit.int.p <- plot(jitter(out$phat, amount=0.009), 
-                    jitter(out$int_eff, amount=0.009), 
-                    xlab="Predicted Probability of Clientelism", 
-                    ylab = "Log Pop * Political Involvement",
-                    ylim=c(-0.015, 0.030)
-)
-abline(h=0, col = "red", lty=2, lwd=2.5)
-ag <- aggregate(out$linear, list(out$phat), mean)
-lines(ag[,1], ag[,2], lty=1, col="red", lwd=3)
-legend("bottomright", 
-       c("Correct Marginal Effect", "Linear Marginal Effect"), 
-       pch=c(1, NA), 
-       lty=c(NA, 1), 
-       col=c("black", "red"), 
-       lwd=c(NA, 2), 
-       inset=.01
-)
-
-# 2
-logit.int <- glm(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + large:polinv,  
-                 family=binomial(link="logit"), 
-                 data = m.data)
-
-out <- intEff(obj=logit.int, vars=c("large", "polinv"), data=m.data)
-
-logit.int.p <- plot(jitter(out$phat, amount=0.009), 
-                    jitter(out$int_eff, amount=0.009), 
-                    xlab="Predicted Probability of Clientelism", 
-                    ylab = "High Density * Political Involvement",
-                    ylim=c(-0.015, 0.064)
-)
-abline(h=0, col = "red", lty=2, lwd=2.5)
-ag <- aggregate(out$linear, list(out$phat), mean)
-lines(ag[,1], ag[,2], lty=1, col="red", lwd=3)
-legend("bottomright", 
-       c("Correct Marginal Effect", "Linear Marginal Effect"), 
-       pch=c(1, NA), 
-       lty=c(NA, 1), 
-       col=c("black", "red"), 
-       lwd=c(NA, 2), 
-       inset=.01
-)
-
-# 3
-
-logit.int <- glm(clien1dummy ~ large + income + exc7 + polinv + urban + log(pop) + ed + munopp + vb3 + munopp:income,  
-                 family=binomial(link="logit"), 
-                 data = m.data)
-
-out <- intEff(obj=logit.int, vars=c("munopp", "income"), data=m.data)
-
-set.seed(604)
-logit.int.p <- plot(jitter(out$phat, amount=0.009), 
-                    jitter(out$int_eff, amount=0.009), 
-                    xlab="Predicted Probability of Clientelism", 
-                    ylab = "Municipal Opposition * Income",
-                    ylim=c(-0.015, 0.02)
-)
-abline(h=0, col = "red", lty=2, lwd=2.5)
-ag <- aggregate(out$linear, list(out$phat), mean)
-lines(ag[,1], ag[,2], lty=1, col="red", lwd=3)
-legend("bottomright", 
-       c("Correct Marginal Effect", "Linear Marginal Effect"), 
-       pch=c(1, NA), 
-       lty=c(NA, 1), 
-       col=c("black", "red"), 
-       lwd=c(NA, 2), 
-       inset=.01
-)
 
 
 ##########################
 #   Sensivity Analysis
 ##########################
 
-large <- as.numeric(m.data$large)
-income <- as.numeric(m.data$income)
-exc7 <- as.numeric(m.data$exc7)
-polinv <- as.numeric(m.data$polinv)
-urban <- as.numeric(m.data$urban)
-logpop = log(m.data$pop)
-logpop <- as.numeric(logpop)
-ed <- as.numeric(m.data$ed)
-munopp <- as.numeric(m.data$munopp)
-vb3 <- as.numeric(m.data$vb3)
 
-
-m.data.imb <- data.frame(large, income, exc7, polinv, urban, logpop, ed, munopp, vb3)
-vars <- c("income", "exc7", "polinv", "urban", "logpop", "ed", "munopp", "vb3")
 library(cem)
-imb <- imbalance(group = m.data$large, data = m.data.imb[vars])
-imb
 
-# l
-l = imb$tab[3] # Extract L Statistic
-st = imb$tab[1] # Extract Diff in Means
+dat$urban = as.numeric(dat$urban)
+imb.m <- imbalance(
+  group = m.data$large, 
+  data = m.data[c("wealth", "polinv", "munopp")], 
+  weights = m.data$wt)
 
-# Calling values
-l.income = round(l$L1[1], 3)
-l.exc7 = round(l$L1[2], 3)
-l.polinv = round(l$L1[3], 3)
-l.urban = round(l$L1[4], 3)
-l.logpop = round(l$L1[5], 3)
-l.ed = round(l$L1[6], 3)
-l.munopp = round(l$L1[7], 3)
-l.vb3 = round(l$L1[8], 3)
+imb.r <- imbalance(group = dat$large, data = dat[c("wealth", "polinv", "munopp")], weights = dat$wt)
 
-# Calling values
-st.income = round(st$statistic[1], 3)
-st.exc7 = round(st$statistic[2], 3)
-st.polinv = round(st$statistic[3], 3)
-st.urban = round(st$statistic[4], 3)
-st.logpop = round(st$statistic[5], 3)
-st.ed = round(st$statistic[6], 3)
-st.munopp = round(st$statistic[7], 3)
-st.vb3 = round(st$statistic[8], 3)
+imb.m.d=data.frame(
+  L = round(as.numeric(imb.m$tab[,3]),3),
+  Diff = round(as.numeric(imb.m$tab[,1]),3),
+  Sample = rep("Matched",3),
+  Variable = c(c("Wealth Index", 
+                 "Political Involvement", 
+                 "Municipal Opposition"))
+)
+  
+
+imb.r.d=data.frame(
+  L = round(as.numeric(imb.r$tab[,3]),3),
+  Diff = round(as.numeric(imb.r$tab[,1]),3),
+  Sample = rep("Raw",3),
+  Variable = c(c("Wealth Index", 
+                 "Political Involvement", 
+                 "Municipal Opposition"))
+  
+)
+
+data.frame(cbind(imb.m.d, imb.r.d))
+
+
+
+
+

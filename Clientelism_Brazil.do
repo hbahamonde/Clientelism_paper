@@ -343,4 +343,8 @@ rename r12 wealth8
 rename r14 wealth9
 rename r15 wealth10
 
+<<<<<<< HEAD
 saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
+=======
+saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
+>>>>>>> origin/master
