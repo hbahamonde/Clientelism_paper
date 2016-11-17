@@ -1417,7 +1417,7 @@ ggplot() +
                linetype="dashed", 
                size=.5, 
                colour = "forestgreen") + 
-               xlab("Percentage of People Living with \n Less than Half of the Minimum Wage") + 
+               xlab("Percentage of People Living on \n Less than Half of the Minimum Wage") + 
                ylab("Density") + 
                theme_bw() +
   theme(
