@@ -1,7 +1,11 @@
 # LOAD
+#setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
+
+## ---- loadings:data ----
+
 cat("\014")
 rm(list=ls())
-#setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
+
 
 # Load the data
 library(foreign) # install.packages("foreign") 
@@ -202,6 +206,8 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 set.seed(604)
 library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
 # m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+
+
 m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
                  discard = "both", 
                  method = "full",
@@ -247,14 +253,27 @@ dat$weights = as.numeric(fit$weights)
 save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 
+## ----
+
+
+
+
+
+
 #####################################################################
 ### PARAMETRIC models
 #####################################################################
 
-# load data
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
+
+#####################################################################
+###  M  O D E L S
+#####################################################################
+
+
+## ---- models ----
+
+# load data
 ## Recode Before modeling
 dat$clien1dummy <- as.numeric(dat$clien1dummy)
 library(car)
@@ -265,16 +284,48 @@ model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + 
 model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
 
 
-################################################
-options(scipen=999)
 
+
+library(Zelig)
+model.m.s = zelig(model.m, 
+                  model = "logit.gee",
+                  id = "municipality", 
+                  weights = "wt",
+                  std.err = "san.se",
+                  corstr = "exchangeable",
+                  data = m.data, 
+                  cite = F)
+
+
+
+
+model.gps.s = zelig(model.gps, 
+                    model = "logit.gee",
+                    id = "municipality", 
+                    weights = "wt",
+                    std.err = "san.se",
+                    corstr = "exchangeable",
+                    data = dat,
+                    cite = F)
+
+## ----
+
+
+#####################################################################
+###  T    A       B       L       E       
+#####################################################################
 
 ### GEE: In gee there is no quasipossion, because gee is in a way already quasi.
 ### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
 ### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
 
+## ---- tab:results:data ----
+
 
 # [tab:results]
+
+options(scipen=999)
+
 
 # models
 library(texreg) # install.packages("texreg")
@@ -320,9 +371,11 @@ model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
                                  corstr = "exchangeable",
                                  data = dat))
 custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
+## ----
 
 
 
+## ---- tab:results:table ----
 # table
 texreg(
   c(model.m.t,model.gps.t), 
@@ -339,32 +392,8 @@ no.margin = TRUE,
 float.pos = "h"
 )
 
+## ----
 
-#####################################################################
-### S I M U L A T I O N S:                            M  O D E L S
-#####################################################################
-
-library(Zelig)
-model.m.s = zelig(model.m, 
-                       model = "logit.gee",
-                       id = "municipality", 
-                       weights = "wt",
-                       std.err = "san.se",
-                       corstr = "exchangeable",
-                       data = m.data, 
-                  cite = F)
-
-                  
-
-
-model.gps.s = zelig(model.gps, 
-                       model = "logit.gee",
-                       id = "municipality", 
-                       weights = "wt",
-                       std.err = "san.se",
-                       corstr = "exchangeable",
-                       data = dat,
-                       cite = F)
 
 
 
@@ -429,13 +458,17 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 ##########################
 ##### BY Competition and Income
 ##########################
+
+
+## ---- plot:four:quadrants ----
+
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
 N = 250
 
 # simulation matched data
-library(Zelig)
+library(Zelig) # install.packages("Zelig")
 high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
 high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
 high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
@@ -448,7 +481,7 @@ low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income
 
 
 # simulation raw/GPS data
-library(Zelig)
+library(Zelig) # install.packages("Zelig")
 high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
 high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
 high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
@@ -543,6 +576,13 @@ ggplot(plot.d, aes(Density, mean,
         legend.position="top")  + 
   scale_colour_discrete(name = "Sample")
 
+## ----
+
+
+
+
+
+
 
 
 ############################### OTHERS
@@ -603,13 +643,16 @@ as.numeric(t$estimate[2])
 ######################################################
 # [wealth:client:plot]
 
+
+## ---- wealth:client:plot ----
+
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
-library(ggplot2)
+library(ggplot2) # install.packages("ggplot2")
 
 ggplot() + geom_jitter(
   width = 4,
-  height = 1, 
+  height = .45, 
   alpha = 1/4,
   aes(
     y=as.factor(dat$clien1dummy), 
@@ -626,6 +669,7 @@ ggplot() + geom_jitter(
         axis.text.y = element_text(size = 8),
         legend.position="none")
     
+## ---- 
 
 
 
@@ -968,6 +1012,9 @@ ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) +
 
 ##########################
 #  LARGE * POLINV:  // LARGE * POP
+
+
+## ---- pol.inv:pop.size:plot ----
 # [pol.inv:pop.size:plot]
 # simulation
 library(Zelig)
@@ -1127,24 +1174,42 @@ p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) +
   theme(axis.title.y=element_text(colour="white"), legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
 
-###################################
 
 library(cowplot) # install.packages("cowplot")
 plot_grid(p1,p2,  nrow = 1, labels = "auto")
+## ----
+
+
+
+
+
+
+
+
+
+
+
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
 ######################################################
 
+
+
+########################################################
+# Descriptive Stats Matched Set
+
+
+
+
+
+## ---- tab:sum:stats:m:data ----
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 library(car)
 
 
-
-########################################################
-# Descriptive Stats Matched Set
-## [tab:sum:stats:m]
+## [tab:sum:stats:m:data]
 
 # clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed
 
@@ -1165,8 +1230,14 @@ m.data.ed <- m.data$ed
 dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.large, m.data.pop.10, m.data.urban, m.data.polinv, m.data.ing4, m.data.vb3, m.data.exc7, m.data.ed)
 
 labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
+## ---- 
 
 
+
+
+
+
+## ---- tab:sum:stats:m:table ----
 library(stargazer, quietly = T) # install.packages("stargazer")
 stargazer(dat.m, 
           summary=T, 
@@ -1179,10 +1250,23 @@ stargazer(dat.m,
           table.placement = "h",
           notes.align = "c"
 )
+## ----
+
+
+
+
+
 
 
 ########################################################
 # Descriptive Stats Raw Set
+
+
+
+
+
+
+## ---- tab:sum:stats:r:data ----
 # [tab:sum:stats:r]
 
 # whole sample
@@ -1202,7 +1286,15 @@ r.data.ed <- dat$ed
 dat.r <- data.frame(r.data.clien1dummy, r.data.wealth, r.data.munopp, r.data.wagehalf.4, r.data.pop.10, r.data.urban, r.data.polinv, r.data.ing4, r.data.vb3, r.data.exc7, r.data.ed)
 
 labels.r = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
+## ---- 
 
+
+
+
+
+
+
+## ---- tab:sum:stats:r:table ----
 library(stargazer, quietly = T)
 stargazer(dat.r, 
           summary=T, 
@@ -1215,8 +1307,7 @@ stargazer(dat.r,
           table.placement = "h",
           notes.align = "c"
 )
-
-
+## ----
 
 
 
@@ -1224,6 +1315,9 @@ stargazer(dat.r,
 
 ############################################################
 # Distribution of Individuals by Municipality 
+
+## ---- municipality:sample:plot ----
+
 # [municipality:sample:plot]
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
@@ -1265,12 +1359,20 @@ library(ggplot2)
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
   
+## ----
 
-
+  
+  
+  
+  
 ############################################################
 # Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
 # [municipality:income:large:plot:matched]
   
+## ---- municipality:income:large:plot:matched:data ----
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
 ## HIGH df
 high.d = data.frame(
   Municipality = as.factor(m.data$municipality[m.data$large == 1]),
@@ -1288,6 +1390,16 @@ low.d = data.frame(
 ## rbinding the two of them
 density.d = data.frame(rbind(high.d, low.d))
 #density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
+
+
+## ----
+
+
+
+
+
+
+## ---- municipality:income:large:plot:matched:plot ----
 
 ## plot
 library(ggplot2)
@@ -1307,6 +1419,11 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 
+## ----
+
+
+
+
 ######
 ## Combine mun.p1, mun.p2
 #library(cowplot) # install.packages("cowplot")
@@ -1314,6 +1431,11 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
 
 
 ############################################################
+
+
+## ---- municipality:wealth:large:plot ----
+
+
 # Distribution of Individuals by High/Low COnditions and Wealth [municipality:wealth:large:plot]
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
@@ -1360,6 +1482,11 @@ density.wealth.r= ggplot() + geom_point(
 library(cowplot) # install.packages("cowplot")
 plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
 
+## ----
+
+
+
+
 
 ############################################################
 # Distribution Outcome Variable Binary Outcome
@@ -1385,6 +1512,9 @@ ggplot(data=m.data, aes(x=clientelism)) +
 ############################################################
 ## Distribution treatment var
 # [tgraph:plot]
+
+
+## ---- tgraph:plot ----
 # Labels
 ggplot.labels1 <- data.frame(
   time = c(15, 60), 
@@ -1392,17 +1522,6 @@ ggplot.labels1 <- data.frame(
   label = c("Low (C)", "High (T)"), 
   type = c("NA*", "MVH")
 )
-
-## Plot BARS
-library(ggplot2)
-ggplot(m.data, aes(x=wagehalf)) + 
-  geom_histogram(binwidth=2.5, alpha=.7) + 
-  #geom_density(alpha=.1) +
-  theme_bw() +
-  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
-  xlab("Density of the Poor") + ylab("Frequency") +
-  geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
-
 
 ## Plot Density [tgraph:plot]
 library(ggplot2)
@@ -1424,7 +1543,22 @@ ggplot() +
     legend.position="none", 
     axis.title.y = element_text(size = 10),
     axis.title.x = element_text(size = 10)) 
-  
+## ----
+
+
+
+
+# THis here is the same graph but with bars
+## Plot BARS
+library(ggplot2)
+ggplot(m.data, aes(x=wagehalf)) + 
+        geom_histogram(binwidth=2.5, alpha=.7) + 
+        #geom_density(alpha=.1) +
+        theme_bw() +
+        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
+        xlab("Density of the Poor") + ylab("Frequency") +
+        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+
 
 
 ######################################################
@@ -1460,9 +1594,21 @@ ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=
 
 
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
+
+
+
+
+## ---- balance:plot ----
+
 # [balance:plot]
 
 plot(m.out, type="hist")
+
+## ----
+
+
+
+
 
 
 
