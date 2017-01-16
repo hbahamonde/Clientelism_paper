@@ -1,160 +1,19 @@
-%----------------------------------------------------------------------------------------
-% PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
 \documentclass[onesided]{article}
-%\usepackage{lipsum} % Package to generate dummy text throughout this template
-
-% \usepackage[default]{lato} % Use the LATO font
-%\usepackage{pxfonts}
-\usepackage[T1]{fontenc}
-\linespread{1.4} % Line spacing - Palatino needs more space between lines
-\usepackage{microtype} % Slightly tweak font spacing for aesthetics
-
-\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
-%\usepackage{multicol} % Used for the two-column layout of the document
-\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
-\usepackage{booktabs} % Horizontal rules in tables
-\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
-
-\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
-\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
-
-\usepackage{abstract} % Allows abstract customization
-\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
-%\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
-
-\usepackage{titlesec} % Allows customization of titles
-\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
-\renewcommand\thesubsection{\Roman{subsection}} % Roman numerals for subsections
-\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
-\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
-
-\usepackage{fancybox, fancyvrb, calc}
-\usepackage[svgnames]{xcolor}
-\usepackage{epigraph}
-
-\usepackage{longtable}
-\usepackage{geometry}
-\usepackage{pdflscape}
+\usepackage{import}
+\subimport{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/}{LaTeX_Paper_Packages_And_Style}
 
 
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{rotating}
-\usepackage{paracol}
-\usepackage{textcomp}
-\usepackage{caption}
-\usepackage[export]{adjustbox}
-\usepackage{afterpage}
-\usepackage{filecontents}
-\usepackage{color}
-\usepackage{latexsym}
-\usepackage{lscape}       %\begin{landscape} and \end{landscape}
-%\usepackage{mathabx}
-\usepackage{wasysym}
-\usepackage{dashrule}
-%\usepackage{txfonts}
-%\usepackage{pgfkeys}
-\usepackage{framed}
-\usepackage{tree-dvips}
-\usepackage{caption}
-\usepackage{fancyvrb}
-\usepackage{pgffor}
-\usepackage{xcolor}
-%\usepackage{pxfonts}
-\usepackage{authblk}
-\usepackage{paracol}
-\usepackage{setspace}
-\usepackage{qtree}
-\usepackage{tree-dvips}
-%\usepackage{sgame}        % shouldn't have neither array nor tabularx packages
-\usepackage{array}
-%\usepackage{tikz}
-\usepackage[latin1]{inputenc}
-%\label{tab:1}    %\autoref{tab:1}  %ocupar para citar.
-% \hyperlik{table1} \hypertarget{table1} 
-% \textquoteright     %apostrofe
-\usepackage{hyperref}     %desactivar para link rojos
-\usepackage{natbib} % style
-\usepackage{graphicx}
-\usepackage{dcolumn} % for R tables
-\usepackage{csquotes} % For long quotes
-\usepackage{multirow} % For multirow in tables
 
-%----------------------------------------------------------------------------------------
-% Other ADDS-ON
-%----------------------------------------------------------------------------------------
-
-% independence symbol \independent
-\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
-\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
-
-%\setlength{\intextsep}{-5ex} % remove extra space above and below in-line float
-
-% VERBATIM WITH BACKGROUND COLOR
-\newenvironment{colframe}{%
-  \begin{Sbox}
-    \begin{minipage}
-      {\columnwidth%-\leftmargin-\rightmargin-6pt
-      }
-    }{%
-    \end{minipage}
-  \end{Sbox}
-  \begin{center}
-    \colorbox{LightSteelBlue}{\TheSbox}
-  \end{center}
-}
-
-
-\hypersetup{
-    bookmarks=true,         % show bookmarks bar?
-    unicode=false,          % non-Latin characters in Acrobat’s bookmarks
-    pdftoolbar=true,        % show Acrobat’s toolbar?
-    pdfmenubar=true,        % show Acrobat’s menu?
-    pdffitwindow=false,     % window fit to page when opened
-    pdfstartview={FitH},    % fits the width of the page to the window
-    pdftitle={My title},    % title
-    pdfauthor={Author},     % author
-    pdfsubject={Subject},   % subject of the document
-    pdfcreator={Creator},   % creator of the document
-    pdfproducer={Producer}, % producer of the document
-    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
-    pdfnewwindow=true,      % links in new window
-    colorlinks=true,       % false: boxed links; true: colored links
-    linkcolor=ForestGreen,          % color of internal links (change box color with linkbordercolor)
-    citecolor=ForestGreen,        % color of links to bibliography
-    filecolor=ForestGreen,      % color of file links
-    urlcolor=ForestGreen           % color of external links
-}
-
-\usepackage[nodayofweek,level]{datetime} % to have date within text
-
-\newcommand{\LETT}[3][]{\lettrine[lines=4,loversize=.2,#1]{\smash{#2}}{#3}} % letrine customization
-
-
-%----------------------------------------------------------------------------------------
-% DOCUMENT ID (Department, Professor, Course, etc.) 
-%----------------------------------------------------------------------------------------
-
-\usepackage{fancyhdr} % Headers and footers
-\pagestyle{fancy} % All pages have headers and footers
-\fancyhead{} % Blank out the default header
-\fancyfoot{} % Blank out the default footer
+% DOCUMENT ID
 \fancyhead[C]{Draft, please don't share without permission} % Custom header text
-\fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 
-%----------------------------------------------------------------------------------------
+
 % TITLE SECTION
-%----------------------------------------------------------------------------------------
-
-
 \title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{Aiming Right At You:\\ Group vs. Individual Clientelistic Targeting in Brazil}} % Article title
 
 
 \author[1]{
-%\large
 \textsc{H\'ector Bahamonde}\\ 
 \thanks{I'm thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast, Geoffrey Wallace, Doug Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Luciana Oliveira Ramos, Giancarlo Visconti, William Young and Johannes Karreth. I thank participants of the XXXII Latin American Studies Association Conference, The Southern Political Science Association meeting, The Western Political Science Association meeting and the 2014th Graduate Conference at the Political Science Dpt., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
 \normalsize PhD Candidate $\bullet$ Political Science Dpt. $\bullet$ Rutgers University \\
@@ -162,22 +21,17 @@
 \normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.hectorbahamonde.com}}
 \vspace{-5mm}
 }
+
 \date{\today}
 
-%----------------------------------------------------------------------------------------
+%
 
 \begin{document}
-
 \maketitle % Insert title
-
-
-
 \thispagestyle{fancy} % All pages have headers and footers
 
-%----------------------------------------------------------------------------------------
-% ABSTRACT
-%----------------------------------------------------------------------------------------
 
+% ABSTRACT
 
 \begin{abstract}
 Do parties target individuals or groups? This is a question fundamental to understanding clientelism, yet the literature does not offer an answer. This paper argues that depending on the conditions, brokers largely target either individuals or groups. The conditions relevant to this decision include how individuals discount the future, the presence of political pressure to secure higher levels of electoral support, and the density of the concentration of poor individuals. Under specific combinations of these three factors, individuals are more identifiable, which in turn makes individual targeting cheaper. Other combinations provide spillover effects, leading brokers to engage in group targeting. Though the theory I outline focuses on targeting, this paper also argues that structural factors should be considered as explanations of vote-buying. Structural factors are one of the few observables upon which brokers can base their decisions regarding where to invest in clientelism. Using survey data from Brazil, the paper exploits variations in personal incomes within contexts of differing levels of poverty. I find that political parties engage in segmented or ad-hoc strategies, targeting individuals when identifiability is high and groups when there are economies of scale. Importantly, non-poor individuals can also be offered clientelism. 
@@ -188,12 +42,12 @@ Do parties target individuals or groups? This is a question fundamental to under
 
 
 
-%----------------------------------------------------------------------------------------
+
 % CONTENT 
-%----------------------------------------------------------------------------------------
 
 \newpage
 
+% loading knitr package
 <<echo=FALSE, cache= F>>=
 library(knitr)
 knitr::read_chunk('/Users/hectorbahamonde/RU/research/Clientelism_paper/brazil_clientelism.R')
@@ -432,11 +286,11 @@ This article presents an argument that systematizes the priorities brokers have 
 
 \section*{Appendix}
 
-%% reset tables and figures counter
-\setcounter{table}{0}
-\renewcommand{\thetable}{A\arabic{table}}
-\setcounter{figure}{0}
-\renewcommand{\thefigure}{A\arabic{figure}}
+
+% reset counter for appendix
+\subimport{/Users/hectorbahamonde/RU/Bibliografia_PoliSci/}{LaTeX_Reset_Counter_For_Appendix}
+
+
 
 
 
@@ -495,6 +349,7 @@ This article presents an argument that systematizes the priorities brokers have 
 
 \newpage
 
+% word count
 
 <<wordcount, echo=FALSE, cache=FALSE>>=
 library(knitr)
