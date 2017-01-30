@@ -330,7 +330,7 @@ merge m:1 municipality using "/Users/hectorbahamonde/RU/research/Clientelism_pap
 drop _merge
 
 
-keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp male   r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
+keep municipality wagehalf cp13 vb3 ing4 ed wt urban clientelism clien1dummy np2 income exc7 polinv1 polinv2 polinv3 polinv4 polinv5 polinv /*large*/  munopp male r1 r3 r4 r4a r5 r6 r7 r12 r14 r15 
 
 rename r1 wealth1
 rename r3 wealth2
@@ -343,8 +343,42 @@ rename r12 wealth8
 rename r14 wealth9
 rename r15 wealth10
 
-<<<<<<< HEAD
+egen wealth1new = group(wealth1)
+egen wealth2new = group(wealth2)
+egen wealth3new = group(wealth3)
+egen wealth4new = group(wealth4)
+egen wealth5new = group(wealth5)
+egen wealth6new = group(wealth6)
+egen wealth7new = group(wealth7)
+egen wealth8new = group(wealth8)
+egen wealth9new = group(wealth9)
+egen wealth10new = group(wealth10)
+
+
+drop wealth1
+drop wealth2
+drop wealth3
+drop wealth4
+drop wealth5
+drop wealth6
+drop wealth7
+drop wealth8
+drop wealth9
+drop wealth10
+
+
+rename wealth1new wealth1
+rename wealth2new wealth2
+rename wealth3new wealth3
+rename wealth4new wealth4
+rename wealth5new wealth5
+rename wealth6new wealth6
+rename wealth7new wealth7
+rename wealth8new wealth8
+rename wealth9new wealth9
+rename wealth10new wealth10
+
+
+
+
 saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
-=======
-saveold "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta", replace version(12)
->>>>>>> origin/master
