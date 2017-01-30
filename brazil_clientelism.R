@@ -34,16 +34,16 @@ dat$munopp = round(dat$munopp, 0)
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(car)
 
-dat$wealth1 = recode(as.numeric(dat$wealth1), "1 = 0 ; 2 = 1")
-dat$wealth2 = recode(as.numeric(dat$wealth2), "1 = 0 ; 2 = 1")
-dat$wealth3 = recode(as.numeric(dat$wealth3), "1 = 0 ; 2 = 1")
-dat$wealth4 = recode(as.numeric(dat$wealth4), "1 = 0 ; 2 = 1")
-dat$wealth5 = recode(as.numeric(dat$wealth5), "1 = 0 ; 2 = 1 ; 3 = 2 ; 4 = 3")
-dat$wealth6 = recode(as.numeric(dat$wealth6), "1 = 0 ; 2 = 1")
-dat$wealth7 = recode(as.numeric(dat$wealth7), "1 = 0 ; 2 = 1")
-dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
-dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
-dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
+dat$wealth1 = recode(dat$wealth1, "1 = 0 ; 2 = 1")
+dat$wealth2 = recode(dat$wealth2, "1 = 0 ; 2 = 1")
+dat$wealth3 = recode(dat$wealth3, "1 = 0 ; 2 = 1")
+dat$wealth4 = recode(dat$wealth4, "1 = 0 ; 2 = 1")
+dat$wealth5 = recode(dat$wealth5, "1 = 0 ; 2 = 1 ; 3 = 2 ; 4 = 3")
+dat$wealth6 = recode(dat$wealth6, "1 = 0 ; 2 = 1")
+dat$wealth7 = recode(dat$wealth7, "1 = 0 ; 2 = 1")
+dat$wealth8 = recode(dat$wealth8, "1 = 0 ; 2 = 1")
+dat$wealth9 = recode(dat$wealth9, "1 = 0 ; 2 = 1")
+dat$wealth10 = recode(dat$wealth10, "1 = 0 ; 2 = 1")
 
 
 
@@ -340,7 +340,17 @@ model.gps.s = zelig(model.gps,
 ## ---- tab:results:data ----
 # [tab:results]
 
-options(scipen=999)
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+# Recode client1dummy after matching
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+
 
 
 # models
@@ -374,15 +384,15 @@ extract.geepack <- function(model) {
 }
 
 
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-
-m.data$clien1dummy = as.numeric(m.data$clien1dummy)
-dat$clien1dummy = as.numeric(dat$clien1dummy); dat$clien1dummy = recode(as.numeric(dat$clien1dummy), "1 = 0 ; 2 = 1")
-
-
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(geepack)
+
+# formulas 
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
+
+
+options(scipen=999)
 
 model.m.t = extract.geepack(model.m.model <- geeglm(model.m,
                                family = binomial(link = "logit"), 
@@ -1346,6 +1356,9 @@ stargazer(dat.m,
 ## ---- tab:sum:stats:r:data ----
 # [tab:sum:stats:r]
 
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
 # whole sample
 r.data.clien1dummy <- as.numeric(recode(as.numeric(dat$clien1dummy), "1 = 0 ; 2 = 1"))
 r.data.wealth <- dat$wealth 
@@ -1669,6 +1682,9 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 # Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
 Distance = as.vector(m.out$distance)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
 Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
 Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
 
