@@ -49,9 +49,9 @@ Do parties target individuals or groups? This is a question fundamental to under
 
 % loading knitr package
 <<echo=FALSE, cache= F, warning = FALSE, message = F>>=
-if (!require("pacman")) install.packages("pacman"); library(pacman)
+if (!require("pacman")) install.packages("pacman", verbose = F, repos = "http://cran.us.r-project.org"); library(pacman)
 pacman::p_load(knitr)
-knitr::read_chunk('/Users/hectorbahamonde/RU/research/Clientelism_paper/brazil_clientelism.R')
+read_chunk('/Users/hectorbahamonde/RU/research/Clientelism_paper/brazil_clientelism.R')
 
 @
 
