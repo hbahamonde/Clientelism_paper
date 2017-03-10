@@ -1,10 +1,17 @@
 # LOAD
-cat("\014")
-rm(list=ls())
 #setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
 
+## ---- loadings:data ----
+
+cat("\014")
+rm(list=ls())
+
+
 # Load the data
-library(foreign) # install.packages("foreign") 
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(foreign)
+
+
 dat <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/clientelism.dta")
 
 # Recoding vars
@@ -24,17 +31,19 @@ dat$munopp = round(dat$munopp, 0)
 
 
 # constructing relative wealth index (Cordova 2009)
-library(car) # install.packages("car") 
-dat$wealth1 = recode(as.numeric(dat$wealth1), "1 = 0 ; 2 = 1")
-dat$wealth2 = recode(as.numeric(dat$wealth2), "1 = 0 ; 2 = 1")
-dat$wealth3 = recode(as.numeric(dat$wealth3), "1 = 0 ; 2 = 1")
-dat$wealth4 = recode(as.numeric(dat$wealth4), "1 = 0 ; 2 = 1")
-dat$wealth5 = recode(as.numeric(dat$wealth5), "1 = 0 ; 2 = 1 ; 3 = 2 ; 4 = 3")
-dat$wealth6 = recode(as.numeric(dat$wealth6), "1 = 0 ; 2 = 1")
-dat$wealth7 = recode(as.numeric(dat$wealth7), "1 = 0 ; 2 = 1")
-dat$wealth8 = recode(as.numeric(dat$wealth8), "1 = 0 ; 2 = 1")
-dat$wealth9 = recode(as.numeric(dat$wealth9), "1 = 0 ; 2 = 1")
-dat$wealth10 = recode(as.numeric(dat$wealth10), "1 = 0 ; 2 = 1")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
+dat$wealth1 = recode(dat$wealth1, "1 = 0 ; 2 = 1")
+dat$wealth2 = recode(dat$wealth2, "1 = 0 ; 2 = 1")
+dat$wealth3 = recode(dat$wealth3, "1 = 0 ; 2 = 1")
+dat$wealth4 = recode(dat$wealth4, "1 = 0 ; 2 = 1")
+dat$wealth5 = recode(dat$wealth5, "1 = 0 ; 2 = 1 ; 3 = 2 ; 4 = 3")
+dat$wealth6 = recode(dat$wealth6, "1 = 0 ; 2 = 1")
+dat$wealth7 = recode(dat$wealth7, "1 = 0 ; 2 = 1")
+dat$wealth8 = recode(dat$wealth8, "1 = 0 ; 2 = 1")
+dat$wealth9 = recode(dat$wealth9, "1 = 0 ; 2 = 1")
+dat$wealth10 = recode(dat$wealth10, "1 = 0 ; 2 = 1")
 
 
 
@@ -113,7 +122,9 @@ dat = merge(dat, pop.municipalities, by=c("municipality"), all.x =T)
 
 
 # create variable large
-library(foreign)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(foreign)
+
 wagehalf.d <- read.dta("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/proportionofpoorcensus.dta")
 
 wagehalf.d = data.frame(cbind(municipality = c( "Acopiara", "Aloandia", "Aparecida de Goiania", "Belo Horizonte", "Belem", "Blumenau", "Branquinha",  "Brasilia", # 1
@@ -200,8 +211,13 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 
 # Constructing Matched Set
 set.seed(604)
-library(MatchIt) # install.packages("MatchIt", dependencies=TRUE)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(MatchIt)
+
 # m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
+
+
 m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
                  discard = "both", 
                  method = "full",
@@ -221,7 +237,9 @@ m.data <- match.data(m.out)
 
 
 # Recode client1dummy after matching
-library(car) # install.packages("car") 
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
 m.data$clien1dummy <- as.numeric(m.data$clien1dummy)
 m.data$clien1dummy <- recode(m.data$clien1dummy, "1 = 0 ; 2 = 1")
 
@@ -230,7 +248,10 @@ save(m.data, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datase
 
 
 # Generating the Propensity Score 
-library(CBPS, quietly = T) # install.packages("CBPS")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(CBPS)
+#library(CBPS, quietly = T) # install.packages("CBPS")
+
 fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv + pop.10,
             #wealth,# + polinv,# + munopp + polinv + ing4,  # wealth + munopp + polinv
             data = dat, 
@@ -247,17 +268,32 @@ dat$weights = as.numeric(fit$weights)
 save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 
+## ----
+
+
+
+
+
+
 #####################################################################
 ### PARAMETRIC models
 #####################################################################
 
-# load data
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
+
+#####################################################################
+###  M  O D E L S
+#####################################################################
+
+
+## ---- models ----
+# load data
 ## Recode Before modeling
 dat$clien1dummy <- as.numeric(dat$clien1dummy)
-library(car)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
 dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
 
 # formulas 
@@ -265,19 +301,63 @@ model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + 
 model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
 
 
-################################################
-options(scipen=999)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
 
+model.m.s = zelig(model.m, 
+                  model = "logit.gee",
+                  id = "municipality", 
+                  weights = "wt",
+                  std.err = "san.se",
+                  corstr = "exchangeable",
+                  data = m.data, 
+                  cite = F)
+
+
+
+
+model.gps.s = zelig(model.gps, 
+                    model = "logit.gee",
+                    id = "municipality", 
+                    weights = "wt",
+                    std.err = "san.se",
+                    corstr = "exchangeable",
+                    data = dat,
+                    cite = F)
+## ----
+
+
+#####################################################################
+###  T    A       B       L       E       
+#####################################################################
 
 ### GEE: In gee there is no quasipossion, because gee is in a way already quasi.
 ### With GEE we do not fit a poisson glm, but use in the construction of the sandwich covariance 
 ### matrix the variance function of the poisson family. In Gee always an 'overdispersion' is estimated.
 
 
+
+## ---- tab:results:data ----
 # [tab:results]
 
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+
+# Recode client1dummy after matching
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
+dat$clien1dummy <- as.numeric(dat$clien1dummy)
+dat$clien1dummy <- recode(dat$clien1dummy, "1 = 0 ; 2 = 1")
+
+
+
 # models
-library(texreg) # install.packages("texreg")
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(texreg)
+
 extract.geepack <- function(model) {
   s <- summary(model)
   names <- rownames(s$coef)
@@ -303,7 +383,17 @@ extract.geepack <- function(model) {
   return(tr)
 }
 
-library(geepack) # install.packages("geepack")
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(geepack)
+
+# formulas 
+model.m = formula(clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed)
+model.gps = formula(clien1dummy ~ wealth*munopp*wagehalf.4 + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed + weights)
+
+
+options(scipen=999)
+
 model.m.t = extract.geepack(model.m.model <- geeglm(model.m,
                                family = binomial(link = "logit"), 
                                id = municipality, 
@@ -319,10 +409,13 @@ model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
                                  std.err = "san.se",
                                  corstr = "exchangeable",
                                  data = dat))
+
 custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
+## ----
 
 
 
+## ---- tab:results:table ----
 # table
 texreg(
   c(model.m.t,model.gps.t), 
@@ -338,33 +431,8 @@ center = TRUE,
 no.margin = TRUE, 
 float.pos = "h"
 )
+## ----
 
-
-#####################################################################
-### S I M U L A T I O N S:                            M  O D E L S
-#####################################################################
-
-library(Zelig)
-model.m.s = zelig(model.m, 
-                       model = "logit.gee",
-                       id = "municipality", 
-                       weights = "wt",
-                       std.err = "san.se",
-                       corstr = "exchangeable",
-                       data = m.data, 
-                  cite = F)
-
-                  
-
-
-model.gps.s = zelig(model.gps, 
-                       model = "logit.gee",
-                       id = "municipality", 
-                       weights = "wt",
-                       std.err = "san.se",
-                       corstr = "exchangeable",
-                       data = dat,
-                       cite = F)
 
 
 
@@ -384,7 +452,10 @@ gee.sim.high.gps = data.frame(High = sim(x = setx(model.gps.s, cond = T, wagehal
 
 
 # plot
-library(ggplot2);library(grid)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2,grid)
+
 
 large.m1 = 
   ggplot() + 
@@ -415,8 +486,9 @@ large.m2 =
   guides(fill=FALSE)
 
 
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(cowplot)
 
-library(cowplot) # install.packages("cowplot")
 plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 
 
@@ -429,13 +501,19 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 ##########################
 ##### BY Competition and Income
 ##########################
+
+
+## ---- plot:four:quadrants ----
+
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
 N = 250
 
 # simulation matched data
-library(Zelig)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
+
 high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
 high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
 high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
@@ -448,7 +526,9 @@ low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income
 
 
 # simulation raw/GPS data
-library(Zelig)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
+
 high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
 high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
 high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
@@ -463,7 +543,9 @@ low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),inco
 
 
 # data frame
-library(Rmisc) # install.packages("Rmisc")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Rmisc)
+
 plot.d = data.frame(
   mean = c(
     as.numeric(CI(high.poor.lowcomp.gps$x)[2]),  # gps
@@ -526,7 +608,9 @@ plot.d = data.frame(
 )
 
 # plot
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(plot.d, aes(Density, mean,
                    ymin = upper,
                    ymax=lower,
@@ -542,6 +626,12 @@ ggplot(plot.d, aes(Density, mean,
         axis.text.y = element_text(size = 8),
         legend.position="top")  + 
   scale_colour_discrete(name = "Sample")
+## ----
+
+
+
+
+
 
 
 
@@ -603,13 +693,16 @@ as.numeric(t$estimate[2])
 ######################################################
 # [wealth:client:plot]
 
+
+## ---- wealth:client:plot ----
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
 
 ggplot() + geom_jitter(
   width = 4,
-  height = 1, 
+  height = .45, 
   alpha = 1/4,
   aes(
     y=as.factor(dat$clien1dummy), 
@@ -626,6 +719,7 @@ ggplot() + geom_jitter(
         axis.text.y = element_text(size = 8),
         legend.position="none")
     
+## ---- 
 
 
 
@@ -663,7 +757,9 @@ low.rich.highcomp.highpop = data.frame(competition = rep("High Competition", 100
 
 
 # plot 1 //
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p1 = ggplot() + 
   geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.lowpop, alpha = .2) +
   geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.lowpop, alpha = .2) +
@@ -679,7 +775,9 @@ p1 = ggplot() +
   facet_grid(competition~income)
 
 # plot 2 //
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p2 = ggplot() + 
   geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.highpop, alpha = .2) +
   geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.highpop, alpha = .2) +
@@ -695,7 +793,9 @@ p2 = ggplot() +
   facet_grid(competition~income)
 
 
-library(cowplot) # install.packages("cowplot")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(cowplot)
+
 plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
 
 
@@ -728,7 +828,9 @@ low.rich.lowcomp.nondem =  data.frame(dem = rep("Non-Democratic", 1000000), inco
 
 
 # plot 1 //
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p1=ggplot() + 
   geom_density(aes(x=x, fill="High Density"), data= high.poor.highcomp.dem, alpha = .2) +
   geom_density(aes(x=x, fill="High Density"), data= high.rich.highcomp.dem, alpha = .2) +
@@ -744,7 +846,9 @@ p1=ggplot() +
   facet_grid(dem~income)
 
 # plot 2 //
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p2=ggplot() + 
   geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.dem, alpha = .2) +
   geom_density(aes(x=x, fill="High Density"), data= high.poor.lowcomp.nondem, alpha = .2) +
@@ -759,7 +863,9 @@ p2=ggplot() +
   scale_fill_discrete(guide = guide_legend(title = "Density of the Poor")) +
   facet_grid(dem~income)
 
-library(cowplot) # install.packages("cowplot")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(cowplot)
+
 plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
 
 
@@ -781,7 +887,9 @@ plot_grid(p1,p2, ncol = 1, align = "v", scale = 1)
 #library(Zelig) # install.packages("Zelig", dependencies=TRUE) # Models
 
 # simulation
-library(Zelig)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
+
 set.seed(602); options(scipen=999)
 
 
@@ -816,7 +924,8 @@ colnames(model.m.s.wealth) <- seq(1:ncol(as.data.frame(t(min(m.data$wealth):max(
 
 
 # to compute confidence intervals
-library(Rmisc) # install.packages("Rmisc")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Rmisc)
 
 ### low
 df.low = data.frame(
@@ -853,7 +962,9 @@ wealth.d= rbind(df.high, df.low,df.wealth.alone)
 
 
 ### plot
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
@@ -876,7 +987,9 @@ ggplot(wealth.d, aes(x=Wealth, y=mean, colour=Poverty)) +
 
 
 # simulation
-library(Zelig)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
+
 set.seed(602); options(scipen=999)
 
 
@@ -916,8 +1029,8 @@ colnames(model.m.s.munopp) <- seq(1:ncol(as.data.frame(t(min(m.data$munopp):max(
 
 
 # to compute confidence intervals
-library(Rmisc) # install.packages("Rmisc")
-
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Rmisc)
 
 ### df's
 ### low
@@ -956,7 +1069,9 @@ munopp.d= rbind(df.high, df.low,df.munopp)
 
 
 ### plot
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
@@ -968,9 +1083,14 @@ ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) +
 
 ##########################
 #  LARGE * POLINV:  // LARGE * POP
+
+
+## ---- pol.inv:pop.size:plot ----
 # [pol.inv:pop.size:plot]
 # simulation
-library(Zelig)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Zelig)
+
 set.seed(602); options(scipen=999)
 
 
@@ -1006,7 +1126,9 @@ colnames(model.m.s.polinv) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(
 
 
 # to compute confidence intervals
-library(Rmisc) # install.packages("Rmisc")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Rmisc)
+
 
 ### df's
 ### low
@@ -1043,7 +1165,9 @@ polinv.d= rbind(df.high, df.low,df.polinv.alone)
 
 
 ### plot
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
@@ -1081,7 +1205,9 @@ colnames(gee.dich.m.2.pop.10) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):m
 
 
 
-library(Rmisc) # install.packages("Rmisc")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(Rmisc)
+
 
 ### low
 df.low = data.frame(
@@ -1117,7 +1243,9 @@ pop.d= rbind(df.high, df.low,df.pop.alone)
 
 
 ### plot
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
@@ -1127,24 +1255,45 @@ p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) +
   theme(axis.title.y=element_text(colour="white"), legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
 
-###################################
 
-library(cowplot) # install.packages("cowplot")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(cowplot)
+
 plot_grid(p1,p2,  nrow = 1, labels = "auto")
+## ----
+
+
+
+
+
+
+
+
+
+
+
 
 ######################################################
 #  D  E S C R I P T I V E          P   L   O   T   S #
 ######################################################
 
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-library(car)
-
 
 
 ########################################################
 # Descriptive Stats Matched Set
-## [tab:sum:stats:m]
+
+
+
+
+
+## ---- tab:sum:stats:m:data ----
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
+
+## [tab:sum:stats:m:data]
 
 # clien1dummy ~ wealth*munopp*large + pop.10 + urban + polinv + ing4 + vb3 + exc7 + ed
 
@@ -1165,9 +1314,18 @@ m.data.ed <- m.data$ed
 dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.large, m.data.pop.10, m.data.urban, m.data.polinv, m.data.ing4, m.data.vb3, m.data.exc7, m.data.ed)
 
 labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
+## ---- 
 
 
-library(stargazer, quietly = T) # install.packages("stargazer")
+
+
+
+
+## ---- tab:sum:stats:m:table ----
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(stargazer)
+
+#library(stargazer, quietly = T) # install.packages("stargazer")
 stargazer(dat.m, 
           summary=T, 
           title = "Summary Statistics: Matched Sample",
@@ -1179,11 +1337,27 @@ stargazer(dat.m,
           table.placement = "h",
           notes.align = "c"
 )
+## ----
+
+
+
+
+
 
 
 ########################################################
 # Descriptive Stats Raw Set
+
+
+
+
+
+
+## ---- tab:sum:stats:r:data ----
 # [tab:sum:stats:r]
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
 
 # whole sample
 r.data.clien1dummy <- as.numeric(recode(as.numeric(dat$clien1dummy), "1 = 0 ; 2 = 1"))
@@ -1202,8 +1376,19 @@ r.data.ed <- dat$ed
 dat.r <- data.frame(r.data.clien1dummy, r.data.wealth, r.data.munopp, r.data.wagehalf.4, r.data.pop.10, r.data.urban, r.data.polinv, r.data.ing4, r.data.vb3, r.data.exc7, r.data.ed)
 
 labels.r = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
+## ---- 
 
-library(stargazer, quietly = T)
+
+
+
+
+
+
+## ---- tab:sum:stats:r:table ----
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(stargazer)
+
+#library(stargazer, quietly = T)
 stargazer(dat.r, 
           summary=T, 
           title = "Summary Statistics: Raw Sample",
@@ -1215,8 +1400,7 @@ stargazer(dat.r,
           table.placement = "h",
           notes.align = "c"
 )
-
-
+## ----
 
 
 
@@ -1224,6 +1408,9 @@ stargazer(dat.r,
 
 ############################################################
 # Distribution of Individuals by Municipality 
+
+## ---- municipality:sample:plot ----
+
 # [municipality:sample:plot]
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
@@ -1256,7 +1443,9 @@ municipality.d = data.frame(table(municipality.d))
 #  #coord_flip() +
 #  theme_bw()
 
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 #mun.p1 = 
   ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity", position=position_dodge()) + 
   xlab("") + 
@@ -1265,12 +1454,20 @@ library(ggplot2)
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
   
+## ----
 
-
+  
+  
+  
+  
 ############################################################
 # Distribution of Individuals by High/Low COnditions and municipality [municipality:income:large:plot]
 # [municipality:income:large:plot:matched]
   
+## ---- municipality:income:large:plot:matched:data ----
+
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+
 ## HIGH df
 high.d = data.frame(
   Municipality = as.factor(m.data$municipality[m.data$large == 1]),
@@ -1289,8 +1486,21 @@ low.d = data.frame(
 density.d = data.frame(rbind(high.d, low.d))
 #density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
 
+
+## ----
+
+
+
+
+
+
+## ---- municipality:income:large:plot:matched:plot ----
+
 ## plot
-library(ggplot2)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
   geom_bar() + 
   geom_point(data=density.d, 
@@ -1307,6 +1517,11 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 
+## ----
+
+
+
+
 ######
 ## Combine mun.p1, mun.p2
 #library(cowplot) # install.packages("cowplot")
@@ -1314,12 +1529,19 @@ ggplot(density.d, aes(factor(Municipality), fill = Density)) +
 
 
 ############################################################
+
+
+## ---- municipality:wealth:large:plot ----
+
+
 # Distribution of Individuals by High/Low COnditions and Wealth [municipality:wealth:large:plot]
 
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 
 ### Matched Set
 density.wealth.m= ggplot() + geom_point(
@@ -1357,15 +1579,24 @@ density.wealth.r= ggplot() + geom_point(
     axis.title.x = element_text(size = 10)) + 
   scale_y_discrete(breaks=c(0, 1), labels=c("Low", "High"))
 
-library(cowplot) # install.packages("cowplot")
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(cowplot)
+
 plot_grid(density.wealth.m,density.wealth.r,  nrow = 2)
+
+## ----
+
+
+
 
 
 ############################################################
 # Distribution Outcome Variable Binary Outcome
 m.data$clien1dummy <- factor(m.data$clien1dummy, labels = c("No", "Yes"))
 
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(data=m.data, aes(x=clien1dummy)) + 
   geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
   xlab("Clientelism") + 
@@ -1374,7 +1605,9 @@ ggplot(data=m.data, aes(x=clien1dummy)) +
 
 
 ## Distribution Outcome Variable 3 outcomes
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot(data=m.data, aes(x=clientelism)) + 
   geom_bar(width=.5, stat="count",size=1, alpha=.7) + 
   xlab("Clientelism") + 
@@ -1385,6 +1618,9 @@ ggplot(data=m.data, aes(x=clientelism)) +
 ############################################################
 ## Distribution treatment var
 # [tgraph:plot]
+
+
+## ---- tgraph:plot ----
 # Labels
 ggplot.labels1 <- data.frame(
   time = c(15, 60), 
@@ -1393,19 +1629,10 @@ ggplot.labels1 <- data.frame(
   type = c("NA*", "MVH")
 )
 
-## Plot BARS
-library(ggplot2)
-ggplot(m.data, aes(x=wagehalf)) + 
-  geom_histogram(binwidth=2.5, alpha=.7) + 
-  #geom_density(alpha=.1) +
-  theme_bw() +
-  geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
-  xlab("Density of the Poor") + ylab("Frequency") +
-  geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
-
-
 ## Plot Density [tgraph:plot]
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 ggplot() + 
   geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
   geom_segment(data= 
@@ -1424,7 +1651,24 @@ ggplot() +
     legend.position="none", 
     axis.title.y = element_text(size = 10),
     axis.title.x = element_text(size = 10)) 
-  
+## ----
+
+
+
+
+# THis here is the same graph but with bars
+## Plot BARS
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
+ggplot(m.data, aes(x=wagehalf)) + 
+        geom_histogram(binwidth=2.5, alpha=.7) + 
+        #geom_density(alpha=.1) +
+        theme_bw() +
+        geom_segment(data= m.data, aes(x = (wagehalf=median(m.data$wagehalf)), y = 0, xend = (wagehalf=median(m.data$wagehalf)), yend = 100), linetype="dashed", size=1.5, colour = "forestgreen") + 
+        xlab("Density of the Poor") + ylab("Frequency") +
+        geom_text(data = ggplot.labels1, aes(x = time, y = value, label = label), colour = "forestgreen")
+
 
 
 ######################################################
@@ -1438,12 +1682,17 @@ load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 # Density Plot: Propensity Scores, by Treatment Condition and By DIscarded 
 Distance = as.vector(m.out$distance)
+
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(car)
 Sample = recode(as.numeric(as.vector(m.out$discarded)), "0 = 'Matched' ; 1 = 'Raw' ")
 Density = recode(as.numeric(as.vector(m.out$treat)), "0 = 'Low' ; 1 = 'High' ")
 
 
 # [balance:distance:plot]
-library(ggplot2)
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+p_load(ggplot2)
+
 #distance.p=
 ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=.1) +
   ylab("Estimated Density") + 
@@ -1460,9 +1709,18 @@ ggplot() + geom_density(aes(x=Distance, colour=Sample, linetype=Density), alpha=
 
 
 # DISTRIBUTION PLOTS PRE AND POST MATCHING
-# [balance:plot]
 
+
+
+
+## ---- balance:plot ----
+# [balance:plot]
 plot(m.out, type="hist")
+## ----
+
+
+
+
 
 
 
