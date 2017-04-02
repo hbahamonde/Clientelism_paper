@@ -10,7 +10,7 @@
 
 
 % TITLE SECTION
-\title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{Aiming Right At You:\\ Group v. Individual Clientelistic Targeting in Brazil}} % Article title
+\title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{\input{/Users/hectorbahamonde/RU/research/Clientelism_paper/title.txt}\unskip}} % Article title
 
 
 \author[1]{
