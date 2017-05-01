@@ -1,0 +1,795 @@
+---
+abstract: |
+    Do parties target individuals or groups? This is a question fundamental
+    to understanding clientelism, yet the literature does not offer an
+    answer. This paper argues that depending on certain conditions, brokers
+    target individuals when they are identifiable and groups when brokers
+    need to rely on the spillover effects of clientelism. Both
+    identifiability and spillovers depend on individual poverty, group
+    poverty and political competition. Though the theory I outline focuses
+    on targeting, the paper also argues that structural factors, such as the
+    density of the poor, should be considered in the vote-buying literature.
+    Structural factors are one of the few observables upon which brokers can
+    base their decision regarding where to invest in clientelism. Using
+    survey data from Brazil, the paper exploits variations in personal
+    incomes within contexts of differing levels of poverty. I find that
+    political parties engage in segmented or ad-hoc strategies, targeting
+    individuals when identifiability is high, and groups when there are
+    economies of scale. Importantly, non-poor individuals can also be
+    offered clientelism.
+author:
+- |
+    <span style="font-variant:small-caps;">Héctor Bahamonde</span>\
+    [^1] PhD Candidate $\bullet$ Political Science Dept. $\bullet$ Rutgers
+    University\
+    `e:`[`hector.bahamonde@rutgers.edu`](mailto:hector.bahamonde@rutgers.edu)\
+    `w:`[`www.hectorbahamonde.com`](http://www.hectorbahamonde.com)
+bibliography:
+- '/Users/hectorbahamonde/RU/Bibliografia_PoliSci/Bahamonde_BibTex2013.bib'
+- '/Users/hectorbahamonde/RU/Bibliografia_PoliSci/library.bib'
+csl: '/Users/hectorbahamonde/RU/Bibliografia_PoliSci/APA_Style.csl'
+title: |
+    **Aiming Right At You:\
+    Group v. Individual Clientelistic Targeting in Brazil**
+---
+
+[<span>`here`</span>](https://github.com/hbahamonde/Clientelism_paper/raw/master/Bahamonde_Clientelism_Paper.pdf).
+
+
+
+There is no agreement on when, how and why parties choose to aim
+clientelistic practices at individuals or groups. The distributive
+politics and vote-buying literatures have traditionally pursued one of
+two approaches. On the one hand, the former has mostly focused on group
+targeting, usually districts or provinces.[^2] In this literature,
+incumbent parties deliver public-sector jobs or construction projects
+contingent on the support of *groups* of people. On the other hand, the
+latter has typically focused on *individuals* and their characteristics,
+such as their socio-economic or electoral profiles. However, it is not
+clear when clientelistic brokers use one or the other strategy, and why.
+Moreover, the decision to investigate group-based and/or
+individual-based targeting seems to be attributable to distinct research
+designs and agendas, rather than theory. For example, ethnographers most
+generally focus on individuals, while others have traditionally focused
+on groups.[^3] What is most concerning, however, is that it is
+relatively assumed or implied that individual and group clientelistic
+targeting strategies are interchangeable, when they are clearly not.
+Groups and individuals have different reasons and mechanisms to defect
+or cooperate and vote for the incumbent. They also face different costs
+and coordination dilemmas. In this paper I systematize the process of
+deciding who to target by arguing it is a function of three mechanisms:
+individuals’ discount factors explained by income levels, the incentives
+of clientelistic brokers to rely on spillover effects caused by the
+nesting structure of individuals (i.e. whether individuals are nested in
+poor or non-poor contexts), and brokers’ incentives to engage in
+clientelism explained by higher electoral pressures and political
+competition. Given the nested structure of the argument and the
+empirics, I am able to disentangle the effects of “being poor” and
+“living in a poor area” on clientelistic targeting. I share @Carlin2015
+[14]’s diagnosis, in that “\[e\]xisting research looks almost
+*exclusively* at individuals’ socio-economic and, specially, electoral
+profile \[and\] \[y\]et our knowledge of who parties target remains
+incomplete.”[^4] The paper seeks to contribute to the vote-buying
+literature by incorporating structural factors and individual factors of
+clientelism in the same theory. Another important implication of the
+argument is that I am able to explain why clientelistic parties target
+their resources to both poor *and* non-poor individuals, an empirical
+regularity that to the best of my knowledge has been unexplored so far
+(see ).
+
+Perhaps the area in which there is the most agreement among scholars is
+on the relationship between poverty and vote-buying.[^5] For example,
+@Brusco2004, @Stokes:2013cj and @Nazareno2008a explain that since the
+poor derive more utility from immediate transfers than the risky returns
+associated with future policy packages, clientelistic political parties
+*only* target the poor. In fact, @Weitz-Shapiro:2014aa [12] explains
+that “\[a\]lmost *universally*, scholars of clientelism treat and
+analyze \[this\] practice as an exchange between politicians and their
+poor clients.”[^6] However, this canonical predictor has recently been
+challenged. @Szwarcberg2013 “challenges the assumption \[that brokers\]
+with access to material benefits will always distribute goods to
+low-income voters in exchange for electoral support,” while
+@Gonzalez-Ocantos2012 and @Holland2015 found that income (measured at
+the individual level) had little or no effect on vote-buying. In fact,
+the Brazilian case, in , also shows that non-poor individuals do receive
+clientelistic offerings. *Why would brokers target non-poor
+individuals?* And relatedly, *Why is contemporary scholarly work
+reporting null findings for poverty, traditionally the most important
+predictor of vote-buying?* I present an argument where individual income
+*on its own* is not relevant. What matters is how *noticeable*
+individuals are. For example, wealthier individuals living in poorer
+contexts are very identifiable. In low-information environments, brokers
+use these observables to reduce their costs.
+
+One often-considered contextual factor in the literature is the size of
+the community where clientelism takes place. Large-sized communities
+impose principal-agent problems. If an individual’s vote is bought, he
+or she may be tempted to accept the benefit and then vote for his or her
+preferred candidate anyway, and this incentive increases linearly with
+the size of the community where the individual is nested. Several
+scholars have then argued that brokers prefer smaller groups because
+individuals nested in small communities should defect less.[^7] One
+problem, however, is that it is not clear how political parties gain
+enough electoral returns from such an expensive strategy. Vote-buying is
+an already expensive strategy,[^8] making one-to-one vote-buying even
+more so.[^9] Therefore, the theoretical challenge is that this method
+seems to be extremely expensive given the relatively small number of
+votes brokers can secure. Moreover, the cost of this strategy increases
+linearly with the size of the targeted population. The brokers’
+production-possibility frontier cannot be shifted upwards either, i.e.
+monitoring capacities are bounded. Simply put, at some point party
+machines run out of brokers. It is hard to conceive that brokers will
+stop being clientelistic when the size of the population is large,
+specially when political competition is high. In my argument, when
+brokers need to secure large amounts of electoral support, specially
+when political competition is high, they turn to group targeting
+strategies relying on the spillover effects of clientelism. In these
+contexts, clientelism mobilizes electoral support from *actual* and
+*potential* beneficiaries, a mechanism that I explain later on in the
+paper.
+
+Civic associations might help solve some of the challenges large-sized
+groups present to brokers. As low-information environments prevent
+brokers from really observing individual electoral behavior,[^10] they
+usually resort to alternative methods that allow them to make safer
+inferences. For example, @Schaffer2015 explain that clientelism is
+“socially multiplied” as party machines target individuals “who are
+opinion-leading epicenters” in informal situations or “partisan
+networks,”[^11] in what has been called “organization buying.”[^12] And
+if parties buy “turnout,”[^13] then they will most probably target
+associations too, as “citizens immersed in clientelistic networks
+\[...\] have a higher probability of voting than the rest.”[^14] The
+positive relationship between group-membership and clientelism is
+intuitive. However, what has not been explored yet is whether
+clientelism is explained by association membership itself, or by the
+fact that poor individuals usually address their problems as an
+organized community since otherwise it would be too costly to solve them
+outside of the group. If this is the case, group *membership* should be
+spuriously related to clientelism. While I find that group membership
+does have a positive effect on clientelism, I find that the density of
+the poor in a given area has even more explanatory power.
+
+In an important paper, @Weitz-shapiro finds that in several Argentine
+municipalities, higher levels of political competition mixed and low
+socioeconomic indicators led to more clientelism. In her paper losses
+are conceptualized in terms of “moral costs.”[^15] Evidence for these
+types of costs have been presented in the literature very recently. For
+example, @Carlin2015 argue that citizens endowed with more democratic
+values feel more “moral repugnance” to clientelism, @Vicente2014
+explains that vote-buying practices have an “immoral/illegal
+connotation,” and @Gonzalez-Ocantos2012 find that individuals wanting to
+avoid social stigma usually do not give truthful answers when asked
+directly about clientelism. However, it is not clear if individuals who
+benefit from vote-buying really *understand* these kinds of ‘costs.’ In
+fact, @GonzalezOcantos2014 find that while the concrete benefits
+obtained through vote-buying are generally well understood, “the
+abstract societal costs of such exchanges are often distant from the
+every-day world in which clientelistic relationships are formed.”
+Individuals then might not really understand that clientelism is bad for
+democracy, or something to be ashamed of. Also, individuals with
+democratic values are also the ones with higher incomes, precisely the
+ones that are not supposed to receive clientelistic offerings. Finally,
+given that clientelism usually satisfies immediate material needs,
+clientelism might very well counterweight any other cost, moral or
+otherwise. In other words, clientelism might be worth the ‘shame’ or
+‘repugnance.’ I argue that political competition rises the incentives to
+capture more votes in a way that is affordable for brokers. When
+political competition is high, clientelism will be higher in contexts
+where poor individuals live in poor economic contests, suggesting that
+brokers rely on the economies of scale and spillover effects clientelism
+provides.
+
+When do parties target individuals and when groups?\[argument\] {#when-do-parties-target-individuals-and-when-groupsargument .unnumbered}
+===============================================================
+
+I argue that brokers will have incentives to engage in individual
+targeting when targets are easier to *identify*. Identifiability not
+only helps brokers to keep targeted individuals electorally accountable,
+but also to reduce the net costs of clientelism. Whereas individual
+targeting is the safest bet a broker can make, it also the most
+expensive one as it requires brokers to have sustained close
+relationships with clients. In the framework I propose the capacity
+brokers have to identify potential clients does not necessarily come
+from third-party sources (associations), but from a few observables
+brokers have at their disposition. In this paper I focus on how
+*noticeable* individuals are in their respective contexts. Should
+brokers engage in individual targeting, they would rather visit highly
+noticeable *poor* households in largely *non*-poor neighborhoods. As
+these households stand out in these contexts, it is easy for brokers to
+notice whether they need construction materials, whether there are wakes
+to which they could contribute flowers or birthday parties to which they
+could bring cakes. Poor households need not be close to each other, they
+just need to be *visible* enough for brokers to detect their needs.
+Income alone does not play an independent role. What is important is how
+individual incomes interact with their respective poverty context,
+making individuals more or less identifiable. Individuals will be more
+noticeable when non-poor individuals are nested in poor areas (quadrant
+1) and when poor individuals are nested in non-poor areas (quadrant 4)
+in .
+
+<span> r|p<span>4cm</span>|p<span>4cm</span>| </span> & &\
+High Competition & <span>**Poor Areas**</span>, *identifiable,
+individual targeting* & <span>**Poor Areas**</span>, *spillover effects,
+group targeting, cheap vote-buying*\
+Low Competition & <span>**Non-Poor Areas**</span>, *group targeting,
+expensive vote-buying, lack of checks and balances, embezzlement* &
+<span>**Non-Poor Areas**</span>, *identifiable, individual targeting*\
+
+When poor individuals are nested in poor areas, or vice-versa,
+individual targeting is no longer efficient. Since individuals are
+masked by their environments, identifiability is hard to achieve,
+increasing the cost of this strategy. In these circumstances, depicted
+in quadrants 2 and 3 in , group targeting is more efficient as it relies
+on the *spillover* effects provided by larger concentrations of
+individuals. Group targeting works because it also mobilizes electoral
+support from *potential* clients, that is, those who have not received
+benefits yet. @Auyero2000 [65] describes the case of *Alfonsina* in
+Argentina. *Alfonsina* was part of the brokers’ inner circle and
+received a job as a cleaning lady in a public school. As the broker
+explained to her before getting the job, *Alfonsina* had to be *patient*
+because as a member of ‘the circle,’ she was in the pool of potential
+beneficiaries; it was only a “matter of time” until she could get the
+job. Building on this intuition, my argument presents two ideal types:
+*actual* and *potential* beneficiaries. The former receive
+particularistic benefits “today” and vote for the broker’s candidate
+“tomorrow,” while the latter do not receive benefits today (in the
+expectation of receiving them in the future) but *still* vote for the
+broker’s candidate. Actual beneficiaries want to remain actual
+beneficiaries; thus, they keep supporting the broker’s candidate.
+Potential beneficiaries want to become actual beneficiaries, but are
+uncertain when that might happen; as a result, they keep supporting the
+broker’s candidate. This mechanism requires the broker’s ability to not
+allow the transaction costs of switching strategies to be lower than
+what it costs clients to wait to be benefited. In other words, brokers
+need to take care of their reputation and deliver benefits.
+@Zarazaga2014 [14] finds that *brokers and voters’ interests are
+aligned. Since the flow of resources to voters is dependent on their
+brokers’ electoral success, if the broker loses the election and is
+replaced, clients do not know what/if the new broker will get them
+benefits. A new broker may access to fewer resources or choose to
+distribute them to other people, and brokers often remind voters about
+this*. Hence, no matter what the type is, both of them keep voting for
+the broker’s party. Given that the poor are risk-averse, potential
+beneficiaries are better-off waiting (and voting for the broker’s party)
+than defecting. In the same vein but in a slightly different subject,
+@Magaloni:2008bq [20] explains that in non-democratic contexts voters
+have incentives to keep voting for the incumbent government, *even when
+they oppose it*.[^16] Hence, the cost of switching brokers (or
+defecting) is very high since it also involves building from scratch
+relationships of confidence with the new broker. Also reputation costs
+keep clients disciplined, and brokers exploit these self-enforced
+compliance dynamics. Vote-buying is also targeted to non-poor groups
+individuals nested in poor groups, as in quadrant 3. Though vote-buying
+has decreasing returns to scale in non-poor individuals,[^17] low levels
+of political contestation give local politicians more “room to move,”
+allowing them to divert local resources into more expensive means of
+targeting (embezzlement). This situation is sustained by the very low
+levels of political opposition.
+
+Case Selection, Research Design and Data Analyses {#case-selection-research-design-and-data-analyses .unnumbered}
+=================================================
+
+This paper tests the effects of individual income, the effects of being
+nested in *communities* with different poverty structures (a variable
+which I call `density of the poor`), and the effect of being exposed to
+different levels of political competition, on receiving clientelism.
+Brazil is a good case because its poverty structure is such that it is
+possible to find low-income individuals nested in non-poor areas (and
+vice versa). This case is also interesting from an institutional
+perspective. The Brazilian electoral system *incentivizes* clientelism.
+Several factors such as multimember districts with open lists and the
+institution of the *candidato nato*,[^18] “clearly \[makes\] Brazil one
+of the most personalistic systems of democratic governance.”[^19] In
+fact, @Gingerich2014b [290] finds that vote-buying drastically changed
+electoral results, concluding that “\[v\]ote brokerage can still pay
+electoral dividends in contemporary Brazil.”
+
+To test this hypothesis, I use survey data from 2010 from
+@LAPOP2010.[^20] Though the LAPOP survey provides a question for income,
+people who are somewhat better off than their neighbors but live in poor
+areas may not “feel” poor. If this is the case, this could confound the
+results. Additionally, when answering the questioner, individuals might
+not want to reveal their true incomes (either because it is too low or
+too high). Following the advice of @Cordova2008 and @Cordova2009
+[@Cordova2010], a relative wealth index (RWI) was constructed.[^21]
+Using principal component analyses, the index measures wealth based on
+actual assets weighted by how common these assets are. Different indexes
+were constructed for urban and rural contexts. plots the distribution of
+the combined index separated by clientelism. To measure the density of
+the poor, I followed a strategy similar to that of @Weitz-shapiro,
+measuring the degree of poverty at the municipal level. Using
+information from the 2010 Brazilian census,[^22] a variable was
+constructed that measures the percentage of individuals who live on less
+than half of the minimum wage in a given municipality
+(`density of the poor`). Given that the municipality of residence for
+each individual in the LAPOP survey is recorded, I was able to merge the
+census percentage with the LAPOP dataset. The `density of the poor`
+serves as a good proxy to capture the size of the poor group. It is
+important to stress that the unit of analysis is the individual, and
+that this variable captures the economic context in which each
+individual lives. And just like other scholars in the past have tested
+the effect of being nested in rural areas,[^23] this paper focuses on
+another class of contextual variable. Although the `density of the poor`
+group was originally a semi-continuous variable,[^24] it had to be
+dichotomized at the median (29%) to be able to construct a matched
+sample, which I justify and explain below. shows the continuous
+distribution dichotomized at the median (dashed line). Finally, to
+measure political competition, the paper follows @Weitz-shapiro. Using
+official electoral data from the 2008 municipal elections,[^25] a
+variable was constructed that measures the percentage of seats that are
+not controlled by the mayor’s party in a given municipal council.
+
+There is a built-in lack of relationship between “being poor” and
+“living in a poor municipality,” confirming that Brazil is in fact a
+good case to test this theory. in the Appendix shows that the
+unmatched/raw dataset had already embedded low levels of correlation
+between these two variables (0.44).[^26] Using matching methods, I am
+able to further break this relationship. Matching is a two-stage
+process. In the first stage the analysts preprocesses the data, seeking
+to break any systematic relationship between, in this case, the
+`density of the poor` and the wealth index (RWI).[^27] Matching does so
+by deleting observations for which matches cannot be found.[^28] The
+idea is to obtain a good covariate balance as in (in the Online
+Appendix), to then estimate any appropriated statistical model.[^29]
+From a statistical standpoint, preprocessed datasets are less
+model-dependent[^30] and prevent analysts from making extreme
+counterfactuals.[^31] and in the Appendix provide summary statistics for
+both the matched and raw datasets.[^32] The preprocessed data used in
+the matching approach has 54 municipalities while the raw data used in
+the generalized propensity score (GPS) approach (which I explain below)
+has 54 too. lists the municipalities and shows which ones are considered
+“high” or “low” in terms of the `density of the poor` after the
+dichotomization process. The figure also shows that there exists
+considerable variance in income/RWI in both high and low poverty density
+conditions (bubbles).[^33]
+
+It could be argued that dichotomizing the `density of the poor` variable
+at the median is an arbitrary decision. While there have been
+theoretical advances regarding general treatment effects regimes for
+continuous or semi-continuous response doses,[^34] algorithms with the
+ability to match on continuous treatment variables are not common. In
+order to obtain covariate balance in a non-parametric way (as matching
+does) but *without* dichotomizing the `density of the poor`, I also use
+the original (i.e. *continuous*) `density of the poor` variable to
+construct a generalized propensity score (GPS).[^35] The score is used
+to *weight* each observation in the model. Besides matching on and
+weighting by income, I also included the following variables to match
+on/weighting by: municipal opposition, municipal population and
+individual involvement in civic associations.
+
+The dependent variable is clientelism. To measure it, I use the question
+that asks if *a candidate or someone from a political party offered
+\[the respondent\] something, like a favor, food, or any other benefit
+or thing in return for \[her/his\] vote or support*. Subjects could
+answer that this had happened *often*, *sometimes* or *never*.
+@Carreras2013a and @Holland2015 use the same dataset and outcome
+variable. As they explain, the question did not ask whether respondents
+*took* the offer, hence it should not be an important source of social
+desirability bias. For statistical and substantive reasons, I
+dichotomized this variable, combining the alternatives *often* (n = 91)
+and *sometimes* (n = 150), leaving *never* (n = 1196) unchanged.[^36]
+
+The following control variables were considered.
+`Perception of corruption` was included to hold constant the effect of
+respondents who declared clientelistic activity when in reality they
+were referring to corruption scandals.[^37] Brokers usually target civic
+associations. Following @Holland2015 [28], who use the same
+dataset/year, an additive index to measure civic participation
+(`Political Involvement`) was created.[^38] Some have also found group
+size to be important. Using the census data, a variable to measure
+`population size` at the municipal level was included. I also included
+an `urban/rural` dummy. A variable to capture party identification
+(`Political Id.`) was included. Higher levels of democratic support
+should be negatively associated with clientelism. To control for that, a
+variable measuring `democratic support` was included.
+@GonzalezOcantos2014 find that schooling plays a negative role on
+clientelism; hence, I control for `education` too.
+
+Observations are clustered on a number of important factors such as
+levels of municipal political competition, municipal poverty and
+municipal population size. In order to account for these clustering
+effects, I use a generalized estimating equations approach. GEE were
+introduced by @Liang1986 to fit clustered, repeated (i.e. correlated)
+and panel data. This method is especially efficient when the data are
+binary.[^39] GEE models are similar to random effects models[^40] in
+that they allow observations to be nested in hierarchical structures.
+This method requires analysts to parameterize the working correlation
+matrix. Though @Hedeker2006 [139] explain that “the GEE is robust to
+misspecification of the correlation structure,”[^41] @Hardin2013 [166]
+point out that “\[i\]f the observations are clustered (not collected
+over time), then \[...\] the exchangeable correlation structure” is the
+most appropriate working correlation matrix. Given that the data do not
+follow a panel but rather a clustered structure, the exchangeable
+correlation matrix was specified in all models.
+
+While this method is very flexible, GEE estimates remain uninterpretable
+in practice,[^42] making regression tables useless from a substantive
+standpoint. In this case, the problem is even more severe due to the
+interactive hypotheses being tested in this paper. The main hypothesis
+is tested by fitting a parameter for the multiplicative term between the
+variables `wealth index`, `political competition` and `high density`.
+Methodologists agree on “not interpret\[ing\] the coefficients on the
+constitutive terms,” as they lack substantive meaning.[^43] These
+problems get more complex when it comes to generalized models as a
+series of challenges arise. As @Ai2003 explain, *(1) the interaction
+effect could be nonzero, even when the estimation says it is zero, (2)
+the statistical significance of the interaction effect cannot be tested
+with a simple t-test on the coefficient of the interaction term, (3) the
+interaction effect is conditional on the independent variables, \[...\]
+and (4) the interaction effect may have different signs for different
+values of covariates*. @Brambor2005 [74] offer the same advice, namely
+“one cannot determine whether a model should include an interaction term
+simply by looking at the significance of the coefficient on the
+interaction term.” Given that cross-partial derivatives are not
+advisable either, simulation methods are required.[^44] Particularly, I
+follow the simulation approach introduced in @King2000. This procedure
+samples via simulation from the point estimates, generating a new and
+larger distribution. That is, taking the single estimated parameters
+(the regression coefficients), I construct a distribution of estimated
+values for each coefficient. Relying on the central limit theorem, with
+enough sampling draws, the new simulated distribution is a
+transformation that approximates with a great degree of precision the
+(uninterpretable) coefficients. Subsequently, means and uncertainty
+measures can be constructed for each of these distributions. From a
+substantive standpoint, simulation methods also allow for sampling new
+distributions at different values of the independent variables. This
+will be important in simulating the expected value of clientelism for
+different “profiles,” such as *non*-poor individuals nested in
+*high*-poor dense municipalities in contexts of *high* political
+competition, etc.
+
+Since it is “impossible to evaluate conditional hypotheses using only
+the information provided in traditional results tables,”[^45] I focus
+instead on the substantive results from the simulation methods. However,
+I still present the raw results in in the Appendix.[^46] Analogous to ,
+in I simulate the predicted probabilities of being targeted using both
+the matched and weighted/GPS models. The horizontal panel depicts
+simulations for the upper (“non-poor,” 75%) and lower (“poor,” 25%)
+quartiles of the continuous `wealth index` variable. In turn, the
+vertical panel shows the simulated values for the maximum (100%) and
+minimum (43%) values of the `municipal opposition` index. Each quadrant
+shows simulations for individuals nested in poor municipalities (*high*
+`density of the poor`) and non-poor municipalities (*low*
+`density of the poor`). Each profile shows two simulated probability
+distributions (with 95% confidence intervals), one for the matched
+sample and one for the weighted/GPS model.[^47]
+
+suggests that brokers engage in *individual* targeting when individuals
+are identifiable. That is, when individuals are poor *but* nested in
+low-poor density municipalities (quadrant 4, with a probability of being
+targeted 22%)[^48] and when individuals are not poor but nested in
+high-poor density municipalities (quadrant 1, with a probability of
+being targeted 24%). This suggests that political competition
+incentivizes motivated brokers to engage in vote-buying regardless of
+personal income when political competition is high. *Group* targeting is
+more efficient in quadrant 2, supporting the spillover effects
+hypothesis. When municipal mayors are politically challenged, brokers
+target *groups* of poor individuals in poor municipalities (quadrant 2,
+25%). I argue that brokers take advantage of the spillover effects of
+clientelism based on the incentives both *potential* and *actual*
+beneficiaries have to support the broker’s candidate. Non-poor
+individuals nested in low-poor density municipalities but exposed to
+lower levels of political competition (quadrant 3) are still offered
+some vote-buying. In these contexts there are less political competition
+and less checks and balances, having incumbents more “room to move.” I
+argue that even when politicians are not in need of more electoral
+support, they still engage in this expensive form of vote-buying which
+is sustained by lowly challenged electoral actors.
+
+shows a plot divided in two panels. Panel <span>**a**</span> shows the
+simulated expected probabilities (with 95% confidence intervals) of
+being targeted at different levels of political involvement. As the blue
+lines suggests, individuals who participate in civic associations have
+higher probabilities of being targeted. This is in line with findings in
+previous research.[^49] However, once I decompose these effects, being
+nested in high-poor density areas contributes substantially more to the
+model. These differences are statistically significant. Panel
+<span>**b**</span> shows the probability (with 95% confidence intervals)
+of being targeted at different increments of the size of the population.
+In line with the literature, I also see that this relationship is
+negative.[^50] However, the effect of being nested in high-poor density
+municipalities outperforms the effect of population size, suggesting
+spillover effects.
+
+Discussion {#discussion .unnumbered}
+----------
+
+Incentives to offer or take clientelistic offerings are not guided by
+structure or individual factors only. This paper has suggested that both
+are necessary to better understand how clientelism happens. Clearly,
+pressures to incur in this expensive and uncertain strategy rise as
+political competition rises as well. However, the execution of this
+strategy largely differs depending on whether brokers face homogeneous
+or heterogeneous groups of individuals. Each one provides a different
+cost-and-benefit structure to either defect or cooperate. When poor
+individuals live in poor areas, brokers engage in group targeting
+relying on the spillover effects of clientelism. Given that the poor are
+risk-averse, even the ones who do not receive benefits support the
+broker’s candidate, while the ones who did receive benefits, support him
+to keep receiving more benefits. In this sense, clientelism propagates
+easily when the poor live among the poor. However, in heterogeneous
+areas brokers adapt their strategy and execute clientelism in a
+different way, relying on how identifiable individuals are.
+Identifiability makes receivers more prone to cooperate, rising the
+costs of defection. Finally, the paper hopes that the literature
+considers that groups and individuals provide different incentives to
+both brokers and individuals, and hence, this distinction should be
+incorporated to better understand clientelism.
+
+Appendix {#appendix .unnumbered}
+========
+
+<span>@lccccc</span>\
+\
+Statistic & & & & &\
+\
+Clientelism & 1,483 & 0.171 & 0.376 & 0 & 1\
+Wealth Index & 1,483 & 1.543 & 0.846 & $-$0.899 & 3.050\
+Municipal Opposition & 1,483 & 81.761 & 11.821 & 43 & 100\
+Density of the Poor & 1,483 & 2.435 & 1.120 & 1 & 4\
+Municipal Population & 1,483 & 5.393 & 2.841 & 1 & 10\
+Urban & 1,483 & 0.860 & 0.347 & 0 & 1\
+Political Involvement Index & 1,483 & 1.792 & 1.619 & 0 & 9\
+Support for Democracy & 1,483 & 5.426 & 1.682 & 1 & 7\
+Party Id. & 1,483 & 5.939 & 1.150 & 1 & 12\
+Perception of Corruption & 1,483 & 2.027 & 1.003 & 0 & 3\
+Years of Education & 1,483 & 9.398 & 3.857 & 1 & 18\
+\
+
+<span>@lccccc</span>\
+\
+Statistic & & & & &\
+\
+Clientelism & 1,437 & 0.168 & 0.374 & 0 & 1\
+Wealth Index & 1,437 & 1.557 & 0.811 & $-$0.899 & 3.050\
+Municipal Opposition & 1,437 & 81.912 & 11.749 & 43 & 100\
+High Density of the Poor & 1,437 & 0.470 & 0.499 & 0 & 1\
+Municipal Population & 1,437 & 5.384 & 2.792 & 1 & 10\
+Urban & 1,437 & 0.860 & 0.347 & 0 & 1\
+Political Involvement Index & 1,437 & 1.784 & 1.613 & 0 & 9\
+Support for Democracy & 1,437 & 5.417 & 1.684 & 1 & 7\
+Party Id. & 1,437 & 5.934 & 1.160 & 1 & 12\
+Perception of Corruption & 1,437 & 2.029 & 1.000 & 0 & 3\
+Years of Education & 1,437 & 9.359 & 3.843 & 1 & 18\
+\
+
+<span>l@ c@ c@ </span> & Matched Data & Weighted Data\
+(Intercept) & $1.404$ & $2.958$\
+& $(1.968)$ & $(2.691)$\
+Wealth Index & $-1.374$ & $-1.320$\
+& $(0.990)$ & $(1.209)$\
+Municipal Opposition & $-0.040$ & $-0.061$\
+& $(0.025)$ & $(0.032)$\
+High Poor Density & $-6.550^{**}$ &\
+& $(2.399)$ &\
+Municipal Population & $-0.115^{*}$ & $-0.101$\
+& $(0.048)$ & $(0.053)$\
+Urban & $-0.091$ & $-0.077$\
+& $(0.401)$ & $(0.416)$\
+Political Involvement & $0.046$ & $0.047$\
+& $(0.055)$ & $(0.055)$\
+Support for Democracy & $-0.056$ & $-0.051$\
+& $(0.046)$ & $(0.048)$\
+Party Id. & $-0.082$ & $-0.087$\
+& $(0.053)$ & $(0.052)$\
+Perception of Corruption & $0.240^{**}$ & $0.267^{**}$\
+& $(0.088)$ & $(0.089)$\
+Years of Education & $0.051^{*}$ & $0.054^{**}$\
+& $(0.021)$ & $(0.020)$\
+Wealth Index \* Municipal Opposition & $0.018$ & $0.013$\
+& $(0.013)$ & $(0.015)$\
+Wealth Index \* High Poor Density & $2.509$ &\
+& $(1.319)$ &\
+Municipal Opposition \* High Poor Density & $0.085^{**}$ &\
+& $(0.030)$ &\
+Wealth Index \* Municipal Opposition \* High Poor Density & $-0.029$ &\
+& $(0.016)$ &\
+Density of the Poor & & $-1.992^{*}$\
+& & $(0.921)$\
+Wealth Index \* Density of the Poor & & $0.555$\
+& & $(0.372)$\
+Municipal Opposition \* Density of the Poor & & $0.024^{*}$\
+& & $(0.011)$\
+Wealth Index \* Municipal Opposition \* Density of the Poor & &
+$-0.005$\
+& & $(0.004)$\
+Num. obs. & 1437 & 1483\
+Num. clust. & 54 & 54\
+
+![Distribution of Pre and Post Matching Observations by Wealth Index and
+Density of the Poor<span
+data-label="fig:municipality:wealth:large:plot"></span>](figure/municipality:wealth:large:plot-1){width="\maxwidth"}
+
+Online Appendix
+===============
+
+![Frequency of Individuals by Municipality, Pre and Post Matching
+Deletion<span
+data-label="fig:municipality:sample:plot"></span>](figure/municipality:sample:plot-1){width="\maxwidth"}
+
+![Pre and Post Matching Balance: Distribution of Propensity Scores<span
+data-label="fig:balance:plot"></span>](figure/balance:plot-1){width="\maxwidth"}
+
+[^1]: I’m thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast,
+    Geoffrey Wallace, Doug Jones, Ezequiel González Ocantos, Juan Pablo
+    Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Luciana
+    Oliveira Ramos, Giancarlo Visconti, William Young and Johannes
+    Karreth. I thank participants of the Latin American Studies
+    Association 2014 Conference, The Southern Political Science
+    Association 2015 meeting, the Western Political Science Association
+    2015 meeting and the 2014 Graduate Conference at the Political
+    Science Dept., Rutgers U. This work was partially funded by the
+    Center for Latin American Studies at Rutgers University. I am
+    thankful to the School of Arts and Sciences and the Department of
+    Political Science for their travel grants.
+
+[^2]: See @Dixit1996, @Khemani2015 and @Calvo2004.
+
+[^3]: See for example @Scott1972, @Auyero2000, @Szwarcberg2013 and
+    @Weitz-shapiro and @Gonzalez-Ocantos2012. I thank Ezequiel González
+    Ocantos for this suggestion.
+
+[^4]: Emphasis is mine.
+
+[^5]: See @Calvo2004 [@Weitz-shapiro], @Kitschelt2000 and Kitschelt and
+    Altamirano in @Carlin:2015 [ch. 10]. Following @Brusco2004 [67], I
+    define vote-buying as “the proffering to voters of cash or (more
+    commonly) minor consumption goods by political parties, in office or
+    in opposition, in exchange for the recipient’s vote.” In the rest of
+    this note, I use clientelism and vote-buying interchangeably.
+
+[^6]: Emphasis is mine.
+
+[^7]: See for an overview @Stokes2005 [323], @Brusco2004, @Kitschelt2007
+    [10] and @Magaloni:2008bq [67]. @Rueda2016 finds support for this
+    hypothesis in Colombia. Similarly, see @Bratton2008a for Nigeria and
+    @Gingerich2013 [456] for Brazil.
+
+[^8]: @Zarazaga2014 [35].
+
+[^9]: For example, @Stokes2005 argues that brokers develop skills that
+    allow them to infer whether individual clients in small-sized
+    communities voted for their party by *looking at them in the eyes*.
+    For the Brazilian case, similar ethnographic evidence is suggested
+    in @Gay:1993aa [@Gay1998].
+
+[^10]: @Zarazaga2014 [35].
+
+[^11]: @Calvo2012.
+
+[^12]: @Stokes:2013cj [250-251]. @Holland2015 [16] explain that when
+    “parties lack their own brokerage networks \[they seek\] to
+    capitalize on organizational networks instead.” Similarly,
+    @Rueda2014a [13] argues that parties tend to target very specific
+    civic associations of “seniors and associations of single mothers,
+    organizing trips to recreational centers outside the city where all
+    their expenses are covered.” *Paradoxically*, the stronger the civic
+    society, i.e. the more organized it is, the more clientelism.
+
+[^13]: @Nichter2008.
+
+[^14]: @Carreras2013 [7].
+
+[^15]: @Weitz-shapiro argues that non-poor individuals are more likely
+    to condemn clientelism “due to self-interest or because of *moral*
+    concern\[s\]” (emphasis is mine). That being said, ‘self-interest’
+    refers to the idea that what is being distributed through
+    clientelism is *discounted* from the pool of resources theoretically
+    available to be spent on policy packages. And that *is* an economic
+    cost.
+
+[^16]: The Mexican PRI lasted as long as it did not because of electoral
+    fraud but because voters supported the “known devil.” As Magaloni
+    explains, hegemonic parties survive when they are able to sustain
+    long-term economic growth and a constant supply of clientelistic
+    transfers.
+
+[^17]: Buying votes from non-poor individuals gets more expensive as
+    income increases.
+
+[^18]: “\[R\]ule that removed parties’ control over the nominations
+    process and let an electoral legislator decide to run on any party
+    ticket.” See @Carlin:2015 [<span>Chapter?</span>].
+
+[^19]: @Carlin:2015 [<span>Chapter?</span>].
+
+[^20]: “I thank the Latin American Public Opinion Project (LAPOP) and
+    its major supporters (the United States Agency for International
+    Development, the United Nations Development Program, the
+    Inter-American Development Bank, and Vanderbilt University) for
+    making the data available.” The sample consists of five strata
+    representing the five main geographical regions of Brazil. Each
+    stratum was further sub-stratified by urban and rural areas.
+
+[^21]: See also @Santos2016.
+
+[^22]: Official data comes from the Bureau of Statistics of Brazil
+    [IBGE](http://www.ibge.gov.br).
+
+[^23]: See for example @Brusco2004 and @Stokes2005. Both of them use the
+    log of population, which is a proxy for urban/rural.
+
+[^24]: I.e., a percentage.
+
+[^25]: Data from the [*Tribunal Superior
+    Eleitoral*](http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip).
+
+[^26]: The figure shows that for both the matched and raw datasets,
+    “being poor” and “living in a poor municipality” are not confounded,
+    as it is possible to find poor individuals living in non-poor areas,
+    and viceversa.
+
+[^27]: @King2011
+
+[^28]: The final procedure matched 761 individuals living in the
+    low-density poverty condition with 676 individuals living in the
+    high-density poverty condition.
+
+[^29]: The idea is that the propensity of being exposed to the “high”
+    *density of the poor* condition (the ‘propensity score’) has a
+    similar distribution in both ‘treated’ and ‘control’ groups. It is
+    important to say that, despite the language, I do not claim any
+    causal relationship in this paper.
+
+[^30]: See @Ho2006.
+
+[^31]: @King2005a. The matching routine used was the `full` matching
+    routine (see @Hansen2004 and @Rosenbaum:2010ul), via the `MatchIt R`
+    package (see @King2011).
+
+[^32]: Tables generated using the `stargazer R` package
+    (@Hlavac:2015qf).
+
+[^33]: in the Online Appendix shows the frequency of individuals by
+    municipality in both raw and matched datasets.
+
+[^34]: See @Ratkovic2012 and @Hirano2004.
+
+[^35]: See @Imbens2004, @Guardabascio2014 and @Imai2014b. To generate
+    the weighting vector, I used the `CBPS R` package (see
+    @Fong:2014aa).
+
+[^36]: These numbers come from the matched dataset.
+
+[^37]: I thank Cesar Zucco for this suggestion.
+
+[^38]: This variable was constructed by adding the frequency of
+    attendance at religious meetings, community improvement meetings and
+    political party meetings (variables `cp6`, `cp8` and `cp13`,
+    respectively).
+
+[^39]: @Hanley2003a.
+
+[^40]: @Gardiner2009.
+
+[^41]: @Carlin2001 [402] argue that “\[r\]elatively minor differences in
+    estimates may arise depending on how the estimating equations are
+    weighted, in particular within the generalized estimating equation
+    (GEE) framework.” @Westgate2016 and @Gardiner2009 [227] make the
+    same point.
+
+[^42]: @Carlin2001.
+
+[^43]: @Brambor2005 [77].
+
+[^44]: @WilliamJ.Wales2013.
+
+[^45]: @Brambor2005 [76].
+
+[^46]: Table generated via the `texreg R` package. The first column
+    shows the estimates for the matched dataset while the second column
+    shows the results for the GPS wighted model. Virtually all
+    coefficients have the same size and sign.
+
+[^47]: In the case of the weighted/GPS model which does not use the
+    dichotomized variable, I use the continuous version of the size of
+    the poor variable, where “low density” represents the lower quartile
+    while “high density” the upper quartile.
+
+[^48]: Matched sample.
+
+[^49]: @Schaffer2015, @Carreras2013 [7], @Calvo2012, @Holland2015 [16]
+    and @Rueda2014a.
+
+[^50]: @Stokes2005 [323], @Kitschelt2007 [10], @Magaloni:2008bq [67],
+    @Rueda2016, @Bratton2008a and @Gingerich2013 [456].

@@ -10,12 +10,12 @@
 
 
 % TITLE SECTION
-\title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{Aiming Right At You:\\ Group v. Individual Clientelistic Targeting in Brazil}} % Article title
+\title{\vspace{-15mm}\fontsize{18pt}{7pt}\selectfont\textbf{\input{/Users/hectorbahamonde/RU/research/Clientelism_paper/title.txt}\unskip}} % Article title
 
 
 \author[1]{
 \textsc{H\'ector Bahamonde}\\ 
-\thanks{I'm thankful to Bob Kaufman, Dan Kelemen, Rick Lau, Paul Poast, Geoffrey Wallace, Doug Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Luciana Oliveira Ramos, Giancarlo Visconti, William Young and Johannes Karreth. I thank participants of the Latin American Studies Association 2014 Conference, The Southern Political Science Association 2015 meeting, the Western Political Science Association 2015 meeting and the 2014 Graduate Conference at the Political Science Dept., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
+\thanks{I'm thankful to Robert Kaufman, Daniel Kelemen, Richard Lau, Paul Poast, Geoffrey Wallace, Douglas Jones, Ezequiel Gonz\'alez Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Luciana Oliveira Ramos, Giancarlo Visconti, William Young and Johannes Karreth. I thank participants of the Latin American Studies Association 2014 Conference, The Southern Political Science Association 2015 meeting, the Western Political Science Association 2015 meeting and the 2014 Graduate Conference at the Political Science Dept., Rutgers U. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
 \normalsize PhD Candidate $\bullet$ Political Science Dept. $\bullet$ Rutgers University \\
 \normalsize \texttt{e:}\href{mailto:hector.bahamonde@rutgers.edu}{\texttt{hector.bahamonde@rutgers.edu}}\\
 \normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.hectorbahamonde.com}}
@@ -45,7 +45,7 @@ Do parties target individuals or groups? This is a question fundamental to under
 
 % CONTENT 
 
-\newpage
+\clearpage
 
 % loading knitr package
 <<echo=FALSE, cache= F, warning = FALSE, message = F>>=
@@ -201,7 +201,7 @@ Incentives to offer or take clientelistic offerings are not guided by structure 
 
 
 
-\newpage
+\clearpage
 
 \section*{Appendix}
 
@@ -270,7 +270,7 @@ Incentives to offer or take clientelistic offerings are not guided by structure 
 
 
 
-\newpage
+\clearpage
 
 % word count
 
@@ -305,7 +305,7 @@ count <- comma(as.numeric(count)) # add comma
 \vspace*{\stretch{1}}
 \end{center}
 \clearpage
-\newpage
+\clearpage
 
 
 
