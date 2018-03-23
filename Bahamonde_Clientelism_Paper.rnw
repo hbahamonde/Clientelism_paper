@@ -101,7 +101,7 @@ Analytically, the structure of the argument (and the empirics) allows for disent
 Vote-buying is an expensive strategy,\footnote{\citet[35]{Zarazaga2014}.} and more so when clients are individually targeted. \citet[317]{Stokes2005} argues that brokers develop skills that allow them to infer whether individual clients in small-sized communities voted for their party by \emph{looking at them in the eyes.} \citet{Gay:1993aa,Gay1998} documents similar findings for Brazilian case. This strategy requires brokers to sustain close over time relationships with their clients in a personal and individualized way. Knowing the client's needs, delivering him benefits, monitoring his political behavior (and punishing him in case of defection), all in an individualized fashion, making this strategy an extremely expensive choice. And it gets even more expensive as more individuals are added to the broker's portfolio.
 
 
-The cost of individual targeting increases linearly with the size of the targeted population.\footnote{\citet[56]{Hicken2007}.} This intuition is important because the brokers' production-possibility frontier cannot be shifted upwards either, i.e. monitoring capacities are bounded. Simply put, at some point party machines run out of enough brokers. Despite this constrain, brokers still have incentives to secure a large amount of votes, not a small amount of votes. Yet, the literature explains that clientelism should decrease in large communities. However, it is hard to conceive that brokers will stop being clientelist just because the size of the population is large. A priori, it seems a missed opportunity for parties to let go a large amount of votes. In fact, survey data for the Brazilian case indicate that inhabitants of large, medium and small municipalities are targeted in virtually the same proportion.\footnote{\citet[2]{Speck2001}.} This article explains that when brokers need to secure large amounts of electoral support, specially when political competition is high, they turn to group-targeting strategies relying on the spillover effects of clientelism. In these contexts, clientelism mobilizes electoral support from \emph{actual} and \emph{potential} beneficiaries, minimizing the costs of clientelist targeting and maximizing electoral benefits, a mechanism that I explain later on in the paper.
+The cost of individual targeting increases linearly with the size of the targeted population.\footnote{\citet[56]{Hicken2007}.} This intuition is important because the brokers' production-possibility frontier cannot be shifted upwards either, i.e. monitoring capacities are bounded. Simply put, at some point party machines run out of enough brokers. In fact, \citet[74]{Auyero2000} explains the capacity brokers have to deliver benefits is ``finite,'' and ``only for a restricted number of people.'' However, and despite this constrain, brokers still have incentives to secure a large amount of votes. Yet, the literature explains that clientelism should decrease in large communities. However, it is hard to conceive that brokers will stop being clientelist just because the size of the population is large. A priori, it seems a missed opportunity for parties to let go a large amount of votes. In fact, survey data for the Brazilian case indicate that inhabitants of large, medium and small municipalities are targeted in virtually the same proportion.\footnote{\citet[2]{Speck2001}.} This article explains that when brokers need to secure large amounts of electoral support, specially when political competition is high, they turn to group-targeting strategies relying on the spillover effects of clientelism. In these contexts, clientelism mobilizes electoral support from \emph{actual} and \emph{potential} beneficiaries, minimizing the costs of clientelist targeting and maximizing electoral benefits, a mechanism that I explain later on in the paper.
 
 
 % Motivation 3: Civic Associations and Organization Buying
@@ -115,39 +115,9 @@ Moving forward, in an important paper, \citet[]{Weitz-shapiro} finds that in sev
 
 \section*{When do Parties Target Individuals and When Groups?\label{argument}} 
 
+%
+This section explains that from the broker's perspective, while individual targeting is more expensive (but safer), group targeting is cheaper (but more uncertain). Given this cost\/benefit structure, the paper contends that brokers will have incentives to engage in \emph{individual targeting} when targets are easier to identify, otherwise they will engage in \emph{group targeting}. \autoref{tab:strategy:set} presents four ideal types in four quadrants; cases where individuals are highly identifiable, that is, non-poor individuals living in poor areas (Q1), and poor individuals living in non-poor areas (Q4). Identifiability in these cases reduces the cost of defection, permitting clientelist brokers to closely follow their clientele. The table also shows cases where individuals are hard to identify, that is, poor individuals living in poor areas (Q2), and non-poor individuals living in non-poor areas (Q3). In these cases, voters are more anonymous, making direct individual-based targeting and monitoring more costly. Since brokers still have incentives to seek electoral support, they rely on the spillover effects of clientelism. In these cases, the effects of vote-buying disseminates by mobilizing targeted voters, but also a latent untargeted (but potential) clientele.
 
-This section explains that from the broker's perspective, individual targeting is more expensive (but safer), while group targeting cheaper, but more uncertain. The paper contends that brokers will have incentives to engage in \emph{individual targeting} when targets are easier to identify, and in \emph{group targeting} when targets are hard to identify. \autoref{tab:strategy:set} presents four ideal types in four quadrants; cases where individuals are highly identifiable, that is, non-poor individuals living in poor areas (Q1), and poor individuals living in non-poor areas (Q4). Identifiability in these cases reduces the cost of defection, permitting clientelist brokers closely follow their clientele. The table also shows cases where individuals are hard to identify, that is, poor individuals living in poor areas (Q2), and non-poor individuals living in non-poor areas (Q3). In these cases, direct individual-based targeting is costly, and hence brokers rely on the spillover effects of clientelism. In these cases, the effects of vote-buying disseminates by mobilizing a latent targeted clientele.
-
-% HERE
-
-
-
-
-% Individual Targeting
-\paragraph{Individual Targeting} This strategy is the safest bet a broker can make, but also the most expensive one as it requires brokers to have sustained close relationships with clients. For instance, \citet[26]{Zarazaga2014} explains that ``brokers have detailed information about their neighborhood and clients' needs.'' Without question, keeping individual track of every single client (and their respective needs) is an expensive strategy. However, such investment pays off electorally. The same detailed information brokers have about their clients is used to infer (or directly know) the electoral behavior of their respective clientele. Consequently, identifiability helps brokers to keep targeted individuals electorally accountable, reducing the uncertainty costs of clientelism. 
-
-
-
-
-
-
-The capacity brokers have to identify potential clients does not necessarily come from third-party sources (associations), as the ``organization buying'' proponents explain,\footnote{\citet[]{Holland2015}, \citet[]{Rueda2014a} and\citet{Stokes:2013cj}.} but from a few observables brokers have at their disposition. In this paper I focus on how \emph{noticeable} individuals are in their respective contexts. Should brokers engage in individual targeting, they would rather visit highly noticeable \emph{poor} households in largely \emph{non}-poor neighborhoods. As these households stand out in these contexts, it is easy for brokers to notice whether they need construction materials, whether there are wakes to which they could contribute flowers or birthday parties to which they could bring cakes. Borrowing \citet[26]{Zarazaga2014}'s language, higher levels of visibility, in summary, supply brokers with \emph{good-quality information about their clients}'. 
-
-And even when brokers are also ``neighbors,''\footnote{\citet[38]{Zarazaga2014}.} that is, members of the same community of the targeted individuals, brokers have incentives to expand their immediate local networks by colonizing visible targets outside of their own proximate neighborhood. By conceptualizing brokers as active political entrepreneurs who seek new supporters outside of their immediate context, the proposed framework complements other accounts, as presented in \citet[32]{Szwarcberg2013} or \citet[681]{Zarazaga2015a}, where brokers are neighborhood party agents. Clientelist entrepreneurship can be done directly, or indirectly. For instance, \citet[65-66]{Auyero2000} describes the situation of \emph{Cholo}, a member of the inner circle of one of the brokers in Buenos Aires, Argentina, who visited ``other poor neighborhoods of the area adjacent to'' the place where the broker (and himself) lived, to spread news about some government plan, the governor and the Peronist party, but importantly, also \emph{reporting to the broker any unattended material needs he had noticed}. Via different channels, brokers expand their client portfolio outside of their immediate community. 
-
-
-Importantly, in this framework, individual poverty does not play a role by itself. What is more relevant is how individual incomes \emph{interact} with their respective socio-economic contexts, making individuals more or less noticeable. Individuals are more noticeable when non-poor individuals are nested in poor areas (quadrant 1) or when poor individuals are nested in non-poor areas (quadrant 4), as shown in \autoref{tab:strategy:set}.\footnote{Importantly, poor households need not be close to each other, but \emph{visible} enough for brokers to detect their needs.} Another necessary condition studied in this paper are the levels of political competition. In quadrant 1, 
-
-
-
-
-%Importantly, contexts of higher electoral contestation need wider margins of electoral support. While the bulk of it comes from quadrant 2 (which I explain next), under contexts of high electoral competition, votes from non-poor individuals are also bought.
-
-
-
-
-
-\todo{more development, Each quadrant of Table 1 probably deserves its own paragraph, Addressing the party, the broker and the client's costs and benefits and strategies}
 
 
 \begin{table}[h]
@@ -167,11 +137,102 @@ Low Competition  & {\bf Non-Poor Areas}, \emph{group targeting, expensive vote-b
 
 
 
+% Individual Targeting 1
+\paragraph{Individual targeting} is the safest bet a broker can make, but also the most expensive one as it requires brokers to have sustained closed relationships with their clients. For instance, \citet[26]{Zarazaga2014} explains that ``brokers have detailed information about their neighborhood and clients' needs.'' Without question, keeping track of every single client (and their respective needs) is an expensive strategy. After all, as \citet[73]{Auyero2000} explains it, brokers are ``problem solvers.'' Importantly, the kind of care given ranges from material needs to symbolic and immaterial necessities, making clientelism a relationship based on ``trust, solidarity, reciprocity, caring, and hope.'' Such broker-client symbiosis is both material and personal-intensive, making it very costly. As an investment, however, it pays off electorally. The same detailed information brokers have about their clients' needs is then used coercively to infer (or directly know) the electoral behavior of their respective clientele, administering punishments or rewards, accordingly. 
+
+% Individual Targeting 2
+The transaction costs of clientelism are reduced by targeting identifiable clients. In a project published elsewhere,\footnote{\citet{Luna2011}.} the author did extensive participant observation in several campaigns, and for several months accompanied a number of candidates in their campaigns during the legislative elections in \emph{Santiago de Chile}, in 2009. Incumbents spent considerable time on the ground, traveling their districts. As we drove throughout the district in her personal car during a campaign day, several times, the candidate was able to recall who the head of household was (including his/her name), what her district office had contributed to solve their needs, and whether the household members were in good terms with her. Importantly, the economic diversity of the district provided a number of handy observables. In non-poor areas, an unpainted wall, a rusty front yard fence, a two-story house with a bodega market on the first, a household with a broken window, or a junk diesel truck aground in the front yard, among others, provided distinctive points of reference. Identifiability, as an observable, made receivers less anonymous, rising their cost of defection, making them more prone to cooperate. 
+
+
+
+% Q4
+Households in Q4, being more noticeable, stand out in their respective contexts, making it is easy for brokers to notice whether they need construction materials, whether there are wakes to which they could contribute flowers or birthday parties to which they could bring cakes. In addition, it makes their possible defection more obvious and memorable for the brokers. Borrowing \citet[26]{Zarazaga2014}'s language, higher levels of visibility, in summary, supply brokers with \emph{good-quality information about their clients}'.\footnote{Importantly, poor households need not be close to each other, but \emph{visible} enough for brokers to detect their needs.} In addition, when political contestation is low, the demand for votes is less astringent, shaping brokers' incentives to target in a more accurate, less massive fashion (as opposed to group targeting, which I explain below), identifiable and particularized individuals.
+
+% 
+The capacity brokers have to identify potential clients does not only come from third-party sources, as the ``organization buying'' proponents explain.\footnote{\citet[]{Holland2015}, \citet[]{Rueda2014a} and \citet{Stokes:2013cj}.} In a similar account, others have pointed out that brokers are also ``reliable neighbors,''\footnote{\citet[38]{Zarazaga2014}.} that is, members of the same community that targeted individuals. Acknowledging this approach, the argument presented in this article contends that brokers have incentives to expand their immediate local networks by colonizing visible targets \emph{outside} of their own proximate neighborhood. By conceptualizing brokers as \emph{active} political entrepreneurs who seek new supporters outside of their immediate context, the proposed framework complements other accounts, as presented in \citet[32]{Szwarcberg2013} or \citet[681]{Zarazaga2015a}, where brokers are neighborhood party agents. Clientelist entrepreneurship can be done directly, or indirectly. For instance, \citet[65-66]{Auyero2000} describes the situation of \emph{Cholo}, a member of the inner circle of one of the brokers in Buenos Aires, Argentina, who visited ``other poor neighborhoods of the area adjacent to'' the place where the broker (and himself) lived, to spread news about some government plan, the governor and the Peronist party, but importantly, also reporting to the broker any unattended material needs he had noticed. Via different channels, brokers expand their client portfolio outside of their immediate community, especially when political competition is high. 
+
+
+% Q1
+An important implication is that individual poverty does not play a role by itself. \emph{Non}-poor individuals living in poor areas (Q1) are also noticeable, and consequently, they are potential targets as well. Political Competition shifts the demand for votes upwards. As elections become more contested, brokers need to secure even higher levels of electoral support. Since newly elected representatives are more likely to bring new people to their machines, brokers are interested in seeing their candidates elected. Consequently, brokers will have even more incentives to engage in clientelism when political competition is high. In these cases, political competition is high enough to even mobilize in a clientelist way non-poor individuals. Since these votes are more expensive to purchase (given their decreasing marginal utility from income),\footnote{\citet[321]{Stokes2005}.} they represent the least preferred alternative. However, costly clientelism is worth the investment given the risk of losing the election. On the other hand, individual targeting minimizes these losses by targeting in an individual basis.
+
+
+
+
+% political competition
+% In Q2, however, when it is difficult to identify individuals, but still brokers need higher levels of electoral support, brokers leverage the spillover effects of clientelism by seeking support among targeted individuals and untargeted unknown clients. In Q3 clientelism occurs with less frequency, but it still happens. Non-poor individuals in non-poor areas are targeted contingent on higher levels of development which under conditions of low political contestation, facilitates embezzlement.
+
+
+
+
 % Group Targeting
-When poor individuals are nested in poor areas, or vice-versa, individual targeting is no longer efficient. Identifiability makes receivers more prone to cooperate, rising the costs of defection. Since individuals are masked by their environments, identifiability is hard to achieve, increasing the cost of this strategy. In these circumstances, depicted in quadrants 2 and 3 in \autoref{tab:strategy:set}, group targeting is more efficient as it relies on the \emph{spillover} effects provided by larger concentrations of individuals. Group targeting works because it also mobilizes electoral support from \emph{potential} clients, that is, those who have not received benefits yet. \citet[65]{Auyero2000} describes the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the brokers' inner circle and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of ``the circle,'' she was in the pool of potential beneficiaries; it was only a ``matter of time'' until she could get the job. Building on this intuition, my argument presents two ideal types: \emph{actual} and \emph{potential} beneficiaries. The former receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow,'' while the latter do not receive benefits ``today'' (in the expectation of receiving them in the future) but \emph{still} vote for the broker's candidate.\footnote{The idea of expectations or ``hope'' is important. \citet[65]{Auyero2000} explains that ``The \emph{hope} of a job serves as important glue within the inner circle. Although not everyone is employed at the municipality, the fact that someone gets [a] job has an important \emph{demonstration} effect.'' Emphases are mine.} Actual beneficiaries want to remain actual beneficiaries; thus, they keep supporting the broker's candidate. Potential beneficiaries want to become actual beneficiaries, but are uncertain when that might happen; as a result, they keep supporting the broker's candidate. This mechanism requires the broker's ability to not allow the transaction costs of switching strategies to be lower than what it costs clients to wait to be benefited. In other words, brokers need to take care of their reputation and, eventually, deliver the benefits, an insight that goes in line with \citet[14]{Zarazaga2014}, who explains that brokers and voters' interests are aligned. In particular, voters know that the flow of resources is dependent on the brokers' electoral success. Also, voters do not know whether new brokers might have access to fewer resources, or distribute them to other people. Consequently, the equilibrium for the voters is to support the current broker. Moreover, no matter what type an individual is, both actual and potential beneficiaries keep voting for the broker's party. Relatedly, given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the broker's party) than defecting.\footnote{In the same vein but in a slightly different subject, \citet[20]{Magaloni:2008bq} explains that The Mexican PRI lasted as long as it did not because of electoral fraud but because voters supported the ``known devil.''} Hence, the cost of switching brokers (or defecting) is very high since it also involves building from scratch relationships of confidence with the new broker. Also reputation costs keep clients disciplined; brokers exploit these self-enforced compliance dynamics. 
+
+% presents the concept
+\paragraph{Group targeting} is the less accurate targeting strategy, but also the cheapest one available to brokers. This tactic leverages the spillover effects provided by larger concentrations of individuals by mobilizing electoral support from actual clients (individuals who have actually been targeted), \emph{and} potential clients (individuals who have not received benefits yet). It is preferred when poor individuals are nested in poor areas (Q2), or vice-versa (Q3). Since in these cases individuals are masked by their environments, identifiability is hard to achieve. Identifiability facilitates individual targeting, an important factor in reducing the probability of defection of targeted clients. When individuals are hard to identify, however, individual targeting becomes prohibitively expensive. Yet, brokers still needing to secure electoral support, do not opt out of clientelism, but turn to group targeting.
+
+% example of spillover using Auyero's theory
+\citet[65]{Auyero2000} describes the case of \emph{Alfonsina} in Argentina. \emph{Alfonsina} was part of the brokers' inner circle and got a job as a cleaning lady in a public school. As the broker explained to her before getting the job, \emph{Alfonsina} had to be \emph{patient} because as a member of ``the circle,'' she was in the pool of potential beneficiaries; it was only a ``matter of time'' until she could get the job. The idea of expectations and hope are important. He explains that the ``\emph{hope} of a job serves as important glue within the inner circle. Although not everyone is employed at the municipality, the fact that someone gets [a] job has an important \emph{demonstration} effect.''\footnote{Emphases are mine.} Building on this intuition, two ideal types are suggested: \emph{actual} and \emph{potential} beneficiaries. The former receive particularistic benefits ``today'' and vote for the broker's candidate ``tomorrow,'' while the latter do not receive benefits ``today'' (in the expectation of receiving them in the future) but \emph{still} vote for the broker's candidate.
 
 
-\todo{expand here}Vote-buying is also targeted to non-poor groups individuals nested in poor groups (quadrant 3)\todo{On theoretical grounds, one might question the assumption implicit in arguments about the decreasing marginal utility of vote buying-namely that a candidate's vote buying funds remain fixed or at least rise more slowly than average incomes. Alternatively, one might assume that a candidate's capacity to buy votes increases commensurate with increases in average incomes. Development, in other words, means more resources for both voters and candidates. If this is the case, then development may have no effect on the prevalence of vote buying. Ultimately Hicken2007, p. 55, especially since quote: There are no limitations to party funding, this in Abramo2001 p 14}. On the one hand, vote-buying has decreasing returns to scale in non-poor individuals. That is, wealthier individuals derive less advantages from a bag of rice relative to poorer individuals.\footnote{\citet{Kitschelt2000}.} Candidates, anticipating this, will not offer the same benefits to wealthy individuals, segmenting the type of offerings they make to the better-off. To be attractive, these goodies should be relatively more expensive. Consequently, buying votes from non-poor individuals gets more expensive as income increases. Low levels of political contestation give local politicians more ``room to move,'' allowing them to divert local resources into more expensive means of targeting (embezzlement). 
+% it explains the spillover component
+Group targeting is cost-effective because it mobilizes two types of voters at the cost of investing in only one type. Actual beneficiaries, since they want to keep receiving benefits, want to remain actual beneficiaries; thus, they keep supporting the broker's candidate. In turn, potential beneficiaries want to become actual beneficiaries, but are uncertain when that might happen; as a result, they also support the broker's candidate. In this sense, from the broker's perspective, this strategy reduces the sunk costs by one half, multiplying the gross benefits by two. In other words, the broker's reputation of a ``problem solver'' disseminates twice as fast relative to individual targeting. Reputation, as a capital, is fundamental for brokers since ``voters prefer to support [brokers] with a reputation for delivering because they are a more reliable source of future rewards.''\footnote{\citet[24]{Zarazaga2014}.}
+
+% HERE
+
+While cost-effective, it is less accurate, however. Brokers hope to mobilize potential beneficiaries only indirectly, that is, by targeting actual beneficiaries. 
+
+Hence it makes it a fragile strategy relative to individual targeting. 
+
+
+In fact, brokers need to infer the discount factors of their potential clients, making it expensive for potential targets to defect.
+
+%This mechanism requires the broker's ability to not allow the transaction costs of switching strategies to be lower than what it costs clients to wait to be benefited. In other words, brokers need to take care of their reputation and, eventually, deliver the benefits, an insight that goes in line with \citet[14]{Zarazaga2014}, who explains that brokers and voters' interests are aligned. 
+
+
+In turn, from the target's perspective, there are several costs that set the equilibrium in voting for the broker's candidate.
+
+Potential clients know that the flow of resources is dependent on the brokers' electoral success.  
+
+
+
+
+Also, potential clients do not know whether new brokers might have access to fewer resources, or distribute them to other people. 
+
+
+Finally, the cost of switching brokers (or defecting) is very high since it also involves building from scratch relationships of confidence with another broker. 
+
+
+
+Hence the incentives are set in supporting the broker. 
+
+
+No matter what type an individual is, both actual and potential beneficiaries keep voting for the broker's candidate. 
+
+
+
+While fragile, this strategy is sustained on a very clear set of incentives. 
+
+Brokers anticipating that, engage in group targeting since it is worth the risk, especially in cases of high political contestation, and where targets are poor individuals living in poor areas (Q2). 
+
+
+
+Given that the poor are risk-averse, potential beneficiaries are better-off waiting (and voting for the broker's party) than defecting.\footnote{In the same vein but in a slightly different subject, \citet[20]{Magaloni:2008bq} explains that The Mexican PRI lasted as long as it did not because of electoral fraud but because voters supported the ``known devil.''} 
+
+
+
+ 
+
+
+
+% HERE
+
+
+
+
+
+
+
+
+\todo{expand here}Vote-buying is also targeted to non-poor groups individuals nested in poor groups (quadrant 3)\todo{On theoretical grounds, one might question the assumption implicit in arguments about the decreasing marginal utility of vote buying-namely that a candidate's vote buying funds remain fixed or at least rise more slowly than average incomes. Alternatively, one might assume that a candidate's capacity to buy votes increases commensurate with increases in average incomes. Development, in other words, means more resources for both voters and candidates. If this is the case, then development may have no effect on the prevalence of vote buying -- Hicken2007, p. 55, especially since quote: There are no limitations to party funding, this in Abramo2001 p 14}. On the one hand, vote-buying has decreasing returns to scale in non-poor individuals. That is, wealthier individuals derive less advantages from a bag of rice relative to poorer individuals.\footnote{\citet{Kitschelt2000}.} Candidates, anticipating this, will not offer the same benefits to wealthy individuals, segmenting the type of offerings they make to the better-off. To be attractive, these goodies should be relatively more expensive. Consequently, buying votes from non-poor individuals gets more expensive as income increases. Low levels of political contestation give local politicians more ``room to move,'' allowing them to divert local resources into more expensive means of targeting (embezzlement). 
 
 
 
