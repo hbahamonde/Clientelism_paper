@@ -213,7 +213,7 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 set.seed(604)
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
-p_load(MatchIt)
+p_load(MatchIt,optmatch)
 
 # m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
 
@@ -222,8 +222,7 @@ m.out <- matchit(large ~ wealth + munopp + polinv + pop.10,
                  discard = "both", 
                  method = "full",
                  data = dat,
-                 verbose = F
-)
+                 verbose = F)
 
 
 
@@ -266,8 +265,6 @@ fit <- CBPS(as.factor(wagehalf.4) ~  wealth + munopp + polinv + pop.10,
 dat$weights = as.numeric(fit$weights)
 
 save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
-
-
 ## ----
 
 
@@ -413,7 +410,7 @@ model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
 custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
 ## ----
 
-
+# HERE
 
 ## ---- tab:results:table ----
 # table
@@ -1621,36 +1618,35 @@ ggplot(data=m.data, aes(x=clientelism)) +
 
 
 ## ---- tgraph:plot ----
-# Labels
-ggplot.labels1 <- data.frame(
-  time = c(15, 60), 
-  value = c(75, 75), 
-  label = c("Low (C)", "High (T)"), 
-  type = c("NA*", "MVH")
-)
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
-## Plot Density [tgraph:plot]
+
+dens <- density(m.data$wagehalf)
+df <- data.frame(x=dens$x, y=dens$y)
+df$quant <- factor(findInterval(df$x, median(m.data$wagehalf)))
+
+
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
-
-ggplot() + 
-  geom_density(aes(x=m.data$wagehalf), fill = "forestgreen", alpha = .2) + 
-  geom_segment(data= 
-                 m.data, aes(
-                   x = (wagehalf=median(m.data$wagehalf)), 
-                   y = 0, 
-                   xend = (wagehalf=median(m.data$wagehalf)), 
-                   yend = .0305), 
-               linetype="dashed", 
-               size=.5, 
-               colour = "forestgreen") + 
-               xlab("Percentage of People Living on \n Less than Half of the Minimum Wage") + 
-               ylab("Density") + 
-               theme_bw() +
-  theme(
-    legend.position="none", 
-    axis.title.y = element_text(size = 10),
-    axis.title.x = element_text(size = 10)) 
+ggplot(df, aes(x,y)) +
+        geom_line() + 
+        geom_ribbon(aes(ymin=0, ymax=y, fill=quant, alpha = 0.5)) + 
+        xlab("Percentage of People Living on\nLess than Half of the Minimum Wage") + 
+        ylab("Density") + 
+        scale_fill_brewer(palette="Greens") +
+        theme_bw() +
+        theme(
+                legend.position="none", 
+                axis.title.y = element_text(size = 10),
+                axis.title.x = element_text(size = 10)) +
+        geom_segment(aes(
+                x = (wagehalf=median(m.data$wagehalf)), 
+                y = 0, 
+                xend = (wagehalf=median(m.data$wagehalf)), 
+                yend = df$y[df$x == max(df$x[df$x<=median(m.data$wagehalf)])]), 
+                linetype="dotted", 
+                size=.5, 
+                colour = "red")
 ## ----
 
 
