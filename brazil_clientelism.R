@@ -2,7 +2,6 @@
 #setwd("/Users/hectorbahamonde/RU/research/Clientelism_paper/Paper_Presentation")
 
 ## ---- loadings:data ----
-
 cat("\014")
 rm(list=ls())
 
@@ -407,10 +406,29 @@ model.gps.t = extract.geepack(model.gps.model <- geeglm(model.gps,
                                  corstr = "exchangeable",
                                  data = dat))
 
-custom.coef.names = c("(Intercept)", "Wealth Index", "Municipal Opposition", "High Poor Density", "Municipal Population", "Urban", "Political Involvement", "Support for Democracy", "Party Id.", "Perception of Corruption", "Years of Education", "Wealth Index * Municipal Opposition", "Wealth Index * High Poor Density", "Municipal Opposition * High Poor Density", "Wealth Index * Municipal Opposition * High Poor Density", "Density of the Poor", "weights", "Wealth Index * Density of the Poor", "Municipal Opposition * Density of the Poor", "Wealth Index * Municipal Opposition * Density of the Poor")
+custom.coef.names = c(
+        "(Intercept)", 
+        "Wealth Index", 
+        "Municipal Opposition", 
+        "High Poor Density", 
+        "Municipal Population", 
+        "Urban", 
+        "Political Involvement", 
+        "Support for Democracy", 
+        "Party Id.", 
+        "Perception of Corruption", 
+        "Years of Education", 
+        "Wealth Index * Municipal Opposition", 
+        "Wealth Index * High Poor Density", 
+        "Municipal Opposition * High Poor Density", 
+        "Wealth Index * Municipal Opposition * High Poor Density", 
+        "Density of the Poor", 
+        #"weights", 
+        "Wealth Index * Density of the Poor", 
+        "Municipal Opposition * Density of the Poor", 
+        "Wealth Index * Municipal Opposition * Density of the Poor")
 ## ----
 
-# HERE
 
 ## ---- tab:results:table ----
 # table
@@ -501,7 +519,6 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 
 
 ## ---- plot:four:quadrants ----
-
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
@@ -511,14 +528,15 @@ N = 250
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(Zelig)
 
-high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
-high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
-high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
-high.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
-low.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
-low.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
-low.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$getqi(qi="ev"))
-low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$getqi(qi="ev"))
+
+high.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$get_qi("ev"))
+high.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$get_qi("ev"))
+high.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$get_qi("ev"))
+high.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = max(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$get_qi("ev"))
+low.poor.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = min(m.data$munopp)), num=N)$get_qi("ev"))
+low.poor.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .25), munopp = max(m.data$munopp)), num=N)$get_qi("ev"))
+low.rich.lowcomp.m = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = min(m.data$munopp)), num=N)$get_qi("ev"))
+low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.m.s, x = setx(model.m.s, cond = TRUE,large = min(m.data$large), wealth= quantile(m.data$wealth, .75), munopp = max(m.data$munopp)), num=N)$get_qi("ev"))
 
 
 
@@ -526,14 +544,14 @@ low.rich.highcomp.m = data.frame(competition = rep("High Competition", N),income
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(Zelig)
 
-high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
-high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
-high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
-high.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
-low.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
-low.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
-low.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$getqi(qi="ev"))
-low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$getqi(qi="ev"))
+high.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N), income = rep("Poor Individuals", N), x = sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$get_qi("ev"))
+high.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x = sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$get_qi("ev"))
+high.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$get_qi("ev"))
+high.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .75), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$get_qi("ev"))
+low.poor.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = min(dat$munopp)), num=N)$get_qi("ev"))
+low.poor.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .25), munopp = max(dat$munopp)), num=N)$get_qi("ev"))
+low.rich.lowcomp.gps = data.frame(competition = rep("Low Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = min(dat$munopp)), num=N)$get_qi("ev"))
+low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),income = rep("Non-Poor Individuals", N), x= sim(model.gps.s, x = setx(model.gps.s, cond = TRUE, wagehalf.4 = quantile(dat$wagehalf.4, .25), wealth= quantile(dat$wealth, .75), munopp = max(dat$munopp)), num=N)$get_qi("ev"))
 
 
 
