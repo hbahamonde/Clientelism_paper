@@ -54,16 +54,37 @@ read_chunk('/Users/hectorbahamonde/RU/research/Clientelism_paper/brazil_clientel
 @
 
 % prepping data, matching
-<<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+<<loadings:data, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
+
+@
+
+% wealth plot
+<<wealth:client:plot:d, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
+
+@
+
+<<tgraph:plot:d, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
 
 @
 
 
 % models
-<<models, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+<<models, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
 
 @
 
+% distribution of dependent variable // load data
+<<municipality:income:large:plot:matched:data, echo = FALSE, warning = FALSE, message = F, cache = FALSE>>=
+
+@
+
+<<plot:four:quadrants:d, echo = FALSE, warning = FALSE, message = F, cache = FALSE>>=
+
+@
+
+<<pol.inv:pop.size:plot:d, echo = FALSE, warning = FALSE, message = F, cache = FALSE>>=
+
+@
 
 % Hook
 There is no agreement on when, how and why parties choose to aim clientelist practices at individuals or groups. The distributive politics and vote-buying literatures have traditionally pursued one of two approaches. On the one hand, the former has mostly focused on group targeting, usually districts or provinces.\footnote{See \citet[]{Dixit1996}, \citet[]{Khemani2015} and \citet[]{Calvo2004}.} In this literature, incumbent parties deliver public-sector jobs or construction projects contingent on the support of \emph{groups} of people. On the other hand, the latter has typically focused on \emph{individuals} and their characteristics, such as their socio-economic or electoral profiles. Yet, substantively, it is not clear when clientelist brokers use one or the other strategy, and why. 
@@ -80,7 +101,7 @@ Overall, I share \citet[14]{Carlin2015}'s diagnosis, in that ``[e]xisting resear
 
 % plot: the wealthy also receive clientelism
 \afterpage{
-<<wealth:client:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Individual Wealth and Vote-Buying in Brazil', fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = TRUE>>=
+<<wealth:client:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=wealth.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = FALSE>>=
 
 @
 }
@@ -208,10 +229,11 @@ This section empirically tests the theoretical proposition stated in \autoref{ta
 
 % plot of the main dependent variable
 \afterpage{
-<<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of the Density of the Poor', fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = TRUE>>=
+<<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=tgraph.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = FALSE>>=
 
 @
 }
+
 
 % income, 
 To test this hypothesis, I use survey data from 2010 from \citet{LAPOP2010}.\footnote{``I thank the Latin American Public Opinion Project (LAPOP) and its major supporters (the United States Agency for International Development, the United Nations Development Program, the Inter-American Development Bank, and Vanderbilt University) for making the data available.'' The sample consists of five strata representing the five main geographical regions of Brazil. Each stratum was further sub-stratified by urban and rural areas.} Though the LAPOP survey provides a question for income, people who are somewhat better off than their neighbors but live in poor areas may not ``feel'' poor. If this is the case, this could confound the results. Additionally, when answering the questioner, individuals might not want to reveal their true incomes (either because it is too low or too high). Following the advice of \citet{Cordova2008} and \citet{Cordova2009,Cordova2010}, a relative wealth index (RWI) was constructed.\footnote{See also \citet{Santos2016}.} Using principal component analyses, the index measures wealth based on actual assets weighted by how common these assets are. Different indexes were constructed for urban and rural contexts. \autoref{fig:wealth:client:plot} plots the distribution of the combined index.
@@ -219,7 +241,7 @@ To test this hypothesis, I use survey data from 2010 from \citet{LAPOP2010}.\foo
 
 \subsection{Main Variables of Interest}
 
-To measure economic development at the group level, a variable, which I call ``the density of the poor'' was constructed following a strategy similar to that of \citet{Weitz-shapiro}. The variable measures the degree of poverty at the municipal level. Using information from the 2010 Brazilian census,\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.} a semi-continuous variable was constructed to measure the percentage of individuals who live on less than half of the minimum wage in a given municipality. Given that the municipality of residence for each individual in the LAPOP survey is recorded, I was able to merge the census percentage with the LAPOP dataset. It is important to stress that the unit of analysis is the individual, and that this variable captures the economic context in which each individual lives. And just like other scholars in the past have tested the effect of being nested in rural areas,\footnote{See for example \citet[]{Brusco2004} and \citet{Stokes2005}. Both of them use the log of population, which is a proxy for urban/rural.} this paper focuses on another class of contextual variable. Although the density of the poor group was originally a semi-continuous variable,\footnote{I.e., a percentage.} it had to be dichotomized at the median (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%) to be able to construct a matched sample, which I justify and explain below. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). 
+To measure economic development at the group level, a variable, which I call ``the density of the poor'' was constructed following a strategy similar to that of \citet{Weitz-shapiro}. The variable is plotted in \autoref{fig:tgraph:plot}, and it measures the degree of poverty at the municipal level. Using information from the 2010 Brazilian census,\footnote{Official data comes from the Bureau of Statistics of Brazil \href{http://www.ibge.gov.br}{IBGE}.} a semi-continuous variable was constructed to measure the percentage of individuals who live on less than half of the minimum wage in a given municipality. Given that the municipality of residence for each individual in the LAPOP survey is recorded, I was able to merge the census percentage with the LAPOP dataset. It is important to stress that the unit of analysis is the individual, and that this variable captures the economic context in which each individual lives. And just like other scholars in the past have tested the effect of being nested in rural areas,\footnote{See for example \citet[]{Brusco2004} and \citet{Stokes2005}. Both of them use the log of population, which is a proxy for urban/rural.} this paper focuses on another class of contextual variable. Although the density of the poor group was originally a semi-continuous variable,\footnote{I.e., a percentage.} it had to be dichotomized at the median (\Sexpr{round(as.numeric(median(m.data$wagehalf)), 2)}\%) to be able to construct a matched sample, which I justify and explain below. \autoref{fig:tgraph:plot} shows the continuous distribution dichotomized at the median (dashed line). 
 
 Finally, to measure political competition, the paper follows \citet[]{Weitz-shapiro} again. Using official electoral data from the 2008 municipal elections,\footnote{Data from the \href{http://agencia.tse.jus.br/estatistica/sead/odsele/votacao_candidato_munzona/votacao_candidato_munzona_2008.zip}{\emph{Tribunal Superior Eleitoral}}.} a variable was constructed that measures the percentage of seats that are not controlled by the mayor's party in a given municipal council. 
 
@@ -234,13 +256,10 @@ Using matching methods, I am able to further break this relationship. Matching i
 
  
 
-% distribution of dependent variable // load data
-<<municipality:income:large:plot:matched:data, echo = FALSE, warning = FALSE, message = F, cache = TRUE>>=
 
-@
 % distribution of dependent variable // plot
 \afterpage{
-<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Distribution of Observations by Municipality, Wealth Index and Density of the Poor', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=municipality.income.large.plot.matched.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=20000,cache = FALSE>>=
 
 @
 }
@@ -270,13 +289,13 @@ Observations are clustered on a number of important factors such as levels of mu
 While this method is very flexible, GEE estimates remain uninterpretable in practice,\footnote{\citet{Carlin2001}.} making regression tables useless from a substantive standpoint. In this case, the problem is even more severe due to the interactive nature of the hypothesis being tested in this paper, which is a parameter for the multiplicative term between the variables wealth index, political competition and density of the poor.\footnote{\citet[74]{Brambor2005} offer the same advice, namely ``one cannot determine whether a model should include an interaction term simply by looking at the significance of the coefficient on the interaction term.''} Methodologists agree on ``not interpret[ing] the coefficients on the constitutive terms,'' as they lack substantive meaning.\footnote{\citet[77]{Brambor2005}.} These problems get more complex when it comes to generalized models, as a series of challenges arise.\footnote{As \citet{Ai2003} explain, \emph{(1) the interaction effect could be nonzero, even when the estimation says it is zero, (2) the statistical significance of the interaction effect cannot be tested with a simple t-test on the coefficient of the interaction term, (3) the interaction effect is conditional on the independent variables, [...] and (4) the interaction effect may have different signs for different values of covariates}.} Given that cross-partial derivatives are not advisable either, simulation methods are required.\footnote{\citet[]{WilliamJ.Wales2013}.} Particularly, I follow the simulation approach introduced in \citet{King2000}. This procedure samples via simulation from the point estimates, generating a new and larger distribution. That is, taking the single estimated parameters (the regression coefficients), I constructed a distribution of estimated values for each coefficient. Relying on the central limit theorem, with enough sampling draws, the new simulated distribution is a transformation that approximates with a great degree of precision the (uninterpretable) coefficients. Subsequently, means and uncertainty measures can be constructed for each of these distributions. From a substantive standpoint, simulation methods also allow for sampling new distributions at different values of the independent variables. This will be important in simulating the expected value of clientelism for different ``profiles,'' such as \emph{non}-poor individuals nested in \emph{high}-poor dense municipalities in contexts of \emph{high} political competition, among other profiles.
 
 % explain table
-Since it is ``impossible to evaluate conditional hypotheses using only the information provided in traditional results tables,''\footnote{\citet[76]{Brambor2005}.} I focus instead on the substantive results from the simulation methods. However, I still present the raw results in \autoref{tab:1} in the Appendix.\footnote{Table generated via the \texttt{texreg R} package. The first column shows the estimates for the matched dataset while the second column shows the results for the GPS wighted model. Virtually all coefficients have the same size and sign.} Analogous to  \autoref{tab:strategy:set}, in \autoref{fig:plot:four:quadrants} I simulate the predicted probabilities of being targeted using both the matched and weighted/GPS models. The horizontal panel depicts simulations for the upper (``non-poor,'' 75\%) and lower (``poor,'' 25\%) quartiles of the continuous wealth index variable. In turn, the vertical panel shows the simulated values for the maximum (\Sexpr{round(max(m.data$munopp),0)}\%) and minimum (\Sexpr{round(min(m.data$munopp),0)}\%) values of the municipal opposition index. Each quadrant shows simulations for individuals nested in poor municipalities (\emph{high} density of the poor) and non-poor municipalities (\emph{low} density of the poor). Each profile shows two simulated probability distributions (with 95\% confidence intervals), one for the matched sample and one for the weighted/GPS model.\footnote{In the case of the weighted/GPS model which does not use the dichotomized variable, I use the continuous version of the size of the poor variable, where ``low density'' represents the lower quartile while ``high density'' the upper quartile.} The idea is to show that the decision of dichotomizing the density of the poor variable at its mean gives substantively exact results than using the continuous version of that variable via the GPS analysis.
+Since it is ``impossible to evaluate conditional hypotheses using only the information provided in traditional results tables,''\footnote{\citet[76]{Brambor2005}.} I focus instead on the substantive results from the simulation methods. However, I still present the raw results in \autoref{tab:1} in the Appendix.\footnote{Table generated via the \texttt{texreg R} package. The first column shows the estimates for the matched dataset while the second column shows the results for the GPS wighted model. Virtually all coefficients have the same size and sign.} Analogous to  \autoref{tab:strategy:set}, in \autoref{fig:plot:four:quadrants} I simulate the predicted probabilities of being targeted using both the matched and weighted/GPS models. The horizontal panel depicts simulations for the upper (``non-poor,'' 75\%) and lower (``poor,'' 25\%) quartiles of the continuous wealth index variable. In turn, the vertical panel shows the simulated values for the maximum (\Sexpr{round(max(m.data$munopp),0)}\%) and minimum (\Sexpr{round(min(m.data$munopp),0)}\%) values of the municipal opposition index. Each quadrant shows simulations for individuals nested in poor municipalities (\emph{high} density of the poor) and non-poor municipalities (\emph{low} density of the poor). Each profile shows two simulated probability distributions (with 95\% confidence intervals), one for the matched sample and one for the weighted/GPS model.\footnote{In the case of the weighted/GPS model which does not use the dichotomized variable, I use the continuous version of the size of the poor variable, where ``low density'' represents the lower quartile while ``high density'' the upper quartile.} The idea is to show that the decision of dichotomizing the density of the poor variable at its median gives substantively exact results than using the continuous version of that variable via the GPS analysis.
 
 \subsection{Results}
 
 
 % Simulated Expected Values of Clientelism
-<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Simulated Expected Values of Clientelism', fig.align='center', fig.width=5, fig.height=3.5,dpi=10000,cache = TRUE>>=
+<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=plot.four.quadrants.plot.legend, fig.align='center', fig.width=5, fig.height=3.5,dpi=10000,cache = FALSE>>=
 
 @
 
@@ -288,7 +307,7 @@ Since it is ``impossible to evaluate conditional hypotheses using only the infor
 
 
 % Simulated Expected Probability of being Targeted: Political Involvement and Population Size (with 95\\% confidence intervals)
-<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Simulated Expected Probability of being Targeted: Political Involvement and Population Size', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=pol.inv.pop.size.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
 
 @
 
@@ -312,40 +331,40 @@ Incentives to offer or take clientelist offerings are not guided by structure or
 
 
 % Descriptive Stats Raw Set
-<<tab:sum:stats:r:data, echo = FALSE, warning = FALSE, message = F, cache = TRUE, results='asis'>>=
+<<tab:sum:stats:r:data, echo = FALSE, warning = FALSE, message = F, cache = FALSE, results='asis'>>=
 
 @
 
 
-<<tab:sum:stats:r:table, echo = FALSE, warning = FALSE, message = F, cache = TRUE, results='asis'>>=
-
-@
-\clearpage
-\newpage
-
-<<tab:sum:stats:m:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE, results='asis'>>=
-
-@
-
-<<tab:sum:stats:m:table, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE, results='asis'>>=
+<<tab:sum:stats:r:table, echo = FALSE, warning = FALSE, message = F, cache = FALSE, results='asis'>>=
 
 @
 \clearpage
 \newpage
 
-
-
-<<tab:results:data, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE>>=
+<<tab:sum:stats:m:data, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE, results='asis'>>=
 
 @
 
-<<tab:results:table, echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE, results='asis'>>=
+<<tab:sum:stats:m:table, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE, results='asis'>>=
 
 @
 \clearpage
 \newpage
 
-<<municipality:wealth:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Pre and Post Matching Observations by Wealth Index and Density of the Poor', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = TRUE>>=
+
+
+<<tab:results:data, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE>>=
+
+@
+
+<<tab:results:table, echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE, results='asis'>>=
+
+@
+\clearpage
+\newpage
+
+<<municipality:wealth:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Pre and Post Matching Observations by Wealth Index and Density of the Poor', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = FALSE>>=
 
 @
 \clearpage
@@ -361,7 +380,7 @@ Incentives to offer or take clientelist offerings are not guided by structure or
 \renewcommand{\thefigure}{OA\arabic{figure}}
 
 
-<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre and Post Matching Deletion', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = TRUE>>=
+<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre and Post Matching Deletion', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
 
 @
 \clearpage
@@ -369,7 +388,7 @@ Incentives to offer or take clientelist offerings are not guided by structure or
 
 
 
-<<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance: Distribution of Propensity Scores', fig.align='center', fig.width=5, fig.height=5,dpi=10000,cache = TRUE>>=
+<<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance: Distribution of Propensity Scores', fig.align='center', fig.width=5, fig.height=5,dpi=10000,cache = FALSE>>=
 
 @
 \clearpage

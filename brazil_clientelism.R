@@ -518,7 +518,7 @@ plot_grid(large.m1,large.m2, nrow = 1, align = "v", scale = 1)
 ##########################
 
 
-## ---- plot:four:quadrants ----
+## ---- plot:four:quadrants:d ----
 # [plot:four:quadrants]
 set.seed(602); options(scipen=999)
 
@@ -617,7 +617,7 @@ plot.d = data.frame(
     as.numeric(CI(low.rich.highcomp.m$x)[3]) # matched
   ),
   Density = c(rep("High", 4), rep("Low", 4), rep("High", 4), rep("Low", 4)),
-  Wealth = rep(c(rep("Poor", 2), rep("Non Poor", 2)), 4),
+  Wealth = rep(c(rep("Poor Individual", 2), rep("Non-Poor Individual", 2)), 4),
   Competition = rep(c("Low Competition","High Competition"),8),
   Sample = c(rep("Weighted (GPS)", 8), rep("Matched", 8))
 )
@@ -626,21 +626,32 @@ plot.d = data.frame(
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
-ggplot(plot.d, aes(Density, mean,
-                   ymin = upper,
-                   ymax=lower,
-                   colour = Sample)) + geom_errorbar(width=0.2) + 
-  facet_grid(Competition~Wealth) +
-  ylab("Probability of being Targeted") + xlab("Density of the Poor") +
-  theme_bw() + #theme(legend.position="none") +
-  theme(strip.text.x = element_text(size = 8), 
-        strip.text.y = element_text(size = 8), 
-        axis.title=element_text(size=10), 
-        legend.text = element_text(size = 8), 
-        legend.title = element_text(size = 10),
-        axis.text.y = element_text(size = 8),
-        legend.position="top")  + 
-  scale_colour_discrete(name = "Sample")
+plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
+                                              ymin = upper,
+                                              ymax=lower,
+                                              colour = Sample)) + geom_errorbar(width=0.2) + 
+        facet_grid(Competition~Wealth) +
+        ylab("Probability of being Targeted") + xlab("Density of the Poor") +
+        theme_bw() + #theme(legend.position="none") +
+        theme(strip.text.x = element_text(size = 8), 
+              strip.text.y = element_text(size = 8), 
+              axis.title=element_text(size=10), 
+              legend.text = element_text(size = 8), 
+              legend.title = element_text(size = 10),
+              axis.text.y = element_text(size = 8),
+              legend.position="top")  + 
+        scale_colour_discrete(name = "Sample")
+## ----
+
+
+
+## ---- plot:four:quadrants ----
+plot.four.quadrants.plot
+plot.four.quadrants.plot.legend = paste(
+        "{\\bf Simulated Expected Values of Clientelism}.",
+        "\\\\\\hspace{\\textwidth}", 
+        "{\\bf Note}: After fitting the models in \\autoref{tab:1}, this figure shows the predicted probabilities of being targeted under differen scenarios. Substantively, the figure emulates the theoretical predictions in \\autoref{tab:strategy:set}. Clientelism is higher when non-poor individuals are nested in poor groups ('high' density of the poor) in highly contested municipalities (Q1), when non-poor individuals are nested in non-poor groups ('low' density of the poor) in scarcely contested municipalities (Q3), when poor individuals are nested in poor areas in highly contested municipalities (Q2), and when poor individuals are nested in non-poor areas in scarcely contested municipalities (Q4). For every quadrant, estimates from both the matched and weighted datasets are shown. The idea is to show that the decision of dichotomizing the density of the poor variable at its median (\\autoref{fig:tgraph:plot}) gives substantively exact results than using the continuous version of that variable via the GPS analysis.",
+        "\n")
 ## ----
 
 
@@ -709,13 +720,13 @@ as.numeric(t$estimate[2])
 # [wealth:client:plot]
 
 
-## ---- wealth:client:plot ----
+## ---- wealth:client:plot:d ----
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
-ggplot() + geom_jitter(
+wealth.plot = ggplot() + geom_jitter(
   width = 4,
   height = .45, 
   alpha = 1/4,
@@ -733,8 +744,19 @@ ggplot() + geom_jitter(
         legend.title = element_text(size = 10),
         axis.text.y = element_text(size = 8),
         legend.position="none")
-    
 ## ---- 
+
+
+
+## ---- wealth:client:plot ----
+wealth.plot
+wealth.plot.legend <- paste(
+        "{\\bf Individual Wealth and Vote-Buying in Brazil}.",
+        "\\\\\\hspace{\\textwidth}", 
+        "{\\bf Note}: Following the advice of \\citet{Cordova2008} and \\citet{Cordova2009,Cordova2010}, different socio-economic variables in \\citet{LAPOP2010} dataset were used to construct a relative wealth index. With this information, in addition to the frequency of clientelism question (\\texttt{clien1}), the figure shows that clientelist brokers target individuals at all levels of income.",
+        "\n")
+## ---- 
+
 
 
 
@@ -1100,7 +1122,7 @@ ggplot(munopp.d, aes(x=Opposition, y=mean, colour=Type)) +
 #  LARGE * POLINV:  // LARGE * POP
 
 
-## ---- pol.inv:pop.size:plot ----
+## ---- pol.inv:pop.size:plot:d ----
 # [pol.inv:pop.size:plot]
 # simulation
 if (!require("pacman")) install.packages("pacman"); library(pacman)
@@ -1111,72 +1133,73 @@ set.seed(602); options(scipen=999)
 
 # low 
 model.m.s.low = data.frame(
-  sim(
+        zelig_qi_to_df(sim(model.m.s,
     x = setx(model.m.s, cond = TRUE,
              large = min(m.data$large), 
              polinv:large,
              polinv = min(m.data$polinv):max(m.data$polinv)), 
-    num=700)$getqi(qi="ev", xvalue="range"))
+    num=700)))
 
-colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # low
+
+model.m.s.low <- model.m.s.low[, c("polinv", "expected_value")]
+
+df.low = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.low, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.low, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.low, FUN=CI)[,2])[,3], # lower
+        Type = rep("Low Density", max(m.data$polinv)+1),
+        Opposition = min(m.data$polinv):max(m.data$polinv)
+        )
+        
+
+
 
 # high
 model.m.s.high = data.frame(
-  sim(
+        zelig_qi_to_df(sim(model.m.s,
     x = setx(model.m.s, cond = TRUE,
              large = max(m.data$large), 
              polinv:large,
              polinv = min(m.data$polinv):max(m.data$polinv)), 
-    num=700)$getqi(qi="ev", xvalue="range")) ; 
-colnames(model.m.s.high) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  # high
+    num=700))) ; 
+
+model.m.s.high <- model.m.s.high[, c("polinv", "expected_value")]
+
+
+df.high = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.high, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.high, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.high, FUN=CI)[,2])[,3], # lower
+        Type = rep("High Density", max(m.data$polinv)+1),
+        Opposition = min(m.data$polinv):max(m.data$polinv)
+        )
 
 
 # polinv 
 model.m.s.polinv = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
+        zelig_qi_to_df(sim(model.m.s, x = setx(model.m.s, cond = TRUE,
                large:munopp,
                polinv = min(m.data$polinv):max(m.data$polinv)), 
-      num=300)$getqi(qi="ev", xvalue="range"))
-colnames(model.m.s.polinv) <- seq(1:ncol(as.data.frame(t(min(m.data$polinv):max(m.data$polinv)))))  
+      num=300)))
 
 
-# to compute confidence intervals
-if (!require("pacman")) install.packages("pacman"); library(pacman)
-p_load(Rmisc)
+
+model.m.s.polinv <- model.m.s.polinv[, c("polinv", "expected_value")]
 
 
-### df's
-### low
-df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`), mean(model.m.s.low$`10`)),
-  Type = rep("Low Density", ncol(model.m.s.low)),
-  Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
-  Lower = c(
-    as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]))
+model.m.s.polinv = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.polinv, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.polinv, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~polinv, data=model.m.s.polinv, FUN=CI)[,2])[,3], # lower
+        Type = rep("Political Involvement", max(m.data$polinv)+1),
+        Opposition = min(m.data$polinv):max(m.data$polinv)
 )
 
-### high
-df.high = data.frame(
-  mean = c(mean(model.m.s.high$`1`),mean(model.m.s.high$`2`),mean(model.m.s.high$`3`),mean(model.m.s.high$`4`),mean(model.m.s.high$`5`),mean(model.m.s.high$`6`),mean(model.m.s.high$`7`),mean(model.m.s.high$`8`), mean(model.m.s.high$`9`), mean(model.m.s.high$`10`)),
-  Type = rep("High Density", ncol(model.m.s.high)),
-  Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.high$`1`)[1]), as.numeric(CI(model.m.s.high$`2`)[1]), as.numeric(CI(model.m.s.high$`3`)[1]), as.numeric(CI(model.m.s.high$`4`)[1]), as.numeric(CI(model.m.s.high$`5`)[1]), as.numeric(CI(model.m.s.high$`6`)[1]), as.numeric(CI(model.m.s.high$`7`)[1]), as.numeric(CI(model.m.s.high$`8`)[1]), as.numeric(CI(model.m.s.high$`9`)[1]), as.numeric(CI(model.m.s.high$`10`)[1])),
-  Lower = c(
-    as.numeric(CI(model.m.s.high$`1`)[3]), as.numeric(CI(model.m.s.high$`2`)[3]), as.numeric(CI(model.m.s.high$`3`)[3]), as.numeric(CI(model.m.s.high$`4`)[3]), as.numeric(CI(model.m.s.high$`5`)[3]), as.numeric(CI(model.m.s.high$`6`)[3]), as.numeric(CI(model.m.s.high$`7`)[3]), as.numeric(CI(model.m.s.high$`8`)[3]), as.numeric(CI(model.m.s.high$`9`)[3]), as.numeric(CI(model.m.s.high$`10`)[3]))
-)
 
-### polinv
-df.polinv.alone = data.frame(
-  mean = c(mean(model.m.s.polinv$`1`),mean(model.m.s.polinv$`2`),mean(model.m.s.polinv$`3`),mean(model.m.s.polinv$`4`),mean(model.m.s.polinv$`5`),mean(model.m.s.polinv$`6`),mean(model.m.s.polinv$`7`),mean(model.m.s.polinv$`8`), mean(model.m.s.polinv$`9`), mean(model.m.s.polinv$`10`)),
-  Type = rep("Political Involvement", ncol(model.m.s.polinv)),
-  Opposition = min(m.data$polinv):max(m.data$polinv),
-  Upper = c(as.numeric(CI(model.m.s.polinv$`1`)[1]), as.numeric(CI(model.m.s.polinv$`2`)[1]), as.numeric(CI(model.m.s.polinv$`3`)[1]), as.numeric(CI(model.m.s.polinv$`4`)[1]), as.numeric(CI(model.m.s.polinv$`5`)[1]), as.numeric(CI(model.m.s.polinv$`6`)[1]), as.numeric(CI(model.m.s.polinv$`7`)[1]), as.numeric(CI(model.m.s.polinv$`8`)[1]), as.numeric(CI(model.m.s.polinv$`9`)[1]), as.numeric(CI(model.m.s.polinv$`10`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.polinv$`1`)[3]), as.numeric(CI(model.m.s.polinv$`2`)[3]), as.numeric(CI(model.m.s.polinv$`3`)[3]), as.numeric(CI(model.m.s.polinv$`4`)[3]), as.numeric(CI(model.m.s.polinv$`5`)[3]), as.numeric(CI(model.m.s.polinv$`6`)[3]), as.numeric(CI(model.m.s.polinv$`7`)[3]), as.numeric(CI(model.m.s.polinv$`8`)[3]), as.numeric(CI(model.m.s.polinv$`9`)[3]), as.numeric(CI(model.m.s.polinv$`10`)[3]))
-)
 
-### combined two df's
-polinv.d= rbind(df.high, df.low,df.polinv.alone)
+
+### combined 3 df's
+polinv.d= rbind(df.high, df.low,model.m.s.polinv)
 
 
 ### plot
@@ -1196,64 +1219,65 @@ p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) +
 ##########################
 
 ## low 
-model.m.s.low = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
-               large = min(m.data$large), 
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)), 
-      num=300)$getqi(qi="ev", xvalue="range"))
-colnames(model.m.s.low) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # low
+gee.dich.m.2.low = data.frame(
+        zelig_qi_to_df(sim(model.m.s,x = setx(model.m.s, cond = TRUE,
+                                              large = min(m.data$large), 
+                                              pop.10 = min(m.data$pop.10):max(m.data$pop.10)), 
+                           num=300)))
+
+gee.dich.m.2.low <- gee.dich.m.2.low[, c("pop.10", "expected_value")]
+
+
+gee.dich.m.2.low = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,3], # lower
+        Poverty = rep("Low Density", max(m.data$pop.10)),
+        Population = min(m.data$pop.10):max(m.data$pop.10)
+        )
+
+
 
 
 ## high
 gee.dich.m.2.high = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
+        zelig_qi_to_df(sim(model.m.s, x = setx(model.m.s, cond = TRUE,
                large = max(m.data$large), 
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
-colnames(gee.dich.m.2.high) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
+               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)))
+
+
+gee.dich.m.2.high <- gee.dich.m.2.high[, c("pop.10", "expected_value")]
+
+
+gee.dich.m.2.high = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,3], # lower
+        Poverty = rep("High Density", max(m.data$pop.10)),
+        Population = min(m.data$pop.10):max(m.data$pop.10)
+        )
 
 
 ## pop.10
-gee.dich.m.2.pop.10 = data.frame(
-  sim(x = setx(model.m.s, cond = TRUE,
-               pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)$getqi(qi="ev", xvalue="range"))
-colnames(gee.dich.m.2.pop.10) <- seq(1:ncol(as.data.frame(t(min(m.data$pop.10):max(m.data$pop.10)))))  # high
-
-
-
-if (!require("pacman")) install.packages("pacman"); library(pacman)
-p_load(Rmisc)
-
-
-### low
-df.low = data.frame(
-  mean = c(mean(model.m.s.low$`1`),mean(model.m.s.low$`2`),mean(model.m.s.low$`3`),mean(model.m.s.low$`4`),mean(model.m.s.low$`5`),mean(model.m.s.low$`6`),mean(model.m.s.low$`7`),mean(model.m.s.low$`8`), mean(model.m.s.low$`9`),mean(model.m.s.low$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("Low Density", ncol(model.m.s.low)),
-  Upper = c(as.numeric(CI(model.m.s.low$`1`)[1]), as.numeric(CI(model.m.s.low$`2`)[1]), as.numeric(CI(model.m.s.low$`3`)[1]), as.numeric(CI(model.m.s.low$`4`)[1]), as.numeric(CI(model.m.s.low$`5`)[1]), as.numeric(CI(model.m.s.low$`6`)[1]), as.numeric(CI(model.m.s.low$`7`)[1]), as.numeric(CI(model.m.s.low$`8`)[1]), as.numeric(CI(model.m.s.low$`9`)[1]), as.numeric(CI(model.m.s.low$`10`)[1])),
-  Lower =c(as.numeric(CI(model.m.s.low$`1`)[3]), as.numeric(CI(model.m.s.low$`2`)[3]), as.numeric(CI(model.m.s.low$`3`)[3]), as.numeric(CI(model.m.s.low$`4`)[3]), as.numeric(CI(model.m.s.low$`5`)[3]), as.numeric(CI(model.m.s.low$`6`)[3]), as.numeric(CI(model.m.s.low$`7`)[3]), as.numeric(CI(model.m.s.low$`8`)[3]), as.numeric(CI(model.m.s.low$`9`)[3]), as.numeric(CI(model.m.s.low$`10`)[3]))
-)
-
-### high
-df.high = data.frame(
-  mean = c(mean(gee.dich.m.2.high$`1`),mean(gee.dich.m.2.high$`2`),mean(gee.dich.m.2.high$`3`),mean(gee.dich.m.2.high$`4`),mean(gee.dich.m.2.high$`5`),mean(gee.dich.m.2.high$`6`),mean(gee.dich.m.2.high$`7`),mean(gee.dich.m.2.high$`8`), mean(gee.dich.m.2.high$`9`),mean(gee.dich.m.2.high$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("High Density", ncol(gee.dich.m.2.high)),
-  Upper = c(as.numeric(CI(gee.dich.m.2.high$`1`)[1]), as.numeric(CI(gee.dich.m.2.high$`2`)[1]), as.numeric(CI(gee.dich.m.2.high$`3`)[1]), as.numeric(CI(gee.dich.m.2.high$`4`)[1]), as.numeric(CI(gee.dich.m.2.high$`5`)[1]), as.numeric(CI(gee.dich.m.2.high$`6`)[1]), as.numeric(CI(gee.dich.m.2.high$`7`)[1]), as.numeric(CI(gee.dich.m.2.high$`8`)[1]), as.numeric(CI(gee.dich.m.2.high$`9`)[1]), as.numeric(CI(gee.dich.m.2.high$`10`)[1])),
-  Lower =c(as.numeric(CI(gee.dich.m.2.high$`1`)[3]), as.numeric(CI(gee.dich.m.2.high$`2`)[3]), as.numeric(CI(gee.dich.m.2.high$`3`)[3]), as.numeric(CI(gee.dich.m.2.high$`4`)[3]), as.numeric(CI(gee.dich.m.2.high$`5`)[3]), as.numeric(CI(gee.dich.m.2.high$`6`)[3]), as.numeric(CI(gee.dich.m.2.high$`7`)[3]), as.numeric(CI(gee.dich.m.2.high$`8`)[3]), as.numeric(CI(gee.dich.m.2.high$`9`)[3]), as.numeric(CI(gee.dich.m.2.high$`10`)[3]))
-)
-
-### pop
 df.pop.alone = data.frame(
-  mean = c(mean(gee.dich.m.2.pop.10$`1`),mean(gee.dich.m.2.pop.10$`2`),mean(gee.dich.m.2.pop.10$`3`),mean(gee.dich.m.2.pop.10$`4`),mean(gee.dich.m.2.pop.10$`5`),mean(gee.dich.m.2.pop.10$`6`),mean(gee.dich.m.2.pop.10$`7`),mean(gee.dich.m.2.pop.10$`8`), mean(gee.dich.m.2.pop.10$`9`),mean(gee.dich.m.2.pop.10$`10`)),
-  Population = min(m.data$pop.10):max(m.data$pop.10),
-  Poverty = rep("Population Size", ncol(gee.dich.m.2.pop.10)),
-  Upper = c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[1]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[1])),
-  Lower =c(as.numeric(CI(gee.dich.m.2.pop.10$`1`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`2`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`3`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`4`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`5`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`6`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`7`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`8`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`9`)[3]), as.numeric(CI(gee.dich.m.2.pop.10$`10`)[3]))
+        zelig_qi_to_df(sim(model.m.s,x = setx(model.m.s, cond = TRUE,
+                                              pop.10 = min(m.data$pop.10):max(m.data$pop.10)),num=300)))
+
+
+
+df.pop.alone <- df.pop.alone[, c("pop.10", "expected_value")]
+
+df.pop.alone = data.frame(
+        mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,2], # mean
+        Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,1], # upper
+        Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,3], # lower
+        Poverty = rep("Population Size", max(m.data$pop.10)),
+        Population = min(m.data$pop.10):max(m.data$pop.10)
 )
 
 
-### combined two df's
-pop.d= rbind(df.high, df.low,df.pop.alone)
+### combined 3 df's
+pop.d= rbind(gee.dich.m.2.low, gee.dich.m.2.high,df.pop.alone)
 
 
 
@@ -1265,7 +1289,7 @@ p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) +
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
   stat_smooth(aes(x=Population,y=mean)) +
-  xlab("Municipal Population Size") + ylab("Expected Value of Clientelism") + 
+  xlab("Municipal Population Size") + ylab("Probability of being Targeted") + 
   theme_bw() + 
   theme(axis.title.y=element_text(colour="white"), legend.position="top", legend.title=element_blank(), legend.key = element_rect())
 
@@ -1274,14 +1298,22 @@ p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) +
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(cowplot)
 
-plot_grid(p1,p2,  nrow = 1, labels = "auto")
+pol.inv.pop.size.plot = plot_grid(p1,p2,  nrow = 1, labels = "auto")
 ## ----
 
 
 
+## ---- pol.inv:pop.size:plot ----
+pol.inv.pop.size.plot
+pol.inv.pop.size.plot.legend <- paste(
+        "{\\bf Simulated Expected Probability of being Targeted: Political Involvement and Population Size}.",
+        "\\\\\\hspace{\\textwidth}", 
+        "{\\bf Note}: Using the estimations in \\autoref{tab:1}, the figure shows the probability of being targeted at different values of political involvement (a) and population size at the municipal level (b). The figure suggests that being nested in high-poor density areas contributes substantially more to explain clientelism.",
+        "\n")
+## ---- 
 
 
-
+## ----
 
 
 
@@ -1480,7 +1512,6 @@ p_load(ggplot2)
 # [municipality:income:large:plot:matched]
   
 ## ---- municipality:income:large:plot:matched:data ----
-
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
 ## HIGH df
@@ -1501,40 +1532,34 @@ low.d = data.frame(
 density.d = data.frame(rbind(high.d, low.d))
 #density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
 
-
-## ----
-
-
-
-
-
-
-## ---- municipality:income:large:plot:matched:plot ----
-
-## plot
-
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
-ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
-  geom_bar() + 
-  geom_point(data=density.d, 
-             position = position_jitter(width = 0.75, height = 1), 
-             size = I(1),
-             aes(
-               x=as.factor(Municipality), 
-               y=Wealth*10,
-               alpha=Wealth))+
-  #coord_flip() +
-  xlab("") + 
-  ylab("Frequency (matched set)") + 
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
-        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
-
+municipality.income.large.plot.matched.plot = ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+        geom_bar() + 
+        geom_point(data=density.d, 
+                   position = position_jitter(width = 0.75, height = 1), 
+                   size = I(1),
+                   aes(
+                           x=as.factor(Municipality), 
+                           y=Wealth*10,
+                           alpha=Wealth))+
+        #coord_flip() +
+        xlab("") + 
+        ylab("Frequency") + 
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1),
+              legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 ## ----
 
 
+## ---- municipality:income:large:plot:matched:plot ----
+municipality.income.large.plot.matched.plot 
+municipality.income.large.plot.matched.plot.legend  <- paste(paste("{\\bf Distribution of Observations by Municipality, Wealth Index and Density of the Poor}."),
+                                                             "\\\\\\hspace{\\textwidth}", 
+                                                             paste("{\\bf Note}: The figure shows the muncipalities in the analyses (matched set). For ever municipality, the figure shows (1) the number of inhabitants (Y-axis), (2) whether the municipality is considered having a high or low density of the poor. High-density municipalities have more than half of their inhabitants living on less than half of the minimum wage. The figure also shows (3) individual wealth indexes." ), 
+                                                                                "\n")
+## ----
 
 
 ######
@@ -1635,7 +1660,7 @@ ggplot(data=m.data, aes(x=clientelism)) +
 # [tgraph:plot]
 
 
-## ---- tgraph:plot ----
+## ---- tgraph:plot:d ----
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
 
 
@@ -1646,7 +1671,7 @@ df$quant <- factor(findInterval(df$x, median(m.data$wagehalf)))
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
-ggplot(df, aes(x,y)) +
+tgraph.plot = ggplot(df, aes(x,y)) +
         geom_line() + 
         geom_ribbon(aes(ymin=0, ymax=y, fill=quant, alpha = 0.5)) + 
         xlab("Percentage of People Living on\nLess than Half of the Minimum Wage") + 
@@ -1667,7 +1692,14 @@ ggplot(df, aes(x,y)) +
                 colour = "red")
 ## ----
 
-
+## ---- tgraph:plot ----
+tgraph.plot
+tgraph.plot.legend <- paste(paste("{\\bf Distribution of the Density of the Poor}."),
+                                  "\\\\\\hspace{\\textwidth}", 
+                            paste("{\\bf Note}: Employing Brazilian census data from the \\href{http://www.ibge.gov.br}{IBGE} (2010), the figure shows  the percentage of individuals who live on less than half of the minimum wage in a given municipality. While individual income is measured using the relative wealth index (in \\autoref{fig:wealth:client:plot}), the variable plotted here is used to measure economic development at the group level. Due to statistical reasons explained in the paper, the variable had to be dichotomized at its median", 
+                                  paste("(",round(as.numeric(median(m.data$wagehalf)), 2),"\\%",").", sep = ""), "However, in separate statistical analyses shown in \\autoref{tab:1} (weighted model), the variable is used without dichotomizing it, showing the same results.", sep = " "), 
+                            "\n")
+## ---- 
 
 
 # THis here is the same graph but with bars
