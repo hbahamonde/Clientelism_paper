@@ -124,7 +124,7 @@ The cost of individual targeting increases linearly with the size of the targete
 
 
 % Motivation 3: Civic Associations and Organization Buying
-Civic associations might help solve some of the challenges large-sized groups present to brokers. As low-information environments prevent brokers from really observing individual electoral behavior,\footnote{\citet[35]{Zarazaga2014}.} they usually resort to alternative methods that allow them to make safer inferences. For example, \citet{Schaffer2015} explain that clientelism is ``socially multiplied'' as party machines target individuals ``who are opinion-leading epicenters'' in informal situations or ``partisan networks,''\footnote{\citet{Calvo2012}.} in what has been called ``organization buying.''\footnote{\citet[250-251]{Stokes:2013cj}. \citet[16]{Holland2015} explain that when ``parties lack their own brokerage networks [they seek] to capitalize on organizational networks instead.'' Similarly, \citet[13]{Rueda2014a} argues that parties tend to target very specific civic associations of ``seniors and associations of single mothers, organizing trips to recreational centers outside the city where all their expenses are covered.'' \emph{Paradoxically}, the stronger the civic society, i.e. the more organized it is, the more clientelism.} And if parties buy ``turnout,''\footnote{\citet[]{Nichter2008}.} then they will most probably target associations too, as ``citizens immersed in clientelist networks [...] have a higher probability of voting than the rest.''\footnote{\citet[7]{Carreras2013}.} The positive relationship between group-membership and clientelism is acknowledged in this article. However, what has not been explored yet is whether clientelism is explained by association membership itself, or by the fact that poor individuals usually address their problems as a \emph{group}, since otherwise it would be too costly to solve them individually. If this is the case, group \emph{membership} should be spuriously related to clientelism. While I find that group membership does have a positive effect on clientelism, I find that structural contexts that foster group-targeting have even more explanatory power. 
+Civic associations might help solve some of the challenges large-sized groups present to brokers. As low-information environments prevent brokers from really observing individual electoral behavior,\footnote{\citet[35]{Zarazaga2014}.} they usually resort to alternative methods that allow them to make safer inferences. For example, \citet{Schaffer2015} explain that clientelism is ``socially multiplied'' as party machines target individuals ``who are opinion-leading epicenters'' in informal situations or ``partisan networks,''\footnote{\citet{Calvo2012}.} in what has been called ``organization buying.''\footnote{\citet[250-251]{Stokes:2013cj}. \citet[16]{Holland2015} explain that when ``parties lack their own brokerage networks [they seek] to capitalize on organizational networks instead.'' Similarly, \citet[13]{Rueda2014a} argues that parties tend to target very specific civic associations of ``seniors and associations of single mothers, organizing trips to recreational centers outside the city where all their expenses are covered.'' \emph{Paradoxically}, the stronger the civic society, i.e. the more organized it is, the more clientelism.} And if parties buy ``turnout,''\footnote{\citet[]{Nichter2008}.} then they will most probably target associations too, as ``citizens immersed in clientelist networks [...] have a higher probability of voting than the rest.''\footnote{\citet[7]{Carreras2013}.} The positive relationship between group-membership and clientelism is acknowledged in this article. However, what has not been explored yet is whether clientelism is explained by association membership itself, or by the fact that poor individuals usually address their problems as a \emph{group}, since otherwise it would be too costly to solve them individually. If this is the case, group \emph{membership} should be spuriously related to clientelism. While I find that group membership does have a positive effect on clientelism, I find that structural contexts that foster group-targeting have even more explanatory power.\footnote{These results are presented in \autoref{fig:pol.inv:pop.size:plot}, in the Appendix section.}
 
 % Motivation 4: Political Competition
 Moving forward, in an important paper, \citet[]{Weitz-shapiro} finds that in several Argentine municipalities, higher levels of political competition, low socioeconomic levels fostered higher levels of clientelism. In her paper, losses are conceptualized in terms of ``moral costs.'' Evidence for these types of costs has been presented in the literature very recently. For example, \citet{Carlin2015} argue that citizens endowed with more democratic values feel more ``moral repugnance'' to clientelism, \citet{Vicente2014} explains that vote-buying practices have an ``immoral/illegal connotation,'' and \citet{Gonzalez-Ocantos2012} find that individuals wanting to avoid social stigma usually do not give truthful answers when asked directly about clientelism. Building on this literature, this paper contends that when political competition is high, clientelism will be higher in contexts where poor individuals live in poor economic contexts. %Importantly, under certain especial circumstances, non-poor individuals also receive clientelism.\footnote{See \autoref{fig:wealth:client:plot}.} 
@@ -300,25 +300,68 @@ Since it is ``impossible to evaluate conditional hypotheses using only the infor
 @
 
 % present the results: 1
-\autoref{fig:plot:four:quadrants} suggests that brokers engage in \emph{individual} targeting when individuals are identifiable. That is, when individuals are poor \emph{but} nested in low-poor density municipalities (quadrant 4, with a probability of being targeted \Sexpr{round(mean(low.poor.lowcomp.m$x)*100,0)}\%)\footnote{Matched sample.} and when individuals are not poor but nested in high-poor density municipalities (quadrant 1, with a probability of being targeted \Sexpr{round(mean(high.rich.highcomp.m$x)*100,0)}\%). This suggests that political competition incentivizes motivated brokers to engage in vote-buying regardless of personal income when political competition is high. \emph{Group} targeting is more efficient in quadrant 2, supporting the spillover effects hypothesis. When municipal mayors are politically challenged, brokers target \emph{groups} of poor individuals in poor municipalities (quadrant 2, \Sexpr{round(mean(high.poor.highcomp.m$x)*100,0)}\%). I argue that brokers take advantage of the spillover effects of clientelism based on the incentives both \emph{potential} and \emph{actual} beneficiaries have to support the broker's candidate. Non-poor individuals nested in low-poor density municipalities but exposed to lower levels of political competition (quadrant 3) are still offered some vote-buying. In these contexts there are less political competition and less checks and balances, having incumbents more ``room to move.'' I argue that even when politicians are not in need of more electoral support, they still engage in this expensive form of vote-buying which is sustained by lowly challenged electoral actors.
+Emulating \autoref{tab:strategy:set}, \autoref{fig:plot:four:quadrants} presents four quadrants. Using both estimations in \autoref{tab:1}, every cell in the figure shows the predicted probability of being targeted for different ``profiles.'' The columns show individual income, while the rows show levels of political contestation. The X-axis shows whether the density of the poor (e.g. levels of economic development at the group level) is high or low. The Y-axis shows the predicted probability of being targeted. 
 
-% Population Size and Organization Buying}
-\autoref{fig:pol.inv:pop.size:plot} shows a plot divided in two panels. Panel {\bf a} shows the simulated expected probabilities (with 95\% confidence intervals) of being targeted at different levels of political involvement. As the blue lines suggests, individuals who participate in civic associations have higher probabilities of being targeted. This is in line with findings in previous research.\footnote{\citet{Schaffer2015}, \citet[7]{Carreras2013}, \citet{Calvo2012}, \citet[16]{Holland2015} and \citet[]{Rueda2014a}.} However, once I decompose these effects, being nested in high-poor density areas contributes substantially more to the model. These differences are statistically significant. Panel {\bf b} shows the probability (with 95\% confidence intervals) of being targeted at different increments of the size of the population. In line with the literature, I also see that this relationship is negative.\footnote{\citet[323]{Stokes2005}, \citet[10]{Kitschelt2007}, \citet[67]{Magaloni:2008bq}, \citet{Rueda2016}, \citet[]{Bratton2008a} and \citet[456]{Gingerich2013}.} However, the effect of being nested in high-poor density municipalities outperforms the effect of population size, suggesting spillover effects. 
+% explain table
+All quadrants in \autoref{fig:plot:four:quadrants}, regardless of the dataset used,\footnote{While there are statistical differences, the differences across datasets are proportional.} suggest that brokers engage in individual targeting when individuals are identifiable, and in group targeting when brokers need to rely on the spillover effects of clientelism. 
+
+% Q1 and Q4
+In Q1 clientelism is more likely (with a \Sexpr{round(mean(high.rich.highcomp.m$x)*100,0)}\% probability) in situations where non-poor individuals are nested in poor groups (e.g. ``high'' density of the poor),\footnote{Matched sample.} and living in electorally contested municipalities. As argued in this paper, these types of individuals are still targeted because they are more identifiable. For instance, a similar individual (same quadrant), but nested in a non-poor group (``low'' density of the poor), and consequently harder to identify, has a much lower probability of being targeted (\Sexpr{round(mean(low.rich.highcomp.m$x)*100,0)}\%). Similarly, individuals in Q4, e.g. poor individuals nested in non-poor areas (``low'' density of the poor), and living in lowly contested municipalities, are more likely of being targeted (\Sexpr{round(mean(low.poor.lowcomp.m$x)*100,0)}\%) relative to harder-to-identify individuals who live in poor areas (\Sexpr{round(mean(high.poor.lowcomp.m$x)*100,0)}\%). In Q1 higher levels of electoral competition put heavier pressures to brokers to even mobilize more expensive ways of clientelism. These pressures decay when incumbents face lower levels of electoral contestation (Q4). 
+
+% Q2 and Q3
+\autoref{fig:plot:four:quadrants} shows in Q2 that clientelism is more likely (\Sexpr{round(mean(high.poor.highcomp.m$x)*100,0)}\%) in situations where poor individuals are nested in poor groups (e.g. ``high'' density of the poor). As argued here, brokers will have incentives to engage in group targeting, taking advantages of the spillover effects of clientelism, e.g. leveraging the electoral support of potential clients by mobilizing actual clients. This is especially the case when the incumbent is seriously contested. Similar individuals (same quadrant), but nested in a non-poor group (``low'' density of the poor), have a much lower probability of being targeted (\Sexpr{round(mean(low.poor.highcomp.m$x)*100,0)}\%). Individuals in Q3, e.g. non-poor individuals nested in non-poor areas (``low'' density of the poor), and living in lowly contested municipalities, are more likely of being targeted (\Sexpr{round(mean(low.rich.lowcomp.m$x)*100,0)}\%) relative to similar individuals but nested in non-poor areas (\Sexpr{round(mean(high.rich.lowcomp.m$x)*100,0)}\%). Areas with higher levels of economic development also allow the broker to have more resources to distribute in what it was called ``embezzle clientelism.'' Lowly contested municipalities give brokers and political incumbents more room to allocate and distribute more expensive goods. However, and as theoretically expected, given that the net costs of this form of clientelism is higher, this is the least likely form of clientelism (reflected in the lower probabilities).
 
 
-% Simulated Expected Probability of being Targeted: Political Involvement and Population Size (with 95\\% confidence intervals)
-<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=pol.inv.pop.size.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
-
-@
 
 
 \subsection*{Discussion}
 
-Incentives to offer or take clientelist offerings are not guided by structure or individual factors only. This paper has suggested that both are necessary to better understand how clientelism happens. Clearly, pressures to incur in this expensive and uncertain strategy rise as political competition rises as well. However, the execution of this strategy largely differs depending on whether brokers face homogeneous or heterogeneous groups of individuals. Each one provides a different cost-and-benefit structure to either defect or cooperate. When poor individuals live in poor areas, brokers engage in group targeting relying on the spillover effects of clientelism. Given that the poor are risk-averse, even the ones who do not receive benefits support the broker's candidate, while the ones who did receive benefits, support him to keep receiving more benefits. In this sense, clientelism propagates easily when the poor live among the poor. However, in heterogeneous areas brokers adapt their strategy and execute clientelism in a different way, relying on how identifiable individuals are. Identifiability makes receivers more prone to cooperate, rising the costs of defection. Finally, the paper hopes that the literature considers that groups and individuals provide different incentives to both brokers and individuals, and hence, this distinction should be incorporated to better understand clientelism.
+The paper argued that when poor individuals live in poor areas, brokers engage in group targeting relying on the spillover effects of clientelism. This strategy mobilizes targeted and untargeted clients by disseminating the broker's reputation of delivering benefits among potential beneficiaries. However, in heterogeneous areas brokers adapt their strategy and execute clientelism in a different way, relying on how identifiable individuals are. Identifiability rises the cost of defection by making their households more memorable, making receivers more prone to cooperate. 
 
-\todo{use word dissemination}
+Incentives to offer or take clientelist offerings are not guided by structural or individual factors only. This paper has suggested that both are necessary to understand clientelism better. Clearly, pressures to incur in clientelism, an expensive and uncertain strategy, rise as political competition rises (from \Sexpr{round(mean(c(low.rich.lowcomp.m$x,low.poor.lowcomp.m$x))*100,0)}\% to \Sexpr{round(mean(c(high.rich.highcomp.m$x,high.poor.highcomp.m$x))*100,0)}\%).\footnote{Grand mean considering the most likely scenarios only.} However, the outcomes of this strategy largely differs depending on whether brokers face homogeneous or heterogeneous groups of individuals. Each one provides a different cost-and-benefit structure for both clients and brokers. Finally, the paper hopes that the literature considers that groups and individuals provide different incentives to both brokers and individuals, and hence, this distinction should be incorporated to better understand clientelism.
 
 \clearpage
+
+
+
+
+% word count
+
+<<wordcount, echo=FALSE, cache=FALSE>>=
+library(knitr)
+
+comma <- function (x, ...) {
+  format(x, ..., big.mark = ",", scientific = FALSE, trim = TRUE)
+} 
+
+# To dynamically extract name of the current file, use code below 
+nameoffile <- current_input() # get name of file
+nof2 <-  strsplit(nameoffile,"\\.")[[1]][1] # extract name, drop extension
+noftex <- paste(nof2, ".tex", sep="") # add .tex extension
+systemcall <- paste("system('texcount -inc -incbib -total -sum ", noftex, "', intern=TRUE)", sep="") # paste together texcount system command  
+texcount.out <- eval(parse(text=systemcall)) # run texcount on current last compiled .tex file
+
+sum.row <- grep("Sum count", texcount.out, value=TRUE) # extract row
+pattern <- "(\\d)+" # regex pattern for digits
+
+count <- regmatches(sum.row, regexpr(pattern, sum.row) ) 
+# extract digits
+
+count <- comma(as.numeric(count)) # add comma
+@
+
+\begin{center}
+\vspace*{\stretch{1}}
+\dotfill
+\dotfill {\huge {\bf Word count}: \Sexpr{count}} \dotfill
+\dotfill
+\vspace*{\stretch{1}}
+\end{center}
+\clearpage
+\clearpage
+
+
+
 
 \section*{Appendix}
 
@@ -395,43 +438,17 @@ Incentives to offer or take clientelist offerings are not guided by structure or
 \newpage
 
 
+% Population Size and Organization Buying}
+\autoref{fig:pol.inv:pop.size:plot} shows a plot divided in two panels. Panel {\bf a} shows the simulated expected probabilities (with 95\% confidence intervals) of being targeted at different levels of political involvement. As the blue lines suggests, individuals who participate in civic associations have higher probabilities of being targeted. This is in line with findings in previous research.\footnote{\citet{Schaffer2015}, \citet[7]{Carreras2013}, \citet{Calvo2012}, \citet[16]{Holland2015} and \citet[]{Rueda2014a}.} However, once I decompose these effects, being nested in high-poor density areas contributes substantially more to the model. These differences are statistically significant. Panel {\bf b} shows the probability (with 95\% confidence intervals) of being targeted at different increments of the size of the population. In line with the literature, I also see that this relationship is negative.\footnote{\citet[323]{Stokes2005}, \citet[10]{Kitschelt2007}, \citet[67]{Magaloni:2008bq}, \citet{Rueda2016}, \citet[]{Bratton2008a} and \citet[456]{Gingerich2013}.} However, the effect of being nested in high-poor density municipalities outperforms the effect of population size, suggesting spillover effects. 
 
-\clearpage
 
-% word count
+% Simulated Expected Probability of being Targeted: Political Involvement and Population Size (with 95\\% confidence intervals)
+<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=pol.inv.pop.size.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
 
-<<wordcount, echo=FALSE, cache=FALSE>>=
-library(knitr)
-
-comma <- function (x, ...) {
-  format(x, ..., big.mark = ",", scientific = FALSE, trim = TRUE)
-} 
-
-# To dynamically extract name of the current file, use code below 
-nameoffile <- current_input() # get name of file
-nof2 <-  strsplit(nameoffile,"\\.")[[1]][1] # extract name, drop extension
-noftex <- paste(nof2, ".tex", sep="") # add .tex extension
-systemcall <- paste("system('texcount -inc -incbib -total -sum ", noftex, "', intern=TRUE)", sep="") # paste together texcount system command  
-texcount.out <- eval(parse(text=systemcall)) # run texcount on current last compiled .tex file
-
-sum.row <- grep("Sum count", texcount.out, value=TRUE) # extract row
-pattern <- "(\\d)+" # regex pattern for digits
-
-count <- regmatches(sum.row, regexpr(pattern, sum.row) ) 
-# extract digits
-
-count <- comma(as.numeric(count)) # add comma
 @
+\clearpage
+\newpage
 
-\begin{center}
-\vspace*{\stretch{1}}
-\dotfill
-\dotfill {\huge {\bf Word count}: \Sexpr{count}} \dotfill
-\dotfill
-\vspace*{\stretch{1}}
-\end{center}
-\clearpage
-\clearpage
 
 
 

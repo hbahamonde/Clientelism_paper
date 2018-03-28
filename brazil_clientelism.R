@@ -435,11 +435,11 @@ custom.coef.names = c(
 texreg(
   c(model.m.t,model.gps.t), 
   caption = "Generalized Estimating Logistic Equations: Clientelism",
-custom.model.names = c("Matched Data","Weighted Data"),
+custom.model.names = c("Matched","Weighted"),
 custom.coef.names = custom.coef.names,
 omit.coef = "weights",
 label = "tab:1",
-custom.note = "%stars. Clustered standard errors at the municipality level.",
+custom.note = "%stars. Clustered standard errors at the municipality level. First column shows the estimates using the matched dataset. Second column shows the estimates of the weighted (the generalized propensity score was omitted in the table). Both models are logit GEE.",
 fontsize = "scriptsize",
 digits = 3,
 center = TRUE,
