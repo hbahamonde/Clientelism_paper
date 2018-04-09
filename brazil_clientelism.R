@@ -561,65 +561,67 @@ low.rich.highcomp.gps = data.frame(competition = rep("High Competition", N),inco
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(Rmisc)
 
+ci = .95
+
 plot.d = data.frame(
-  mean = c(
-    as.numeric(CI(high.poor.lowcomp.gps$x)[2]),  # gps
-    as.numeric(CI(high.poor.highcomp.gps$x)[2]),  # gps
-    as.numeric(CI(high.rich.lowcomp.gps$x)[2]),  # gps
-    as.numeric(CI(high.rich.highcomp.gps$x)[2]),  # gps
-    as.numeric(CI(low.poor.lowcomp.gps$x)[2]),  # gps
-    as.numeric(CI(low.poor.highcomp.gps$x)[2]),  # gps
-    as.numeric(CI(low.rich.lowcomp.gps$x)[2]),  # gps
-    as.numeric(CI(low.rich.highcomp.gps$x)[2]), # gps
-    as.numeric(CI(high.poor.lowcomp.m$x)[2]),  # matched
-    as.numeric(CI(high.poor.highcomp.m$x)[2]),  # matched
-    as.numeric(CI(high.rich.lowcomp.m$x)[2]),  # matched
-    as.numeric(CI(high.rich.highcomp.m$x)[2]),  # matched
-    as.numeric(CI(low.poor.lowcomp.m$x)[2]),  # matched
-    as.numeric(CI(low.poor.highcomp.m$x)[2]),  # matched
-    as.numeric(CI(low.rich.lowcomp.m$x)[2]),  # matched
-    as.numeric(CI(low.rich.highcomp.m$x)[2]) # matched
-  ),
-  upper = c(
-    as.numeric(CI(high.poor.lowcomp.gps$x)[1]),  # gps
-    as.numeric(CI(high.poor.highcomp.gps$x)[1]), # gps
-    as.numeric(CI(high.rich.lowcomp.gps$x)[1]), # gps
-    as.numeric(CI(high.rich.highcomp.gps$x)[1]), # gps
-    as.numeric(CI(low.poor.lowcomp.gps$x)[1]), # gps
-    as.numeric(CI(low.poor.highcomp.gps$x)[1]), # gps
-    as.numeric(CI(low.rich.lowcomp.gps$x)[1]), # gps
-    as.numeric(CI(low.rich.highcomp.gps$x)[1]), # gps
-    as.numeric(CI(high.poor.lowcomp.m$x)[1]),  # matched
-    as.numeric(CI(high.poor.highcomp.m$x)[1]), # matched
-    as.numeric(CI(high.rich.lowcomp.m$x)[1]), # matched
-    as.numeric(CI(high.rich.highcomp.m$x)[1]), # matched
-    as.numeric(CI(low.poor.lowcomp.m$x)[1]), # matched
-    as.numeric(CI(low.poor.highcomp.m$x)[1]), # matched
-    as.numeric(CI(low.rich.lowcomp.m$x)[1]), # matched
-    as.numeric(CI(low.rich.highcomp.m$x)[1]) # matched
-  ),
-  lower = c(
-    as.numeric(CI(high.poor.lowcomp.gps$x)[3]),  # gps
-    as.numeric(CI(high.poor.highcomp.gps$x)[3]), # gps
-    as.numeric(CI(high.rich.lowcomp.gps$x)[3]), # gps
-    as.numeric(CI(high.rich.highcomp.gps$x)[3]), # gps
-    as.numeric(CI(low.poor.lowcomp.gps$x)[3]), # gps
-    as.numeric(CI(low.poor.highcomp.gps$x)[3]), # gps
-    as.numeric(CI(low.rich.lowcomp.gps$x)[3]), # gps
-    as.numeric(CI(low.rich.highcomp.gps$x)[3]), # gps
-    as.numeric(CI(high.poor.lowcomp.m$x)[3]),  # matched
-    as.numeric(CI(high.poor.highcomp.m$x)[3]), # matched
-    as.numeric(CI(high.rich.lowcomp.m$x)[3]), # matched
-    as.numeric(CI(high.rich.highcomp.m$x)[3]), # matched
-    as.numeric(CI(low.poor.lowcomp.m$x)[3]), # matched
-    as.numeric(CI(low.poor.highcomp.m$x)[3]), # matched
-    as.numeric(CI(low.rich.lowcomp.m$x)[3]), # matched
-    as.numeric(CI(low.rich.highcomp.m$x)[3]) # matched
-  ),
-  Density = c(rep("High", 4), rep("Low", 4), rep("High", 4), rep("Low", 4)),
-  Wealth = rep(c(rep("Poor Individual", 2), rep("Non-Poor Individual", 2)), 4),
-  Competition = rep(c("Low Competition","High Competition"),8),
-  Sample = c(rep("Weighted (GPS)", 8), rep("Matched", 8))
+        mean = c(
+                as.numeric(CI(high.poor.lowcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(high.poor.highcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(high.rich.lowcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(high.rich.highcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(low.poor.lowcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(low.poor.highcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(low.rich.lowcomp.gps$x, ci = ci)[2]),  # gps
+                as.numeric(CI(low.rich.highcomp.gps$x, ci = ci)[2]), # gps
+                as.numeric(CI(high.poor.lowcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(high.poor.highcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(high.rich.lowcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(high.rich.highcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(low.poor.lowcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(low.poor.highcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(low.rich.lowcomp.m$x, ci = ci)[2]),  # matched
+                as.numeric(CI(low.rich.highcomp.m$x, ci = ci)[2]) # matched
+        ),
+        upper = c(
+                as.numeric(CI(high.poor.lowcomp.gps$x, ci = ci)[1]),  # gps
+                as.numeric(CI(high.poor.highcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(high.rich.lowcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(high.rich.highcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(low.poor.lowcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(low.poor.highcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(low.rich.lowcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(low.rich.highcomp.gps$x, ci = ci)[1]), # gps
+                as.numeric(CI(high.poor.lowcomp.m$x, ci = ci)[1]),  # matched
+                as.numeric(CI(high.poor.highcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(high.rich.lowcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(high.rich.highcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(low.poor.lowcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(low.poor.highcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(low.rich.lowcomp.m$x, ci = ci)[1]), # matched
+                as.numeric(CI(low.rich.highcomp.m$x, ci = ci)[1]) # matched
+        ),
+        lower = c(
+                as.numeric(CI(high.poor.lowcomp.gps$x, ci = ci)[3]),  # gps
+                as.numeric(CI(high.poor.highcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(high.rich.lowcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(high.rich.highcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(low.poor.lowcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(low.poor.highcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(low.rich.lowcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(low.rich.highcomp.gps$x, ci = ci)[3]), # gps
+                as.numeric(CI(high.poor.lowcomp.m$x, ci = ci)[3]),  # matched
+                as.numeric(CI(high.poor.highcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(high.rich.lowcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(high.rich.highcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(low.poor.lowcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(low.poor.highcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(low.rich.lowcomp.m$x, ci = ci)[3]), # matched
+                as.numeric(CI(low.rich.highcomp.m$x, ci = ci)[3]) # matched
+        ),
+        Density = c(rep("High", 4), rep("Low", 4), rep("High", 4), rep("Low", 4)),
+        Wealth = rep(c(rep("Poor Individual", 2), rep("Non-Poor Individual", 2)), 4),
+        Competition = rep(c("Low Competition","High Competition"),8),
+        Sample = c(rep("Weighted (GPS)", 8), rep("Matched", 8))
 )
 
 # plot
@@ -644,18 +646,17 @@ plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
 ## ----
 
 
-
 ## ---- plot:four:quadrants ----
 plot.four.quadrants.plot
 plot.four.quadrants.plot.legend = paste(
         "{\\bf Simulated Expected Values of Clientelism}.",
         "\\\\\\hspace{\\textwidth}", 
-        "{\\bf Note}: After fitting the models in \\autoref{tab:1}, this figure shows the predicted probabilities of being targeted under differen scenarios. Substantively, the figure emulates the theoretical predictions in \\autoref{tab:strategy:set}. Clientelism is higher when non-poor individuals are nested in poor groups (`high' density of the poor) in highly contested municipalities (Q1), when non-poor individuals are nested in non-poor groups (`low' density of the poor) in scarcely contested municipalities (Q3), when poor individuals are nested in poor areas in highly contested municipalities (Q2), and when poor individuals are nested in non-poor areas in scarcely contested municipalities (Q4). For every quadrant, estimates from both the matched and weighted datasets are shown. The idea is to show that the decision of dichotomizing the density of the poor variable at its median (\\autoref{fig:tgraph:plot}) gives substantively exact results than using the continuous version of that variable via the GPS analysis.\\todo{add CI}",
+        paste("{\\bf Note}:", paste("After fitting the models shown in \\autoref{tab:1}, this figure shows the predicted probabilities of being targeted under different scenarios, with", paste(ci*100,"\\%", sep = ""), "confidence intervals.")),"Substantively, the figure emulates the theoretical predictions of \\autoref{tab:strategy:set}. Clientelism is higher when non-poor individuals are nested in poor groups (`high' density of the poor) in highly contested municipalities (Q1), when non-poor individuals are nested in non-poor groups (`low' density of the poor) in scarcely contested municipalities (Q3), when poor individuals are nested in poor areas in highly contested municipalities (Q2), and when poor individuals are nested in non-poor areas in scarcely contested municipalities (Q4). For every quadrant, estimates from both the matched and weighted datasets are shown. The idea is to show that the decision of dichotomizing the density of the poor variable at its median (\\autoref{fig:tgraph:plot}) gives substantively exact results than using the continuous version of that variable via the GPS analysis.",
         "\n")
 ## ----
 
 
-
+# HERE
 
 
 
@@ -1538,7 +1539,7 @@ p_load(ggplot2)
 municipality.income.large.plot.matched.plot = ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
         geom_bar() + 
         geom_point(data=density.d, 
-                   position = position_jitter(width = 0.75, height = 1), 
+                   position = position_jitter(width = 0.22, height = 5), 
                    size = I(1),
                    aes(
                            x=as.factor(Municipality), 
