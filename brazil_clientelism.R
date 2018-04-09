@@ -1558,7 +1558,7 @@ municipality.income.large.plot.matched.plot = ggplot(density.d, aes(factor(Munic
 municipality.income.large.plot.matched.plot 
 municipality.income.large.plot.matched.plot.legend  <- paste(paste("{\\bf Distribution of Observations by Municipality, Wealth Index and Density of the Poor}."),
                                                              "\\\\\\hspace{\\textwidth}", 
-                                                             paste("{\\bf Note}: The figure shows the muncipalities in the analyses (matched set). For every municipality, the figure shows (1) the number of inhabitants (Y-axis), (2) whether the municipality is considered having a high or low density of the poor. High-density municipalities have more than half of their inhabitants living on less than half of the minimum wage. The figure also shows (3) individual wealth indexes." ), 
+                                                             paste("{\\bf Note}: The figure shows the municipalities in the analyses (matched set). For every municipality, the figure shows (1) the number of inhabitants (Y-axis), (2) whether the municipality is considered having a high or low density of the poor. High-density municipalities have more than half of their inhabitants living on less than half of the minimum wage. The figure also shows (3) individual wealth indexes." ), 
                                                                                 "\n")
 ## ----
 
