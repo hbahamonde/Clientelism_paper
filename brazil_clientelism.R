@@ -651,7 +651,7 @@ plot.four.quadrants.plot
 plot.four.quadrants.plot.legend = paste(
         "{\\bf Simulated Expected Values of Clientelism}.",
         "\\\\\\hspace{\\textwidth}", 
-        paste("{\\bf Note}:", paste("After fitting the models shown in \\autoref{tab:1}, this figure shows the predicted probabilities of being targeted under different scenarios, with", paste(ci*100,"\\%", sep = ""), "confidence intervals.")),"Substantively, the figure emulates the theoretical predictions of \\autoref{tab:strategy:set}. Clientelism is higher when non-poor individuals are nested in poor groups (`high' density of the poor) in highly contested municipalities (Q1), when non-poor individuals are nested in non-poor groups (`low' density of the poor) in scarcely contested municipalities (Q3), when poor individuals are nested in poor areas in highly contested municipalities (Q2), and when poor individuals are nested in non-poor areas in scarcely contested municipalities (Q4). For every quadrant, estimates from both the matched and weighted datasets are shown. The idea is to show that the decision of dichotomizing the density of the poor variable at its median (\\autoref{fig:tgraph:plot}) gives substantively exact results than using the continuous version of that variable via the GPS analysis.",
+        paste("{\\bf Note}:", paste("After fitting the models shown in \\autoref{tab:1}, this figure shows the predicted probabilities of being targeted under different scenarios, with", paste(ci*100,"\\%", sep = ""), "confidence intervals.")),"Substantively, the figure emulates the theoretical predictions of \\autoref{tab:strategy:set}. Clientelism is higher when non-poor individuals are nested in poor groups (``high'' density of the poor) in highly contested municipalities (Q1), when non-poor individuals are nested in non-poor groups (``low'' density of the poor) in scarcely contested municipalities (Q3), when poor individuals are nested in poor areas in highly contested municipalities (Q2), and when poor individuals are nested in non-poor areas in scarcely contested municipalities (Q4). For every quadrant, estimates from both the matched and weighted datasets are shown. The idea is to show that the decision of dichotomizing the density of the poor variable at its median (\\autoref{fig:tgraph:plot}) gives substantively exact results than using the continuous version of that variable via the GPS analysis.",
         "\n")
 ## ----
 
@@ -754,7 +754,7 @@ wealth.plot
 wealth.plot.legend <- paste(
         "{\\bf Individual Wealth and Vote-Buying in Brazil}.",
         "\\\\\\hspace{\\textwidth}", 
-        "{\\bf Note}: Following the advice of \\citet{Cordova2008} and \\citet{Cordova2009,Cordova2010}, different socio-economic variables in \\citet{LAPOP2010} dataset were used to construct a relative wealth index. With this information, in addition to the frequency of clientelism question (\\texttt{clien1}), the figure shows that clientelist brokers target individuals at all levels of income.",
+        "{\\bf Note}: Following the advice of \\textcite{Cordova2008} and \\textcite{Cordova2009,Cordova2010}, different socio-economic variables in \\textcite{LAPOP2010} dataset were used to construct a relative wealth index. With this information, in addition to the frequency of clientelism question (\\texttt{clien1}), the figure shows that clientelist brokers target individuals at all levels of income.",
         "\n")
 ## ---- 
 
@@ -1376,7 +1376,7 @@ p_load(stargazer)
 #library(stargazer, quietly = T) # install.packages("stargazer")
 stargazer(dat.m, 
           summary=T, 
-          title = "Summary Statistics: Matched Sample",
+          title = "Summary Statistics: Matched Sample.",
           label = "sumtab:matched",
           type = "latex",
           font.size = "scriptsize",
@@ -1439,7 +1439,7 @@ p_load(stargazer)
 #library(stargazer, quietly = T)
 stargazer(dat.r, 
           summary=T, 
-          title = "Summary Statistics: Raw Sample",
+          title = "Summary Statistics: Raw Sample.",
           label = "sumtab:raw",
           type = "latex",
           font.size = "scriptsize",
