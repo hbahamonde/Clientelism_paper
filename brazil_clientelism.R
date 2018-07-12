@@ -1309,7 +1309,7 @@ pol.inv.pop.size.plot
 pol.inv.pop.size.plot.legend <- paste(
         "{\\bf Simulated Expected Probability of being Targeted: Political Involvement and Population Size}.",
         "\\\\\\hspace{\\textwidth}", 
-        "{\\bf Note}: Using the estimations in \\autoref{tab:1}, the figure shows the probability of being targeted at different values of political involvement (a) and population size at the municipal level (b). The figure suggests that being nested in high-poor density areas contributes substantially more to explain clientelism.",
+        "{\\bf Note}: Using the estimations in \\autoref{tab:1}, the figure shows the probability of being targeted at different values of political involvement (a) and population size at the municipal level (b). The figure suggests that being nested in high-poor density areas contributes substantially more to explaining clientelism.",
         "\n")
 ## ---- 
 
