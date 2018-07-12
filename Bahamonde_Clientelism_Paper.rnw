@@ -418,13 +418,13 @@ count <- comma(as.numeric(count)) # add comma
 \newpage
 
 
-\section{Online Appendix}
+%\section{Online Appendix}
 
 %% reset tables and figures counter
-\setcounter{table}{0}
-\renewcommand{\thetable}{OA\arabic{table}}
-\setcounter{figure}{0}
-\renewcommand{\thefigure}{OA\arabic{figure}}
+%\setcounter{table}{0}
+%\renewcommand{\thetable}{OA\arabic{table}}
+%\setcounter{figure}{0}
+%\renewcommand{\thefigure}{OA\arabic{figure}}
 
 
 <<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre and Post Matching Deletion.', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
@@ -454,17 +454,17 @@ count <- comma(as.numeric(count)) # add comma
 
 % References
 \newpage
-%\pagenumbering{Roman}
-%\setcounter{page}{1}
+\pagenumbering{Roman}
+\setcounter{page}{1}
 \printbibliography
 
 % EndNotes
-%\newpage
-%\pagenumbering{Roman}
-%\setcounter{page}{1}
-\linespread{2} % 1.5, Line spacing - Palatino needs more space between lines
+\newpage
+\pagenumbering{Roman}
+\setcounter{page}{1}
+%\linespread{2} % 1.5, Line spacing - Palatino needs more space between lines
 \theendnotes
-\linespread{1.5} % 1.5, Line spacing - Palatino needs more space between lines
+%\linespread{1.5} % 1.5, Line spacing - Palatino needs more space between lines
 
 
 \end{document}

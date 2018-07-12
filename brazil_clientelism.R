@@ -281,6 +281,9 @@ save(dat, file = "/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/
 ###  M  O D E L S
 #####################################################################
 
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
 
 ## ---- models ----
 # load data
@@ -629,10 +632,12 @@ if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
 plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
-                                              ymin = upper,
-                                              ymax=lower,
-                                              colour = Sample)) + geom_errorbar(width=0.2) + 
-        facet_grid(Competition~Wealth) +
+                   ymin = upper,
+                   ymax=lower,
+                   colour = Sample)) + 
+  geom_errorbar(width=0.2) + 
+  scale_color_manual(values=c("grey70", "gray0")) +
+  facet_grid(Competition~Wealth) +
         ylab("Probability of being Targeted") + xlab("Density of the Poor") +
         theme_bw() + #theme(legend.position="none") +
         theme(strip.text.x = element_text(size = 8), 
@@ -641,8 +646,8 @@ plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
               legend.text = element_text(size = 8), 
               legend.title = element_text(size = 10),
               axis.text.y = element_text(size = 8),
-              legend.position="top")  + 
-        scale_colour_discrete(name = "Sample")
+              legend.position="top")  #+ 
+       # scale_colour_discrete(name = "Sample")
 ## ----
 
 
@@ -1210,6 +1215,7 @@ p_load(ggplot2)
 p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  scale_color_manual(values=c("gray0", "grey70", "gray60")) +
   stat_smooth(aes(x=Opposition,y=mean)) +
   xlab("Political Involvement") + ylab("Expected Value of Clientelism") + 
   theme_bw() + 
@@ -1289,6 +1295,7 @@ p_load(ggplot2)
 p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
+  scale_color_manual(values=c("gray0", "grey70", "gray60")) +
   stat_smooth(aes(x=Population,y=mean)) +
   xlab("Municipal Population Size") + ylab("Probability of being Targeted") + 
   theme_bw() + 
@@ -1378,7 +1385,7 @@ stargazer(dat.m,
           summary=T, 
           title = "Summary Statistics: Matched Sample.",
           label = "sumtab:matched",
-          type = "latex",
+          type = "latex", # 'text' for word // 'latex' for latex.
           font.size = "scriptsize",
           style= "apsr",
           covariate.labels=labels.m,
@@ -1402,6 +1409,8 @@ stargazer(dat.m,
 
 
 ## ---- tab:sum:stats:r:data ----
+load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
 # [tab:sum:stats:r]
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
@@ -1441,7 +1450,7 @@ stargazer(dat.r,
           summary=T, 
           title = "Summary Statistics: Raw Sample.",
           label = "sumtab:raw",
-          type = "latex",
+          type = "latex", # 'text' for word // 'latex' for latex.
           font.size = "scriptsize",
           style= "apsr",
           covariate.labels=labels.r,
@@ -1536,21 +1545,26 @@ density.d = data.frame(rbind(high.d, low.d))
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
-municipality.income.large.plot.matched.plot = ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
-        geom_bar() + 
-        geom_point(data=density.d, 
+# The palette with grey:
+
+
+municipality.income.large.plot.matched.plot = 
+  ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
+    geom_bar() + 
+    scale_fill_manual(values= c("gray32", "#999999")) + 
+    geom_point(data=density.d, 
                    position = position_jitter(width = 0.22, height = 5), 
                    size = I(1),
                    aes(
                            x=as.factor(Municipality), 
                            y=Wealth*10,
-                           alpha=Wealth))+
-        #coord_flip() +
-        xlab("") + 
-        ylab("Frequency") + 
-        theme_bw() +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1),
-              legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+                           alpha=Wealth)) + 
+    #coord_flip() +
+    xlab("") + 
+    ylab("Frequency") + 
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1),
+          legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 ## ----
 
 
