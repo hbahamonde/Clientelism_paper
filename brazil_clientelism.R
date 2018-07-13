@@ -442,12 +442,13 @@ custom.model.names = c("Matched","Weighted"),
 custom.coef.names = custom.coef.names,
 omit.coef = "weights",
 label = "tab:1",
-custom.note = ("\\parbox{.65\\linewidth}{\\vspace{2pt}%stars. Clustered standard errors at the municipality level. First column shows the estimates using the matched dataset. Second column shows the estimates of the weighted (the generalized propensity score was omitted in the table). Both models are logit GEE.}"),
+custom.note = ("\\parbox{.65\\linewidth}{\\vspace{2pt}%stars. Clustered standard errors at the municipality level. First column shows the estimates using the matched dataset. Second column shows the estimates of the weighted model (the generalized propensity score was omitted in the table). Both models are logit GEE.}"),
 fontsize = "scriptsize",
 digits = 3,
 center = TRUE,
 no.margin = TRUE, 
-float.pos = "h"
+float.pos = "h"#,
+#file = "/Users/hectorbahamonde/Desktop/Table_A3.html"
 )
 ## ----
 
@@ -636,7 +637,7 @@ plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
                    ymax=lower,
                    colour = Sample)) + 
   geom_errorbar(width=0.2) + 
-  scale_color_manual(values=c("grey70", "gray0")) +
+  #scale_color_manual(values=c("grey70", "gray0")) +
   facet_grid(Competition~Wealth) +
         ylab("Probability of being Targeted") + xlab("Density of the Poor") +
         theme_bw() + #theme(legend.position="none") +
@@ -661,7 +662,7 @@ plot.four.quadrants.plot.legend = paste(
 ## ----
 
 
-# HERE
+
 
 
 
@@ -1295,7 +1296,7 @@ p_load(ggplot2)
 p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
-  scale_color_manual(values=c("gray0", "grey70", "gray60")) +
+  #scale_color_manual(values=c("gray0", "grey70", "gray60")) +
   stat_smooth(aes(x=Population,y=mean)) +
   xlab("Municipal Population Size") + ylab("Probability of being Targeted") + 
   theme_bw() + 
@@ -1343,7 +1344,7 @@ pol.inv.pop.size.plot.legend <- paste(
 
 ## ---- tab:sum:stats:m:data ----
 load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/mdata.RData")
-load("/Users/hectorbahamonde/RU/research/Clientelism_paper/datasets/dat.RData")
+
 
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(car)
@@ -1368,6 +1369,16 @@ m.data.ed <- m.data$ed
 # df
 dat.m <- data.frame(m.data.clien1dummy, m.data.wealth, m.data.munopp, m.data.large, m.data.pop.10, m.data.urban, m.data.polinv, m.data.ing4, m.data.vb3, m.data.exc7, m.data.ed)
 
+# complete cases fx
+completeFun <- function(data, desiredCols) {
+  completeVec <- complete.cases(data[, desiredCols])
+  return(data[completeVec, ])
+}
+
+dat.m = completeFun(dat.m)
+
+
+
 labels.m = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "High Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 ## ---- 
 
@@ -1390,7 +1401,8 @@ stargazer(dat.m,
           style= "apsr",
           covariate.labels=labels.m,
           table.placement = "h",
-          notes.align = "c"
+          notes.align = "c"#,
+          #out = "/Users/hectorbahamonde/Desktop/matched_sum_stats.txt"
 )
 ## ----
 
@@ -1432,6 +1444,16 @@ r.data.ed <- dat$ed
 # df
 dat.r <- data.frame(r.data.clien1dummy, r.data.wealth, r.data.munopp, r.data.wagehalf.4, r.data.pop.10, r.data.urban, r.data.polinv, r.data.ing4, r.data.vb3, r.data.exc7, r.data.ed)
 
+
+# complete cases fx
+completeFun <- function(data, desiredCols) {
+  completeVec <- complete.cases(data[, desiredCols])
+  return(data[completeVec, ])
+}
+
+dat.r = completeFun(dat.r)
+
+
 labels.r = c("Clientelism",  "Wealth Index", "Municipal Opposition",  "Density of the Poor", "Municipal Population", "Urban", "Political Involvement Index" ,  "Support for Democracy",  "Party Id.", "Perception of Corruption",  "Years of Education")
 ## ---- 
 
@@ -1455,7 +1477,9 @@ stargazer(dat.r,
           style= "apsr",
           covariate.labels=labels.r,
           table.placement = "h",
-          notes.align = "c"
+          notes.align = "c"#,
+          #out = "/Users/hectorbahamonde/Desktop/raw_sum_stats.txt"
+          
 )
 ## ----
 
@@ -1504,12 +1528,14 @@ if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
 #mun.p1 = 
-  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + geom_bar(stat = "identity", position=position_dodge()) + 
-  xlab("") + 
-  ylab("Frequency") + 
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
-        legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
+  ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + 
+    geom_bar(stat = "identity", position=position_dodge()) + 
+    #scale_fill_manual(values= c("gray32", "#999999")) + 
+    xlab("") + 
+    ylab("Frequency") + 
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1), 
+          legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
   
 ## ----
 
@@ -1551,7 +1577,7 @@ p_load(ggplot2)
 municipality.income.large.plot.matched.plot = 
   ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
     geom_bar() + 
-    scale_fill_manual(values= c("gray32", "#999999")) + 
+    #scale_fill_manual(values= c("gray32", "#999999")) + 
     geom_point(data=density.d, 
                    position = position_jitter(width = 0.22, height = 5), 
                    size = I(1),
