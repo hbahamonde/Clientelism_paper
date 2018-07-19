@@ -1585,7 +1585,7 @@ p_load(ggplot2)
 municipality.income.large.plot.matched.plot = 
   ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
     geom_bar() + 
-    scale_fill_manual(values= c("#7fc97f","#ef3b2c")) + 
+    scale_fill_manual(values= c("#ef3b2c","#7fc97f")) + 
     geom_point(data=density.d, 
                    position = position_jitter(width = 0.22, height = 5), 
                    size = I(1),
