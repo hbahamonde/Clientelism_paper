@@ -16,9 +16,9 @@
 \author[1]{
 \textsc{Hector Bahamonde}\\ 
 \thanks{I'm thankful to Robert Kaufman, Daniel Kelemen, Richard Lau, Paul Poast, Geoffrey Wallace, Douglas Jones, Ezequiel Gonz\'alez-Ocantos, Juan Pablo Luna, Jorge Bravo, Eric Davis, Adam Cohon, Edwin Camp, Luciana Oliveira Ramos, Giancarlo Visconti, William Young, Johannes Karreth, and the reviewers and editor of JPLA. I also thank participants of the Latin American Studies Association 2014 conference, the Southern Political Science Association 2015 meeting, the Western Political Science Association 2015 meeting, and the 2014 Graduate Conference at the Political Science Department, Rutgers University. This work was partially funded by the Center for Latin American Studies at Rutgers University. I am thankful to the School of Arts and Sciences and the Department of Political Science for their travel grants.}
-\normalsize Postdoctoral Fellow $\bullet$ Center For Inter-American Policy \& Research $\bullet$ Tulane University\\
+\normalsize Assistant Professor $\bullet$ Instituto de Ciencias Sociales $\bullet$ O$'$Higgins University\\
 \normalsize \texttt{e:}\href{mailto:\filetext}{\texttt{\filetext}}\\
-\normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.hectorbahamonde.com}}
+\normalsize \texttt{w:}\href{http://www.hectorbahamonde.com}{\texttt{www.HectorBahamonde.com}}
 \vspace{-5mm}
 }
 
@@ -258,14 +258,15 @@ Using matching methods, I am able to further break this relationship. Matching i
 
  
 
-
 % 
-\afterpage{
-<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=municipality.income.large.plot.matched.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=20000,cache = FALSE>>=
+%\afterpage{
+%\clearpage
+<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap=municipality.income.large.plot.matched.plot.legend, fig.align='center', fig.width=7, fig.height=8,dpi=20000,cache = FALSE>>=
 
 @
-}
+%}
 
+\pagebreak
 % gps
 It could be argued that dichotomizing the density of the poor variable at the median is an arbitrary decision. While there have been theoretical advances regarding general treatment effects regimes for continuous or semi-continuous response doses,\footnote{See \textcite{Ratkovic2012} and \textcite{Hirano2004}.} algorithms with the ability to match on continuous treatment variables are not common. In order to obtain covariate balance in a non-parametric way (as matching does) but \emph{without} dichotomizing the density of the poor, I also use the original (i.e. \emph{continuous}) density of the poor variable to construct a generalized propensity score (GPS).\footnote{See \textcite{Imbens2004}, \textcite{Guardabascio2014} and \textcite[]{Imai2014b}. To generate the weighting vector, I used the \texttt{CBPS R} package \textcite[]{Fong:2014aa}.} The score is used to \emph{weight} each observation in the model.\footnote{Besides matching on and weighting by the RWI index, I also included the following variables to match on/weighting by: municipal opposition, municipal population and individual involvement in civic associations.}
 
@@ -298,7 +299,7 @@ Since it is ``impossible to evaluate conditional hypotheses using only the infor
 
 \afterpage{
 % Simulated Expected Values of Clientelism
-<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=plot.four.quadrants.plot.legend, fig.align='center', fig.width=5, fig.height=3.5,dpi=10000,cache = FALSE>>=
+<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=plot.four.quadrants.plot.legend, fig.align='center', fig.width=5, fig.height=3.5,dpi=300,cache = FALSE>>=
 
 @
 }
@@ -427,7 +428,7 @@ count <- comma(as.numeric(count)) # add comma
 %\renewcommand{\thefigure}{OA\arabic{figure}}
 
 
-<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre and Post Matching Deletion.', fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
+<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre---and Post---Matching Deletion.', fig.align='center', fig.width=7, fig.height=8,dpi=10000,cache = FALSE>>=
 
 @
 \clearpage

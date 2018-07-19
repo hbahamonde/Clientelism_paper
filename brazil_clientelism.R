@@ -637,7 +637,7 @@ plot.four.quadrants.plot = ggplot(plot.d, aes(Density, mean,
                    ymax=lower,
                    colour = Sample)) + 
   geom_errorbar(width=0.2) + 
-  #scale_color_manual(values=c("grey70", "gray0")) +
+  scale_colour_manual(values= c("#7fc97f","#ef3b2c")) + 
   facet_grid(Competition~Wealth) +
         ylab("Probability of being Targeted") + xlab("Density of the Poor") +
         theme_bw() + #theme(legend.position="none") +
@@ -740,10 +740,11 @@ wealth.plot = ggplot() + geom_jitter(
   aes(
     y=as.factor(dat$clien1dummy), 
     x=as.numeric(dat$wealth), 
-    colour=as.numeric(dat$clien1dummy))) +
+    colour=as.factor(dat$clien1dummy))) +
   xlab("Wealth Index") + 
-  ylab("Offered him/her to buy vote") + 
+  ylab("Offered Him/Her to Buy Vote") + 
   theme_bw()+
+  scale_colour_manual(values= c("#7fc97f","#ef3b2c")) + 
   theme(strip.text.x = element_text(size = 8), 
         strip.text.y = element_text(size = 8), 
         axis.title=element_text(size=10), 
@@ -1208,15 +1209,18 @@ model.m.s.polinv = data.frame(
 ### combined 3 df's
 polinv.d= rbind(df.high, df.low,model.m.s.polinv)
 
+# HERE
 
 ### plot
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
+
+
 p1= ggplot(polinv.d, aes(x=Opposition, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
-  scale_color_manual(values=c("gray0", "grey70", "gray60")) +
+  scale_color_manual(values=c("#ef3b2c","#7fc97f","#ffff33")) +
   stat_smooth(aes(x=Opposition,y=mean)) +
   xlab("Political Involvement") + ylab("Expected Value of Clientelism") + 
   theme_bw() + 
@@ -1240,7 +1244,7 @@ gee.dich.m.2.low = data.frame(
         mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,2], # mean
         Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,1], # upper
         Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.low, FUN=CI)[,2])[,3], # lower
-        Poverty = rep("Low Density", max(m.data$pop.10)),
+        Type = rep("Low Density", max(m.data$pop.10)),
         Population = min(m.data$pop.10):max(m.data$pop.10)
         )
 
@@ -1261,7 +1265,7 @@ gee.dich.m.2.high = data.frame(
         mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,2], # mean
         Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,1], # upper
         Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=gee.dich.m.2.high, FUN=CI)[,2])[,3], # lower
-        Poverty = rep("High Density", max(m.data$pop.10)),
+        Type = rep("High Density", max(m.data$pop.10)),
         Population = min(m.data$pop.10):max(m.data$pop.10)
         )
 
@@ -1279,7 +1283,7 @@ df.pop.alone = data.frame(
         mean = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,2], # mean
         Upper = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,1], # upper
         Lower = data.frame(aggregate(cbind(expected_value)~pop.10, data=df.pop.alone, FUN=CI)[,2])[,3], # lower
-        Poverty = rep("Population Size", max(m.data$pop.10)),
+        Type = rep("Population Size", max(m.data$pop.10)),
         Population = min(m.data$pop.10):max(m.data$pop.10)
 )
 
@@ -1293,10 +1297,11 @@ pop.d= rbind(gee.dich.m.2.low, gee.dich.m.2.high,df.pop.alone)
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
 
-p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Poverty)) + 
+
+p2= ggplot(pop.d, aes(x=Population, y=mean, colour=Type)) + 
   stat_smooth() + 
   geom_ribbon(aes(ymin=Lower, ymax=Upper, linetype=NA), alpha=0.2) +
-  #scale_color_manual(values=c("gray0", "grey70", "gray60")) +
+  scale_color_manual(values=c("#7fc97f","#ef3b2c","#ffff33"), breaks = c('High Density','Low Density','Population Size')) +
   stat_smooth(aes(x=Population,y=mean)) +
   xlab("Municipal Population Size") + ylab("Probability of being Targeted") + 
   theme_bw() + 
@@ -1530,7 +1535,8 @@ p_load(ggplot2)
 #mun.p1 = 
   ggplot(municipality.d, aes(x = Municipality, y = Freq, fill = Sample)) + 
     geom_bar(stat = "identity", position=position_dodge()) + 
-    #scale_fill_manual(values= c("gray32", "#999999")) + 
+    coord_flip() +
+    scale_fill_manual(values= c("#7fc97f","#ef3b2c")) + 
     xlab("") + 
     ylab("Frequency") + 
     theme_bw() +
@@ -1539,8 +1545,7 @@ p_load(ggplot2)
   
 ## ----
 
-  
-  
+ 
   
   
 ############################################################
@@ -1568,16 +1573,19 @@ low.d = data.frame(
 density.d = data.frame(rbind(high.d, low.d))
 #density.d$Wealth = as.numeric((density.d$Wealth-min(density.d$Wealth))/(max(density.d$Wealth)-min(density.d$Wealth))*60)
 
+# colors
+# c("#386cb0","#fdb462","#7fc97f","#ef3b2c","#662506","#a6cee3","#fb9a99","#984ea3","#ffff33")), ...)
+  
+
+
+
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 p_load(ggplot2)
-
-# The palette with grey:
-
 
 municipality.income.large.plot.matched.plot = 
   ggplot(density.d, aes(factor(Municipality), fill = Density)) + 
     geom_bar() + 
-    #scale_fill_manual(values= c("gray32", "#999999")) + 
+    scale_fill_manual(values= c("#7fc97f","#ef3b2c")) + 
     geom_point(data=density.d, 
                    position = position_jitter(width = 0.22, height = 5), 
                    size = I(1),
@@ -1585,13 +1593,19 @@ municipality.income.large.plot.matched.plot =
                            x=as.factor(Municipality), 
                            y=Wealth*10,
                            alpha=Wealth)) + 
-    #coord_flip() +
+    coord_flip() +
     xlab("") + 
     ylab("Frequency") + 
     theme_bw() +
     theme(axis.text.x = element_text(angle = 90, hjust = 1),
           legend.key = element_rect(colour = NA, fill = NA, size = 0.5))
 ## ----
+
+
+  library( ggthemes)
+  
+municipality.income.large.plot.matched.plot +scale_colour_Publication()+ theme_Publication()
+
 
 
 ## ---- municipality:income:large:plot:matched:plot ----
@@ -1629,13 +1643,14 @@ density.wealth.m= ggplot() + geom_point(
   aes(
     y=as.factor(m.data$large), 
     x=m.data$wealth, 
-    colour=m.data$large,
+    colour=as.factor(m.data$large),
     alpha = 1/length(m.data$wealth)), 
   position = position_jitter(width = 5)) +
   xlab("Wealth Index: Matched Set") + 
   ylab("Density of \nthe Poor") + 
   xlim(min(dat$wealth), max(dat$wealth)) +
   theme_bw() +
+  scale_colour_manual(values= c("#7fc97f","#ef3b2c")) +
   theme(
     legend.position="none", 
     axis.title.y = element_text(size = 10),
@@ -1647,13 +1662,14 @@ density.wealth.r= ggplot() + geom_point(
   aes(
     y=as.factor(dat$large), 
     x=dat$wealth, 
-    colour=dat$large,
+    colour=as.factor(dat$large),
     alpha = 1/length(dat$large)), 
   position = position_jitter(width = 5)) +
   xlab("Wealth Index: Raw Set") + 
   ylab("Density of \nthe Poor") + 
   xlim(min(dat$wealth), max(dat$wealth)) +
   theme_bw() +
+  scale_colour_manual(values= c("#7fc97f","#ef3b2c")) +
   theme(
     legend.position="none", 
     axis.title.y = element_text(size = 10),
@@ -1717,8 +1733,9 @@ tgraph.plot = ggplot(df, aes(x,y)) +
         geom_ribbon(aes(ymin=0, ymax=y, fill=quant, alpha = 0.5)) + 
         xlab("Percentage of People Living on\nLess than Half of the Minimum Wage") + 
         ylab("Density") + 
-        scale_fill_brewer(palette="Greens") +
-        theme_bw() +
+        # scale_fill_brewer(palette="Greens") +
+  scale_fill_manual(values= c("#7fc97f","#ef3b2c")) + 
+  theme_bw() +
         theme(
                 legend.position="none", 
                 axis.title.y = element_text(size = 10),
