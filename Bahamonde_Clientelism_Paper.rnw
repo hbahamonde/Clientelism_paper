@@ -102,7 +102,7 @@ Overall, I share \textcite[14]{Carlin2015}'s diagnosis that ``[e]xisting researc
 
 % plot: the wealthy also receive clientelism
 \afterpage{
-<<wealth:client:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=wealth.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = FALSE>>=
+<<wealth:client:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=wealth.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,out.width="504px", out.height="504px", dev=c('pdf', 'png'), dpi=1000,cache = FALSE>>=
 
 @
 }
@@ -231,7 +231,7 @@ This section empirically tests the theoretical proposition stated in \autoref{ta
 
 % plot of the main dependent variable
 \afterpage{
-<<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=tgraph.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,dpi=10000,cache = FALSE>>=
+<<tgraph:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=tgraph.plot.legend, fig.align='center', fig.width=3, fig.height=2.5,out.width="1000px", out.height="1000px", dev=c('pdf', 'png'), dpi=3000,cache = FALSE>>=
 
 @
 }
@@ -261,10 +261,10 @@ Using matching methods, I am able to further break this relationship. Matching i
 % 
 %\afterpage{
 %\clearpage
-<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap=municipality.income.large.plot.matched.plot.legend, fig.align='center', fig.width=7, fig.height=8,dpi=20000,cache = FALSE>>=
+<<municipality:income:large:plot:matched:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap=municipality.income.large.plot.matched.plot.legend, fig.align='center', fig.width=7, fig.height=8,out.width="850px", out.height="850px", dev=c('pdf', 'png'), dpi=800,cache = FALSE>>=
 
 @
-%}
+%} 
 
 \pagebreak
 % gps
@@ -299,10 +299,10 @@ Since it is ``impossible to evaluate conditional hypotheses using only the infor
 
 \afterpage{
 % Simulated Expected Values of Clientelism
-<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=plot.four.quadrants.plot.legend, fig.align='center', fig.width=5, fig.height=3.5,dpi=300,cache = FALSE>>=
+<<plot:four:quadrants, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=plot.four.quadrants.plot.legend, fig.align='center', fig.width=5, fig.height=3.5,out.width="800px", out.height="800px", dev=c('pdf', 'png'), dpi=2500,cache = FALSE>>=
 
 @
-}
+} 
 
 % present the results: 1
 %Emulating \autoref{tab:strategy:set}, \autoref{fig:plot:four:quadrants} presents four quadrants. Using both estimations in \autoref{tab:1}, every cell in the figure shows the predicted probability of being targeted for different ``profiles.'' The columns show individual income, while the rows show levels of political contestation. The X-axis shows whether the density of the poor (e.g. levels of economic development at the group level) is high or low. The Y-axis shows the predicted probability of being targeted. 
@@ -412,7 +412,7 @@ count <- comma(as.numeric(count)) # add comma
 \clearpage
 \newpage
 
-<<municipality:wealth:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Pre and Post Matching Observations by Wealth Index and Density of the Poor.', fig.align='center', fig.width=4, fig.height=3.5,dpi=10000,cache = FALSE>>=
+<<municipality:wealth:large:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Distribution of Pre and Post Matching Observations by Wealth Index and Density of the Poor.', fig.align='center', fig.width=4, fig.height=3.5,out.width="504px", out.height="504px", dev=c('pdf', 'png'), dpi=1000,cache = FALSE>>=
 
 @
 \clearpage
@@ -428,7 +428,7 @@ count <- comma(as.numeric(count)) # add comma
 %\renewcommand{\thefigure}{OA\arabic{figure}}
 
 
-<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre---and Post---Matching Deletion.', fig.align='center', fig.width=7, fig.height=8,dpi=10000,cache = FALSE>>=
+<<municipality:sample:plot, echo = FALSE, fig.pos='H', warning = FALSE, message = F, fig.cap='Frequency of Individuals by Municipality, Pre---and Post---Matching Deletion.', fig.align='center', fig.width=7, fig.height=8,out.width="504px", out.height="504px", dev=c('pdf', 'png'), dpi=1200,cache = FALSE>>=
 
 @
 \clearpage
@@ -436,7 +436,7 @@ count <- comma(as.numeric(count)) # add comma
 
 
 
-<<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance: Distribution of Propensity Scores.', fig.align='center', fig.width=5, fig.height=5,dpi=10000,cache = FALSE>>=
+<<balance:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap='Pre and Post Matching Balance: Distribution of Propensity Scores.', fig.align='center', fig.width=5, fig.height=5,out.width="504px", out.height="504px", dev=c('pdf', 'png'), dpi=1000,cache = FALSE>>=
 
 @
 \clearpage
@@ -448,7 +448,7 @@ count <- comma(as.numeric(count)) # add comma
 
 
 % Simulated Expected Probability of being Targeted: Political Involvement and Population Size (with 95\\% confidence intervals)
-<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=pol.inv.pop.size.plot.legend, fig.align='center', fig.width=13, fig.height=6,dpi=10000,cache = FALSE>>=
+<<pol.inv:pop.size:plot, echo = FALSE, fig.pos='h', warning = FALSE, message = F, fig.cap=pol.inv.pop.size.plot.legend, fig.align='center', fig.width=13, fig.height=6,out.width="504px", out.height="504px", dev=c('pdf', 'png'), dpi=1000,cache = FALSE>>=
 
 @
 
