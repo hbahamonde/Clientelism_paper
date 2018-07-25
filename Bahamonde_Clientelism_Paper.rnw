@@ -37,7 +37,8 @@
 \end{abstract}
 
 
-%\hspace*{1.3cm}{\bf Please consider downloading the last version of the paper} \href{https://github.com/hbahamonde/Clientelism_paper/raw/master/Bahamonde_Clientelism_Paper.pdf}{{\color{red}\texttt{here}}}.
+\hspace*{1.2cm}
+\input{/Users/hectorbahamonde/RU/research/Clientelism_paper/status.txt}\unskip
 
 
 
